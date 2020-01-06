@@ -157,11 +157,6 @@ dmypy.json
 
 /preprocessing/*/
 
-# !/preprocessing/*.py
-# !/preprocessing/*.ipynb
-# !/preprocessing/*.sh
-
-# werden hier nur unterordner ignoriert
 /scripts/*/
 
 /socket_connection/*/

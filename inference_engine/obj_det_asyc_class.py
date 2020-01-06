@@ -3,19 +3,9 @@ from __future__ import print_function
 import sys
 import os
 import cv2
-import time
 import logging as log
 import numpy as np
-import datetime
 from openvino.inference_engine import IENetwork, IECore
-
-'''
-ToDo:
-wegen asychron wird erstes bild nicht inferiert 
-und letztes bild nicht mehr zurückgegeben
-
-
-'''
 
 
 class Inference:
@@ -70,9 +60,6 @@ class Inference:
         self.cur_request_id = 0
         self.next_request_id = 1
 
-        # self.is_async_mode = True
-        self.render_time = 0
-
         self.frame = np.ones((600, 600, 3))
         # print(type(self.frame))
         self.initial_h, self.initial_w = self.frame[:2]
@@ -89,60 +76,9 @@ class Inference:
             next_initial_w = cap.get(3)
             next_initial_h = cap.get(4)
 
-            inf_start = time.time()
-
-            in_frame = cv2.resize(next_frame, (self.w, self.h))
-            # Change data layout from HWC to CHW
-            in_frame = in_frame.transpose((2, 0, 1))
-            in_frame = in_frame.reshape((self.n, self.c, self.h, self.w))
-            self.feed_dict[self.input_blob] = in_frame
-            self.exec_net.start_async(
-                request_id=self.next_request_id, inputs=self.feed_dict)
-
-            if self.exec_net.requests[self.cur_request_id].wait(-1) == 0:
-                inf_end = time.time()
-                det_time = inf_end - inf_start
-
-                res = self.exec_net.requests[self.cur_request_id].outputs[self.out_blob]
-
-                for obj in res[0][0]:
-                    if obj[2] > threshhold:
-                        xmin = int(obj[3] * self.initial_w)
-                        ymin = int(obj[4] * self.initial_h)
-                        xmax = int(obj[5] * self.initial_w)
-                        ymax = int(obj[6] * self.initial_h)
-                        class_id = int(obj[1])
-
-                        # Draw box and label\class_id
-                        color = (min(class_id * 12.5, 255),
-                                 min(class_id * 7, 255), min(class_id * 5, 255))
-                        cv2.rectangle(self.frame, (xmin, ymin),
-                                      (xmax, ymax), color, 2)
-
-                        det_label = self.labels_map[class_id - 1] if self.labels_map else str(
-                            class_id)
-                        cv2.putText(self.frame, det_label + ' ' + str(round(obj[2] * 100, 1)) + ' %', (xmin, ymin - 7),
-                                    cv2.FONT_HERSHEY_COMPLEX, 0.6, color, 1)
-
-                # Draw performance stats
-                inf_time_message = "Inference time: N\A for async mode"
-                render_time_message = "OpenCV rendering time: {:.3f} ms".format(
-                    self.render_time * 1000)
-                async_mode_message = "Async mode is on. Processing request {}".format(
-                    self.cur_request_id)
-
-                cv2.putText(self.frame, inf_time_message, (15, 15),
-                            cv2.FONT_HERSHEY_COMPLEX, 0.5, (200, 10, 10), 1)
-                cv2.putText(self.frame, render_time_message, (15, 30),
-                            cv2.FONT_HERSHEY_COMPLEX, 0.5, (10, 10, 200), 1)
-                cv2.putText(self.frame, async_mode_message, (10, int(self.initial_h - 20)), cv2.FONT_HERSHEY_COMPLEX, 0.5,
-                            (10, 10, 200), 1)
-
-            render_start = time.time()
+            self.frame = self.__infer_frame(next_frame, threshhold)
 
             cv2.imshow("Detection Results", self.frame)
-            render_end = time.time()
-            render_time = render_end - render_start
 
             self.cur_request_id, self.next_request_id = self.next_request_id, self.cur_request_id
             self.frame = next_frame
@@ -161,7 +97,19 @@ class Inference:
         next_frame = cv2.imread(img_path)
         next_initial_h, next_initial_w = next_frame.shape[:2]
 
-        inf_start = time.time()
+        ret_frame = self.__infer_frame(next_frame, threshhold)
+
+        self.cur_request_id, self.next_request_id = self.next_request_id, self.cur_request_id
+        self.frame = next_frame
+        self.initial_w = next_initial_w
+        self.initial_h = next_initial_h
+
+        return ret_frame
+
+    def infer_video(self):
+        pass
+
+    def __infer_frame(self, next_frame, threshhold):
 
         in_frame = cv2.resize(next_frame, (self.w, self.h))
         # Change data layout from HWC to CHW
@@ -172,9 +120,6 @@ class Inference:
             request_id=self.next_request_id, inputs=self.feed_dict)
 
         if self.exec_net.requests[self.cur_request_id].wait(-1) == 0:
-
-            inf_end = time.time()
-            det_time = inf_end - inf_start
 
             res = self.exec_net.requests[self.cur_request_id].outputs[self.out_blob]
 
@@ -196,41 +141,7 @@ class Inference:
                         class_id)
                     cv2.putText(self.frame, det_label + ' ' + str(round(obj[2] * 100, 1)) + ' %', (xmin, ymin - 7),
                                 cv2.FONT_HERSHEY_COMPLEX, 0.6, color, 1)
-
-            # Draw performance stats
-            inf_time_message = "Inference time: N\A for async mode"
-            render_time_message = "OpenCV rendering time: {:.3f} ms".format(
-                self.render_time * 1000)
-            async_mode_message = "Async mode is on. Processing request {}".format(
-                self.cur_request_id)
-
-            cv2.putText(self.frame, inf_time_message, (15, 15),
-                        cv2.FONT_HERSHEY_COMPLEX, 0.5, (200, 10, 10), 1)
-            cv2.putText(self.frame, render_time_message, (15, 30),
-                        cv2.FONT_HERSHEY_COMPLEX, 0.5, (10, 10, 200), 1)
-            cv2.putText(self.frame, async_mode_message, (10, int(self.initial_h - 20)), cv2.FONT_HERSHEY_COMPLEX, 0.5,
-                        (10, 10, 200), 1)
-
-        render_start = time.time()
-
-        ret_frame = self.frame
-
-        render_end = time.time()
-        render_time = render_end - render_start
-
-        self.cur_request_id, self.next_request_id = self.next_request_id, self.cur_request_id
-        self.frame = next_frame
-        self.initial_w = next_initial_w
-        self.initial_h = next_initial_h
-
-        return ret_frame
-
-    def infer_video(self):
-        pass
-
-    def __infer_fram(self, next_frame):
-
-        pass
+        return self.frame
 
 
 def main():

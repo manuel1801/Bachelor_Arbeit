@@ -92,8 +92,6 @@ class Inference:
 
     def infer_image(self, img_path, threshhold):
 
-        ret_frame = []
-
         next_frame = cv2.imread(img_path)
         next_initial_h, next_initial_w = next_frame.shape[:2]
 

@@ -1,0 +1,97 @@
+\begin{tikzpicture}
+%
+%Icon
+%
+\begin{scope}[yshift = 100]
+%
+%Stator
+\node[shape = circle,minimum width = 1cm,draw,fill =
+gray!40!](sjochaussen) at (0,0) {}; 
+\node[shape = circle,minimum width = 0.7cm,draw,fill =
+white](sjochinnen) at (0,0) {};
+%Rotor
+\node[shape = circle,minimum width = 0.4cm,draw,fill =
+gray!80!](srotor) at (0,0) {};
+%
+%Pole
+\draw[line width = 1.5pt] (150:0.3) arc (150:30:0.3) -- (30:0.3);
+\draw[line width = 1.5pt] (-150:0.3) arc (-150:-30:0.3) -- (-30:0.3);
+%
+\draw[-latex] (0,0)--(1,0);
+\draw[dashed] (0,0)--(40:1);
+\draw[-latex] (0:0.75)node[above right]{$\gamma$} arc (0:40:0.75);
+%
+\end{scope}
+%
+%--------------------------------------------------------------------
+%
+%Stator mit B-Feld
+%
+\coordinate (psnc) at (2.5,0);
+\coordinate (pssc) at (7.5,0);
+%
+\filldraw[fill = gray!40!] (0,-0.5)-- (0,0) -- ($(psnc)+(-1.5,0)$)
+--($(psnc)+(-1.5,1)$) -- ($(psnc)+(1.5,1)$) -- ($(psnc)+(1.5,0)$)-- ($(pssc)+(-1.5,0)$) --($(pssc)+(-1.5,1)$) --
+($(pssc)+(1.5,1)$) -- ($(pssc)+(1.5,0)$)--(10,0)--(10,-0.5);
+\draw ($(psnc)!0.5!(pssc)$) node[below]{Stator};
+%
+%--------------------------------------------------------------------
+%
+%Anker
+%
+\filldraw[fill = gray!80!]
+(0,2.85)--(0,2.35)--(5,2.35)node[above]{Anker}--(10,2.35)--(10,2.85);
+%
+%
+%----------------------------------------------------------
+%
+%Geometrie Teil 1
+%
+\draw[dashed](2.5,-0.5)--(2.5,4);
+\draw[dashed](7.5,-0.4)--(7.5,4);
+\draw[latex-latex](2.5,3.9)--(7.5,3.9)node[pos=0.5,above]{$\tau_{\text{p}}$};
+%
+\draw[dashed]($(psnc)+(-1.5,0)$)--($(psnc)+(-1.5,-2)$);
+\draw[dashed]($(psnc)+(1.5,0)$)--($(psnc)+(1.5,-2)$);
+%
+\draw[latex-latex]($(psnc)+(-1.5,-1.9)$)--($(psnc)+(1.5,-1.9)$)node[pos=0.5,above]{$b_{\text{p}}$};
+%
+%--------------------------------------------------------------------
+%
+%Feldlininien
+%
+\foreach \x in {-6,-4,-2,0,2,4,6}
+  \draw[red,line width = 1pt,-latex] ($(psnc)+(\x/5,0.5)$)-- +(0,0.9);
+%
+\draw[red] ($(psnc)+(-6/5,1.5)$) node[left]{$\vec{B}$};
+%
+\foreach \x in {-6,-4,-2,0,2,4,6}
+  \draw[red,line width = 1pt,latex-] ($(pssc)+(\x/5,0.5)$)-- +(0,0.9);
+  %
+\draw[red] ($(pssc)+(-6/5,0.5)$) node[below right]{$\vec{B}$};
+%
+%--------------------------------------------------------------------
+%
+%Ankerleiter
+%
+\draw ($(psnc)+(0.5,2)$)node[circle,minimum width = 0.5,draw](ian){};
+\draw (ian.west)node[fill=white,left=0.2]{Leiter 1: $I_{\text{A}}$};
+\draw (ian.north west)--(ian.south east);
+\draw (ian.south west)--(ian.north east);
+\draw[-latex] (ian.east)--++(1.5,0)node[below]{$\vec{F}_{\text{A}}$};
+\draw[-latex,line width = 1pt,blue] (ian.east)--++(1,0)node[below]{$\vec{v}$};
+
+%
+%
+\draw ($(pssc)+(0.5,2)$)node[circle,minimum width = 0.5,draw](ias){};
+\draw (ias.west)node[fill=white,left=0.2]{Leiter 2: $I_{\text{A}}$};
+\filldraw (ias.center) circle (1pt);
+\draw[-latex] (ias.east)--++(1.5,0)node[below]{$\vec{F}_{\text{A}}$};
+\draw[-latex,line width = 1pt,blue] (ias.east)--++(1,0)node[below]{$\vec{v}$};
+
+\draw[-latex] (0,-0.7)--(11,-0.7)node[below]{$\gamma$};
+
+\foreach \x/\xtext in {0/0°,2.5/90°,5/180°,7.5/270°,10/360°}
+  \draw (\x,-0.65)--(\x,-0.75)node[fill = white,below]{\xtext};
+%
+\end{tikzpicture}

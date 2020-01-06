@@ -1,0 +1,138 @@
+\chapter{Realisierung Objekt Erkennung}\label{kap:objerk}
+
+\section{Dataset}\label{sec:dataset}
+
+
+Da es sich um supervised Learning handelt müssen trainigs daten gelabelt werden.\\
+für validierung und test muss datensatz zu 80, 10, 10 in test/train/validation aufgeteilt werden.
+\\
+wie in \ref{sec:ml} beschieben dient das validierungs set zur überwachung wärend des trainings für overfitting.\\
+Mit dem Test set kann nach dem training die Inferenz also das ausfüren des traininierten models getestet werden.
+
+Für die Objekterkennung muss der Datensatz wie in \ref{sec:deepl_cv} beschrieben neben den gelabelten bildern auch
+die X- und Y-Koordinaten der Bounding Boxen, welche das objekt auf dem Bild umramt, enthalte. das Objekt befindet enthalten.\\
+
+
+\subsection{Datenbeschaffung}\label{subsec:get_data}
+
+Da das Erstellen eines eingangs erwähnten Datensets von Hand sehr müsam ist wird meistens auf Quellen zurückgegriffen, die
+schon gelabelte Daten zu bestimmten Klassen zur verfügung stellen. Neben den in \ref{subsec:comp} vorgestellten Seiten
+bietet OpenImages einen vielzahl an Klassen an, darunter auch Unter der Kategorie Säugetiere eine Auswahl an Wild Tier, welche 
+im folgenden verwendet wurde.
+
+Mit einem Open source Tool \cite{OpenImages} konnten eine teilmenge aus dem gesammten Open Images datensatzes herunter geladen werden.
+
+Die Label Files haben das anotierungs format \texttt{class,xmin,ymin,xmax,ymax} welches wie in \ref{subsec:tfrecord} 
+beschrieben wird, noch in ein für tensorflow vertändliches format gebracht werden musste.
+
+Die Verteilung der Klassen im Datensatz war nicht ausbalanciert, wie in \ref{fid:distribution} zu sehen ist.
+
+Das kann zur folge haben das.\\
+
+Allg wie viele samples sollte man haben.\\
+
+Augmentierung im folgenen Teil beschieben.
+
+
+
+\subsection{Augmentierung}
+
+
+
+
+was ist Augmentierung\\
+wie wurde es angewand\\
+bsp bilder
+
+
+
+\subsection{TF Record Files}\label{subsec:tfrecord}
+
+was es ist\\
+wie es erstellu wurde\\
+
+Wie in \ref{subsec:get_data} erwähnt verwendet tensorflow ein bestimmtes format für das datenset, sog 
+Protocol buffer tf record files, dateien im Binary format die sowohl die Bilder als 
+auch die Labels enthalten. das sind Protocol buffer welche die daten serealisieren.\\
+evtl hier besp ausschnitt von aufbau eines proto elements.\\
+
+Um nun die von OpenImages herunter geladenen Bilder und Label Files in das TFRecords Format zu bringen waren 
+mehrere Schritte nötig.
+
+OI - VOC - csv - tf.records
+
+
+
+\section{Training}
+
+\subsection{TF obj det api}
+
+Für das Training wurde das Framework Tensorflow verwendet, welces eine Api für Objekterkennung bietet. 
+
+welche pretrained modell gibt es und welche kamen in frage (für ncs2)
+Die Tensorflow Objekt Detection Api bietet eine vielzahle an vortrainierten Modellen, 
+dabei wurden die meiseten auf den COCO datensatz trainiert.\\
+
+speed/acc trade off \\%\cite{paper speed/acc}
+
+daneben war bei der bei der Ausahl die kompatibilität zu Open Vino zu berücksichtigen:\\
+liste von kompatiblen modellen.\\
+
+trainiert wurde auf:\\
+\begin{itemize}
+    \item ssd mobile net und inception
+    \item faster rcnn (inception und resnet)
+    \item frcnn
+\end{itemize}
+
+(in eval ergebniss dann etwa so: ssd zu schlechte 
+performence und für appl keine realtime nitwendig, 
+frcnn zu langsam, faster rcnn gute mitte)
+
+hier ersten durchlauf (mit Overfitting) darstellen
+
+\subsection{Regularisierung}
+
+Um das Overfitting zu vermeiden gibt es wie in \ref{sec:nn} 
+beschrieben vershiedene Möglichkeiten.
+
+Untersucht wurde hier
+
+\begin{itemize}
+    \item Augmentierung
+    \item Early Stopping
+    \item \dots weitere zB $L_{1}$, $L_{2}$
+\end{itemize}
+
+
+
+\subsection{Training grayscale}\label{subsec:train_gray}
+
+Da die Kamera im Infrarot Modus ein Graustufen Bild mit nur einem 
+Farbchannel liefert, muss dies für die Inferenz berücksichtigt werden.
+
+Es ergeben sich hier mehrere möglichkeiten:
+
+\begin{enumerate}
+    \item Normales (r, g, b) Netz
+    \item Ein Farbchannel (gr) Netz
+    \item Drei Farbchannel (gr, gr, gr)
+\end{enumerate}
+
+Für 1. und 3. Müssen die bilder der Kamera vor der 
+Inferenz auf 3 Farbchannel ($3 \times grau$) erweitert werden.
+\\
+Um das Netz auf einen Channel zu trainieren wurde im config file \dots
+\\
+Um $3 \times gray$ zu trainieren wurden die Bilder in OpenCV in 
+grau convertiert und wieder als jpgs abgespeichert.
+
+Die Ergebnisse sind in Kapitel \ref{kap:eval} dargestellt.
+
+
+\section{Parameter Optimierung}
+einstellungen im Config File\\
+tensorflow graph oder plot zeigen\\
+loss erklären (mit formel und für train und eval)
+
+

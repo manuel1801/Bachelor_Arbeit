@@ -1,0 +1,59 @@
+\begin{tikzpicture}
+%
+%Stroeme
+\draw[dashed,xstep = 2](0,0) grid(12,6);
+\draw(0,0)	rectangle(12,6);
+%
+\begin{scope}[yshift = 1cm]
+%Ia
+\draw[line width = 1pt] (0,0) -- (1,0) --
+(1,-0.5)--(5,-0.5)--(5,0)--(7,0)--(7,0.5)--(11,0.5)--(11,0)--(12,0);
+\draw(0,0) node[left]{$I_{\text{U}}$};
+\end{scope}
+%
+\begin{scope}[yshift = 3cm]
+%Ib
+\draw[line width = 1pt] (0,0.5) -- (3,0.5) --
+(3,0)--(5,0)--(5,-0.5)--(9,-0.5)--(9,0)--(11,0)--(11,0.5)--(12,0.5);
+\draw(0,0) node[left]{$I_{\text{V}}$};
+\end{scope}
+%
+\begin{scope}[yshift = 5cm]
+%Ic
+\draw[line width = 1pt] (0,-0.5) -- (1,-0.5) --
+(1,0)--(3,0)--(3,0.5)--(7,0.5)--(7,0)--(9,0)--(9,-0.5)--(12,-0.5); 
+\draw(0,0)node[left]{$I_{\text{W}}$};
+\end{scope}
+%
+%
+
+\foreach \x/\xtext in {0/0°,2/60°,4/120°,6/180°,8/240°,10/300°,12/360°}
+	\draw (\x,0) node[below] {\xtext};
+	
+\draw (6,-0.5) node[below]{$\gamma$};
+%
+%--------------------------------------------------------------------
+%
+%Hallsignale
+\draw[dashed,xstep = 2](0,7) grid(12,13);
+\draw(0,7)	rectangle(12,13);
+%
+\begin{scope}[yshift = 7cm]
+%Ha
+\draw[line width = 1pt] (0,1.5) -- (1,1.5) -- (1,0.5)--(7,0.5)--(7,1.5)--(12,1.5);
+\draw(0,1) node[left]{$H_1$};
+\end{scope}
+%
+\begin{scope}[yshift = 9cm]
+%Hb
+\draw[line width = 1pt] (0,1.5) -- (5,1.5) -- (5,0.5)--(11,0.5)--(11,1.5)--(12,1.5);
+\draw(0,1) node[left]{$H_2$};
+\end{scope}
+%
+\begin{scope}[yshift = 11cm]
+%Hc
+\draw[line width = 1pt] (0,0.5) -- (3,0.5) -- (3,1.5)--(9,1.5)--(9,0.5)--(12,0.5);
+\draw(0,1) node[left]{$H_3$};
+\end{scope}
+%
+\end{tikzpicture}

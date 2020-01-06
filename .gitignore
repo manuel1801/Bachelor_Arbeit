@@ -141,6 +141,9 @@ dmypy.json
 *.toc
 *.gz
 *.txt
+*.fls
+*.fdb_latexmk
+*.webp
 
 
 /dataset

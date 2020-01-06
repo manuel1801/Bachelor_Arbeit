@@ -146,9 +146,10 @@ dmypy.json
 *.webp
 
 
+
 /dataset
 
-/doc/
+/doc/*
 !/doc/*.md
 
 /models_deprecated/

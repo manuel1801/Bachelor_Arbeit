@@ -84,6 +84,8 @@ LEDs montiert wird. \ref{sec:raspicam}
 %##########################  SECTION 2: OPENVINO  #######################
 \section{OpenVino Toolkit}\label{sec:openvino}
 
+% doku: https://docs.openvinotoolkit.org/latest/_docs_IE_DG_Introduction.html
+
 Die Implementierung der Inferenz des trainierten Models wurde 
 mithilfe des OpenVino Toolkits vorgenommen, eine Anwendung 
 zur Optimierung und Ausführung von CNNs auf Intel Hardware.
@@ -185,7 +187,7 @@ asynchronen Inferenz ist im Folgenden als Pseudocode dargestellt.
 % \end{algorithm}
 
 
-
+% von hier https://docs.openvinotoolkit.org/latest/_demos_python_demos_object_detection_demo_ssd_async_README.html
 \begin{algorithm}[H]
     \SetKwData{Current}{Current}\SetKwData{Next}{Next}
     \While{true}{

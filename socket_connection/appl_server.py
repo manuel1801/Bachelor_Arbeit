@@ -5,7 +5,7 @@ import cv2
 my_connection = cnb.RaspyConnection()
 my_connection.start_server()
 
-img = cv2.imread('deer.jpg')
+img = cv2.imread('test/face.jpg')
 print('iamge shape ', str(img.shape))
 
 

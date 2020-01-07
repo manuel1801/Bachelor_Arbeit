@@ -79,6 +79,7 @@ class RaspyConnection:
 
                     self.data = np.fromstring(self.data, dtype='uint8')
                     self.datas.append(cv2.imdecode(self.data, 1))
+                    print('image received')
                 else:
                     # receive text
                     self.data = notified_socket.recv(
@@ -103,6 +104,7 @@ class RaspyConnection:
                 self.img_header = f'{len(self.img_string):<{self.HEADER_LENGTH}}'.encode(
                     'utf-8')
                 sender_socket.send(self.img_header + self.img_string)
+                print('image send')
             elif data_type == 'text':
                 self.data = data.encode('utf-8')
                 self.data_header = f'{len(self.data):<{self.HEADER_LENGTH}}'.encode(

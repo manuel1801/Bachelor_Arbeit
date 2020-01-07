@@ -165,7 +165,7 @@ dmypy.json
 
 /TensorFlow_Models/
 
-
+/RaspberryPi/models/
 test/Webcam/
 
 Kolloquium_WS19.pdf

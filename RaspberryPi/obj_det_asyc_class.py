@@ -16,10 +16,10 @@ class Inference:
 
     def load_plugin(self, dataset, model):
 
-        model_xml = os.path.join(self.workspace_dir, dataset, model,
-                                 'open_vino', 'frozen_inference_graph.xml')
+        model_xml = os.path.join(
+            self.workspace_dir, dataset, model, 'frozen_inference_graph.xml')
         model_bin = os.path.join(self.workspace_dir, dataset, model,
-                                 'open_vino', 'frozen_inference_graph.bin')
+                                 'frozen_inference_graph.bin')
         self.labels_map = [l.strip() for l in open(os.path.join(
             self.workspace_dir, dataset, 'classes.txt')).readlines()]
 

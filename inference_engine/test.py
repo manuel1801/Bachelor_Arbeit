@@ -5,6 +5,3 @@ y = x
 
 print(x)
 print(y)
-
-y.reshape(3, 2)
-print(y)

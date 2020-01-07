@@ -11,7 +11,7 @@ class RaspyConnection:
         self.address = 0
         self.port = 0
         self.HEADER_LENGTH = 10  # in header noch data_type
-        self.HEADER_LENGTH = 30  # für adr, datatype, länge der nutzdaten jeweils 10
+        # self.HEADER_LENGTH = 30  # für adr, datatype, länge der nutzdaten jeweils 10
         # beim erhalten von nachricht 3x recv(HEADELEN/3) abfragen
         self.my_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         self.my_socket.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)

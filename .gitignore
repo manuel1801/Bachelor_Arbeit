@@ -139,6 +139,7 @@ dmypy.json
 *.out
 *.log
 *.toc
+*.synctex(busy)
 *.gz
 *.txt
 *.fls

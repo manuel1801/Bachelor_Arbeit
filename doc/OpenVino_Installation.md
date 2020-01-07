@@ -46,6 +46,12 @@ and
 ./demo_security_barrier_camera.sh -d MYRIAD
 ```
 
+## Allgmein
+[OpenVino accuracy checker tool](https://docs.openvinotoolkit.org/latest/_tools_accuracy_checker_README.html)
+
+[Supported Models for NCS2](https://docs.openvinotoolkit.org/latest/_docs_IE_DG_supported_plugins_MYRIAD.html)  
+
+
 ## Raspberry Os
 
 ### 1. Download

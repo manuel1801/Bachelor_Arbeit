@@ -146,6 +146,7 @@ dmypy.json
 *.fdb_latexmk
 *.webp
 *.jpg
+*.pptx
 
 
 /dataset
@@ -171,3 +172,4 @@ test/Webcam/
 Kolloquium_WS19.pdf
 
 /workspace
+/evaluation

@@ -5,6 +5,7 @@ import os
 import cv2
 import logging as log
 import numpy as np
+import time
 from openvino.inference_engine import IENetwork, IECore
 
 
@@ -48,8 +49,11 @@ class Inference:
 
         self.out_blob = next(iter(net.outputs))
         log.info("Loading IR to the plugin...")
+
+        t1 = time.time()
         self.exec_net = ie.load_network(
             network=net, num_requests=2, device_name='MYRIAD')
+        print(time.time() - t1)
 
         # Read and pre-process input image
         self.n, self.c, self.h, self.w = net.inputs[self.input_blob].shape
@@ -66,7 +70,10 @@ class Inference:
 
     print('plugin initialized')
 
-    def infer_stream(self, input_stream, threshhold):
+    def infer_stream(self, input_stream, threshhold, save_image_files=False, save_time_in_sec=5):
+        if save_image_files:
+            t_start = time.time()
+            os.mkdir(os.path.join(self.workspace_dir, 'saved_images'))
         cap = cv2.VideoCapture(input_stream)
         while cap.isOpened():
             ret, next_frame = cap.read()
@@ -79,6 +86,12 @@ class Inference:
             self.frame = self.__infer_frame(next_frame, threshhold)
 
             cv2.imshow("Detection Results", self.frame)
+            actual_time = time.time() - t_start
+            if save_image_files and actual_time < save_time_in_sec:
+                print('saving image to ' + os.path.join(self.workspace_dir,
+                                                        'saved_images', 'image_' + str(actual_time) + '.jpg'))
+                cv2.imwrite(os.path.join(self.workspace_dir,
+                                         'saved_images', 'image_' + str(actual_time) + '.jpg'), self.frame)
 
             self.cur_request_id, self.next_request_id = self.next_request_id, self.cur_request_id
             self.frame = next_frame
@@ -109,6 +122,8 @@ class Inference:
 
     def __infer_frame(self, next_frame, threshhold):
 
+        inf_start = time.time()
+
         in_frame = cv2.resize(next_frame, (self.w, self.h))
         # Change data layout from HWC to CHW
         in_frame = in_frame.transpose((2, 0, 1))
@@ -118,7 +133,9 @@ class Inference:
             request_id=self.next_request_id, inputs=self.feed_dict)
 
         if self.exec_net.requests[self.cur_request_id].wait(-1) == 0:
-
+            inf_end = time.time()
+            det_time = inf_end - inf_start
+            det_time_str = str(round((det_time * 1000), 2)) + 'ms'
             res = self.exec_net.requests[self.cur_request_id].outputs[self.out_blob]
 
             for obj in res[0][0]:
@@ -139,10 +156,18 @@ class Inference:
                         class_id)
                     cv2.putText(self.frame, det_label + ' ' + str(round(obj[2] * 100, 1)) + ' %', (xmin, ymin - 7),
                                 cv2.FONT_HERSHEY_COMPLEX, 0.6, color, 1)
+
+            cv2.putText(self.frame, det_time_str, (15, 25), cv2.FONT_HERSHEY_COMPLEX,
+                        0.8, (255, 0, 0), 1)
         return self.frame
 
 
 def main():
+    # workspace_dir = '/home/manuel/Bachelor_Arbeit/workspace'
+
+    # inference = Inference(workspace_dir)
+    # inference.load_plugin('OI_Animals_Augmented_9_2000',
+    #                       'faster_rcnn_inception_v2_coco_2018_01_28_out')
     pass
 
 

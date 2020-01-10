@@ -246,6 +246,7 @@ Wird der Infrarotfilter ausgeschaltet ist es durch die Infrarot LEDs mit
 850nm welligen Licht möglich auch bei dunkelheit aufnahmen zu machen, 
 die in Graustufen Werten dargestellt werden.
 
+
 %------------------------------------------------------------------------
 
 
@@ -258,8 +259,15 @@ die in Graustufen Werten dargestellt werden.
 
 
 %##########################  SECTION 1: REST  ###########################
-\section{put it all together}\label{sec:ka}
+\section{Anwendung gesamt}\label{sec:ka}
 
+Da die Inferenz sehr rechenaufwendig ist, sollen die Frames der Kamera nur 
+dann inferiert werden, wenn eine Bewegung stattfindet. Dafür wurde der 
+Inferenz ein Bewegungsmelder vorgeschaltet. Dieser wurde mithilfe der Library 
+OpenCV implementiert, indem zu beginn des Kamerea Streams ein referenzbild 
+gespeichert wurde, mit dem die aktuellen Frames verglichen werden. 
+Ist der absolute Abstand der einzelnen Array Elemente/Werte der Bilder größer 
+als ein bestimmter Thresshold, wird dies als Bewegung gewertet.
 
 
 %-------------------------------------------------------------------------

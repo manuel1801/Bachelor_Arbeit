@@ -1,0 +1,83 @@
+\begin{tikzpicture}
+%
+%--------------------------------------------------------------------
+%
+% Achse 1
+%
+\begin{scope}   %Achse1
+%
+\node[rotate = 90,rectangle,minimum width = 2.5cm,minimum height = 0.8cm,fill =
+gray!80!](achse1) at (0,0) {Achse 1};
+
+\begin{scope}
+
+\tikzstyle{every node} = [shape = cylinder,rotate=190,draw,
+                          cylinder uses custom fill,cylinder end fill = black!20!,cylinder body fill = black!50!]
+%
+\node[aspect = 0.85,inner xsep = 0.45cm,inner ysep = 0.4cm,draw] (motor)at
+($(achse1.west)+(-0.3,-0.95)$){};
+%
+
+\node[aspect = 0.85,inner xsep = 0.15cm,inner ysep = 0.05cm,draw](welle) at
+($(motor.east) + (0.27,0.05)$) {};
+
+\end{scope}
+%
+%Motorleitung
+\draw[line width = 2pt]
+(achse1.west)--($(achse1.west)+(0,-0.25)$)--($(achse1.west)+(-0.27,-0.3)$)--($(achse1.west)+(-0.27,-0.55)$);
+%
+\draw[dashed](welle.east)--+(190:1.3)node[left]{$\varphi_1$, $\Omega_1$};
+%
+\draw[dashed,-latex] ($(welle.east)+(0,-0.5)+(190:0.7)$) arc
+(-50:150:0.5);
+%
+\end{scope}
+
+%
+%--------------------------------------------------------------------
+%
+% Achse 2
+%
+\begin{scope}[xshift=0.85cm]   %Achse2
+%
+\node[rotate = 90,rectangle,minimum width = 2.5cm,minimum height = 0.8cm,fill =
+gray!80!](achse2) at (0,0) {Achse 2};
+
+\begin{scope}
+
+\tikzstyle{every node} = [shape = cylinder,rotate=190,draw,
+                          cylinder uses custom fill,cylinder end fill = black!20!,cylinder body fill = black!50!]
+
+\node[aspect = 0.85,inner xsep = 0.45cm,inner ysep = 0.4cm,draw] (motor) at
+($(achse2.west)+(0.34,-1.4)$){};
+%
+
+\node[aspect = 0.85,inner xsep = 0.15cm,inner ysep = 0.05cm,draw](welle) at
+($(motor.east) + (0.27,0.05)$) {};
+%
+\end{scope}
+
+\draw[dashed](welle.east)--+(190:3)node[left]{$\varphi_2$, $\Omega_2$};
+\draw[dashed,-latex] ($(welle.east)+(0,-0.5)+(190:2.3)$)
+arc(-50:150:0.5);
+
+%Motorleitung
+\draw[line width = 2pt]
+(achse2.west)--($(achse2.west)+(0,-0.5)$)--($(achse2.west)+(0.37,-0.65)$)--($(achse2.west)+(0.37,-1)$);
+%
+\end{scope}
+%
+%--------------------------------------------------------------------
+%
+% Steuerung
+%
+\node[rotate = 90,rectangle,minimum width = 2.5cm,minimum height = 1.5cm,fill =
+gray!80!](sps) at ($(achse1.north) + (-0.8,0)$){Steuerung};
+%
+\visible<2->{
+\draw(sps.north)node[text width = 1.5cm,above left]{Virtueller Master};
+\draw(sps.north)node[below left]{$\varphi_{VM}$, $\Omega_{VM}$};
+}
+%
+\end{tikzpicture}

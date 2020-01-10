@@ -1,0 +1,24 @@
+\begin{tikzpicture}
+%
+\coordinate (start) at (0,1);
+\coordinate (ecke) at (1,1);
+\coordinate (semitte) at ($(start)!0.65!(ecke)$);
+\coordinate (ende) at (1,0);
+\coordinate (eemitte) at ($(ecke)!0.65!(ende)$);
+%
+\draw[-latex,thick](start)--(semitte);
+\draw[-latex,thick](ecke)--(eemitte);
+\draw[thick](start)--(ecke)--(ende);
+\visible<2->{\draw[thick,dashed,rounded corners=12pt](start)--(ecke)--(ende);}
+%
+\begin{scope}[xshift = 3cm]
+%
+\draw[-latex](-0.1,0)--(3.5,0);
+\draw[-latex](0,-0.1)--(0,1)node[left]{$V_X,V_Y$};
+%
+\draw[thick,blue](0,0.6)--(1.25,0.6)--(1.5,0.2)--(1.5,0);
+\draw[thick,dashed,red](1.5,0)--(1.5,0.2)--(1.75,0.6)--(3,0.6);
+%
+\end{scope}
+%
+\end{tikzpicture}

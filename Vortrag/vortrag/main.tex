@@ -1,0 +1,96 @@
+\documentclass[pdftex,10pt]{beamer}
+
+\useoutertheme{infolines}
+
+\usepackage[ngerman]{babel}
+\usepackage[utf8]{inputenc}
+\usepackage{times}
+\usepackage[T1]{fontenc}
+\usepackage{graphicx}
+\usepackage[right]{eurosym}
+\usepackage{longtable}
+\usepackage{bibgerm}
+
+\usepackage{tikz}
+\usetikzlibrary{positioning}
+\usetikzlibrary{calc}
+\usetikzlibrary{fit}
+\usetikzlibrary{shapes.geometric}
+\usetikzlibrary{shapes.arrows}
+\usetikzlibrary{decorations}
+\usetikzlibrary{decorations.pathmorphing}
+\usetikzlibrary{decorations.text}
+\usetikzlibrary{backgrounds}
+\usetikzlibrary{intersections}
+\usetikzlibrary{plotmarks}
+\usetikzlibrary{arrows.meta}
+
+\usepackage{pgfplots}
+\pgfplotsset{compat=1.10}
+
+\usepackage[european]{circuitikz}
+\ctikzset {bipoles/length=1cm}
+
+\setlength{\arrayrulewidth}{0.75pt}
+
+\title[Autonomes Bilderkennungsystem, Neuronale Netze] {Entwicklung eines autonomen Systems zur Bilderkennung mithilfe Neuronaler Netze auf dedizierter Hardware}
+
+\subtitle{\vspace{0.5cm}Kolloqiuim - Bachelorarbeit}
+
+\author[Manuel Barky]{Manuel Barkey}
+
+  
+\date[Reutlingen, 29.01.2020] 
+{Reutlingen, 29.01.2020}
+
+\subject{Mechatronik}
+
+
+\pgfdeclareimage[height=0.49cm]{logotitel}{./Bilder/Silhouette_HSRT_045K.jpg}
+\pgfdeclareimage[height=0.235cm]{logofolie}{./Bilder/hsrt_silhouette_folie.png}
+\logo{\pgfuseimage{logotitel}}
+
+
+% Falls Aufzählungen immer schrittweise gezeigt werden sollen, kann
+% folgendes Kommando benutzt werden:
+
+%\beamerdefaultoverlayspecification{<+->}
+
+\begin{document}
+
+\begin{frame}
+  \titlepage
+\end{frame}
+
+\logo{\pgfuseimage{logofolie}}
+
+%Einleitung soll direkt nach der Titelfolie erfolgen, ohne zusätzliche
+%Inhalts- und Inhaltsverlaufsfolien
+%
+%
+%Nach der Einleitung wird vor jedem Abschnitt das Inhaltverzeichnis eingeblendet
+
+\input{motivation}
+
+\AtBeginSection[]
+{
+  \begin{frame}<beamer>{Gliederung}
+    \tableofcontents[currentsection,hideothersubsections]
+  \end{frame}
+} 
+
+\begin{frame}{Gliederung}
+  \tableofcontents[hideallsubsections]
+\end{frame}
+%
+\input{neuronale_netze}
+\input{hardware}
+\input{training}
+\input{application}
+\input{zusammenfassung}
+\input{einzelachspositionierung}
+\input{koordiniertebewegungen}
+
+%
+  
+\end{document}

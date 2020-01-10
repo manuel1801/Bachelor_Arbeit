@@ -1,0 +1,460 @@
+w%
+%--------------------------------------------------------------------
+%
+\section[\thesection \ Koordinierte Bewegungen]{Koordinierte
+Bewegungen}\label{sec:koordinierteBewegungen}
+%
+%--------------------------------------------------------------------
+%
+\subsection[\thesection .\thesubsection \ 
+Master--Slave--Anwendungen]{Master--Slave--Anwendungen}\label{sec:masterslave}
+%
+\begin{frame}{Aufgabenstellung}
+%
+\begin{block}{Synchronisation der Bewegung mehrerer Achsen:}
+%
+
+\vspace{-6pt}
+
+%
+\begin{itemize}
+  \item Eine Masterachse
+  \item Eine oder mehrere Slaveachsen
+\end{itemize}
+%
+\end{block}
+%
+
+\vspace{6pt}
+
+\begin{columns}[T]
+
+\column{0.48\textwidth}
+\input{./Bilder/mehrachsapplikation.tex}
+
+\column{0.47\textwidth}
+%
+\begin{block}{$\varphi_2$ , $\Omega_2 = f(\varphi_1)$ , $f(\Omega_1)$}
+%
+\begin{tabular}{ll}
+  $\varphi_2 = K \varphi_1$ & Winkelsynchronlauf\\
+  $\Omega_2 = K\Omega_1$    & Drehzahlsynchronlauf\\
+  $\varphi_2 = f(\varphi_1)$ & Kurvenscheibe
+\end{tabular}
+%
+\end{block}
+%
+\visible<2->{Masterachse kann auch durch \alert{\em Virtuellen Master} ersetzt
+werden}
+%
+\end{columns}
+%
+\end{frame}
+%
+%--------------------------------------------------------------------
+%
+\begin{frame}{Drehzahlsynchronlauf}
+%
+Beispiel: Fliegende Säge
+%
+\begin{itemize}
+  \item Master fährt mit konstanter Drehzahl
+  %
+  \item Slave 
+  %
+  \begin{enumerate}
+    \item Ist im Stillstand in der Position~$X_0$
+    \item Beschleunigt auf die Masterdrehzahl
+    \item Fährt mit der Masterdrehzahl
+    \item Fährt zur Position $X_0$
+  \end{enumerate}
+  %
+  \item Weitere unsynchronisierte Achsen
+  %
+  \begin{itemize}
+    %
+    \item Vorschub der Säge von Position $Y_0$ nach $Y_1$
+    \item Antrieb der Säge
+    %
+  \end{itemize}
+  %
+\end{itemize}
+%
+\begin{block}{Beispiel Applikationsdaten}
+%
+\begin{tabular}{llp{0.25cm}ll}
+%
+Band                &         &&Säge\\[0.25em]
+\cline{1-2} \cline{4-5}
+%
+\\[-0.75em]
+
+%
+Geschwindigkeit:     &20m/min  &&Vorschubgeschwindigkeit:&10m/min\\
+Breite:              &20cm     &&Beschleunigung X (Slave):&5m/s$^{2}$\\
+Länge:               &1m       &&Beschleunigung Y:&6m/s$^{2}$
+%
+\end{tabular}
+%
+\end{block}
+%
+\end{frame}
+%
+%
+%--------------------------------------------------------------------
+%
+\subsection[\thesection .\thesubsection \ 
+Interpolierte Bewegungen]{Interpolierte Bewegungen}\label{sec:interpolation}
+%
+\begin{frame}{Interpolierte Bewegungen}
+%
+\begin{block}{Aufgabenstellung}
+%
+Verfahren einer beliebigen durch die Anwendung vorgegebenen Bahn in der Ebene
+/ im Raum
+%
+\begin{itemize}
+  \item Aufteilung der Bewegung in der Ebene / im Raum auf die einzelnen Achsen
+  \item Zerlegung der Bahn in Stützstellen zu diskreten Zeitpunkten
+  \item Interpolation zwischen den Stützstellen
+\end{itemize}
+%
+\end{block}
+%
+
+\vspace{12pt}
+
+Typische Anwendungsfelder
+%
+\begin{itemize}
+  \item Robotik
+  \item Werkzeugmaschinen
+\end{itemize}
+%
+
+
+\vspace{36pt}
+
+
+\end{frame}
+%
+%--------------------------------------------------------------------
+%
+\begin{frame}{Darstellung einer zweidimensionalen Bahn}
+%
+\vspace{-3pt}
+%
+\begin{block}{Implizite Darstellung}
+%
+\begin{columns}
+%
+\column{0.2\textwidth}
+%
+\begin{align}
+%
+0 = F(X,Y)\nonumber
+%
+\end{align}
+%
+\column{0.25\textwidth}
+%
+Beispiel: Kreis
+
+\vspace{-18pt}
+
+\begin{align}
+%
+X^2+Y^2 &= 1 \nonumber 
+%
+\end{align}
+%
+\column{0.25\textwidth}
+%
+\begin{tikzpicture}
+%
+\draw[fill=white,draw] (-0.6,-0.6)rectangle(0.6,0.6);
+\draw[thick,black] (0,0) circle(0.3cm);
+\draw[-latex,black](-0.5,0)--(0.5,0)node[below]{$\scriptstyle{X}$};
+\draw[-latex,black](0,-0.5)--(0,0.5)node[left]{$\scriptstyle{Y}$};
+%
+\end{tikzpicture}
+%
+\column{0.25\textwidth}
+%
+%
+\end{columns}
+%
+\end{block}
+
+\vspace{-6pt}
+
+\begin{block}{Explizite Darstellung}
+%
+\begin{columns}
+%
+\column{0.2\textwidth}
+%
+\begin{align}
+%
+X = F_1(Y)\nonumber\\
+Y = F_2(X)\nonumber
+%
+\end{align}
+%
+\column{0.25\textwidth}
+%
+Beispiel: Kreis
+
+\vspace{-18pt}
+
+\begin{align}
+%
+X &= \sqrt{1-Y^2} \nonumber\\
+Y &= \sqrt{1-X^2} \nonumber 
+%
+\end{align}
+%
+\column{0.25\textwidth}
+%
+\begin{tikzpicture}
+%
+\draw[fill=white,draw] (-0.6,-0.6)rectangle(0.6,0.6);
+\draw[thick,black] (0,0) circle(0.3cm);
+\draw[-latex,black](-0.5,0)--(0.5,0)node[below]{$\scriptstyle{X}$};
+\draw[-latex,black](0,-0.5)--(0,0.5)node[left]{$\scriptstyle{Y}$};
+%
+\end{tikzpicture}
+%
+\column{0.25\textwidth}
+%
+
+%
+\end{columns}
+%
+\end{block}
+%
+
+\vspace{-6pt}
+
+%
+\begin{block}{Parametrische Darstellung}
+%
+\begin{columns}
+%
+\column{0.2\textwidth}
+%
+\begin{align}
+%
+X = F_1(u)\nonumber\\
+Z = F_2(u)\nonumber
+%
+\end{align}
+%
+\column{0.25\textwidth}
+%
+Beispiel: Kreis
+%
+
+\vspace{-18pt}
+
+\begin{align}
+%
+X &= \sin{u} \nonumber\\
+Z &= \cos{u} \nonumber 
+%
+\end{align}
+%
+\column{0.15\textwidth}
+%
+\begin{tikzpicture}
+%
+\draw[fill=white,draw] (-0.6,-0.6)rectangle(0.6,0.6);
+\draw[thick,black] (0,0) circle(0.3cm);
+\draw[-latex,black](-0.5,0)--(0.5,0)node[below]{$\scriptstyle{X}$};
+\draw[-latex,black](0,-0.5)--(0,0.5)node[left]{$\scriptstyle{Y}$};
+%
+\end{tikzpicture}
+%
+\column{0.2\textwidth}
+%
+Beispiel: Kurve
+
+\vspace{-18pt}
+
+\begin{align}
+%
+X &= u\sin{u} \nonumber\\
+Y &= u\cos{u} \nonumber 
+%
+\end{align}
+%
+\column{0.1\textwidth}
+%
+\begin{tikzpicture}
+%
+\draw[fill=white,draw] (-0.3,-0.6)rectangle(0.6,0.6);
+\draw[-latex,black](-0.2,0)--(0.5,0)node[below]{$\scriptstyle{X}$};
+\draw[-latex,black](0,-0.5)--(0,0.5)node[left]{$\scriptstyle{Y}$};
+%
+\draw[thick,black,scale=0.15,domain=-2.9:2.9,smooth,variable=\t]
+plot ({\t*sin(\t r)},{\t*cos(\t r)});
+%
+\end{tikzpicture}
+%
+\end{columns}
+%
+\end{block}
+%
+\end{frame}
+%
+%--------------------------------------------------------------------
+%
+\begin{frame}{Satzübergänge}
+%
+Übergang zwischen den Teilstücken des interpolierten Bewegungsprofils
+%
+\begin{enumerate}
+  \item Standardverfahren
+\end{enumerate}
+%
+\begin{columns}[T]
+%
+\column{0.1\textwidth}
+%
+\column{0.25\textwidth}
+%
+\begin{itemize}
+  \item Übergang mit {\em Genauhalt}
+\end{itemize}
+%
+\column{0.6\textwidth}
+\input{./Bilder/satzueberganggenauhalt.tex}
+%
+\end{columns}
+%
+\vspace{12pt}
+%
+\begin{columns}[T]
+%
+\column{0.1\textwidth}
+%
+\column{0.25\textwidth}
+%
+\begin{itemize}
+  \item Übergang mit {\em Überschleifen}
+\end{itemize}
+%
+\column{0.6\textwidth}
+\input{./Bilder/satzuebergangueberschleifen.tex}
+%
+\end{columns}
+%
+\vspace{12pt}
+%
+\begin{columns}[T]
+%
+\column{0.1\textwidth}
+%
+\column{0.25\textwidth}
+%
+\begin{itemize}
+  \item Übergang mit {\em Grenzgeschwindigkeit}
+\end{itemize}
+%
+\column{0.6\textwidth}
+\input{./Bilder/satzuebergangvmin.tex}
+%
+\end{columns}
+%
+
+\vspace{6pt}
+
+Satzübergänge ohne Genauhalt
+%
+\begin{itemize}
+  \item[$\Rightarrow$] Eckenverrundung aufgrund der Maschinendynamik / der
+  Schleppfehler
+\end{itemize} 
+%
+\end{frame}
+%
+%
+%--------------------------------------------------------------------
+%
+\begin{frame}{Satzübergänge}
+%
+\begin{enumerate}
+  \setcounter{enumi}{0}
+  \item Standardverfahren (Fortsetzung)
+\end{enumerate}
+%
+\vspace{6pt}
+%
+\begin{columns}
+%
+\column{0.1\textwidth}
+%
+\column{0.85\textwidth}
+%
+
+Beispiel: Geradeninterpolation zwischen drei Punkten
+
+\vspace{6pt}
+
+%
+\input{./Bilder/satzuebergangstandard.tex}
+%
+
+\vspace{6pt}
+%
+
+Die gesamte Bahn setzt sich aus einzelnen $R$--$R$--Segmenten zusammen
+
+%
+\end{columns}
+%
+\vspace{12pt}
+%
+\end{frame}
+%
+%--------------------------------------------------------------------
+%
+\begin{frame}{Satzübergänge}
+%
+Übergang zwischen den Teilstücken des interpolierten Bewegungsprofils
+%
+\begin{enumerate}
+  \setcounter{enumi}{1}
+  \item Übergang mit {\em Look--Ahead}
+\end{enumerate}
+%
+\begin{columns}
+%
+\column{0.1\textwidth}
+%
+\column{0.85\textwidth}
+%
+
+Forsetzung Beispiel: Geradeninterpolation zwischen drei Punkten
+
+\vspace{6pt}
+
+%
+\input{./Bilder/satzueberganglookahead.tex}
+%
+
+\vspace{6pt}
+%
+
+\begin{itemize}
+  \item Keine R--R Bewegungen mehr
+  \item Geringere Geschwindigkeitsänderungen
+\end{itemize}
+
+%
+\end{columns}
+%
+\vspace{12pt}
+%
+\end{frame}
+%

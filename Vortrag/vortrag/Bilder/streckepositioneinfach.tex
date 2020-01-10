@@ -1,0 +1,27 @@
+\begin{tikzpicture}
+%
+\draw(0,0)node[rectangle,minimum width = 1.8cm,minimum height =
+1.2cm,draw](m2n){};
+\draw(m2n.south west)--(m2n.north east);
+\draw(m2n.north west)node[above]{$\dfrac{1}{J_G}$};
+%
+\draw($(m2n.east)+(1,0)$)node[rectangle,minimum width = 1.8cm,minimum height =
+1.2cm,draw,anchor = west](n2x){};
+\draw(n2x.south west)--(n2x.north east);
+%
+\draw($(m2n.west)+(-1,0)$)node[circle,minimum width = 0.2cm,draw](deltam){};
+%
+%---------------
+%
+\draw[-latex](m2n.east)--(n2x.west)node[pos = 0.5,above]{$\Omega$};
+\draw[-latex](deltam.east)--(m2n.west);
+%
+\coordinate (mm) at ($(deltam.west)+(-1,0)$);
+\coordinate (ml) at ($(deltam.north)+(0,1)$);
+\coordinate (xist) at ($(n2x.east)+(1,0)$);
+%
+\draw[-latex] (mm)node[above right]{$M_M$}--(deltam.west);
+\draw[-latex] (ml)node[below left]{$M_L$}--(deltam.north)node[above left]{$-$};
+\draw[-latex] (n2x.east)--(xist)node[above left]{$\varphi$};
+%
+\end{tikzpicture}

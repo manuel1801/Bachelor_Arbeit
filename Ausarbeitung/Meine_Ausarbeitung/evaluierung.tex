@@ -2,7 +2,27 @@
 
 \section{Evaluierungs Metriken}\label{sec:metricen}
 
-hier zb confusion matrix, IOU, mAP erklären.
+\subsection*{mAP}
+\begin{itemize}
+    \item IoU Intersection over Unit: überlappung pred box mit ground truth box fläche beider boxen zusammen
+    \item Confusion matrix
+    \begin{itemize}
+        \item TP: True Positive (richtig auf ja getippt) (TP wird bei IoU > threshh. (übl 0.5) festgelegt)
+        \item TN: True Negative (richtig auf nein getippt)
+        \item FP: False Positive (fälschlicher ja getippt)
+        \item FN: False Negative (fälschlicherweise auf nein getippt)
+    \end{itemize}
+    \item Precision: TP/(TP + FP): möglichst viele richtige aus allen finden
+    \item Recall: TP/(TP + FN): möglichst \textbf{nur} die richtigen (sensitivity)
+    \item AP = Precision-Recall vehältniss, genauer fläche unter kurve der beiden
+    \item mAP für alle klassen gemittelt
+\end{itemize}
+
+\subsection*{Loss}
+kombination aus binärem classification log loss (cross entropy) für boxen und 
+L1 smooth loss.
+
+
 
 \section{Ergebnisse}\label{sec:results}
 

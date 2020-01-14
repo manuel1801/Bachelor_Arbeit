@@ -17,7 +17,7 @@ while True:
         else:
             print(type(msg))
             print(msg.shape)
-            cv2.imwrite('test/received_image.jpg', msg)
+            cv2.imwrite('received_image.jpg', msg)
             my_connection.send_data('image received', 'text')
     time.sleep(3)
 

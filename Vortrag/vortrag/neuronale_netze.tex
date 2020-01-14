@@ -1,22 +1,51 @@
 \section[\thesection \  Künstliche Neuronale Netze]{Künstliche Neuronale Netze}\label{sec:nn}
 
-\begin{frame}{Neuronale Netze}
+% Frame 1
+\begin{frame}{Machine Learning}
+    \vspace{0.5cm}
+    %\begin{block}
+        erkennung von mustern/zusammenhängen in großer 
+        datenmenge ohne expliziert programmiert zusein
+        \begin{figure}[h]
+            \centering
+            \def\svgwidth{0.8\columnwidth}
+            \tiny
+            \input{Bilder/ml_classic_system.pdf_tex}
+        \end{figure}
+    %\end{block}
 
-    \begin{itemize}
-        \item was: NN lernt in gr Datenmenge Zusammenhänge und kann diese generalisieren so das es sie auch für neue daten anwenden kann
-        \item wie: input daten mit zugehörigen outputs (hier gelabelte bilder) in Modell, dieses lernt iterativ die zusammenhänge
-    \end{itemize}
-
-    \vspace{1cm}
-
-    \begin{center}
+    \begin{block}{Neuronale Netze}
         \begin{columns}[T]
-            \column{0.3\textwidth}
-            \input{Bilder/system}
-            \column{0.3\textwidth}
-            \input{Bilder/system_edit}
+            \column{0.3\columnwidth}
+            Neuronale netze \dots
+            \column{0.7\columnwidth}
+            \begin{figure}[htb]
+                \centering
+                \tiny
+                \input{Bilder/nn.tex}
+            \end{figure}         
         \end{columns}
-        
-    \end{center}
-    
+    \end{block}    
 \end{frame}
+
+
+
+% Frame 2
+\begin{frame}{Training vs Inferenz}
+    \begin{columns}[T]
+        \column{0.5\columnwidth}
+        Training
+        \begin{itemize}
+            \item variable parameter
+            \item gelablte input daten
+        \end{itemize}
+        \column{0.5\columnwidth}
+        Inferenz
+        \begin{itemize}
+            \item fixe parameter
+            \item unbekannte input daten
+        \end{itemize}
+    \end{columns}
+\end{frame}
+
+

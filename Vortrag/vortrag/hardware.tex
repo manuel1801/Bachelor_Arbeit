@@ -1,80 +1,47 @@
 \section[\thesection \  Hardware]{Hardware}\label{sec:hardware}
 
-
-\begin{frame}{Verwendete Hardware}
+% Frame 4
+\begin{frame}{Intel Neural Compute Stick 2}
     \begin{columns}[T]
-
-        \column{0.5\textwidth}
+        \column{0.6\textwidth}
+        Beschleuniger für die Inferenz von Deep Learining Algorithmen
         \begin{itemize}
-            \item Raspberry Pi 4
-            \item Intels Neural Compute Stick 2
-            \item Raspberry Pi Camera Modul mit IR Cut Funktion      
+            \item Für Edge Anwendungen:
+            \begin{itemize}
+                \item Überwachungskamers, Drohnen, Roboter
+            \end{itemize}
+            \item Prozessor: Intel Movidius Myriad X VPU
+            \begin{itemize}
+                \item parallelität > taktrate
+                \item effiziente berechnung von matrixmultiplikatioen
+            \end{itemize}
         \end{itemize}
-        
-        \column{0.5\textwidth}
-        \includegraphics[width=0.6\textwidth]{Bilder/RPiCam.jpg}
-        \includegraphics[width=0.6\textwidth]{Bilder/raspberrypi_4.png}
-
+        \column{0.4\textwidth}
+        \vspace{1cm}
+        \includegraphics[width=0.8\textwidth]{Bilder/ncs2.jpg}
     \end{columns}
-        
-\end{frame}
+    \vspace{0.3cm}
 
-
-
-
-\begin{frame}{NCS2 und Myriad Chip}
+    \visible<2->{
 
     \begin{columns}[T]
-        \column{0.5\textwidth}
-        \begin{block}{Funktionsweise}
+        \column{0.4\textwidth}
+
+        \begin{block}{OpenVino Toolkit}
+    
+            Inferenz auf Intelhardware
             \begin{itemize}
-                \item schnelle NN berechnungen
+                \item Eigenes Dateiformat für Model
+                \item Unterstütze Frameworks:
+                \begin{itemize}
+                    \item  Tensorflow, Caffe
+                \end{itemize}
             \end{itemize}
         \end{block}
-    
-        \begin{block}{Anwendungen}
-            \begin{itemize}
-                \item für edge systeme
-                \item vgl zu cloud basierten nns
-            \end{itemize}
-        \end{block}
-
-        \column{0.5\textwidth}
-        \includegraphics[width=\textwidth]{Bilder/ncs2.jpg}
-
-
-        
-    \end{columns}
-
-
-    
-\end{frame}
-
-
-\begin{frame}{OpenVino}
-    
-    \begin{block}{\vspace{1cm}Open Vino Toolkit Developement Workflow}
-        \begin{columns}[T]
-            \column{0.3\textwidth}
-            
-            \begin{itemize}
-                \item in Tensorflow, Caffe, rainierte Modelle
-                \item Asymchrone Inferenz möglich
-            \end{itemize}
-            
-
-            \column{0.7\textwidth}
-            \begin{center}
-                \includegraphics[width=0.9\textwidth]{Bilder/open_vino_workflow_steps.png}    
-            
-            \end{center}
-        
+            \column{0.6\textwidth}
+            \includegraphics[width=\textwidth]{Bilder/open_vino_workflow_steps.png}
         \end{columns}
 
+    }
         
-    \end{block}
-
-        
-    
 \end{frame}
-

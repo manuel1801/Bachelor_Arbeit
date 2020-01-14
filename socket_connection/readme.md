@@ -28,6 +28,7 @@
 * **return** received data list
  
 ### send_data(data, datatype)
+* datatypes: 'image', 'text'
 *  sender_sockets = select(socket_list)
 * for each sender_sockets:
     * send image

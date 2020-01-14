@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   width="210mm"
+   height="297mm"
+   viewBox="0 0 210 297"
+   version="1.1"
+   id="svg8"
+   inkscape:version="0.92.3 (2405546, 2018-03-11)"
+   sodipodi:docname="train_test_split.svg">
+  <defs
+     id="defs2" />
+  <sodipodi:namedview
+     id="base"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:pageopacity="0.0"
+     inkscape:pageshadow="2"
+     inkscape:zoom="1.4"
+     inkscape:cx="440.77198"
+     inkscape:cy="789.5511"
+     inkscape:document-units="mm"
+     inkscape:current-layer="layer1"
+     showgrid="false"
+     inkscape:measure-start="507.857,573.571"
+     inkscape:measure-end="775.714,730"
+     inkscape:window-width="1853"
+     inkscape:window-height="1025"
+     inkscape:window-x="67"
+     inkscape:window-y="27"
+     inkscape:window-maximized="1" />
+  <metadata
+     id="metadata5">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title></dc:title>
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <g
+     inkscape:label="Layer 1"
+     inkscape:groupmode="layer"
+     id="layer1">
+    <rect
+       y="106.6894"
+       x="26.44495"
+       height="13.372895"
+       width="95.263885"
+       id="rect12"
+       style="opacity:1;fill:#ffa2ff;fill-opacity:1;stroke:#0a00ff;stroke-width:0.4643321;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       inkscape:transform-center-x="-36.11376"
+       inkscape:transform-center-y="5.0108584" />
+    <rect
+       y="106.68745"
+       x="127.96043"
+       height="13.372895"
+       width="19.995598"
+       id="rect12-6"
+       style="opacity:1;fill:#ffa2ff;fill-opacity:1;stroke:#0a00ff;stroke-width:0.4643321;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       inkscape:transform-center-x="-99.995092"
+       inkscape:transform-center-y="5.0089129" />
+    <rect
+       y="106.80611"
+       x="152.34297"
+       height="13.372896"
+       width="19.995598"
+       id="rect12-6-6"
+       style="opacity:1;fill:#ffa2ff;fill-opacity:1;stroke:#0a00ff;stroke-width:0.4643321;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       inkscape:transform-center-x="-99.995092"
+       inkscape:transform-center-y="5.0089129" />
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-weight:normal;font-size:10.58333302px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.26458332"
+       x="29.671131"
+       y="116.89436"
+       id="text4997"><tspan
+         sodipodi:role="line"
+         id="tspan4995"
+         x="29.671131"
+         y="116.89436"
+         style="stroke-width:0.26458332">Train</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-weight:normal;font-size:10.58333302px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.26458332"
+       x="129.49463"
+       y="116.70536"
+       id="text5001"><tspan
+         sodipodi:role="line"
+         id="tspan4999"
+         x="129.49463"
+         y="116.70536"
+         style="stroke-width:0.26458332">Test</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-weight:normal;font-size:10.58333302px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.26458332"
+       x="154.59227"
+       y="117.27232"
+       id="text5005"><tspan
+         sodipodi:role="line"
+         id="tspan5003"
+         x="154.59227"
+         y="117.27232"
+         style="stroke-width:0.26458332">Val</tspan></text>
+  </g>
+</svg>

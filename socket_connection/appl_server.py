@@ -4,8 +4,7 @@ import cv2
 
 my_connection = cnb.RaspyConnection()
 my_connection.start_server()
-
-img = cv2.imread('test/face.jpg')
+img = cv2.imread('deer.jpg')
 print('iamge shape ', str(img.shape))
 
 
@@ -25,6 +24,7 @@ while True:
                 print(msg)
 
     time.sleep(2)
+    my_connection.send_data(img, 'image')
 
 
 my_connection.end_connection()

@@ -10,8 +10,13 @@
 \usepackage[right]{eurosym}
 \usepackage{longtable}
 \usepackage{bibgerm}
+\usepackage{caption}
 
+\usepackage{subcaption}
+\usepackage[pdf]{pstricks}
 \usepackage{tikz}
+\usepackage{neuralnetwork}
+
 \usetikzlibrary{positioning}
 \usetikzlibrary{calc}
 \usetikzlibrary{fit}
@@ -25,6 +30,11 @@
 \usetikzlibrary{plotmarks}
 \usetikzlibrary{arrows.meta}
 
+\renewcommand{\footnotesize}{\fontsize{3pt}{4pt}\selectfont}
+
+
+\graphicspath{{Bilder/}}
+
 \usepackage{pgfplots}
 \pgfplotsset{compat=1.10}
 
@@ -33,9 +43,9 @@
 
 \setlength{\arrayrulewidth}{0.75pt}
 
-\title[Autonomes Bilderkennungsystem, Neuronale Netze] {Entwicklung eines autonomen Systems zur Bilderkennung mithilfe Neuronaler Netze auf dedizierter Hardware}
+\title[Autonomes Bilderkennungsystem mit neuronalen Netze] {Entwicklung eines autonomen Systems zur Bilderkennung mithilfe Neuronaler Netze auf dedizierter Hardware}
 
-\subtitle{\vspace{0.5cm}Kolloqiuim - Bachelorarbeit}
+\subtitle{\vspace{0.5cm}Kolloquium - Bachelorarbeit}
 
 \author[Manuel Barky]{Manuel Barkey}
 
@@ -72,6 +82,8 @@
 
 \input{motivation}
 
+\section*{Gliederung}\label{sec:toc}
+
 \AtBeginSection[]
 {
   \begin{frame}<beamer>{Gliederung}
@@ -88,9 +100,6 @@
 \input{training}
 \input{application}
 \input{zusammenfassung}
-\input{einzelachspositionierung}
-\input{koordiniertebewegungen}
-
 %
   
 \end{document}

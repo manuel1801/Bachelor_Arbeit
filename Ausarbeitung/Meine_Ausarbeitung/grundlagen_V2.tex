@@ -50,20 +50,15 @@ Beim Machine Learning erhällt das Programm neben den
 Eingeben auch die zugehörigen Ausgaben und soll daraus 
 dann die Regeln so ableiten, das es zukünftig für ähnliche 
 Input Daten die richtigen Outputs bestimmen kann.
-
+\vspace{0.5cm}
 \begin{figure}[htb]
     \centering
-    \begin{minipage}[b]{0.4\textwidth}
-        \centering
-        \input{./Bilder/system}
-    \end{minipage}
-    \begin{minipage}[b]{0.4\textwidth}
-        \centering
-        \input{./Bilder/system_edit}
-    \end{minipage}
-    \caption{vgl classisches program und ml}
-    \label{fig:ml_system}
+    \def\svgwidth{0.8\columnwidth}
+    \footnotesize
+    \input{Bilder/ml_classic_system.pdf_tex}
 \end{figure}
+\vspace{0.5cm}
+
 
 Das Ableiten der Regeln wird als Lernen bezeichnet und ist 
 mit einer numerischen Annäherung einer math Funktion an die In- Output 
@@ -387,6 +382,13 @@ Ein weiterer bestandteil von CNNs sind die Pooling Layer, welche eine
 bestimmte Anzahl an Pixeln zB 3 x 3 zu einem Wert zusammenfassen wodurch 
 sich die Parameter Anzahl des Bildes veringert. Das hat den Vorteil, dass 
 
+
+\begin{figure}[htb]
+    \centering
+    \label{fig:lenet}
+    \includegraphics[width=0.8\textwidth]{Bilder/lenet.png}
+    \caption{LeNet-5 cite lecun}
+\end{figure}
 
 
 

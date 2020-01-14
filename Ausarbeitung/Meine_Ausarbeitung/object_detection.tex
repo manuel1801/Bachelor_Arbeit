@@ -81,7 +81,13 @@ liste von kompatiblen modellen.\\
 trainiert wurde auf:\\
 \begin{itemize}
     \item ssd mobile net und inception
+    \begin{itemize}
+        \item keine region proposal, dafür vordefinierte anker boxen, und cnn mit unterschiedl großen layern
+    \end{itemize}
     \item faster rcnn (inception und resnet)
+    \begin{itemize}
+        \item ist ein Two stage detector: 1 ROIs mithilfe RPN oder SelSearch finden, darauf dann classifier anwenden
+    \end{itemize}
     \item frcnn
 \end{itemize}
 

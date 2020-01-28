@@ -4,12 +4,8 @@
 %
 
 
-
-
-
 \subsection[\thesection .\thesubsection \ 
 Sammeln und aufbereiten der Daten]{Sammeln und aufbereiten der Daten}\label{subsec:collect_data}
-% Frame 7
 \begin{frame}{Datensatz}
    
    Bilder + Labels mit Koordinaten der Bounding Boxen
@@ -42,7 +38,6 @@ Sammeln und aufbereiten der Daten]{Sammeln und aufbereiten der Daten}\label{subs
     }
 \end{frame}
 
-% Frame 8
 \begin{frame}{Augmentierung}
     Künstlich mehr Daten erzeugen, verhindern von Overfitting
         \begin{figure}
@@ -59,7 +54,6 @@ Sammeln und aufbereiten der Daten]{Sammeln und aufbereiten der Daten}\label{subs
 \subsection[\thesection .\thesubsection \ 
 Auswahl und Training des Modells]{Auswahl und Training des Modells}\label{subsec:train}
 
-% Frame 5 (cnn und objekt det zusammen)
 
 \begin{frame}{Convolutional Neural Network}
     \begin{columns}[T]
@@ -115,93 +109,6 @@ Auswahl und Training des Modells]{Auswahl und Training des Modells}\label{subsec
     }
 \end{frame}
 
-
-
-% % Frame 5
-% \begin{frame}{Convolutional Neural Networks}
-
-%     \begin{figure}
-%         \centering
-%         \def\svgwidth{0.75\columnwidth}
-%         \input{Bilder/lenet.pdf_tex}
-%     \end{figure}
-
-%     \begin{columns}[T]
-%         %\column{0.05\columnwidth}
-%         \column{0.6\columnwidth}
-%         \begin{itemize}
-%             \item Faltung des Inputs mit Filter Matrix
-%             \begin{itemize}
-%                     \item erzeugt Feature Maps
-%                     \item räumliche invarianz
-%                     \item gemeinsame Nutzung von Parametern
-%             \end{itemize}
-%         \end{itemize}
-
-%         \column{0.45\columnwidth}
-
-%         \visible<2->{
-%     \begin{itemize}
-%         \item Implementierung mithilfe Frameworks wie z.B. Tensorflow
-%         \item Training: mit vortrainierten Filtern: Fine Tuning
-%     \end{itemize}}
-        
-%     \end{columns}
-    
-% \end{frame}
-
-
-% % Frame 6
-% \begin{frame}{Objekterkennung}
-
-%     \begin{columns}[T]
-%         \column{0.5\columnwidth}
-
-%         zusätzliche Lokalisierung der erkannten Objekte im Bild
-
-
-
-%         \vspace{0.5cm}
-
-%         \begin{itemize}
-%             \item Basis Netz:
-%             \begin{itemize}
-%                 \item Vgg16, Inception, Resnet
-%             \end{itemize} 
-%         \end{itemize}
-
-
-%         \begin{itemize}
-%             \item Object Det Framework:
-%             \begin{itemize}
-%                 \item SSD, Faster R-CNN, YOLO 
-%             \end{itemize} 
-%         \end{itemize}
-        
-
-%         \vspace{0.5cm}
-%         Bsp Faster R-CNN
-%         \begin{enumerate}
-%             \item Feature Extraction: CNN
-%             \item Region Proposial: RPN
-%             \item classification/regression
-            
-%         \end{enumerate}
-        
-%         \column{0.5\columnwidth}
-%         \begin{figure}
-%             \centering
-%             \includegraphics[width=0.8\textwidth]{Bilder/classification_detection.jpeg}
-%         \end{figure}
-%         \begin{figure}
-%             \centering
-%             \includegraphics[width=0.8\textwidth]{Bilder/faster_rcnn.png}
-%         \end{figure}
-%     \end{columns}
-% \end{frame}
-
-
-% Frame 9
 \begin{frame}{Trainingsworkflow}
     Mehrfaches durchlaufen und anpassen des Trainingsprozess
     \begin{figure}

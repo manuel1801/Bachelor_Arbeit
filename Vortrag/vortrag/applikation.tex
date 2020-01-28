@@ -1,7 +1,6 @@
 \section[\thesection \  Applikation]{Applikation}\label{sec:application}
 
-% Frame 13
-\begin{frame}{Test Inferenz auf eigene Bilder} % ersetzen mit erste tests und vergl training auf gr bilder (inf erg von reh zeigen)
+\begin{frame}{Test Inferenz auf eigene Bilder} 
         
     \begin{columns}
         \column{0.5\columnwidth}
@@ -21,13 +20,11 @@
 
 \end{frame}
 
-% Frame 14 (AsyncInf und Appl Ablauf in ein frame)
 \begin{frame}{Applikation}
 
-    \input{flowchart.tex}
+    \input{Bilder/flowchart.tex}
 
     \visible<2->{
-
     
     \begin{block}{Asynchrone Inferenz}
         \begin{columns}[T]
@@ -47,42 +44,3 @@
     }
     
 \end{frame}
-
-% % Frame 13
-% \begin{frame}{Inferenz auf dem NCS2}
-%     Implementierung mit OpenVINO Toolkit
-%     \begin{block}{Asynchrone Inferenz}
-
-%         \begin{figure}[h]
-%             \centering
-%             \def\svgwidth{0.7\columnwidth}
-%             \input{Bilder/synch_asynch.pdf_tex}
-%         \end{figure}
-
-%         \begin{itemize}
-%             \item beschleunigte Inferenz durch
-%             \begin{itemize}
-%                 \item Asynchrone Inferenzrequests auf mehreren Threads
-%                 \item Batching
-%             \end{itemize} 
-%         \end{itemize}
-  
-%     \end{block}
-    
-% \end{frame}
-
-
-
-% % Frame 14
-% \begin{frame}{Anwendung}
-%     Ablauf:
-%     \begin{enumerate}
-%         \item Bewegung: ja/nein
-%         \item Zwischenspeichern der Frames
-%         \item Inferenz der Frames starten
-%         \item Ergebnisse auswerten und an Server schicken
-%         \item Benachrichtigung an Nutzer senden
-%     \end{enumerate}
-
-% \end{frame}
-

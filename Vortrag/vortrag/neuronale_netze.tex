@@ -1,50 +1,68 @@
-\section[\thesection \  Künstliche Neuronale Netze]{Künstliche Neuronale Netze}\label{sec:nn}
+\section[\thesection \  Neuronale Netze]{Neuronale Netze}\label{sec:nn}
 
 % Frame 1
 \begin{frame}{Machine Learning}
-    \vspace{0.5cm}
-    %\begin{block}
-        erkennung von mustern/zusammenhängen in großer 
-        datenmenge ohne expliziert programmiert zusein
+        Erkennung von Zusammenhängen in großen Datenmengen,\\ohne explizite programmierung darauf.
+        \begin{itemize}
+            \item Supervised Learning
+        \end{itemize}
+
         \begin{figure}[h]
             \centering
             \def\svgwidth{0.8\columnwidth}
-            \tiny
             \input{Bilder/ml_classic_system.pdf_tex}
         \end{figure}
-    %\end{block}
 
-    \begin{block}{Neuronale Netze}
+        \visible<2->{
         \begin{columns}[T]
-            \column{0.3\columnwidth}
-            Neuronale netze \dots
-            \column{0.7\columnwidth}
-            \begin{figure}[htb]
-                \centering
-                \tiny
-                \input{Bilder/nn.tex}
-            \end{figure}         
-        \end{columns}
-    \end{block}    
+        \column{0.3\columnwidth}
+        \begin{block}{Neuronale Netze}
+
+        \vspace{0.5cm}
+            Für komplexere Input Daten, z.B. Bilder
+
+    \end{block}
+
+    \column{0.65\columnwidth}
+
+    \begin{figure}[h]
+        \centering
+        \def\svgwidth{\columnwidth}
+        \input{Bilder/nn.pdf_tex}
+    \end{figure}
+    \end{columns}
+        }
 \end{frame}
 
-
-
 % Frame 2
-\begin{frame}{Training vs Inferenz}
+\begin{frame}{Training \& Inferenz}
     \begin{columns}[T]
-        \column{0.5\columnwidth}
+        \column{0.6\columnwidth}
         Training
+        \begin{figure}
+            \centering
+            \def\svgwidth{0.8\columnwidth}
+            \input{Bilder/train_workflow.pdf_tex}
+        \end{figure}
         \begin{itemize}
-            \item variable parameter
-            \item gelablte input daten
+            \item variable Parameter: \textit{Weights}
+            \item bekannte Input Daten: \textit{Labels}
+            \item mehrfaches durchlaufen: \textit{Epochen}
         \end{itemize}
-        \column{0.5\columnwidth}
+        \column{0.4\columnwidth}
+        \visible<2->{
         Inferenz
+        \begin{figure}
+            \centering
+            \def\svgwidth{0.4\columnwidth}
+            \input{Bilder/infer_workflow.pdf_tex}
+        \end{figure}
         \begin{itemize}
-            \item fixe parameter
-            \item unbekannte input daten
+            \item fixe Parameter
+            \item unbekannte Input Daten
+            \item einmaliges durchlaufen
         \end{itemize}
+        }
     \end{columns}
 \end{frame}
 

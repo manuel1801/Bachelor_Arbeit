@@ -11,12 +11,14 @@
 \usepackage{longtable}
 \usepackage{bibgerm}
 \usepackage{caption}
+\usepackage{multirow}
+
 
 \usepackage{subcaption}
 \usepackage[pdf]{pstricks}
 \usepackage{tikz}
-\usepackage{neuralnetwork}
 
+%\usetikzlibrary{shapes,arrows}
 \usetikzlibrary{positioning}
 \usetikzlibrary{calc}
 \usetikzlibrary{fit}
@@ -43,13 +45,13 @@
 
 \setlength{\arrayrulewidth}{0.75pt}
 
-\title[Autonomes Bilderkennungsystem mit neuronalen Netze] {Entwicklung eines autonomen Systems zur Bilderkennung mithilfe Neuronaler Netze auf dedizierter Hardware}
+\title[Autonomes Bilderkennungsystem mit neuronalen Netzen] {Entwicklung eines autonomen Systems zur Bilderkennung mithilfe Neuronaler Netze auf dedizierter Hardware}
 
 \subtitle{\vspace{0.5cm}Kolloquium - Bachelorarbeit}
 
-\author[Manuel Barky]{Manuel Barkey}
+\author[Manuel Barkey]{Manuel Barkey}
 
-  
+
 \date[Reutlingen, 29.01.2020] 
 {Reutlingen, 29.01.2020}
 
@@ -61,10 +63,6 @@
 \logo{\pgfuseimage{logotitel}}
 
 
-% Falls Aufzählungen immer schrittweise gezeigt werden sollen, kann
-% folgendes Kommando benutzt werden:
-
-%\beamerdefaultoverlayspecification{<+->}
 
 \begin{document}
 
@@ -74,13 +72,8 @@
 
 \logo{\pgfuseimage{logofolie}}
 
-%Einleitung soll direkt nach der Titelfolie erfolgen, ohne zusätzliche
-%Inhalts- und Inhaltsverlaufsfolien
-%
-%
-%Nach der Einleitung wird vor jedem Abschnitt das Inhaltverzeichnis eingeblendet
+\input{motivation.tex}
 
-\input{motivation}
 
 \section*{Gliederung}\label{sec:toc}
 
@@ -94,12 +87,21 @@
 \begin{frame}{Gliederung}
   \tableofcontents[hideallsubsections]
 \end{frame}
-%
-\input{neuronale_netze}
-\input{hardware}
+
+
+
+% \input{neuronale_netze}
+% \input{hardware}
+\input{grundlagen}
+
 \input{training}
-\input{application}
+\input{evaluierung}
+
+\input{applikation}
 \input{zusammenfassung}
-%
+
+
+
+
   
 \end{document}

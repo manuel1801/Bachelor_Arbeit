@@ -1,0 +1,88 @@
+\section[\thesection \  Applikation]{Applikation}\label{sec:application}
+
+% Frame 13
+\begin{frame}{Test Inferenz auf eigene Bilder} % ersetzen mit erste tests und vergl training auf gr bilder (inf erg von reh zeigen)
+        
+    \begin{columns}
+        \column{0.5\columnwidth}
+        \begin{figure}
+            \centering
+            \includegraphics[width=\textwidth]{Bilder/infer_result_ssd.jpg}
+            \caption{SSD+InceptionV2}
+        \end{figure}
+        
+        \column{0.5\columnwidth}
+        \begin{figure}
+            \centering
+            \includegraphics[width=\textwidth]{Bilder/infer_result_faster.jpg}
+            \caption{Faster R-CNN+InceptionV2}
+        \end{figure}
+    \end{columns}
+
+\end{frame}
+
+% Frame 14 (AsyncInf und Appl Ablauf in ein frame)
+\begin{frame}{Applikation}
+
+    \input{flowchart.tex}
+
+    \visible<2->{
+
+    
+    \begin{block}{Asynchrone Inferenz}
+        \begin{columns}[T]
+            \column{0.3\columnwidth}
+            \vspace{1cm}
+            \begin{itemize}
+                \item Asynchrone Inferenzrequests auf mehreren Threads
+            \end{itemize}
+            \column{0.7\columnwidth}
+            \begin{figure}[h]
+                \centering
+                \def\svgwidth{\columnwidth}
+                \input{Bilder/synch_asynch.pdf_tex}
+            \end{figure}    
+        \end{columns}
+    \end{block}
+    }
+    
+\end{frame}
+
+% % Frame 13
+% \begin{frame}{Inferenz auf dem NCS2}
+%     Implementierung mit OpenVINO Toolkit
+%     \begin{block}{Asynchrone Inferenz}
+
+%         \begin{figure}[h]
+%             \centering
+%             \def\svgwidth{0.7\columnwidth}
+%             \input{Bilder/synch_asynch.pdf_tex}
+%         \end{figure}
+
+%         \begin{itemize}
+%             \item beschleunigte Inferenz durch
+%             \begin{itemize}
+%                 \item Asynchrone Inferenzrequests auf mehreren Threads
+%                 \item Batching
+%             \end{itemize} 
+%         \end{itemize}
+  
+%     \end{block}
+    
+% \end{frame}
+
+
+
+% % Frame 14
+% \begin{frame}{Anwendung}
+%     Ablauf:
+%     \begin{enumerate}
+%         \item Bewegung: ja/nein
+%         \item Zwischenspeichern der Frames
+%         \item Inferenz der Frames starten
+%         \item Ergebnisse auswerten und an Server schicken
+%         \item Benachrichtigung an Nutzer senden
+%     \end{enumerate}
+
+% \end{frame}
+

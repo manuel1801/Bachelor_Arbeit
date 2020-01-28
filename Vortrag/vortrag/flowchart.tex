@@ -1,0 +1,50 @@
+% Define block styles
+\tikzstyle{decision} = [diamond, draw, fill=blue!20, 
+    text width=3.5em, text badly centered, inner sep=0pt, text height=0.4em, node distance=2cm]
+\tikzstyle{block} = [rectangle, draw, fill=blue!20, 
+    text width=3em, text centered, minimum height=2em, node distance=2cm]
+\tikzstyle{line} = [draw, -latex']
+\tikzstyle{cloud} = [draw, ellipse,fill=red!20, node distance=2.5cm,
+    minimum height=2em]
+    
+\begin{tikzpicture}[node distance = 2.2cm, auto]
+    % Place nodes
+
+    \node [cloud] (frame) {Frame};
+    \node [decision, right of=frame] (motion) {Bewe-\\gung};
+    \node [block, right of=motion] (buffer) {Buffer};
+    \node [block, right of=buffer] (infer) {Infer};
+    \node [decision, right of=infer] (thresshold) {Pred.\\> 0.8};
+    \node [cloud, right of=thresshold] (server) {Server};
+    
+    %\node [block, right of=thresshold] (sender) {Send an Server};
+
+    \path [line] (frame) -- (motion);
+    \path [line] (motion) -- node {ja} (buffer);
+    \path [line] (buffer) -- (infer);
+    \path [line] (infer) -- (thresshold);
+    \path [line] (thresshold) -- node {send} (server);
+
+    
+    
+    
+    
+
+    % \node [cloud, left of=init] (expert) {expert};
+    % \node [cloud, right of=init] (system) {system};
+    % \node [block, below of=init] (identify) {identify candidate models};
+    % \node [block, below of=identify] (evaluate) {evaluate candidate models};
+    % \node [block, left of=evaluate, node distance=3cm] (update) {update model};
+    % \node [decision, below of=evaluate] (decide) {is best candidate better?};
+    % \node [block, below of=decide, node distance=3cm] (stop) {stop};
+    % % Draw edges
+    % \path [line] (init) -- (identify);
+    % \path [line] (identify) -- (evaluate);
+    % \path [line] (evaluate) -- (decide);
+    % \path [line] (decide) -| node [near start] {yes} (update);
+    % \path [line] (update) |- (identify);
+    % \path [line] (decide) -- node {no}(stop);
+    % \path [line,dashed] (expert) -- (init);
+    % \path [line,dashed] (system) -- (init);
+    % \path [line,dashed] (system) |- (evaluate);
+\end{tikzpicture}

@@ -46,8 +46,10 @@
 
 
 
-\begin{frame}{Auswirkung von Augmentierung}
-
+\begin{frame}{Visualisierung des Trainigsfortschritts}
+    \begin{itemize}
+        \item Tensorboard
+    \end{itemize}
     \begin{columns}[T]
         \column{0.05\textwidth}
         \vspace{1.5cm}
@@ -56,37 +58,37 @@
         mAP\\
         
 
-        \column{0.45\textwidth}
+        \column{0.475\textwidth}
         \centering
-        Ohne Augmentierung
+        \small Ohne Augmentierung
         \begin{figure}
             \centering
-            \def\svgwidth{0.75\columnwidth}
+            \def\svgwidth{0.7\columnwidth}
             \footnotesize
             \input{Bilder/loss_ohne_aug.pdf_tex}
         \end{figure}
 
         \begin{figure}
             \centering
-            \def\svgwidth{0.75\columnwidth}
+            \def\svgwidth{0.7\columnwidth}
             \footnotesize
             \input{Bilder/mAP_ohne_aug.pdf_tex}
         \end{figure}
         
 
-        \column{0.45\textwidth}
+        \column{0.475\textwidth}
         \centering
-        Mit Augmentierung
+        \small Mit Augmentierung
 
         \begin{figure}
             \centering
-            \def\svgwidth{0.75\columnwidth}
+            \def\svgwidth{0.7\columnwidth}
             \footnotesize
             \input{Bilder/loss_aug.pdf_tex}
         \end{figure}
         \begin{figure}
             \centering
-            \def\svgwidth{0.75\columnwidth}
+            \def\svgwidth{0.7\columnwidth}
             \footnotesize
             \input{Bilder/mAP_aug.pdf_tex}
         \end{figure}
@@ -99,7 +101,7 @@
 \begin{frame}{Vergleich Modelle: Genauigkeit - Inferenzzeit}
     \begin{columns}
         \column{0.45\columnwidth}
-        \textbf{Inferenzzeit}
+        \textbf{Inferenzzeit auf dem NCS2}
 
 
 \begin{table}[]
@@ -109,8 +111,7 @@
                                                                               &                                                                     & \multicolumn{1}{l}{Sync.} & \multicolumn{1}{l|}{Async.} \\ \hline
     \multirow{2}{*}{SSD}                                                      & Mobilenet                                                           & 12,6                      & 33,6                        \\
                                                                               & InceptionV2                                                         & 10,7                      & \textbf{28,3}               \\ \hline
-    \multirow{2}{*}{\begin{tabular}[c]{@{}l@{}}Faster\\ R-CNN\end{tabular}}   & InceptionV2                                                         & 0,55                      & \textbf{0,72}               \\
-                                                                              & ResNet50                                                            & -                         & -                           \\ \hline
+    \begin{tabular}[c]{@{}l@{}}Faster\\ R-CNN\end{tabular}                    & InceptionV2                                                         & 0,55                      & \textbf{0,72}               \\ \hline
     \end{tabular}
     \end{table}
         
@@ -124,8 +125,8 @@
             \begin{tabular}{|lll|}
             \hline
             Model                                                                                             & mAP                                                             & Loss                                                             \\ \hline
-            \begin{tabular}[c]{@{}l@{}}SSD InceptionV2\\ +Augmentierung\end{tabular}                          & \begin{tabular}[c]{@{}l@{}}0.55\\ 0.6\end{tabular}              & \begin{tabular}[c]{@{}l@{}}4,4\\ 4,1\end{tabular}                \\ \hline
-            \begin{tabular}[c]{@{}l@{}}Faster R-CNN\\ +Augmentierung\\ +Dropout\\ +L2 Regularis.\end{tabular} & \begin{tabular}[c]{@{}l@{}}0.67\\ 0.7\\ 0.7\\ adsf\end{tabular} & \begin{tabular}[c]{@{}l@{}}0.82\\ 0,7\\ 0.66\\ adfs\end{tabular} \\ \hline
+            \begin{tabular}[c]{@{}l@{}}SSD InceptionV2\\ +Augmentierung\end{tabular}                          & \begin{tabular}[c]{@{}l@{}}0.55\\ 0.6\end{tabular}              & \begin{tabular}[c]{@{}l@{}}4,4\\ \textbf{4,1}\end{tabular}                \\ \hline
+            \begin{tabular}[c]{@{}l@{}}Faster R-CNN\\ +Augmentierung\\ +Dropout/L2 Reg.\end{tabular} & \begin{tabular}[c]{@{}l@{}}0.67\\ 0.7\\ 0.7\end{tabular} & \begin{tabular}[c]{@{}l@{}}0.82\\ 0,7\\ \textbf{0.66}\end{tabular} \\ \hline
             \end{tabular}
             \end{table}
         }
@@ -134,7 +135,7 @@
     \visible<3->{
     \begin{itemize}
         \centering
-        \item Je genauer, desto langsamer!
+        \item Je \textbf{genauer}, desto \textbf{langsamer}!
     \end{itemize}
     }
     \end{frame}

@@ -1,0 +1,18 @@
+ssd_mobilenet, infer req 1: Fps 12.630870911616572
+ssd_mobilenet, infer req 2: Fps 25.142466648483563
+ssd_mobilenet, infer req 3: Fps 33.461688617922166
+ssd_mobilenet, infer req 4: Fps 33.630807563977826
+ssd_inception, infer req 1: Fps 10.714774099296788
+ssd_inception, infer req 2: Fps 21.219505650241775
+ssd_inception, infer req 3: Fps 28.103599272320556
+ssd_inception, infer req 4: Fps 28.293286031371185
+faster_rcnn_vgg16_caffe, infer req 1: Fps 0.8137181382426897
+faster_rcnn_vgg16_caffe, infer req 2: Fps 1.2296893718088449
+faster_rcnn_vgg16_caffe, infer req 3: Fps 1.2398600640524471
+faster_rcnn_vgg16_caffe, infer req 4: Fps 1.2423334769582686
+faster_rcnn_inception, infer req 1: Fps 0.5495374243040533
+faster_rcnn_inception, infer req 2: Fps 0.6151926754435308
+faster_rcnn_inception, infer req 3: Fps 0.68447859026412444
+faster_rcnn_inception, infer req 4: Fps 0.71737922640299567
+
+

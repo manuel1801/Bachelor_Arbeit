@@ -1,0 +1,27 @@
+-allg
+https://www.dlology.com/blog/bag-of-tricks-for-image-classification-with-convolutional-neural-networks-in-keras/
+
+-overfitting:
+https://www.dlology.com/blog/two-simple-recipes-for-over-fitted-model/
+https://keras.rstudio.com/articles/tutorial_overfit_underfit.html
+
+-hyperparameter:
+https://www.dlology.com/blog/how-to-do-hyperparameter-search-with-baysian-optimization-for-keras-model/
+
+-transfer learning
+--info
+http://cs231n.github.io/transfer-learning/
+--how to
+https://blog.keras.io/building-powerful-image-classification-models-using-very-little-data.html
+https://www.dlology.com/blog/transfer-learning-with-efficientnet/
+https://www.learnopencv.com/keras-tutorial-transfer-learning-using-pre-trained-models/
+https://towardsdatascience.com/transfer-learning-using-mobilenet-and-keras-c75daf7ff299
+
+-augmentation:
+https://www.dlology.com/blog/how-to-do-mixup-training-from-image-files-in-keras/
+
+-pretrained keras models:
+https://keras.io/applications/
+
+
+

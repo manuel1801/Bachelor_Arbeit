@@ -133,6 +133,8 @@ dmypy.json
 .vscode
 
 /Ausarbeitung/Ausarbeitung_Vorlage/
+/Ausarbeitung/zusammenfassung-vortrag
+
 *.bbl
 *.aux
 *.blg
@@ -141,37 +143,36 @@ dmypy.json
 *.toc
 *.synctex(busy)
 *.gz
-*.txt
 *.fls
 *.fdb_latexmk
 *.webp
-*.jpg
 *.pptx
 *.snm
 *.nav
+*_log
 
 
-/dataset
 
-/doc/*
-!/doc/*.md
 
-/models_deprecated/
+/doc/ma_ba
+/doc/books
+/doc/anmeldeformular
 
-/openvino
+/Preprocessing/sample_set/
 
-/preprocessing/*/
+/TensorFlow/models
 
-/scripts/*/
 
-/socket_connection/*/
 
-/TensorFlow_Models/
 
-/RaspberryPi/models/
-test/Webcam/
 
-Kolloquium_WS19.pdf
 
-/workspace
-/evaluation
+
+
+
+
+
+
+
+
+

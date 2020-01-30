@@ -1,0 +1,5 @@
+https://www.dlology.com/blog/transfer-learning-with-efficientnet/
+
+https://www.kaggle.com/devang/transfer-learning-with-keras-and-mobilenet-v2
+
+

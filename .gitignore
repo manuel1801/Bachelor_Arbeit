@@ -164,6 +164,12 @@ dmypy.json
 
 
 Dataset/kaggle.json
+Dataset/handy_videos
+Dataset/iWildCam_2019
+Dataset/PetImages
+Dataset/FlickrAnimals
+Dataset/OI_Animals
+Dataset/OI_Samples
 
 
 

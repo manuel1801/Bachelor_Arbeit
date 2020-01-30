@@ -165,11 +165,18 @@ dmypy.json
 
 Dataset/kaggle.json
 Dataset/handy_videos
-Dataset/iWildCam_2019
+Dataset/iWildCam_2019_FGVC6
 Dataset/PetImages
 Dataset/FlickrAnimals
 Dataset/OI_Animals
 Dataset/OI_Samples
+
+/openvino
+/openvino_models/caffe/vgg16/
+/TensorFlow/workspace
+
+
+
 
 
 

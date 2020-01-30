@@ -46,3 +46,6 @@
 
 [One-stage object detection](https://machinethink.net/blog/object-detection/)
 
+
+## Param Opt
+[GyOpt](http://sheffieldml.github.io/GPyOpt/)

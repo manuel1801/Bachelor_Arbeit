@@ -17,12 +17,12 @@ ip_addr = '10.10.73.89'
 
 buffer_size = 200  # zum zwischen speichern wenn infer langsamer stream
 infer_requests = 3  # für parallele inferenzen
-view_results = False  # für raspi ohne monitor ausschalten
+view_results = True  # für raspi ohne monitor auf False
 threshhold = 0.6
 send_all_every = 60  # sec
 
-#workspace_dir = os.path.join(os.environ['HOME'], 'Bachelor_Arbeit')
-workspace_dir = '/home/pi/Bachelor_Arbeit/'  # für autostart
+workspace_dir = os.path.join(os.environ['HOME'], 'Bachelor_Arbeit')
+# workspace_dir = '/home/pi/Bachelor_Arbeit/'  # für autostart in raspi geht kein os.environ['HOME']
 models_dir = os.path.join(workspace_dir, 'openvino_models')
 
 print('select model')
@@ -38,8 +38,8 @@ for dataset in os.listdir(models_dir):
                 print(i, dataset, model)
                 i += 1
 
-#model_ind = int(input())
-model_ind = 4  # für autostart
+model_ind = int(input())
+# model_ind = 4  # für autostart model ind hier festlegen
 print(selected_model[model_ind], ' selected')
 
 model_xml = os.path.join(

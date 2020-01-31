@@ -21,8 +21,8 @@ view_results = False  # für raspi ohne monitor ausschalten
 threshhold = 0.6
 send_all_every = 60  # sec
 
-workspace_dir = os.path.join(os.environ['HOME'], 'Bachelor_Arbeit')
-#workspace_dir = '/home/pi/Bachelor_Arbeit/'
+#workspace_dir = os.path.join(os.environ['HOME'], 'Bachelor_Arbeit')
+workspace_dir = '/home/pi/Bachelor_Arbeit/'  # für autostart
 models_dir = os.path.join(workspace_dir, 'openvino_models')
 
 print('select model')
@@ -38,7 +38,8 @@ for dataset in os.listdir(models_dir):
                 print(i, dataset, model)
                 i += 1
 
-model_ind = int(input())
+#model_ind = int(input())
+model_ind = 4  # für autostart
 print(selected_model[model_ind], ' selected')
 
 model_xml = os.path.join(

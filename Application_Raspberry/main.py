@@ -58,7 +58,7 @@ assert os.path.isfile(model_xml)
 # Load Model to Device
 infer_model = detection.InferenceModel()
 exec_model = infer_model.create_exec_infer_model(
-    model_xml, model_bin, labels, num_requests=3, conn_ip=None)
+    model_xml, model_bin, labels, num_requests=3, conn_ip=ip_addr)
 
 # init motion detector
 motion_detector = detection.MotionDetect()

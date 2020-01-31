@@ -4,18 +4,29 @@ import os
 import cv2
 import infer_async
 
-workspace_dir = os.path.join(os.environ['HOME'], 'object_detection_ncs2')
-test_image = cv2.imread(os.path.join(workspace_dir, 'benchmark/car.png'))
+workspace_dir = os.path.join(os.environ['HOME'], 'Bachelor_Arbeit')
+test_image = cv2.imread(os.path.join(workspace_dir, 'Benchmark/car.png'))
+models_dir = os.path.join(workspace_dir, 'openvino_models')
 
 iterations = 100
 
+all_models = {}
+i = 1
+for dataset in os.listdir(models_dir):
+    dataset_dir = os.path.join(models_dir, dataset)
+    if os.path.isdir(dataset_dir):
+        for model in os.listdir(dataset_dir):
+            model_dir = os.path.join(dataset_dir, model)
+            if os.path.isdir(model_dir):
+                all_models[i] = dataset, model
+                i += 1
 
-for model in os.listdir(os.path.join(workspace_dir, 'benchmark/models')):
+for _, model in all_models.items():
 
     model_xml = os.path.join(
-        workspace_dir, 'benchmark/models', model, 'frozen_inference_graph.xml')
+        models_dir, model[0], model[1], 'frozen_inference_graph.xml')
     model_bin = os.path.join(
-        workspace_dir, 'benchmark/models', model, 'frozen_inference_graph.bin')
+        models_dir, model[0], model[1], 'frozen_inference_graph.bin')
 
     assert os.path.isfile(model_bin)
     assert os.path.isfile(model_xml)
@@ -55,7 +66,7 @@ for model in os.listdir(os.path.join(workspace_dir, 'benchmark/models')):
                     res = exec_net.requests[0].outputs[output_blop]
                     infered_images += 1
                     fps = str(infered_images / (time.time() - t_start))
-                    print(model + ', infer req ' + str(infer_req) +
+                    print(model[0] + ', ' + model[1] + ', infer req ' + str(infer_req) +
                           ': Fps ' + fps, end='\r', flush=True)
             del exec_net
         else:
@@ -74,13 +85,13 @@ for model in os.listdir(os.path.join(workspace_dir, 'benchmark/models')):
                 for res in results:
                     infered_images += 1
                     fps = str(infered_images / (time.time() - t_start))
-                    print(model + ', infer req ' + str(infer_req) +
+                    print(model[0] + ', ' + model[1] + ', infer req ' + str(infer_req) +
                           ': Fps ' + fps, end='\r', flush=True)
 
                 if not test_images:
                     break
             del exec_model
-        print(model + ', infer req ' +
+        print(model[0] + ', ' + model[1] + ', infer req ' +
               str(infer_req) + ': Fps ' + fps)
 
     del ie

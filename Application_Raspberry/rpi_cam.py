@@ -24,6 +24,8 @@ image = np.empty((res[1], res[0], 3), dtype=np.uint8)
 while True:
     camera.capture(image, 'bgr', use_video_port=True)
 
+    #cv2.imshow('cam', image)
+
     key = cv2.waitKey(1)
     if key == 113:
         break

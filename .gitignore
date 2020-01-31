@@ -162,7 +162,7 @@ dmypy.json
 
 /TensorFlow/models
 
-/caffe/
+/Caffe/
 
 Dataset/kaggle.json
 Dataset/handy_videos

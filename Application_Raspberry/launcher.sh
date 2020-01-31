@@ -2,7 +2,7 @@
 # launcher.sh
 
 cd /
-cd /home/pi/object_detection_ncs2
+cd /home/pi/Bachelor_Arbeit/Application_Raspberry
 source /opt/intel/openvino/bin/setupvars.sh
 python3 main.py
 cd /

@@ -10,14 +10,14 @@ from datetime import datetime
 import connection
 
 # Settings:
-#import picamera.array
-#import picamera
-raspi = False
+import picamera.array
+import picamera
+raspi = True
 ip_addr = '10.10.73.89'
 
 buffer_size = 200  # zum zwischen speichern wenn infer langsamer stream
 infer_requests = 3  # für parallele inferenzen
-view_results = True  # für raspi ohne monitor ausschalten
+view_results = False  # für raspi ohne monitor ausschalten
 threshhold = 0.6
 send_all_every = 60  # sec
 
@@ -52,16 +52,13 @@ if os.path.isfile(os.path.join(models_dir, selected_model[model_ind][0], 'classe
 else:
     labels = None
 
-
 assert os.path.isfile(model_bin)
 assert os.path.isfile(model_xml)
-
 
 # Load Model to Device
 infer_model = detection.InferenceModel()
 exec_model = infer_model.create_exec_infer_model(
     model_xml, model_bin, labels, num_requests=3, conn_ip=None)
-
 
 # init motion detector
 motion_detector = detection.MotionDetect()

@@ -4,9 +4,6 @@ import cv2
 
 # Doku: https://intelrealsense.github.io/librealsense/python_docs/index.html
 
-# für punkte: https://github.com/IntelRealSense/librealsense/blob/master/wrappers/python/examples/box_dimensioner_multicam/realsense_device_manager.py
-# https://forums.intel.com/s/question/0D70P0000069qxHSAQ/how-to-enabledisable-emitter-through-python-wrapper-pyrealsense2?language=de
-
 
 pipeline = rs.pipeline()
 config = rs.config()

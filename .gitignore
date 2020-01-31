@@ -131,6 +131,7 @@ dmypy.json
 # Eigene
 
 .vscode
+tempCodeRunnerFile.py
 
 /Ausarbeitung/Ausarbeitung_Vorlage/
 /Ausarbeitung/zusammenfassung-vortrag
@@ -158,6 +159,9 @@ dmypy.json
 /doc/books
 /doc/anmeldeformular_thesis_master_-_2014-08-12_01_Update.pdf
 /doc/hardware/
+
+/Application_Raspberry/detected/*
+/Application_Raspberry/remote_client_test.py
 
 /Preprocessing/sample_set/
 

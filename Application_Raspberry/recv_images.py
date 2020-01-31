@@ -8,7 +8,8 @@ conn = connection.RaspyConnection()
 conn.start_client('10.42.0.111')
 # conn.start_client()
 
-workspace_dir = os.path.join(os.environ['HOME'], 'object_detection_ncs2')
+workspace_dir = os.path.join(
+    os.environ['HOME'], 'Bachelor_Arbeit/Application_Raspberry')
 
 
 assert os.path.isdir(workspace_dir)

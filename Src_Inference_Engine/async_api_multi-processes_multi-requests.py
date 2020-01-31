@@ -89,7 +89,9 @@ image_number = 300
 
 
 def preprocess_worker(image_queue, n, c, h, w):
-    test_images_dir = '/home/manuel/Bachelor_Arbeit/workspace/OI_Animals_9/validation/'
+    test_images_dir = os.path.join(
+        os.environ['HOME'], 'Bachelor_Arbeit/TensorFlow/workspace/OI_Animals/test')
+
     images = [
         os.path.join(test_images_dir, img) for img in os.listdir(test_images_dir) if img[-3:] == 'jpg']
     for img_path in images:
@@ -103,8 +105,6 @@ def preprocess_worker(image_queue, n, c, h, w):
 
 start_time = -1
 
-# ./async_api_multi-processes_multi-requests.py <request number>
-
 
 def main():
     global start_time
@@ -114,23 +114,36 @@ def main():
 
     image_queue = multiprocessing.Queue(maxsize=request_number*3)
 
-    model = {1: ['Samples', 'ssd_mobilenet_v2'],
-             2: ['Samples', 'ssd_inception_v2'],
-             3: ['Samples', 'faster_rcnn_inception_v2'],
-             4: ['Samples', 'faster_rcnn_inception_v2_gray'],
-             5: ['Animals', 'ssd_inception_v2'],
-             6: ['Animals', 'faster_rcnn_inception_v2'],
-             7: ['Animals', 'faster_rcnn_inception_v2_gray'],
-             8: ['Animals', 'ssd_mobilenet_oi'],
-             9: ['coco', 'ssd_fpn_resnet50']}
+    workspace_dir = os.path.join(os.environ['HOME'], 'Bachelor_Arbeit')
+    #workspace_dir = '/home/pi/Bachelor_Arbeit/'
+    models_dir = os.path.join(workspace_dir, 'openvino_models')
 
-    model_ind = 6
+    print('select model')
+    selected_model = {}
+    i = 1
+    for dataset in os.listdir(models_dir):
+        dataset_dir = os.path.join(models_dir, dataset)
+        if os.path.isdir(dataset_dir):
+            for model in os.listdir(dataset_dir):
+                model_dir = os.path.join(dataset_dir, model)
+                if os.path.isdir(model_dir):
+                    selected_model[i] = dataset, model
+                    print(i, dataset, model)
+                    i += 1
 
-    workspace_dir = os.path.join(os.environ['HOME'], 'object_detection_ncs2')
+    model_ind = int(input())
+    print(selected_model[model_ind], ' selected')
+
     model_xml = os.path.join(
-        workspace_dir, 'models', model[model_ind][0], model[model_ind][1], 'frozen_inference_graph.xml')
+        models_dir, selected_model[model_ind][0], selected_model[model_ind][1], 'frozen_inference_graph.xml')
     model_bin = os.path.join(
-        workspace_dir, 'models', model[model_ind][0], model[model_ind][1], 'frozen_inference_graph.bin')
+        models_dir, selected_model[model_ind][0], selected_model[model_ind][1], 'frozen_inference_graph.bin')
+
+    assert os.path.isfile(model_bin)
+    assert os.path.isfile(model_xml)
+
+    print('select infer requests')
+    request_number = int(input())
 
     plugin = IEPlugin(device="MYRIAD")
     net = IENetwork(model=model_xml, weights=model_bin)

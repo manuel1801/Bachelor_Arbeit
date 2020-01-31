@@ -4,26 +4,34 @@ import os
 import cv2
 import infer_async
 
-workspace_dir = os.path.join(os.environ['HOME'], 'object_detection_ncs2')
-test_image = cv2.imread(os.path.join(workspace_dir, 'benchmark/car.png'))
-models_dir = os.path.join(workspace_dir, 'benchmark/models')
+workspace_dir = os.path.join(os.environ['HOME'], 'Bachelor_Arbeit')
+test_image = cv2.imread(os.path.join(workspace_dir, 'Benchmark/car.png'))
+models_dir = os.path.join(workspace_dir, 'openvino_models')
 
-iterations = 50
+iterations = 100
 
 
 print('select model')
-model = {}
-for i, m in enumerate(os.listdir(models_dir)):
-    model[i+1] = m
-    print(i+1, m)
+selected_model = {}
+i = 1
+for dataset in os.listdir(models_dir):
+    dataset_dir = os.path.join(models_dir, dataset)
+    if os.path.isdir(dataset_dir):
+        for model in os.listdir(dataset_dir):
+            model_dir = os.path.join(dataset_dir, model)
+            if os.path.isdir(model_dir):
+                selected_model[i] = dataset, model
+                print(i, dataset, model)
+                i += 1
+
 
 model_ind = int(input())
-print(model[model_ind], ' selected')
+print(selected_model[model_ind], ' selected')
 
 model_xml = os.path.join(
-    models_dir, model[model_ind], 'frozen_inference_graph.xml')
+    models_dir, selected_model[model_ind][0], selected_model[model_ind][1], 'frozen_inference_graph.xml')
 model_bin = os.path.join(
-    models_dir, model[model_ind], 'frozen_inference_graph.bin')
+    models_dir, selected_model[model_ind][0], selected_model[model_ind][1], 'frozen_inference_graph.bin')
 
 assert os.path.isfile(model_bin)
 assert os.path.isfile(model_xml)
@@ -44,7 +52,7 @@ if infer_req == 1:
         network=net, num_requests=2, device_name='MYRIAD')
     t1 = time.time()
 
-    print(model[model_ind], str(round((t1 - t0), 4)), 'sec')
+    print(selected_model[model_ind], str(round((t1 - t0), 4)), 'sec')
 
     input_blob = None
     feed_dict = {}

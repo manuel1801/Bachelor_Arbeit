@@ -7,8 +7,9 @@ import numpy as np
 conn = connection.RaspyConnection()
 conn.start_server()
 
-workspace_dir = os.path.join(os.environ['HOME'], 'object_detection_ncs2')
-output_folder = 'detected'
+workspace_dir = os.path.join(
+    os.environ['HOME'], 'Bachelor_Arbeit/Application_Raspberry')
+
 
 assert os.path.isdir(workspace_dir)
 image_name = ''
@@ -22,7 +23,7 @@ while True:
             print('msg receive: ', image_name)
         else:
             cv2.imwrite(os.path.join(workspace_dir,
-                                     output_folder, image_name + '.png'), msg)
+                                     'detected', image_name + '.png'), msg)
             #image = msg
 
     # if image is not None:

@@ -3,9 +3,9 @@ import os
 import cv2
 import subprocess
 
-dataset_dir = os.path.join(os.environ['HOME'], 'Bachelor_Arbeit/dataset')
-workspace_dir = os.path.join(os.environ['HOME'], 'Bachelor_Arbeit/workspace')
-eval_dir = os.path.join(os.environ['HOME'], 'Bachelor_Arbeit/evaluation')
+dataset_dir = os.path.join(os.environ['HOME'], 'Bachelor_Arbeit/Dataset')
+workspace_dir = os.path.join(
+    os.environ['HOME'], 'Bachelor_Arbeit/TensorFlow/workspace')
 model_dir = os.path.join(os.environ['HOME'], 'Bachelor_Arbeit/models')
 
 
@@ -39,23 +39,36 @@ infer_images_ind = int(input())
 print(infer_images[infer_images_ind], ' selected')
 assert os.path.isdir(infer_images[infer_images_ind])
 
-model = {1: ['Samples', 'ssd_mobilenet_v2'],
-         2: ['Samples', 'ssd_inception_v2'],
-         3: ['Samples', 'faster_rcnn_inception_v2'],
-         4: ['Samples', 'faster_rcnn_inception_v2_gray'],
-         5: ['Animals', 'ssd_inception_v2'],
-         6: ['Animals', 'faster_rcnn_inception_v2_3000'],
-         7: ['Animals', 'faster_rcnn_inception_v2_gray'],
-         8: ['Animals', 'faster_rcnn_inception_v2_gray_3000'],
-         9: ['Animals', 'faster_rcnn_inception_v2_gray_geo'],
-         10: ['Animals', 'faster_rcnn_inception_v2_geo'],
-         12: ['Animals', 'ssd_mobilenet_oi']}
+models_dir = os.path.join(
+    os.environ['HOME'], 'Bachelor_Arbeit/openvino_models')
 
-for m in model.items():
-    print(m)
 print('select model')
+selected_model = {}
+i = 1
+for dataset in os.listdir(models_dir):
+    dataset_dir = os.path.join(models_dir, dataset)
+    if os.path.isdir(dataset_dir):
+        for model in os.listdir(dataset_dir):
+            model_dir = os.path.join(dataset_dir, model)
+            if os.path.isdir(model_dir):
+                selected_model[i] = dataset, model
+                print(i, dataset, model)
+                i += 1
+
 model_ind = int(input())
-print(model[model_ind], ' selected')
+print(selected_model[model_ind], ' selected')
+
+
+model_xml = os.path.join(
+    models_dir, selected_model[model_ind][0], selected_model[model_ind][1], 'frozen_inference_graph.xml')
+model_bin = os.path.join(
+    models_dir, selected_model[model_ind][0], selected_model[model_ind][1], 'frozen_inference_graph.bin')
+
+if os.path.isfile(os.path.join(models_dir, selected_model[model_ind][0], 'classes.txt')):
+    labels = [l.strip() for l in open(os.path.join(
+        models_dir, selected_model[model_ind][0], 'classes.txt')).readlines()]
+else:
+    labels = None
 
 
 def get_image_paths(imgs_dir):
@@ -74,38 +87,43 @@ def get_image_paths(imgs_dir):
 
 test_images = get_image_paths(infer_images[infer_images_ind])
 
+
+eval_dir = os.path.join(os.environ['HOME'], 'Bachelor_Arbeit/evaluation')
+if not os.path.isdir(eval_dir):
+    os.mkdir(eval_dir)
+
 infer_results = 'infer_results_' + \
     infer_images[infer_images_ind].split('/')[-1]
 output_dir = os.path.join(eval_dir, infer_results,
-                          model[model_ind][0], model[model_ind][1])
+                          selected_model[model_ind][0], selected_model[model_ind][1])
 if not os.path.isdir(os.path.join(eval_dir, infer_results)):
     os.mkdir(os.path.join(eval_dir, infer_results))
 
-if not os.path.isdir(os.path.join(eval_dir, infer_results, model[model_ind][0])):
+if not os.path.isdir(os.path.join(eval_dir, infer_results, selected_model[model_ind][0])):
     os.mkdir(os.path.join(eval_dir, infer_results,
-                          model[model_ind][0]))
+                          selected_model[model_ind][0]))
 
 
 if not os.path.isdir(os.path.join(eval_dir, infer_results,
-                                  model[model_ind][0], model[model_ind][1])):
+                                  selected_model[model_ind][0], selected_model[model_ind][1])):
     os.mkdir(os.path.join(eval_dir, infer_results,
-                          model[model_ind][0], model[model_ind][1]))
+                          selected_model[model_ind][0], selected_model[model_ind][1]))
+
 
 infer_model = detection.InferenceModel()
-exec_model = infer_model.create_exec_infer_model(model_dir,
-                                                 model[model_ind][0],
-                                                 model[model_ind][1],
-                                                 num_requests=1,
-                                                 conn_ip=None)
+exec_model = infer_model.create_exec_infer_model(
+    model_xml, model_bin, labels, num_requests=3, conn_ip=None)
+
 
 for test_image in test_images:
     image = cv2.imread(test_image)
     result = exec_model.infer_image(image)
     cv2.imwrite(os.path.join(
-        output_dir, test_image.split('/')[-1][:-4] + '_' + model[model_ind][1] + '.jpg'), result)
+        output_dir, test_image.split('/')[-1][:-4] + '_' + selected_model[model_ind][1] + '.jpg'), result)
 
 
-dataset_eval_dir = os.path.join(eval_dir, infer_results, model[model_ind][0])
+dataset_eval_dir = os.path.join(
+    eval_dir, infer_results, selected_model[model_ind][0])
 if not os.path.isdir(os.path.join(dataset_eval_dir, 'all')):
     os.mkdir(os.path.join(dataset_eval_dir, 'all'))
 subprocess.Popen(['find', dataset_eval_dir, '-name', '*.jpg', '-exec', 'cp', '{}', os.path.join(dataset_eval_dir, 'all'), ';'],

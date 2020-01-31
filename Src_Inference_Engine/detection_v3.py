@@ -5,7 +5,6 @@ from datetime import datetime
 import sys
 import os
 import cv2
-import connection
 
 
 class MotionDetect:
@@ -37,19 +36,7 @@ class InferenceModel:
         self.ie = IECore()
         self.device = device
 
-    def create_exec_infer_model(self, model_dir, dataset, model, num_requests=2, conn_ip=None):
-
-        model_xml = os.path.join(
-            model_dir, dataset, model, 'frozen_inference_graph.xml')
-        model_bin = os.path.join(
-            model_dir, dataset, model, 'frozen_inference_graph.bin')
-
-        if os.path.isfile(os.path.join(
-                model_dir, dataset, 'classes.txt')):
-            labels = [l.strip() for l in open(os.path.join(
-                model_dir, dataset, 'classes.txt')).readlines()]
-        else:
-            labels = None
+    def create_exec_infer_model(self, model_xml, model_bin, labels=None, num_requests=2, conn_ip=None):
 
         assert os.path.isfile(model_bin)
         assert os.path.isfile(model_xml)
@@ -85,7 +72,8 @@ class ExecInferModel:
     def __init__(self, exec_net, input_blob, out_blob, feed_dict, n, c, h, w, num_requests, labels, conn_ip):
         self.exec_net = exec_net
         self.conn_ip = conn_ip
-        self.conn = connection.RaspyConnection()
+        if conn_ip:
+            self.conn = connection.RaspyConnection()
         self.labels = labels
         self.input_blob = input_blob
         self.out_blob = out_blob
@@ -133,13 +121,6 @@ class ExecInferModel:
         return image
 
     def infer_frames(self, buffer):
-        '''
-        for async and non blocking inferenc
-        inferes images from 'buffer' list of images
-        deletes infered images from list
-        returns: if inference result ready: list of set of (rois, frame)
-                 else: empty list
-        '''
 
         results = []
 
@@ -172,10 +153,7 @@ class ExecInferModel:
 
         return results
 
-    def prossec_result(self, frame, res, threshhold, workspace_dir='/home/pi/object_detection_ncs2', fps=1):
-        '''
-        drwas roi boxes in image and sends over socket connection
-        '''
+    def prossec_result(self, frame, res, threshhold, output_dir, fps=1):
 
         height, width = frame.shape[:2]
         detection = False
@@ -244,8 +222,8 @@ class ExecInferModel:
                         self.conn.end_connection()
                         print('sending succesfull')
                     except:
-                        cv2.imwrite(os.path.join(workspace_dir,
-                                                 'detected', image_name + '.png'), image_array)
+                        cv2.imwrite(os.path.join(
+                            output_dir, image_name + '.png'), image_array)
 
                     del self.detected_objects[class_id]
 
@@ -253,7 +231,7 @@ class ExecInferModel:
             return frame
         return None
 
-    def send_all(self, workspace_dir='/home/pi/object_detection_ncs2'):
+    def send_all(self, output_dir):
 
         print('sending all')
         # detected_objects -> class_id:(nr, roi, proba)
@@ -277,8 +255,8 @@ class ExecInferModel:
                 self.conn.end_connection()
                 print('sending succesfull')
             except:
-                cv2.imwrite(os.path.join(workspace_dir,
-                                         'detected', image_name + '.png'), image_array)
+                cv2.imwrite(os.path.join(
+                    output_dir, image_name + '.png'), image_array)
                 print('could not connect to server. Saved image locally')
 
             del self.detected_objects[class_id]

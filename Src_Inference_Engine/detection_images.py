@@ -6,32 +6,40 @@ import pyrealsense2 as rs
 import numpy as np
 from random import shuffle
 
-workspace_dir = '/home/manuel/Bachelor_Arbeit/workspace'
-
-dataset = 'OI_Animals_Augmented_9_2000'
-model = 'faster_rcnn_inception_v2_coco_2018_01_28_out'
-
-model_xml = os.path.join(workspace_dir, dataset, model,
-                         'open_vino', 'frozen_inference_graph.xml')
-model_bin = os.path.join(workspace_dir, dataset, model,
-                         'open_vino', 'frozen_inference_graph.bin')
+workspace_dir = os.path.join(os.environ['HOME'], 'Bachelor_Arbeit')
+models_dir = os.path.join(workspace_dir, 'openvino_models')
 
 
-labels = [l.strip() for l in open(os.path.join(
-    workspace_dir, dataset, 'classes.txt')).readlines()]
-
-test_images_dir = os.path.join(workspace_dir, dataset, 'validation')
-test_images_dir = '/home/manuel/Bachelor_Arbeit/test'
+test_images_dir = os.path.join(workspace_dir, 'Dataset/handy_bilder/rgb')
 
 
-# zum testen auf pretrained faster net
-labels = None
-model_xml = '/home/manuel/Bachelor_Arbeit/models_deprecated/faster_rcnn_inception_v2_coco/frozen_inference_graph.xml'
-model_bin = '/home/manuel/Bachelor_Arbeit/models_deprecated/faster_rcnn_inception_v2_coco/frozen_inference_graph.bin'
-# labels = [l.strip().split('display_name: ')[-1] for l in open('/home/manuel/Bachelor_Arbeit/models_deprecated/' +
-#                                                              dataset + '_' + model + '/classes.txt').readlines() if 'display_name:' in l]
+print('select model')
+selected_model = {}
+i = 1
+for dataset in os.listdir(models_dir):
+    dataset_dir = os.path.join(models_dir, dataset)
+    if os.path.isdir(dataset_dir):
+        for model in os.listdir(dataset_dir):
+            model_dir = os.path.join(dataset_dir, model)
+            if os.path.isdir(model_dir):
+                selected_model[i] = dataset, model
+                print(i, dataset, model)
+                i += 1
 
-test_images_dir = os.path.join(workspace_dir, 'Beispiel_Set', 'validation')
+model_ind = int(input())
+print(selected_model[model_ind], ' selected')
+
+model_xml = os.path.join(
+    models_dir, selected_model[model_ind][0], selected_model[model_ind][1], 'frozen_inference_graph.xml')
+model_bin = os.path.join(
+    models_dir, selected_model[model_ind][0], selected_model[model_ind][1], 'frozen_inference_graph.bin')
+
+
+if os.path.isfile(os.path.join(models_dir, selected_model[model_ind][0], 'classes.txt')):
+    labels = [l.strip() for l in open(os.path.join(
+        models_dir, selected_model[model_ind][0], 'classes.txt')).readlines()]
+else:
+    labels = None
 
 
 assert os.path.isfile(model_bin)
@@ -92,8 +100,6 @@ for img_path in images:
     for pred in res[list(res.keys())[0]][0][0]:
         if pred[2] < 0.5:
             continue
-
-        print('threshhold passed')
 
         # preictin class
         if labels != None:

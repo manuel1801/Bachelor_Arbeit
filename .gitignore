@@ -177,6 +177,7 @@ Dataset/OI_Samples
 /openvino_models/caffe/vgg16/
 /TensorFlow/workspace
 
+/evaluation/
 
 
 

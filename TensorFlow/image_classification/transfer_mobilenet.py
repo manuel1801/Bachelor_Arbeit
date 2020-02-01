@@ -44,7 +44,7 @@ for layer in model.layers[:-4]:
 train_datagen = ImageDataGenerator(
     preprocessing_function=preprocess_input)  # included in our dependencies
 
-
+train_datagen.__init__()
 train_generator = train_datagen.flow_from_directory(dataset_dir + 'train',
                                                     target_size=(224, 224),
                                                     color_mode='rgb',

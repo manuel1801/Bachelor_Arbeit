@@ -1,0 +1,19 @@
+
+ncs2
+https://www.amazon.de/Intel-NCSM2485-DK-Movidius-Compute-Processing/dp/B07KT6361R
+
+classification/detection/segmentation
+https://medium.com/zylapp/review-of-deep-learning-algorithms-for-object-detection-c1f3d437b852
+https://www.datacamp.com/community/tutorials/object-detection-guide
+
+nn generator
+http://alexlenail.me/NN-SVG/index.html
+
+cat:
+https://kezunlin.me/images/posts/635233-20180807173641145-432603467.png
+
+IoU:
+https://www.pyimagesearch.com/2016/11/07/intersection-over-union-iou-for-object-detection/
+
+raspi + cam
+https://images-na.ssl-images-amazon.com/images/I/61bXTL5M8RL._AC_SL1000_.jpg

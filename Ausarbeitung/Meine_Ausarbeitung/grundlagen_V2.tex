@@ -1,57 +1,29 @@
 \chapter{Grundlagen}\label{kap:grundlagen}
 
-%########################################################################################
-%##########################  CHAPER 1: GRUNDLAGEN  ######################################
-%########################################################################################
+%####################  CHAPTER 1: Grundlagen  #################
 
-Computer könne in kürzester Zeit die komplexesten Berechnungen 
-durchführen, wenn es jedoch um eine für den Menschen so 
-simple Aufgabe wie das erkennen und zuordnen eines Gegenstandes
-auf einem Bild geht, ist diese Aufgabe praktisch 
-unmöglich für einen Computer mit herkömmlicher programmierung. 
-Da jedoch sowohl die Entwicklung von Deep Learing Algorithmen 
-als auch die Rechenleistung in den letzen Jahren rasante 
-Fortschritte gemacht haben, ist die bis vor kurzem 
-noch unmöglich geglaubte Aufgabe zum alltäglichen ... 
-im Bereich des Maschinellen Sehens geworden.\\
+Im folgende Kapitel wird zunächst auf die Grundlegenden Techniken
+ des Machine Learings, insbesondere auf die für die Bilderkennung 
+verwendeten Convolutional Neural Networks eingegangen.
 
-Um Objekte auf Bildern erkennen und lokalisieren zu können 
-werden Künstliche Neuronale Netze in CNN Architektur 
-zusammen mit Techniken der Bildverarbeitung angewandt.\\
-
-Daher werden im folgenden kurz die Begrifflichkeiten Machine 
-Learnin und AI geklärt, und anschließend die Funktions
-weise von Neuronalen Netzen allgemein sowie Convolutional 
-Neural Networks im Speziellen für die Bilderkennung.
-
-Der Letzte Teil der Grundlagen geht auf die für Deep 
-Learning verwendete Hardwaretypen und anforderungen ein.
+Anschließend wird es um die verwendete Hardware, den Neural 
+Compute Stick 2 un seine Anwendungen gehen.
 
 
+%------------------- SECTION: Machine Learning ------------------
 
+\section{Machine Learning}\label{sec:ml}
 
+Beim Machine Lerining, welches ein Teilgebiet der Computerwissenschafen
+ist, geht es um Algorithmen, die Zusammenhänge in großen Datenmengen 
+erkennen sollen, ohne expliziet darauf programmiert worden zu sein.
 
-%########################################################################################
-%##########################  SECTION: MACHINE LEARNIN  ##################################
-%########################################################################################
+Eine Form davon ist das \textit{Supervised Learning}, bei der das Programm 
+neben den Input Daten auch die Zugehörigen Ausgaben erhällt und daraus 
+dann die Regeln für Zusammenhänge herleiten soll.
+Dadurch unterscheidet sich das Vorgehen wesentlich zur klassischen Programmierung,
+bei bei der die Regeln vorab definiert werden.
 
-\section{Machine Learning und AI}\label{sec:ml}
-
-
-Machine Learining ist ein Teilgebiet der Computer Wissenschaften, 
-das sich mit selbstlernenden Algorithmen befasst. Dabei sollen 
-Programme komplexe Zusammenhänge in einer menge von daten 
-erkennen ohne expliziert dafür programmiert worden zu sein.
-\\
-Das Unterscheidet den Algorithmus sehr von einem herkömmlichen 
-Computer Programm, bei dem der Entwickler bestimmte Regeln 
-definiert, sodass das Programm auf bestimmte Eingaben 
-die richtigen Ausgaben liefert.
-\\
-Beim Machine Learning erhällt das Programm neben den 
-Eingeben auch die zugehörigen Ausgaben und soll daraus 
-dann die Regeln so ableiten, das es zukünftig für ähnliche 
-Input Daten die richtigen Outputs bestimmen kann.
 \vspace{0.5cm}
 \begin{figure}[htb]
     \centering
@@ -61,56 +33,26 @@ Input Daten die richtigen Outputs bestimmen kann.
 \end{figure}
 \vspace{0.5cm}
 
-
-Das Ableiten der Regeln wird als Lernen bezeichnet und ist 
-mit einer numerischen Annäherung einer math Funktion an die In- Output 
-beziehungen der Daten zu verglischen.
+Das herleiten der Regeln erfolgt beim Machine Learning dabei in einem 
+iterativen Prozess, welcher als Training bezeichnet wird.
+Dabei soll eine math. Funktion, welche die Zusammenhänge beschreibt 
+numerisch angenähert werden. Ist der Zusammenhang linear, spricht man 
+von einer Regrassion, handelt es sich um Kategorische, liegt 
+ein Klassifizierung problem vor.
 \\
-Die Funktion oder Modell wird dabei zunächst mit zufälligen 
-Parameterwerten initialisiert. Anschließend wird iterativ mit den 
-Input Daten ein Ergebnis berechnet und mit dem tatsächlichen/richtigen 
-Ausgabe Werten verglichen. Bei Abweichung werden die Parameter des 
-Modells in die Richtige richtung angepasst.
+Weitere Formen neben dem \textit{Supervised Learning} sind das 
+\textit{Unsupervised Learning}, bei der das Programm keine Labels 
+erhällt, sondern diese durch Clustering Verfahren selber finden 
+soll, oder das \textit{Reinfocement Learning}, bei dem das Programm 
+mit der Umwelt interagieren soll.
 \\
-Da dem Modell während des Trainings die zu den Inputs gehörigen 
-Outputs bekannt sind, wird von \textit{Supervised Learining} 
-gesprochen.
-\\
-Dieses wird für Regressionsprobleme (Lineare Regression) sowie 
-Klassifikationsprobleme (Logistische Regression, SVM) angewandt.
-\\
-Sind die Outputs nicht, bakannt spricht man von \textit{Unsupervised 
-Lerning}. Hierbei soll das Model Mustern in den Daten Erkennen und 
-gruppieren, was zum automatisierten Labeln von Daten eingesetzt 
-wird oder die Rollen eines Datenaufbereitungsschritt für ein 
-anderes ML Modell übernimmt.
-\\
-Eine Dritte Form des Machine Leaerinigs stellt das Reinforcement Learing 
-dar, bei der \dots
-\\
-Die Anwendugsgebiete für Machine Learning Algorithmen sind 
-sehr vielfältig. Ob Websiten wie Facebook, Amazon generieren 
-Bild und Spracherkennung, Industrie, Robotik, autonom-fahrende Autos.
-
-\cite{hastieElementsStatisticalLearning2009} oder \cite{michelucciAdvancedAppliedDeep2019a} 
-oder \cite{osingaDeepLearningCookbook2018}
-oder \cite{goodfellowDeepLearning2016a}
+Da hier jedoch ausschließlich mit dem Supervised Learing gearbeitet
+wurde, werden diese Techniken nicht näher erläutert.
 
 
 
-\subsection{Machine Learning Frameworks}
+%------------------- SECTION: Neuronale Netze -------------------
 
-Die Algorithmen müssen nicht jedesmal neu implementiert werden. 
-Für die gängigen verfahren gibt es Frameworks, welche 
-die Implementierung enthalten und über APIs verwendet 
-werden können (Bsp Tensorflo und Keras)
-
-
-
-
-%########################################################################################
-%##########################  SECTION: NEURAL NETWORKS  ##################################
-%########################################################################################
 \section{Künstliche Neuronale Netze} \label{sec:nn}
 
 
@@ -122,7 +64,9 @@ Netzwerkartig in Schichten miteinander verbunden. Dadurch können
 auch komplexere zusammenhänge zwischen In- und Output Daten 
 gelernt werden.
 
-%##########################  SUBSECTION: PERCEPTRON  ##################################
+
+%------------------- SUBSECTION: Das Perceptron -------------------
+
 \subsection{Funktionsweise einzelnes Perzepreon}\label{subsec:percepron}
 
 Die berechnung eines einzelnes Neuron ist entspricht der Logistischen 
@@ -198,10 +142,8 @@ ein zufallig ausgewähltes \textit{Stochastic Gradient
 Descent} verwendet werden.
 
 
-
-%##########################  SUBSECTION: MLP  ##################################
+%------------------- SUBSECTION: MLP -------------------
 \subsection{Mehrschichtiges Netz}\label{subsec:mlp}
-
 
 Da die möglichkeiten mit einem einzelnen Neuron stark bergrenzt sind 
 werden für komplexere Zusammenhänge mehrere Neuronen in Schichten 
@@ -282,10 +224,9 @@ Neben dem Ansatz des Gradienten Descent für die Optimierungs
 gibt es noch weitere, effizientere verfahren wie z.B. Momentum oder Adam.
 
 
-%URSPRÜNGLICH IN ML ENTHALTEN. TEILE IN NN ÜBERTRAGEN
-%##########################  SUBSECTION: VALIDIERUNG ################################
-\subsection{Validierung und Overfitting}
 
+%------------------- SUBSECTION: Validierung -------------------
+\subsection{Validierung und Overfitting}
 
 Um zu erkennen, ob das Netz die Trainings Daten nur 'auswendig' lernt, oder die 
 Zusammenhänge in ihnen für neue Daten generalisiert hat, wird während des Trainings 
@@ -302,7 +243,6 @@ für Overfitting, das heist keine generalisierung findet statt.
     \caption{irgend ein plot}
     \label{fig:ptl}
 \end{figure}
-% hier plot von train/val los
 
 Grund dafür sind entweder zu wenige Trainingsdaten oder das Netz hat zu viele Neuronen, ist also 
 überparametrisiert, und damit zu viele Freiheiten sich den Daten anzupassen. \ref{fig:overfit} 
@@ -336,12 +276,8 @@ in Abschnitt \ref{sec:deepl_cv} genauer eingegangen wird.
 
 
 
-%########################################################################################
-%##########################  SECTION: DEEP LEARNIN UNG COMPUTER VISION  #################
-%########################################################################################
+%------------------- SECTION: DEEP LEARNIN UNG COMPUTER VISION ----------------
 \section{Deep Learning und Computer Vision}\label{sec:deepl_cv}
-
-
 
 Neben den in \ref{sec:nn} beschrieben sogenannten \textit{Feed Forward Netzen} 
 gibt es eine vielzahl an Erweiterungen der Netzwerk Architektur, für unterschiedliche 
@@ -361,8 +297,7 @@ Anwendungen sind gesichtserkennung oder Autonomes Fahren.
 
 
 
-
-%##########################  SUBSECTION:CNNs  ################################
+%------------------- SUBSECTION: CNNs -------------------
 \subsection{Convolutional Neural Networks}
 
 Um Bilder /Inhalte mithilfe Neuronaler Netze zu erkennen, 
@@ -429,7 +364,7 @@ ergibt grundstruktur von cnn\\
 
 weitere layer wie dropout\\
 
-%##########################  SUBSECTION: TANSFER LEARINING  ################################
+%------------------- SUBSECTION: Transfer Learining ----------------
 \subsection{Transfer Learining}
 
 erklären, dass features von einfach bis immer komplexer werdende muster enthalten, die im bild zu finden sind.
@@ -442,8 +377,7 @@ je nach ähnlichkeit des eig datensetz zu dem auf das netz urspr trainiert wurde
 scratch, fine tuning, feature extractor
 
 
-
-%##########################  SUBSECTION: COMPETITIONS  ################################
+%------------------- SUBSECTION: Competitions ----------------
 \subsection{Competitions mit Imagenet und co + cnn winner}\label{subsec:comp}
 
 zuerst competition erklären \\
@@ -452,7 +386,7 @@ dann chronologische gewinner netzt + besonderheit\\
 
 
 
-%##########################  SUBSECTION: OBJEKT ERKENNUNG  ################################
+%------------------- SUBSECTION: Object Detection ----------------
 \subsection{Objekt erkennung}\label{sec:objdet}
 
 
@@ -469,9 +403,17 @@ Single Shot Detectoren
 Two Stage Detectoren
 
 
-%########################################################################################
-%##########################  SECTION: HARDWARE  #################
-%########################################################################################
+% hier irgendwo die frameworks einbringen
+\subsection{Machine Learning Frameworks}
+
+Die Algorithmen müssen nicht jedesmal neu implementiert werden. 
+Für die gängigen verfahren gibt es Frameworks, welche 
+die Implementierung enthalten und über APIs verwendet 
+werden können (Bsp Tensorflo und Keras)
+
+
+%------------------- SECTION: Hardware ----------------------
+
 \section{Hardware}\label{sec:hardware}
 %noch eine section zu Hardware allg (cpu, gpu, tpu), Neural Compute Stick und AI on the egde
 
@@ -485,6 +427,7 @@ technischen spezifikationen
 
 
 
+%------------------- SUBSECTION: AI on the Edge ----------------
 
 \subsection{AI on the edge}
 

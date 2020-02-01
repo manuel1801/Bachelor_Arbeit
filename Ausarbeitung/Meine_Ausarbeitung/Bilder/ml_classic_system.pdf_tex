@@ -38,7 +38,7 @@
   \newcommand*\fsize{\dimexpr\f@size pt\relax}%
   \newcommand*\lineheight[1]{\fontsize{\fsize}{#1\fsize}\selectfont}%
   \ifx\svgwidth\undefined%
-    \setlength{\unitlength}{558.32321666bp}%
+    \setlength{\unitlength}{585.51634921bp}%
     \ifx\svgscale\undefined%
       \relax%
     \else%
@@ -50,20 +50,9 @@
   \global\let\svgwidth\undefined%
   \global\let\svgscale\undefined%
   \makeatother%
-  \begin{picture}(1,0.11033622)%
+  \begin{picture}(1,0.10325457)%
     \lineheight{1}%
     \setlength\tabcolsep{0pt}%
     \put(0,0){\includegraphics[width=\unitlength,page=1]{ml_classic_system.pdf}}%
-    \put(0.6528901,0.0650947){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\smash{\begin{tabular}[t]{l}\footnotesize{Klassisches}\\\footnotesize{Programm}\end{tabular}}}}%
-    \put(0.90055762,0.05352808){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}Regeln\end{tabular}}}}%
-    \put(0,0){\includegraphics[width=\unitlength,page=2]{ml_classic_system.pdf}}%
-    \put(0.49882494,0.0368878){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}Outputs\end{tabular}}}}%
-    \put(0.51315136,0.07350607){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}Inputs\end{tabular}}}}%
-    \put(0,0){\includegraphics[width=\unitlength,page=3]{ml_classic_system.pdf}}%
-    \put(0.13536512,0.04960219){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\smash{\begin{tabular}[t]{l}\footnotesize{ML Programm}\end{tabular}}}}%
-    \put(0.38034503,0.04878214){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}Outputs\end{tabular}}}}%
-    \put(0,0){\includegraphics[width=\unitlength,page=4]{ml_classic_system.pdf}}%
-    \put(0.00010561,0.03482846){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}Regeln\end{tabular}}}}%
-    \put(-0.00168753,0.07144676){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}Inputs\end{tabular}}}}%
   \end{picture}%
 \endgroup%

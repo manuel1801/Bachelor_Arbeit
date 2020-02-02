@@ -1,21 +1,35 @@
 import numpy as np
 import cv2
 import os
+import sys
+import subprocess
 
+# usage: python3 resize_images.py path/to/images/ size
 
-image_path = '/home/manuel/Bachelor_Arbeit/dataset/my_images/'
+image_dir = sys.argv[1]
+if image_dir[-1] == '/':
+    image_dir = image_dir[:-1]
 
-# max größe von höhe oder breite (je nach ausrichtung)
-size = 1024
+size = int(sys.argv[2])
 
+image_dir_new = image_dir + '_resized_' + str(size)
 
-images = [os.path.join(image_path, i) for i in os.listdir(
-    image_path)if i[-3:] == 'jpg']
+# kopie der Bilder erzeugen
+os.system('cp -r ' + image_dir + ' ' + image_dir_new)
 
+# get paths to all image files
+pr = subprocess.Popen(['find', image_dir_new, '-name', '*.jpg'],
+                      stdout=subprocess.PIPE)
 
-for img_path in images:
+# collect paths in a list
+image_paths = [p.decode('utf-8').strip() for p in pr.stdout.readlines()]
+
+for img_path in image_paths:
     img = cv2.imread(img_path)
-    #cv2.imshow('origineal', img)
+
+    if img is None:
+        print('None Type at: ', img_path)
+        continue
 
     h, w = img.shape[:2]
     if w > h:  # quearformat
@@ -32,5 +46,3 @@ for img_path in images:
     #    break
 
     cv2.imwrite(img_path, img)
-
-#img = cv2.imread()

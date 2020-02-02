@@ -50,30 +50,59 @@ Da hier jedoch ausschließlich mit dem Supervised Learing gearbeitet
 wurde, werden diese Techniken nicht näher erläutert.
 
 
-
 %------------------- SECTION: Neuronale Netze -------------------
 
-\section{Künstliche Neuronale Netze} \label{sec:nn}
+\subsection{Künstliche Neuronale Netze} \label{sec:nn}
+
+Für komplexe Input Daten, wie beispielsweise Bilder, bei denen 
+die einzelnen Pixelwerte als Inputs und der Inhalt des Bildes als 
+Output dienen, werden in der Regel künstliche Neuronale Netze verwendet.
+Diese sind eine Form des Machine Learings und bestehen aus einer 
+vielzahl an miteinander verbundener Neuronen. Durch unterschiedlich 
+starke Gewichtungen der einzelnen Verbindungen, auch Gewichte genannt, 
+können für unterschiedliche Input Daten die entsprechenden Outputs 
+gefunden werden.
+
+\begin{figure}[htb]
+    \centering
+    \label{fig:nn}
+    \def\svgwidth{0.5\columnwidth}
+    \footnotesize
+    \input{Bilder/nn.pdf_tex}
+\end{figure}
 
 
-Künstliche Neuronale Netze sind eine Form des Machine Learning, 
-bei der das Modell aus einer vielzal an Einheiten besteht, welche 
-einen Input erhalten und dafür einen Wert ausgeben. Inspiriert 
-vom menschlichen Gehirn werden diese Einheiten, auch Neuronen genannt, 
-Netzwerkartig in Schichten miteinander verbunden. Dadurch können 
-auch komplexere zusammenhänge zwischen In- und Output Daten 
-gelernt werden.
+Die richtige einstellung der Gewichte, welche zunächst zufällig initialisiert werden, 
+erfolgt dabei im Trainingsprozess, welcher in \ref{fig:train} schematisch
+ dargestellt ist und sich in die drei Schritte:
+\begin{itemize}
+    \item Feed Forward anhand aktueller Gewichte vorhersage aus den Inputs treffen
+    \item Lossfuction Abweichung zu tatsächlichen werten bestimmen
+    \item Backpropagation minimierung der Fhlerfunktion durch anpassung der Gewichte
+\end{itemize}
+
+\begin{figure}[htb]
+    \centering
+    \label{fig:train}
+    \def\svgwidth{0.5\columnwidth}
+    \footnotesize
+    \input{Bilder/train_workflow.pdf_tex}
+\end{figure}
+
+Durch häufiges wiederholen dieser Schritte kann die Fehlerfunktion soweit minimiert werde, 
+dass das Modell auch für neue Input Daten die richtigen Aussagen treffen kann.
 
 
 %------------------- SUBSECTION: Das Perceptron -------------------
 
-\subsection{Funktionsweise einzelnes Perzepreon}\label{subsec:percepron}
+\subsubsection{Vorwärts}\label{subsec:percepron}
 
-Die berechnung eines einzelnes Neuron ist entspricht der Logistischen 
-Regression und ist in Abbildung \ref{fig:neuron} dargestellt.
-\\
-Zunächst werden die mit $w_{i}$ gewichteten Inputs $x_{i}$ aufsummiert 
-und anschießend einer Aktivierungsfunktion $\delta(z)$ übergeben.
+Im Vorwärtsdurchgang wird der Input durch alle Schichten hindurch 
+gereicht, um in der letzten Schicht den gewünschten Output zu liefern.
+Dabei erhält jedes Neuron wie in \ref{fig:neuron} dargestellt, die Ausgaben aller
+ neuronen der vorherigen Schicht, summiert diese auf und übergibt den Wert
+  einer Aktivierungsfunktion, die den Wert auf einen bestimmten Bereich Skalliert.
+ 
 
 \begin{figure}[htb]
     \centering
@@ -82,49 +111,72 @@ und anschießend einer Aktivierungsfunktion $\delta(z)$ übergeben.
     \label{fig:neuron}
 \end{figure}
 
-Die Aktivierungsfunktion soll den Wert auf einen bestimmten Berich skallieren.
-Für einen binären klassifikator, also $y = 1$ oder $0$ wird dafür die 
-\textit{Simoid Funktion} verwendet, welche einen Wert S-Förmig ziwschen 0 ind 1 
-skalliert. 
-
-Die vorhersage berechnet sich demnach aus 
-
-\begin{align}
-    \label{eq:neuron}
-    z = \sum_{i}(w_{i}x_{i} + b)\\
-    y = \frac{1}{1 + e^{-z}}
-\end{align}
-%hier plot
-
-Mithilfe einer Loss Funktion $L(y,w)$ wird nun bestimmt wie sehr sich geschätze 
-Wert $y$ von dem tatsächlichen Wert $\hat{y}$ unterscheidet.
-
-Für Regressions Probleme wird dafür oft der Absolute oder Quadratische Abstand
-verwendet. Bei Klassifikationen ist jedoch eine Logarithmische Fehler berechnung 
-effektiver.
-
-Durch den Logarithmus wird der Loss um so größer, je weiter die Schätzung $y$ (0 bis 1) vom 
-tatsächlichen Wert $\hat{y}$ (0 oder 1) abweicht. 
+Die Berechnung des Vorwärtsdurchgangs von einer ges Schicht 
+zur nächsten, lässt sich die mithilfe der Matrixixmultiplikation
+durchführen, was Gl. in ... als Vektorschreibweise ergibt.
+\\
+y = a(WTX)\\
+wobei a() die Aktivierungsfunktion.
+\\
+Aktivierungsfunktion können sein
+\begin{equation}
+    \label{eq:relu}
+    \delta(z) = max(0,z)
+\end{equation}
+ReLU in den hidden Layer
+oder
 
 \begin{equation}
+    \label{eq:softmax}
+    \delta(z) = \frac{e^{z}}{\sum e^{x}}
+\end{equation}
+
+\begin{equation}
+    \label{eq:sidmoid}
+    \delta(z) = \frac{1}{1 + e^{-x}}
+\end{equation}
+
+
+sigmoid(bin) oder softmax(cat) im letzten layer
+
+bei softmax erhällt man Wahrscheinlichkeitsverteilung über allen Output
+neuronen.\\
+Neben dem Ansatz des Gradienten für die Optimierungs 
+gibt es noch weitere, effizientere verfahren wie z.B. Momentum oder Adam.
+
+
+\subsubsection{Fehlerfunktion}
+
+Die Abweichung der Schätzung, welche an den Neuronen der letzen Schicht 
+vorliegen, zu den tatsächlichen Werten, den Labels, wird mithilfe geeigneter 
+Fehlerfunktion bestimmt. Für Ragression z.B. abs oder rms und für Kategorisch
+häufig logarithmisch.
+
+hier am beispiel einer binären klassifikation (erg 0 oder 1) mit log loss
+ (crossentropy) dargestellt.
+
+ \begin{equation}
     \label{eq:crossentropy}
     L = \hat{y}log(y) + (1 - \hat{y})log(1 - y)
 \end{equation}
+
+Durch den Logarithmus wird der Loss um so größer, je weiter die Schätzung $y$ vom 
+tatsächlichen Wert $\hat{y}$ abweicht.
 %hier plot
+\subsubsection{Backpropagation}
+Durch berechnung des Gradienten der Fehlerfunktion kann ermittelt 
+werden in welche Richtung die Gewichte angepasst werden müssen, sodass sie sich 
+im nächsten Durchgang minimiert.
+Dafür wird die die Fehlerfunktion für jede Schicht partiell nach den 
+Gewichten abgeleitet, was wie in gl. \ref{eq:grad} dargestellt mithilfe der 
+Kettenregel für die Aktivierungsfunktion geschieht.
 
-
-Um nun die Schätzungen $\hat{y}$ beim nächsten mal zu verbessern muss die 
-Lossfunktionen minimiert werden. Dafür wird das Gradienten Verfaheren angewandt 
-bei dem die Loss funktion partiell nach den Parametern $W_{i}$ und $b_{i}$ 
-abgeleitet wird.
 
 \begin{equation}
     \label{eq:grad}
     \frac{\partial L}{\partial w} = \frac{\partial L}{\partial z}\frac{\partial z}{\partial w}
 \end{equation}
-
-Nun können die Parameter $W$ und b angepasst werden.
-
+Damit werden die Gewichte dann nach Gleichung \ref{eq:update_wieghts} angepasst.
 \begin{equation}
     \label{eq:update_wieghts}
     w  \leftarrow w - \eta \frac{\partial L}{\partial w}
@@ -133,168 +185,74 @@ Nun können die Parameter $W$ und b angepasst werden.
 wobei die \textit{Leariningrate} $\eta$ die Schrittweite mit der die Anpassung vorgenommen
 werden soll angibt.
 
-Die Sritte (\ref{eq:neuron}) bis (\ref{eq:update_wieghts}) werden dann solange wiederholt, 
-bis der Loss genügend minimiert wurde.
-\\
-Dabei können entweder alle Input Daten auf einmal \textit{Batch 
-gradient Descent}, nur ein Teil \textit{Mini Batch} oder nur 
-ein zufallig ausgewähltes \textit{Stochastic Gradient 
-Descent} verwendet werden.
-
-
-%------------------- SUBSECTION: MLP -------------------
-\subsection{Mehrschichtiges Netz}\label{subsec:mlp}
-
-Da die möglichkeiten mit einem einzelnen Neuron stark bergrenzt sind 
-werden für komplexere Zusammenhänge mehrere Neuronen in Schichten 
-miteinander Verbunden. Die Verbindungen sind unterschiedlich stark 
-gewichtet wodurch auf Eingaben in die erste Schicht \textit{Input Layer} 
-an der Letzten Schicht,\textit{Output Layer} die zugehörigen Ausgaben 
-erzeugt werden können. 
-
-\begin{figure}[htb]
-    \centering
-    \input{Bilder/neuralnetwork.tex}
-    \caption{Neural Network Struktur}
-    \label{fig:nn}
-\end{figure}
 
 
 
-Die berechnung erfolgt gleich wie beim einzelnen Perzepron für alle Neuronen 
-einer Schicht glleichzeitig mit matrixmultiplitkation
 
-\begin{equation}
-    \label{mat:feedforward}
-    \begin{pmatrix}
-        x_{0} & x_{1} & x_{2}
-    \end{pmatrix}
-    \cdot
-    \begin{pmatrix}
-        w_{0,1} & x_{0,2}\\
-        w_{1,1} & x_{1,2}\\
-        w_{2,1} & x_{2,2}\\
-    \end{pmatrix}
-    =
-    \begin{pmatrix}
-        y_{1}\\
-        y_{2}
-    \end{pmatrix}
-\end{equation}
-
-
-Die Ergebnisse der Aktivierungsfunktion in einer Schicht dienen 
-dann als Input für die nächste Schicht. Für \textit{Hidden Layer}
-wird anstelle der in \ref{subsec:percepron} beschrieben Sigmoid 
-Funktion ReLu verwendet, da das skallieren zw 0 und 1 nur für die 
-Ausgabe Schicht
-
-\begin{equation}
-    \label{eq:relu}
-    \delta(z) = max(0,z)
-\end{equation}
-
-Diese setzt nur die negativen Werte zu 0. Durch die dadurch erhaltenen
-größeren Gradienten kann das Netzt Schneller lernen.
-
-
-Enthält die Output Schicht mehr als ein Neuron, soll also keine binäre sondern 
-Kategorische Klassifizierung erreicht werden, wird anstelle der Sigmoid 
-die \textit{Softmax} Funtion verwendet.
-
-
-\begin{equation}
-    \label{eq:softmax}
-    \delta(z) = \frac{e^{z}}{\sum e^{x}}
-\end{equation}
-
-welche eine Wahrscheinlichkeitsverteilung über allen Output 
-Neuronen bildet, die sich zu 1 aufsummeiren lässt. Somit ergebt sich
-für jedes Output Neuron, das für eine mögliche Klasse steht, eine 
-wahrscheinlichkkeit, mit der es sich um diese klasse handelt.
-\\
-Um nun für die berechnete Lossfunktion die Anpassungen für die 
-einzelnen Gewichte zu berehnen, werden Schrittweise die Partiellen
-Ableitungen rückwarts für alle Layer vorgenommen, \textit{Backpropaetion}
-sodass für die Layer $L = 1...N$ die Gradienten $\frac{\partial L}{\partial 
-w_{1}}$ bis $\frac{\partial L}{\partial w_{L}}$ zur Anpassung 
-der w Matrizen entsteht.
-\\
-Neben dem Ansatz des Gradienten Descent für die Optimierungs 
-gibt es noch weitere, effizientere verfahren wie z.B. Momentum oder Adam.
 
 
 
 %------------------- SUBSECTION: Validierung -------------------
 \subsection{Validierung und Overfitting}
 
-Um zu erkennen, ob das Netz die Trainings Daten nur 'auswendig' lernt, oder die 
-Zusammenhänge in ihnen für neue Daten generalisiert hat, wird während des Trainings 
-eine Validierung durchgeführt. Dafür wird das Datenset in ein Trainings- und in 
-ein Test Set aufgeteilt und nur mit den Trainingsdaten die Backpropagation zur 
-Parameter Anpassung durchgeführt. Mit dem Test Datensatz wird nur der Loss berechnet und
-mit ausgegeben. Wenn sich nur der Trainings Loss veingert \ref{fig:loss_plot} ist das ein zeichen 
-für Overfitting, das heist keine generalisierung findet statt. 
+um überprüfen zu können ob ein Modell die Trainingsdaten tatsächlich generalisiert 
+hat, dh auch für neue daten anwendbar ist, oder diese nur auswendig gelernt hat, 
+wird häufig der Datensatz in einen Trainingsanteil und einen Testanteil aufgeteilt.
 
+Mit dem Testdatensatz wird dann schon wärend des Trainings regelmäßig zwischen geprüft, 
+veringert sich irgendwann nur noch der fehler der trainingsdaten, findet overfitting statt.
 
-\begin{figure}[htb]
-    \centering
-    \input{Bilder/plot.tex}
-    \caption{irgend ein plot}
-    \label{fig:ptl}
-\end{figure}
+% \begin{figure}[htb]
+%     \centering
+%     \input{Bilder/plot.tex}
+%     \caption{irgend ein plot}
+%     \label{fig:ptl}
+% \end{figure}
 
-Grund dafür sind entweder zu wenige Trainingsdaten oder das Netz hat zu viele Neuronen, ist also 
-überparametrisiert, und damit zu viele Freiheiten sich den Daten anzupassen. \ref{fig:overfit} 
-\\
-Hat das Modell zu wenige Parameter um die komplexität der Daten anzugleichen, Bsp, Gerade an Funktion 
-höreren Grades, spricht man von Underfitting. \ref{fig:underfit}
+Häufig sind zu wenige Trainingsdaten oder zu komplexe/überparametrisierte
+ Modelle und damit zuviele freiheitsgrade, grund für overfitting.
 
 % hier plots von linie durch datenpunkte
-
 
 % Overfitting -> hohe varianz: varianz = train_err - test_error
 % Underfitting -> hoher Bias: Bias = 
 
+Techniken um Overfitting zu vermeiden sind z.B.
+\begin{itemize}
+    \item Augmentierung der Daten
+    \item Regularisierung der Parameter (L1/L2)
+    \item Dropout
+    \item early stopping
+\end{itemize}
 
-Um Overfitting zu vermeiden können entweder mehr Trainingsdaten verwendet werden. Stehen diese 
-jedoch nicht zu verfügung, kann Regularisierung verwendet werden, eine Technik die neben der 
-minimierung der Loss Funktion auch versucht die Gewichte auf einem kleinen Wert zu halten. 
-Dafür wird der zu minimierenden Loss Function als weiterer 
-Therm eine aufsummierung aller quadrieten Gewichte hinzugefügt. (\ref{eq:regularization}) 
-\cite{geronHandsonMachineLearning2017}
-
-
-\begin{equation}
+Bei Augmentierung werden aus den vorhandenen Daten künstlich mehr 
+Daten generiert, in dem an den Bildern geometrische transformationen 
+oder manipulationen der pixelwerte vorgenommen werden.
+\\
+Bei Regularisierung wird an die Lossfuction als weiterer Term
+ eine aufsummierung der Gewichte gehängt, wodurch diese bei der Minimierung 
+  klein gehalten werden, wodurch weniger potential zur überanpassung da ist.
+  \begin{equation}
     \label{eq:regularization}
     J(w) = E + \lambda \sum_{i} w_{i}^{2}
 \end{equation}
 
-% Early Stopping
-Weitere Möglichkeiten sind Daten Augemntierung oder Drop Out, auf die 
-in Abschnitt \ref{sec:deepl_cv} genauer eingegangen wird.
+Beim Dropout werden zufällig gewichte zu 0 gesetzt.
+\\
+early stopping: stoppen des trainings, wenn sich overfitting einstellt.
+
 
 
 
 %------------------- SECTION: DEEP LEARNIN UNG COMPUTER VISION ----------------
 \section{Deep Learning und Computer Vision}\label{sec:deepl_cv}
 
-Neben den in \ref{sec:nn} beschrieben sogenannten \textit{Feed Forward Netzen} 
-gibt es eine vielzahl an Erweiterungen der Netzwerk Architektur, für unterschiedliche 
-Anwendugsgebiete, die jedoch alle das beschriebene Grundprinzip verwenden.\\
+Das maschinelle sehen verwendet Deep Learining Techniken (CNNs) zusammen 
+mit Techiniken der Digitalen Bildverarbeitung.
+Die für die Bilderkennung am häufigsten eingesetze Art der NNs sind CNNs.
 
-Hat ein NN mehr als eine Hidden Schicht, spricht man von Deep Lerining.
-
-Arten von NNs:
-\begin{itemize}
-    \item CNN: für bilder, durch faltung erkennt features und ist translatorisch invariant: \textbf{Image Classification}
-    \item Recurrecnt Neural Networks/LSTM: durch feedback in network: für Audio und zeitl. anwendungen 
-    \item Autoencoder, GANs, etc.
-\end{itemize}
-
-Computer Vision beschäftigt sich mit der Bild erkennung und Objekt Lokalisierung. 
-Anwendungen sind gesichtserkennung oder Autonomes Fahren. 
-
+Es geht im wesentlichen darum Bilder und videos zu Klassifizieren oder objekte
+in ihenn zu Lokalisieren.
 
 
 %------------------- SUBSECTION: CNNs -------------------

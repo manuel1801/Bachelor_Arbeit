@@ -85,8 +85,8 @@ erfolgt dabei im Trainingsprozess, welcher in \ref{fig:train} schematisch
     \centering
     \label{fig:train}
     \def\svgwidth{0.5\columnwidth}
-    \footnotesize
     \input{Bilder/train_workflow.pdf_tex}
+    \caption{Trainingsablauf NN}
 \end{figure}
 
 Durch häufiges wiederholen dieser Schritte kann die Fehlerfunktion soweit minimiert werde, 
@@ -245,129 +245,80 @@ early stopping: stoppen des trainings, wenn sich overfitting einstellt.
 
 
 %------------------- SECTION: DEEP LEARNIN UNG COMPUTER VISION ----------------
-\section{Deep Learning und Computer Vision}\label{sec:deepl_cv}
+\subsection{Convolutional Neural Networks}\label{sec:cnn}
 
-Das maschinelle sehen verwendet Deep Learining Techniken (CNNs) zusammen 
-mit Techiniken der Digitalen Bildverarbeitung.
-Die für die Bilderkennung am häufigsten eingesetze Art der NNs sind CNNs.
+Für die Bilderkennung werden typischerweise Convolutionael 
+Neural Networks (CNNs) verwendet. Hierbei handelt es sich um eine Erweiterung
+der in \ref{sec:nn} beschriebenen Neuronalen Netze. Beim CNN 
+sollen vor der Klassifikation, Merkemale des Input Bildes,
+die spezifisch für eine Klasse sind herausextrahiert werden.
 
-Es geht im wesentlichen darum Bilder und videos zu Klassifizieren oder objekte
-in ihenn zu Lokalisieren.
+Dafür werden über das Bild zeilenweise Filtermatrizen mit kleinerer Dimension
+(3x3, 5x5) geschoben und eine math Faltung angewendet.
+Die Ergebnisse der Faltungen ergeben eine sog Feature Map, in welcher 
+Muster die sowol in Filter Mtrix als auch in input Bild auftreten, verstärkt 
+dargestellt werden.
 
-
-%------------------- SUBSECTION: CNNs -------------------
-\subsection{Convolutional Neural Networks}
-
-Um Bilder /Inhalte mithilfe Neuronaler Netze zu erkennen, 
-werden die einzelnen Pixelwerte der Bilder als Inputs verwendet 
-und das auf dem Bild zu erkennende Objekt als output verwendet. Bilder 
-werden als Matrizen der Form $height\times width \times color channels$ 
-dargestellt.
-
-Da dies für regulere/vollständig verbundene Neuronale Netze eine 
-enorme Anzahl an Parametern und damit einhergenhender rechenkost 
-bedeuten würde, werden hier CNNs verwendet, eine Architektur in 
-der Paramer von verschiedenen Neuronen gemeinsam genutzt werden.
-
-Hauptbestandteil von CNNs sind die \textit{Convolutional Layers}
-welche die mathematische Faltungsoperation zwischen Input Bild 
-und Filter/Kernel durchführen.
-
-Die Filter meist der Form $3 \times 3$ oder $5 \times 5$ und mit der 
-selben Tiefe wie der Input, werden während des \textit{Forward 
-Pass/bropagation} zeilenweise über das Bild geschoben und an jeder Stelle 
-das Kreuzprodukt berechnet. Jedes Ergebnis dieser berechnungen ergibt einen
-Pixel Wert der nächsten Schicht auch Feature Map genannt. \ref{fig:cnn}
-
-Ein weiterer bestandteil von CNNs sind die Pooling Layer, welche eine 
-bestimmte Anzahl an Pixeln zB 3 x 3 zu einem Wert zusammenfassen wodurch 
-sich die Parameter Anzahl des Bildes veringert. Das hat den Vorteil, dass 
-
+Die Werte der Filter Matrizen entsprechen den zu lernenden Gewichten 
+und werden mithilfe der Backpropagation angepasst.
 
 \begin{figure}[htb]
     \centering
-    \label{fig:lenet}
-    \includegraphics[width=0.8\textwidth]{Bilder/lenet.png}
-    \caption{LeNet-5 cite lecun}
+    \label{fig:conv}
+    \includegraphics[width=0.4\columnwidth]{convolution.png}
+    \caption{Faltung, \cite{researcherSimpleIntroductionConvolutional2019}}
 \end{figure}
 
 
 
-Ziel dieser Operation ist es, dass die 
-Filter Maps bestimmte Muster/features die zu einer bestimmten klasse 
-gehren lernen. Mit diesen Filtern können dann unabhängig wo im Bild 
-befindlich, die features wie zb horizontale/vertikale linien, Ecken 
-oder Kreise gefunden werden. 
+Durch die hintereinanderschaltung mehrerer Convolutional Layern 
+lassen sich so immer komplexere Merkmale des Input Bildes in den 
+Feature Maps heraus extrahieren.
+
+Durch Subsampling Methoden wie Max Pool Layer zwischen den Convolutional
+Layern verkleinert sich die Dimension der Ferture Maps in jeder Schicht.
+
+
+\begin{figure}[htb]
+    \centering
+    \label{fig:conv}
+    \includegraphics[width=0.8\columnwidth]{lenet.png}
+    \caption{Faltung, \cite{lecunGradientBasedLearningApplied1998}}
+\end{figure}
+
+
+Vorteile der CNNs sind der geringere Rechenaufwand durch die gemeinsame 
+Nutzung der Paramer der Filter Matrizen und die durch die 
+Faltung zustande kommende räumliche invarianz für das zu erkennende 
+Objekt auf dem Bild.
 \\
-Beispiel:
-\begin{equation}
-    \begin{pmatrix}
-        1 & 0 & -1\\
-        1 & 0 & -1\\
-        1 & 0 & -1
-    \end{pmatrix}
-\end{equation}
-
-erkennt vertikale Linien im Bild. 
+Um die Features, welche insbesondere in den vordersten ConvLayern für 
+alle klassen sehr ähnlich sind, nicht bei jedem Modell von grund auf 
+neu lernen zu müssen, wird häufig \textit{Transfer Learing} angewendet, 
+d.h. es werden die auf ein allg Datenset wie z.B. ImageNet vortrainierten
+Gewichte verwendet und müssen so nur noch leicht für den eigenen Datensatz 
+fine getuned werden.
 
 
+\subsubsection{Architkturen}
+historie, bzw gewinner Modelle der ImageNet Challenges
 
-
-Conv layer:\\
-Faltung an cnn erklärt: input image als (h,w,c) tensor wird mit filter/kernel gefaltet. daraus erhält man feature map
-zusammen mit pool layer:\\
-pool layer erklärt\\
-
-ergibt grundstruktur von cnn\\
-
-weitere layer wie dropout\\
-
-%------------------- SUBSECTION: Transfer Learining ----------------
-\subsection{Transfer Learining}
-
-erklären, dass features von einfach bis immer komplexer werdende muster enthalten, die im bild zu finden sind.
-\\
-filter können zufällig initialisiert und gelernt werden, oder von vortrainierten netzen wieder verwendet
-werden. (transfer learining oder fine tuning) da die deatures (besonders in den vorderen layern) immer ähnlich sind und das
-neu lernen zeitaufwändig und oft sogar ungenauer ist.
-\\
-je nach ähnlichkeit des eig datensetz zu dem auf das netz urspr trainiert wurde:\\
-scratch, fine tuning, feature extractor
-
-
-%------------------- SUBSECTION: Competitions ----------------
-\subsection{Competitions mit Imagenet und co + cnn winner}\label{subsec:comp}
-
-zuerst competition erklären \\
-dann chronologische gewinner netzt + besonderheit\\
-
-
+\begin{itemize}
+    \item Lente5
+    \item Alexnet
+    \item Inception
+    \item Resnet
+\end{itemize}
 
 
 %------------------- SUBSECTION: Object Detection ----------------
-\subsection{Objekt erkennung}\label{sec:objdet}
+\subsubsection{Objekt erkennung}\label{sec:objdet}
+
+Neben der Information, was sich auf einem Bild befindet möchte
+man bei der Object Detection auch herausfinden wo sich das 
+Objekt befindet.
 
 
-Unterschied deutlich machen: klassifikator kann nur ges bild auswertuen und wahscheinlichk angeben welche 
-klasse darauf. keine lokalisierng und keine mult obj\\
-
-3 Arten der Bilderkennung: Klassifizierung, Objekt Erkennung (für mult + box), Segmentation (jeden pixel)
-
-dafür obj erkennung notw:\\
-
-Single Shot Detectoren
-\\
-
-Two Stage Detectoren
-
-
-% hier irgendwo die frameworks einbringen
-\subsection{Machine Learning Frameworks}
-
-Die Algorithmen müssen nicht jedesmal neu implementiert werden. 
-Für die gängigen verfahren gibt es Frameworks, welche 
-die Implementierung enthalten und über APIs verwendet 
-werden können (Bsp Tensorflo und Keras)
 
 
 %------------------- SECTION: Hardware ----------------------

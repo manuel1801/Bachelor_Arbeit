@@ -2,11 +2,20 @@
 
 \section{Ziel der Arbeit}\label{sec:zielderarbeit}
 
+\begin{itemize}
+    \item Tiere sollen erkannt und auch lokalisiert werden. -> bbox
+    \item keine echtzeit, jedoch dennoch alle relevanten frames von camera input verarbeiten
+    \item insbesondere nacht geeignet, da tiere oft nacht aktiv -> infrarotfähige kamera
+    \item implementierung auf einem Raspberry Pi und Inferenz auf dem NCS2 mit hilfe OpenVino
+    \item möglichkeit zur nutzer benachrichtigung bei erkennung zb per email und senden des Bildes
+\end{itemize}
+Erkennu g mithilfe CNNs. Lokalisierung entweder mit keras ggf merhstufig oder 
+mit end to end lösung wie zb ssd oder f-rcnn
+\\
 End to end Prozess von Datensatz beschaffung, über training eines geeigneten Neuronalen 
 Netzes bis hin zu implementierung der Applikation, 
 die auf einem Raspberry Pi läuft und die Inferenz auf dem NCS2 ausführt.
 \\
-
 Es sollen in Wild Tiere erkannt werden, die in Deutschland heimisch sind.\\
 Das system soll autonom laufen und den Nutzer informieren (und das erkannte bild senden) 
 sobald etwas erkannt wurde.\\
@@ -33,7 +42,8 @@ sowie einstellungen bezüglich infrarot leds vorgenommen werden können.
 
 \section{Related Work}\label{sec:related_work}
 
-hier:
+hier obj det architecturen wie ssd und faster r-cnn und aktuelle trends
+
 \begin{itemize}
     \item Gibt einen Überblick über verwandte Arbeiten im Gebiet
     \item Strukturiert und Gruppiert diese Arbeiten sinnvoll

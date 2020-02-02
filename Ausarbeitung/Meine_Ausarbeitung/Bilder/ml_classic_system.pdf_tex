@@ -38,7 +38,7 @@
   \newcommand*\fsize{\dimexpr\f@size pt\relax}%
   \newcommand*\lineheight[1]{\fontsize{\fsize}{#1\fsize}\selectfont}%
   \ifx\svgwidth\undefined%
-    \setlength{\unitlength}{585.51634921bp}%
+    \setlength{\unitlength}{593.19626428bp}%
     \ifx\svgscale\undefined%
       \relax%
     \else%
@@ -50,9 +50,12 @@
   \global\let\svgwidth\undefined%
   \global\let\svgscale\undefined%
   \makeatother%
-  \begin{picture}(1,0.10325457)%
+  \begin{picture}(1,0.10191777)%
     \lineheight{1}%
     \setlength\tabcolsep{0pt}%
+    \put(1.40873582,-0.37850955){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\begin{minipage}{1.57693674\unitlength}\raggedright \end{minipage}}}%
+    \put(0.54858843,-0.33072359){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\begin{minipage}{1.76808075\unitlength}\raggedright \end{minipage}}}%
     \put(0,0){\includegraphics[width=\unitlength,page=1]{ml_classic_system.pdf}}%
+    \put(0.8830902,-0.33072359){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\begin{minipage}{1.57693689\unitlength}\raggedright \end{minipage}}}%
   \end{picture}%
 \endgroup%

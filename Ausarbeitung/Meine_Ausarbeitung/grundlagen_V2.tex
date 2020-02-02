@@ -52,7 +52,7 @@ wurde, werden diese Techniken nicht näher erläutert.
 
 %------------------- SECTION: Neuronale Netze -------------------
 
-\subsection{Künstliche Neuronale Netze} \label{sec:nn}
+\subsection{Künstliche Neuronale Netze} \label{subsec:nn}
 
 Für komplexe Input Daten, wie beispielsweise Bilder, bei denen 
 die einzelnen Pixelwerte als Inputs und der Inhalt des Bildes als 
@@ -93,60 +93,65 @@ Durch häufiges wiederholen dieser Schritte kann die Fehlerfunktion soweit minim
 dass das Modell auch für neue Input Daten die richtigen Aussagen treffen kann.
 
 
-%------------------- SUBSECTION: Das Perceptron -------------------
-
-\subsubsection{Vorwärts}\label{subsec:percepron}
-
+\subsubsection{Vorwärts}
 Im Vorwärtsdurchgang wird der Input durch alle Schichten hindurch 
 gereicht, um in der letzten Schicht den gewünschten Output zu liefern.
-Dabei erhält jedes Neuron wie in \ref{fig:neuron} dargestellt, die Ausgaben aller
- neuronen der vorherigen Schicht, summiert diese auf und übergibt den Wert
-  einer Aktivierungsfunktion, die den Wert auf einen bestimmten Bereich Skalliert.
- 
+Dabei erhält jedes Neuron wie in \ref{fig:neuron} dargestellt, die Ausgabewerte
+aller Neuronen der vorherigen Schicht, summiert diese auf und übergibt den Wert
+an eine Aktivierungsfunktion, die den Wert auf einen bestimmten Bereich skaliert.
 
-\begin{figure}[htb]
+
+\begin{figure}[h]
     \centering
+    \label{fig:neuron}
     \input{Bilder/neuron}
     \caption{Einzelnes Perzeptron}
-    \label{fig:neuron}
 \end{figure}
 
-Die Berechnung des Vorwärtsdurchgangs von einer ges Schicht 
-zur nächsten, lässt sich die mithilfe der Matrixixmultiplikation
-durchführen, was Gl. in ... als Vektorschreibweise ergibt.
-\\
-y = a(WTX)\\
-wobei a() die Aktivierungsfunktion.
-\\
-Aktivierungsfunktion können sein
-\begin{equation}
-    \label{eq:relu}
-    \delta(z) = max(0,z)
-\end{equation}
-ReLU in den hidden Layer
-oder
+
+
+
+
+
+Die Berechnung des Vorwärtsdurchgangs einer ges Schicht aus Neuronen
+als Vektor $z$ dargestellt, erfolgt wie in \cite{goodfellowDeepLearning2016a}
+beschrieben, über die Matrixmultiplikation des Vektors
+$x$ der vorherigen Schicht mit der Gewichtsmatrix $W$.
 
 \begin{equation}
-    \label{eq:softmax}
-    \delta(z) = \frac{e^{z}}{\sum e^{x}}
+    \label{eq:forward}
+    z = W^{T}x+b
 \end{equation}
+
+und wird anschließend elementweise einer nichtlinearen Aktivierungsfunktion
+$g(z)$ übergeben.\\
+Für Hidden Schichten wird dabei üblicherweisse in \ref{eq:relu} dargestellte
+\textit{ReLU} verwendet eine Funktion die negative Werte zu 0 setzt.
+
+\begin{equation}
+    \label{eq:relu}
+    g(z) = max\{0,z\}
+\end{equation}
+
+Da die Ausgabe meist einen Wahrscheinlichkeites Wert zwischen 0 und 1 
+haben soll wird für die letzte Schicht bei einer binären Klassifikation 
+die \textit{Sigmoid} Funktion \ref{eq:sidmoid}
 
 \begin{equation}
     \label{eq:sidmoid}
-    \delta(z) = \frac{1}{1 + e^{-x}}
+    g(z) = \frac{1}{1 + e^{-x}}
+\end{equation}
+
+verwendet und für kategorische Ausgaben die \textit{Softmax} \ref{eq:softmax}
+Funktion.
+\begin{equation}
+    \label{eq:softmax}
+    g(z) = \frac{e^{z}}{\sum e^{x}}
 \end{equation}
 
 
-sigmoid(bin) oder softmax(cat) im letzten layer
-
-bei softmax erhällt man Wahrscheinlichkeitsverteilung über allen Output
-neuronen.\\
-Neben dem Ansatz des Gradienten für die Optimierungs 
-gibt es noch weitere, effizientere verfahren wie z.B. Momentum oder Adam.
-
 
 \subsubsection{Fehlerfunktion}
-
 Die Abweichung der Schätzung, welche an den Neuronen der letzen Schicht 
 vorliegen, zu den tatsächlichen Werten, den Labels, wird mithilfe geeigneter 
 Fehlerfunktion bestimmt. Für Ragression z.B. abs oder rms und für Kategorisch
@@ -163,6 +168,8 @@ hier am beispiel einer binären klassifikation (erg 0 oder 1) mit log loss
 Durch den Logarithmus wird der Loss um so größer, je weiter die Schätzung $y$ vom 
 tatsächlichen Wert $\hat{y}$ abweicht.
 %hier plot
+
+
 \subsubsection{Backpropagation}
 Durch berechnung des Gradienten der Fehlerfunktion kann ermittelt 
 werden in welche Richtung die Gewichte angepasst werden müssen, sodass sie sich 
@@ -193,7 +200,7 @@ werden soll angibt.
 
 
 %------------------- SUBSECTION: Validierung -------------------
-\subsection{Validierung und Overfitting}
+\subsection{Validierung und Overfitting}\label{subsec:validation}
 
 um überprüfen zu können ob ein Modell die Trainingsdaten tatsächlich generalisiert 
 hat, dh auch für neue daten anwendbar ist, oder diese nur auswendig gelernt hat, 
@@ -244,8 +251,8 @@ early stopping: stoppen des trainings, wenn sich overfitting einstellt.
 
 
 
-%------------------- SECTION: DEEP LEARNIN UNG COMPUTER VISION ----------------
-\subsection{Convolutional Neural Networks}\label{sec:cnn}
+%---------------- SUBSECTION: Convolutional ----------------
+\subsection{Convolutional Neural Networks}\label{subsec:cnn}
 
 Für die Bilderkennung werden typischerweise Convolutionael 
 Neural Networks (CNNs) verwendet. Hierbei handelt es sich um eine Erweiterung
@@ -310,9 +317,8 @@ historie, bzw gewinner Modelle der ImageNet Challenges
     \item Resnet
 \end{itemize}
 
-
-%------------------- SUBSECTION: Object Detection ----------------
-\subsubsection{Objekt erkennung}\label{sec:objdet}
+%---------------- SUBSECTION: Obj Detection ----------------
+\subsection{Objekt erkennung}\label{subsec:objdet_det}
 
 Neben der Information, was sich auf einem Bild befindet möchte
 man bei der Object Detection auch herausfinden wo sich das 
@@ -322,23 +328,30 @@ Objekt befindet.
 
 
 %------------------- SECTION: Hardware ----------------------
-
 \section{Hardware}\label{sec:hardware}
 %noch eine section zu Hardware allg (cpu, gpu, tpu), Neural Compute Stick und AI on the egde
 
+Da das Training und die Inferenz von Deep Learning Algorithmen
+ sehr rechenintensiv ist, werden entsprechen leistungsfähige 
+Prozessoren benötigt. Dabei ist die Ausführung auf einer GPU 
+(Graphical Processor Unit) meist effizienter als auf einer 
+CPU (Central Processor Unit). Anwendungen auf eingebetteten Systemen
+wie z.B. einplatinen Computern wie dem in der Arbeite verwendeten
+Raspberry Pi kommen dabei schnell an ihre Grenzen.
+Möchte man dennoch die Daten auf dem Gerät verrechnen und 
+nicht an eine Cloud senden, bieten verschiedene KI Beschleuniger 
+die möglichketi die Inferenz des Deep Learning Modells 
+auf externer Hardware auszuführen. Einer davon ist der in der 
+Arbeit verwendete Neural Compute Stick 2 von Intel.
+\\
+Dieser basiert auf der Movidius Myriad X Vision Processing Unit (VPU)
+\cite{haussermannFunktionUndEffizienz}
 
-allg zu hardware für deeplearning. Das besser auf gpu als cpu. weitere: tpu, fpga, vpu, wie zb ncs2.
+\begin{figure}[htb]
+    \centering
+    \label{fig:ncs2}
+    \includegraphics[width=0.4\columnwidth]{ncs2_top.jpg}
+    \caption{NCS2}
+\end{figure}
 
-\subsection{Neural Compute Stick 2}
-
-technischen spezifikationen
-
-
-
-
-%------------------- SUBSECTION: AI on the Edge ----------------
-
-\subsection{AI on the edge}
-
-was bedeutet dies. cloud unabhängig und ohne groß rechner. bsp anwendungen.
 

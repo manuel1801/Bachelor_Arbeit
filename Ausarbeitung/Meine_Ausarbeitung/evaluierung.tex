@@ -2,27 +2,74 @@
 
 \section{Evaluierungs Metriken}\label{sec:metricen}
 
-\subsection*{mAP}
-\begin{itemize}
-    \item IoU Intersection over Unit: überlappung pred box mit ground truth box fläche beider boxen zusammen
-    \item Confusion matrix
-    \begin{itemize}
-        \item TP: True Positive (richtig auf ja getippt) (TP wird bei IoU > threshh. (übl 0.5) festgelegt)
-        \item TN: True Negative (richtig auf nein getippt)
-        \item FP: False Positive (fälschlicher ja getippt)
-        \item FN: False Negative (fälschlicherweise auf nein getippt)
-    \end{itemize}
-    \item Precision: TP/(TP + FP): möglichst viele richtige aus allen finden
-    \item Recall: TP/(TP + FN): möglichst \textbf{nur} die richtigen (sensitivity)
-    \item AP = Precision-Recall vehältniss, genauer fläche unter kurve der beiden
-    \item mAP für alle klassen gemittelt
-\end{itemize}
+\subsection*{Mean Average Precision (mAP)}
+Als Maß für die Genauigkeit wird für die Objekterkennung häufig 
+die \textit{Mean Average Precision (mAP)} verwendet, welche sowohl
+die Lokalisierung- als auch die Klassifizierungsgenauigkeit 
+mit einbezieht. Dafür wird zunächst die \textit{Intersection over 
+Union} berechnet, welche wie in Abbildung \ref{fig:iou} dargestellt das Verhältnis
+des Überlappungsgrad der gelabelten (Ground Truth) und der
+geschätzete Boundig Box zu dem Gesammtbereich beider Boxen darstellt.
+\\
+Beträgt dieser mehr als ein Bestimmter Threshhold, häufig 50\%
+gilt die Schätzung als \textit{True Positive}, andernfalls als 
+\textit{False Positive}. Werden die Falsschätzungen, also Negative 
+noch hinzugenommen, für fälschlicherweise daneben FN und für richtiger 
+weise daneben TN, lässt sich daraus eine \textit{Confusion Matrix}
+bilden.
 
-\subsection*{Loss}
-kombination aus binärem classification log loss (cross entropy) für boxen und 
-L1 smooth loss.
+\begin{figure}[htb]
+    \centering
+    \label{fig:iou}
+    \includegraphics[width=0.25\columnwidth]{Bilder/IoU.png}
+    \caption{IoU}
+\end{figure}
+%hier rechts davon noch conf matrix als bild
+
+\newcommand\MyBox[2]{
+  \fbox{\lower0.75cm
+    \vbox to 1.7cm{\vfil
+      \hbox to 1.7cm{\hfil\parbox{1.4cm}{#1\\#2}\hfil}
+      \vfil}%
+  }%
+}
+\noindent
+\renewcommand\arraystretch{1.5}
+\setlength\tabcolsep{0pt}
+\begin{tabular}{c >{\bfseries}r @{\hspace{0.7em}}c @{\hspace{0.4em}}c @{\hspace{0.7em}}l}
+  \multirow{10}{*}{\rotatebox{90}{\parbox{2.5cm}{\bfseries\centering tatsächlicher Wert}}} & 
+    & \multicolumn{2}{c}{\bfseries geschätzter Wert} & \\
+  & & \bfseries p & \bfseries n & \bfseries\\% total \\
+  & p$'$ & \MyBox{True}{Positive} & \MyBox{False}{Negative}\\[2.4em]% & P$'$ \\[2.4em]
+  & n$'$ & \MyBox{False}{Positive} & \MyBox{True}{Negative} \\%& N$'$ \\
+  %& total & P & N &
+\end{tabular}
+\\[0.5cm]
+Mit diesen Werten lassen sich dann der \textit{Recall}, welcher angibt wie 
+viele Objekte das Modell gefunden hat und die \textit{Precision}
+die angibt mit welcher Genauigkeit die Objekte gefunden wurden
+berechnen.
+\\
+Der \textit{Recall} ist definiert durch TP/TP + FN
+wobei TP + FN allen Objekten im Bild entspricht, somit also das 
+Verhälltnis der Gefunden zu allen Objekten im Bild.
+\\
+Die \textit{Precision} kann durch TP/TP + FP, also die richtig 
+geschätzen durch alle gemachten schätzunge und gibt somit die 
+genauigkeit mit der das Model die Objekte findet an.
+\\
+Daraus kann nun die durchschnittliche Precision für alle Recall 
+Werte bestimmt werden, welche als \textit{Average Precision}
+bezeichnet wird und die Genauigkeit des Models bezogen auf 
+eine bestimmte Klasse angibt. Für alle Klassen gemittel 
+erhält man die mittlere durchschnittliche Precision (mAP)
 
 
+\subsection*{Fehlerfunktion}
+Die Fehlerfunktion setzet sich aus einem Lokalisierungs und einem 
+Klassifizierungsfehler zusammen. 
+Die Lokalisierung erfolgt über eine Lineare Regression zur 
+Annäherung der Bounding Boxes and die richtigen Koordinaten.\\
 
 \section{Ergebnisse}\label{sec:results}
 

@@ -52,7 +52,7 @@ pr = subprocess.Popen(['find', path, '-name', '*.txt'],
 label_paths = [p.decode('utf-8').strip() for p in pr.stdout.readlines()]
 shuffle(label_paths)
 
-
+# sort
 image_paths = [image_paths[idx]
                for idx in list(map(get_index_by_name, label_paths))]
 

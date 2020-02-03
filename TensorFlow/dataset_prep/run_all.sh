@@ -10,7 +10,7 @@ dataset_dir=$1
 # remove_spaces.py
 
 # 2. collect files from subfolders
-./collect_files_from_subfolders.sh $dataset_dir
+#./collect_files_from_subfolders.sh $dataset_dir
 
 # 3. convert oi txt labels to pascal voc xml labels
 python3 oi_to_pascal_voc_xml.py --dataset_path $dataset_dir/

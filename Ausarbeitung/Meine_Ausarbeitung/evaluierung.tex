@@ -18,14 +18,7 @@ noch hinzugenommen, für fälschlicherweise daneben FN und für richtiger
 weise daneben TN, lässt sich daraus eine \textit{Confusion Matrix}
 bilden.
 
-\begin{figure}[htb]
-    \centering
-    \label{fig:iou}
-    \includegraphics[width=0.25\columnwidth]{Bilder/IoU.png}
-    \caption{IoU}
-\end{figure}
-%hier rechts davon noch conf matrix als bild
-
+% für confusion matrix
 \newcommand\MyBox[2]{
   \fbox{\lower0.75cm
     \vbox to 1.7cm{\vfil
@@ -36,15 +29,31 @@ bilden.
 \noindent
 \renewcommand\arraystretch{1.5}
 \setlength\tabcolsep{0pt}
-\begin{tabular}{c >{\bfseries}r @{\hspace{0.7em}}c @{\hspace{0.4em}}c @{\hspace{0.7em}}l}
-  \multirow{10}{*}{\rotatebox{90}{\parbox{2.5cm}{\bfseries\centering tatsächlicher Wert}}} & 
-    & \multicolumn{2}{c}{\bfseries geschätzter Wert} & \\
-  & & \bfseries p & \bfseries n & \bfseries\\% total \\
-  & p$'$ & \MyBox{True}{Positive} & \MyBox{False}{Negative}\\[2.4em]% & P$'$ \\[2.4em]
-  & n$'$ & \MyBox{False}{Positive} & \MyBox{True}{Negative} \\%& N$'$ \\
-  %& total & P & N &
-\end{tabular}
-\\[0.5cm]
+
+\begin{minipage}{\textwidth}
+    \begin{minipage}[b]{0.49\textwidth}
+      \centering
+      \includegraphics[width=0.8\textwidth]{Bilder/IoU.png}
+      \captionof{figure}{Intersection over Union}
+    \end{minipage}
+    \hfill
+    \begin{minipage}[b]{0.49\textwidth}
+      \centering
+      \begin{tabular}{c >{\bfseries}r @{\hspace{0.7em}}c @{\hspace{0.4em}}c @{\hspace{0.7em}}l}
+        \multirow{10}{*}{\rotatebox{90}{\parbox{2.5cm}{\bfseries\centering tatsächlicher Wert}}} & 
+          & \multicolumn{2}{c}{\bfseries geschätzter Wert} & \\
+        & & \bfseries p & \bfseries n & \bfseries\\
+        & p$'$ & \MyBox{True}{Positive} & \MyBox{False}{Negative}\\[2.4em]
+        & n$'$ & \MyBox{False}{Positive} & \MyBox{True}{Negative} \\
+      \end{tabular}
+        \captionof{figure}{Confusion Matrix}
+    \end{minipage}
+\end{minipage}
+
+
+\vspace{0.5cm}
+    
+
 Mit diesen Werten lassen sich dann der \textit{Recall}, welcher angibt wie 
 viele Objekte das Modell gefunden hat und die \textit{Precision}
 die angibt mit welcher Genauigkeit die Objekte gefunden wurden

@@ -175,12 +175,12 @@ Durch berechnung des Gradienten der Fehlerfunktion kann ermittelt
 werden in welche Richtung die Gewichte angepasst werden müssen, sodass sie sich 
 im nächsten Durchgang minimiert.
 Dafür wird die die Fehlerfunktion für jede Schicht partiell nach den 
-Gewichten abgeleitet, was wie in gl. \ref{eq:grad} dargestellt mithilfe der 
+Gewichten abgeleitet, was wie in gl. \ref{eq:backprop} dargestellt mithilfe der 
 Kettenregel für die Aktivierungsfunktion geschieht.
 
 
 \begin{equation}
-    \label{eq:grad}
+    \label{eq:backprop}
     \frac{\partial L}{\partial w} = \frac{\partial L}{\partial z}\frac{\partial z}{\partial w}
 \end{equation}
 Damit werden die Gewichte dann nach Gleichung \ref{eq:update_wieghts} angepasst.
@@ -288,7 +288,7 @@ Layern verkleinert sich die Dimension der Ferture Maps in jeder Schicht.
 
 \begin{figure}[htb]
     \centering
-    \label{fig:conv}
+    \label{fig:lenet}
     \includegraphics[width=0.8\columnwidth]{lenet.png}
     \caption{Faltung, \cite{lecunGradientBasedLearningApplied1998}}
 \end{figure}
@@ -308,13 +308,22 @@ fine getuned werden.
 
 
 \subsubsection{Architkturen}
-historie, bzw gewinner Modelle der ImageNet Challenges
+
+Nach der in Abbildung \ref{fig:lenet} dargestellten, erfolgreichen
+ersten veröffentlichung eines CNN von YannLecunn 1998 \cite{lecunGradientBasedLearningApplied1998}
+wurden wurden viele weitere Architekturen entwickelt. 
+
+Diese werden anhand der ImageNet Chanllange ILSVRC \cite{ILSVRC15} bewerted
+
+Die bekanntesten gewinner Modelle sind wie in \cite{StanfordCS231nConvolutional}
+aufgeführt:
+
 
 \begin{itemize}
-    \item Lente5
-    \item Alexnet
-    \item Inception
-    \item Resnet
+    \item Alexnet (2012), mehrere conv layer hintereinander
+    \item GoogleLeNet (2014), Inception Module
+    \item VGGNet 2014
+    \item ResNet (2015), 
 \end{itemize}
 
 %---------------- SUBSECTION: Obj Detection ----------------

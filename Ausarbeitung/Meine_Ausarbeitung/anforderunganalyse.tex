@@ -2,52 +2,68 @@
 
 \section{Ziel der Arbeit}\label{sec:zielderarbeit}
 
-\begin{itemize}
-    \item Tiere sollen erkannt und auch lokalisiert werden. -> bbox
-    \item keine echtzeit, jedoch dennoch alle relevanten frames von camera input verarbeiten
-    \item insbesondere nacht geeignet, da tiere oft nacht aktiv -> infrarotfähige kamera
-    \item implementierung auf einem Raspberry Pi und Inferenz auf dem NCS2 mit hilfe OpenVino
-    \item möglichkeit zur nutzer benachrichtigung bei erkennung zb per email und senden des Bildes
-\end{itemize}
-Erkennu g mithilfe CNNs. Lokalisierung entweder mit keras ggf merhstufig oder 
-mit end to end lösung wie zb ssd oder f-rcnn
+
+Wie in der Einleitung \ref{kap:einleitung} beschrieben, soll 
+ein CNN Basiertes System zur Wildtiererkennung entwickelt 
+werden, das für dir Inferenz den Neural Compute Stick 2 verwendet.
+Dabei sollte neben der reinen Erkennung auch eine Lokalisierung 
+der erkannten Tiere im Bild stattfinden. Gängige Techniken dafür 
+werden im nächsten Abschnitt erläutert.
 \\
-End to end Prozess von Datensatz beschaffung, über training eines geeigneten Neuronalen 
-Netzes bis hin zu implementierung der Applikation, 
-die auf einem Raspberry Pi läuft und die Inferenz auf dem NCS2 ausführt.
+Anforderungen an die Erkennung waren ein möglichst hohe 
+Genauigkeit und Robustheit des Models zu schaffen, sodass 
+diese auch für die weniger detailreichen graustufen Bilder 
+der Infrarot kamera noch funktioniert. Echtzeit Inferenz 
+war nicht notwendig, dennoch sollten alle relevanten Informationen 
+verarbeitet werden können.
 \\
-Es sollen in Wild Tiere erkannt werden, die in Deutschland heimisch sind.\\
-Das system soll autonom laufen und den Nutzer informieren (und das erkannte bild senden) 
-sobald etwas erkannt wurde.\\
-Im Optimalfall soll es mithilfe Infrarot kamera auch im Dunkeln Tiere erkennen, 
-(da Nachts mehr tiere zu sehen sein werden)
-
-
-Verwender werden soll: für Inferenz der in \ref{sec:hardware} beschriebene
-Neural Compute Stick 2, und für die Stuerung der (Einptaininen Computer) 
-RaspberryPi2. 
-
-Um auch im Dunklen oder bei nacht Tiere erkennen zu können soll eine Kamera ohne
-Infrarot Filter verwendet werden. (evtl noch auf realsense eingehen)
+Die entwicklung der autonome laufenden Anwendung für den Raspberry, 
+sowie die Integration des trainierten Modells in diese war ebenso 
+wichtigier Bestandteil der Arbeit.
 \\
-Die Kommunikation zwischen Raspberry und Pc soll über eine server/client tcp 
-Verbindung erfolgen. Die Applikattio soll mitteilen wenn etwas erkannt wurde 
-und das bild zusenden. Ausserdem soll das aktuelle frame abgefragt werden können
-sowie einstellungen bezüglich infrarot leds vorgenommen werden können.
-
-
-
-
+Hierbei waren die anforderungen eine geeignete Kamera (infrarot) 
+auszusuchen, sowie eine Kommunikations/Benachrichtigungs 
+möglichkeit über Netzwerk verbindung zu schaffen.
 
 
 \section{Related Work}\label{sec:related_work}
 
-hier obj det architecturen wie ssd und faster r-cnn und aktuelle trends
+Für die Objekterkennung werden häufig End-to-End Lösung verwendet,
+Modelle die sowohl Klassifikation als auch Lokalisierung 
+durchführen.
+Diese verwenden meist eines der im Abschnitt 
+\ref{subsubsec:architecture} aufgezeigten Basis CNNs als  
+Feature Extractor und darauf aufbauend ein Framework für die 
+Lokalisierung. 
 
-\begin{itemize}
-    \item Gibt einen Überblick über verwandte Arbeiten im Gebiet
-    \item Strukturiert und Gruppiert diese Arbeiten sinnvoll
-    \item Deckt möglichst alle relevanten Arbeiten ab
-    \item Erklärt kurz deren Inhalt und was sie von anderen Arbeiten (vorallem der Eigenen!) abheben
-    \item Positioniert die eigene Arbeit im Gebiet
-\end{itemize}
+
+Diese lassen sich in einstufige und zweistufige Verfahren 
+gliedern \cite{wengObjectDetectionPart2018}. Bei den zweistufigen
+handelt es sich um Regionbased CNNs, die Regionen für
+mögliche Box Locations mithilfe RPN (Region Proposia Network)
+oder selective search verfahren finden soll, um diese dann
+zu klassifizieren bzw box regression. Die aktuellste Version 
+davon ist das in Abbildung \ref{fig:faster_rcnn} schematisch 
+dargestellte \textit{Faster R-CNN} \cite{renFasterRCNNRealTime2016a}
+
+
+Einstufige Verfahren wie Single Shot Detectoren (SSD) 
+führen die lokalisierung zusammen mit dem Feature Extractor 
+aus, indem verschiedene scalierungen/ausmaße der Convolutional 
+Layer in den Classifier/Regressor gegeben werden.
+Dadurch sind diese wie in Abbildung \ref{fig:speed_acc}
+zu erkennen ist, zwar schneller, jedoch auch ungenauer.
+
+\begin{minipage}[t]{0.5\textwidth}
+    \centering
+    \label{fig:faster_rcnn}
+    \includegraphics[width=0.67\textwidth]{faster_rcnn.png}
+    \captionof{figure}{Faster R-CNN, \cite{renFasterRCNNRealTime2016a}}
+\end{minipage}
+\begin{minipage}[t]{0.5\textwidth}
+    \centering
+    \label{fig:speed_acc}
+    \includegraphics[width=\textwidth]{speed_acc_comp.png}
+    \captionof{figure}{Geschw vs Genauigkeit, \cite{huangSpeedAccuracyTradeOffs2017}}
+\end{minipage}
+

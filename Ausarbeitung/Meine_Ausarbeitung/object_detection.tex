@@ -38,13 +38,17 @@ Farbwerte, Helligkeit, Kontrast oder Rauschen vorgenommen.
 
 \section{Training}
 
-hier kurz schreiben welche ansätze möglich sind(openvino), angegangen
-wurden(keras, tf obj det api)
+Da der Neural Compute Stick mit OpenVino ein eigenes Datei Format 
+für die traininerten Modelle verwendet, musste bei der Auswahl
+eines Frameworks sowie Models auf die Kompatibilität zu OpenVino 
+geachtet werden. 
 
-
-daneben war bei der bei der Ausahl die kompatibilität zu Open Vino zu berücksichtigen:\\
-liste von kompatiblen modellen.
-
+Verwendete wurde daher das untersstütze Framework Tensorflow, 
+um zwei Ansätze zu verfolgen. Der eine verwendet die Api Keras, 
+und versucht neben der Klassifikation die Lokalisierung mit 
+dieser vorzunahemen, der andere verwendet eine speziell für die 
+Objekterkennung konzipierte Api für wie in Abschnitt
+ \ref{sec:related_work} beschriebene End-to-End lösungen.
 
 \subsection{Tensorflow Object Detection Api}
 

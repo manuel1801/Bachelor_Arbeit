@@ -307,7 +307,7 @@ Gewichte verwendet und müssen so nur noch leicht für den eigenen Datensatz
 fine getuned werden.
 
 
-\subsubsection{Architkturen}
+\subsubsection{Architkturen}\label{subsubsec:architecture}
 
 Nach der in Abbildung \ref{fig:lenet} dargestellten, erfolgreichen
 ersten veröffentlichung eines CNN von YannLecunn 1998 \cite{lecunGradientBasedLearningApplied1998}
@@ -332,8 +332,15 @@ aufgeführt:
 Neben der Information, was sich auf einem Bild befindet möchte
 man bei der Object Detection auch herausfinden wo sich das 
 Objekt befindet.
-
-
+Dafür wird ein in \ref{subsec:cnn} beschriebenes CNN als Basis 
+zusammen mit weiteren Mechanaismen, auf die in \ref{sec:related_work}
+genauer eingegangen wird, verwendet.
+\begin{figure}[htb]
+    \centering
+    \label{fig:class_vs_det}
+    \includegraphics[width=0.8\textwidth]{classification_detection_small.jpeg}
+    \caption{Unterschied: Classification - Detection}
+\end{figure}
 
 
 %------------------- SECTION: Hardware ----------------------

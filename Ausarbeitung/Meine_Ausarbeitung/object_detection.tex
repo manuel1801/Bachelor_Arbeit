@@ -1,4 +1,4 @@
-\chapter{Realisierung Objekt Erkennung}\label{kap:objerk}
+\chapter{Realisierung Objekt Erkennung}\label{kap:object_det}
 
 \section{Datensatz}\label{sec:dataset}
 
@@ -61,52 +61,60 @@ verschiedenen Basis CNNs mit vortrainierten Geweichten.
 Um die Modelle trainieren zu können, mussten zunächst die 
 Trainingsdaten in das binary Dateiformate TFRecords umgewandelt 
 werden, welches die Api verwendet. Dieses ist eine Serialisierte 
-darstellung der Daten als Protocol Buffer für effiziente Zufriff.
+darstellung der Bilder und Labels als Protocol Buffer für
+effizienten Zugriff auf diese.
 
+Trainiert wurde mit hilfe \textit{Google Colab}, eine cloudbasierte VM,
+welche eine \dots Gpu zur verfügung stellt.
 
+\subsection{Trainingsoptimierung}
 
-\subsection{Regularisierung}
+Um zu einem guten Ergebnis zu kommen werden, wie in ... dargestellt, 
+häufig Anpassung bezogen auf Datensatz Augmentierungstechniken, 
+verschiedene Modell und Basis CNNs, sowie dessen Hyperparameter vorgenommen.
 
-Um das Overfitting zu vermeiden gibt es wie in \ref{sec:nn} 
-beschrieben vershiedene Möglichkeiten.
-
-Untersucht wurde hier
+\begin{figure}[htb]
+    \centering
+    \def\svgwidth{0.7\textwidth}
+    \input{Bilder/train_workflow_gesammt.pdf_tex}
+    \caption{Trainingsworkflow}
+    \label{fig:train_workflow}
+\end{figure}
 
 \begin{itemize}
-    \item Augmentierung
-    \item Early Stopping
-    \item \dots weitere zB $L_{1}$, $L_{2}$
+    \item Datensatz
+    \begin{itemize}
+        \item Augmentierungstechniken
+        \begin{itemize}
+            \item Geometrische
+            \item Farbwerte
+        \end{itemize}
+        \item Graustufen
+        \begin{itemize}
+            \item 1 Channel
+            \item 3 Channel
+        \end{itemize}
+    \end{itemize}
+    \item Modelle
+    \begin{itemize}
+        \item Faster R-CNNs
+        \begin{itemize}
+            \item InceptionV2
+            \item Resnet
+        \end{itemize}
+        \item SSD
+        \begin{itemize}
+            \item Mobilenet
+            \item InceptionV2
+        \end{itemize}
+    \end{itemize}
+    \item Hyperparameter
+    \begin{itemize}
+        \item Dropout
+        \item L2 Realisierung
+        \item Early Stopping
+    \end{itemize}
 \end{itemize}
 
-
-
-\subsection{Training grayscale}\label{subsec:train_gray}
-
-Da die Kamera im Infrarot Modus ein Graustufen Bild mit nur einem 
-Farbchannel liefert, muss dies für die Inferenz berücksichtigt werden.
-
-Es ergeben sich hier mehrere möglichkeiten:
-
-\begin{enumerate}
-    \item Normales (r, g, b) Netz
-    \item Ein Farbchannel (gr) Netz
-    \item Drei Farbchannel (gr, gr, gr)
-\end{enumerate}
-
-Für 1. und 3. Müssen die bilder der Kamera vor der 
-Inferenz auf 3 Farbchannel ($3 \times grau$) erweitert werden.
-\\
-Um das Netz auf einen Channel zu trainieren wurde im config file \dots
-\\
-Um $3 \times gray$ zu trainieren wurden die Bilder in OpenCV in 
-grau convertiert und wieder als jpgs abgespeichert.
-
-Die Ergebnisse sind in Kapitel \ref{kap:eval} dargestellt.
-
-
-\section{Parameter Optimierung}
-einstellungen im Config File\\
-tensorflow graph oder plot zeigen\\
-loss erklären (mit formel und für train und eval)
 
 

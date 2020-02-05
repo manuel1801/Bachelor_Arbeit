@@ -1,0 +1,99 @@
+Certificate:
+    Data:
+        Version: 3 (0x2)
+        Serial Number: 2 (0x2)
+        Signature Algorithm: sha256WithRSAEncryption
+        Issuer: C=DE, ST=BW, L=Reutlingen, O=meineorganisation, OU=meineabteilung, CN=meinedomain.de/name=meinvpn/emailAddress=manuel.barkey@gmail.com
+        Validity
+            Not Before: Feb  5 17:53:56 2020 GMT
+            Not After : Feb  2 17:53:56 2030 GMT
+        Subject: C=DE, ST=BW, L=Reutlingen, O=meineorganisation, OU=meineabteilung, CN=myclient/name=meinvpn/emailAddress=manuel.barkey@gmail.com
+        Subject Public Key Info:
+            Public Key Algorithm: rsaEncryption
+                RSA Public-Key: (2048 bit)
+                Modulus:
+                    00:dd:f3:31:61:3e:ba:eb:29:61:90:eb:78:88:32:
+                    cf:61:5c:41:3b:d2:61:62:34:d6:ea:3a:98:4b:b6:
+                    d7:73:10:25:d3:f7:ce:66:73:91:f6:db:de:e4:ac:
+                    33:44:00:ab:49:7f:23:66:83:ab:b9:9c:bd:72:19:
+                    5d:b7:a2:a0:81:fe:18:d5:f5:0d:59:c1:0b:31:d2:
+                    7c:1c:aa:d4:fc:52:29:c7:73:f0:21:55:64:fa:59:
+                    20:7c:68:d7:4f:82:08:66:b0:b0:57:87:e8:4c:15:
+                    82:e8:27:0c:2f:37:59:ca:85:4d:06:c6:d9:b6:c7:
+                    d3:fc:76:19:7a:23:7d:69:73:b1:45:ba:91:f7:42:
+                    60:aa:3f:65:31:28:a4:2b:99:c7:78:7d:26:9d:37:
+                    2e:56:41:b8:6f:d1:18:c6:94:71:b6:ca:ce:e0:a4:
+                    01:74:63:af:be:47:10:99:f3:9e:11:2d:56:33:22:
+                    b1:bc:20:4e:b8:83:24:eb:b7:dd:7b:bd:09:0e:ca:
+                    d3:90:8f:0c:df:ee:0f:d8:e7:fa:0f:66:c5:5a:58:
+                    07:8a:79:55:88:cb:82:c0:1c:de:6d:14:40:47:c2:
+                    9b:2b:97:80:c6:ee:c7:b1:38:ae:b6:7d:94:db:38:
+                    ef:9b:e0:d3:31:27:d4:36:05:a7:67:7f:3a:a4:66:
+                    98:7b
+                Exponent: 65537 (0x10001)
+        X509v3 extensions:
+            X509v3 Basic Constraints: 
+                CA:FALSE
+            Netscape Comment: 
+                Easy-RSA Generated Certificate
+            X509v3 Subject Key Identifier: 
+                91:ED:C7:AD:DD:2C:F6:D9:E8:33:CB:5B:1C:1F:C4:F8:4A:0D:51:2C
+            X509v3 Authority Key Identifier: 
+                keyid:90:29:97:EE:02:7D:CA:AB:4A:52:BB:B7:9E:6B:A4:0A:24:03:60:87
+                DirName:/C=DE/ST=BW/L=Reutlingen/O=meineorganisation/OU=meineabteilung/CN=meinedomain.de/name=meinvpn/emailAddress=manuel.barkey@gmail.com
+                serial:10:3A:B0:21:AE:82:67:9B:59:F6:4F:F8:DE:21:EA:CE:67:06:C0:EF
+
+            X509v3 Extended Key Usage: 
+                TLS Web Client Authentication
+            X509v3 Key Usage: 
+                Digital Signature
+            X509v3 Subject Alternative Name: 
+                DNS:myclient
+    Signature Algorithm: sha256WithRSAEncryption
+         67:3c:d2:91:34:2b:3d:64:83:7e:03:64:2e:80:ae:36:9e:87:
+         95:e4:aa:1f:4d:02:df:84:d8:3a:1a:5b:0d:e1:2a:3d:64:f8:
+         f8:3d:04:9c:d8:d6:1a:5a:98:84:bd:27:89:48:43:4d:4e:3e:
+         62:bf:d1:88:8f:20:0b:72:db:19:05:41:c6:40:6a:3e:0f:20:
+         f6:b0:7d:e0:88:c8:33:61:aa:40:45:e3:62:23:79:aa:3c:74:
+         ad:c5:f1:fc:ee:07:e8:f1:0f:de:e7:8c:2f:73:e3:5a:94:3c:
+         ac:ce:97:c7:98:38:2c:fb:d8:fc:bc:4e:d9:f6:d7:bd:99:d5:
+         d4:75:e3:fd:f0:01:7f:83:26:6a:8e:2b:50:b9:59:41:d0:49:
+         d1:0b:c2:03:69:da:7c:14:6b:8b:6a:1b:84:81:96:f4:58:f7:
+         8f:dc:b8:df:f9:06:af:25:b6:95:b5:b4:2b:42:30:0e:42:ee:
+         aa:bd:b4:c8:38:bd:a0:24:61:f3:1c:8b:1e:90:3d:29:ae:70:
+         39:e1:e4:85:5f:10:8f:a5:71:df:91:8b:e2:4b:4c:47:17:00:
+         b1:f1:c7:83:91:79:2b:ba:a2:89:3e:9f:98:7f:49:d1:90:d9:
+         b3:f4:96:a5:7f:24:c2:eb:2f:70:4d:19:59:1d:62:df:ca:81:
+         fb:5a:2f:17
+-----BEGIN CERTIFICATE-----
+MIIFdTCCBF2gAwIBAgIBAjANBgkqhkiG9w0BAQsFADCBtzELMAkGA1UEBhMCREUx
+CzAJBgNVBAgTAkJXMRMwEQYDVQQHEwpSZXV0bGluZ2VuMRowGAYDVQQKExFtZWlu
+ZW9yZ2FuaXNhdGlvbjEXMBUGA1UECxMObWVpbmVhYnRlaWx1bmcxFzAVBgNVBAMT
+Dm1laW5lZG9tYWluLmRlMRAwDgYDVQQpEwdtZWludnBuMSYwJAYJKoZIhvcNAQkB
+FhdtYW51ZWwuYmFya2V5QGdtYWlsLmNvbTAeFw0yMDAyMDUxNzUzNTZaFw0zMDAy
+MDIxNzUzNTZaMIGxMQswCQYDVQQGEwJERTELMAkGA1UECBMCQlcxEzARBgNVBAcT
+ClJldXRsaW5nZW4xGjAYBgNVBAoTEW1laW5lb3JnYW5pc2F0aW9uMRcwFQYDVQQL
+Ew5tZWluZWFidGVpbHVuZzERMA8GA1UEAxMIbXljbGllbnQxEDAOBgNVBCkTB21l
+aW52cG4xJjAkBgkqhkiG9w0BCQEWF21hbnVlbC5iYXJrZXlAZ21haWwuY29tMIIB
+IjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEA3fMxYT666ylhkOt4iDLPYVxB
+O9JhYjTW6jqYS7bXcxAl0/fOZnOR9tve5KwzRACrSX8jZoOruZy9chldt6Kggf4Y
+1fUNWcELMdJ8HKrU/FIpx3PwIVVk+lkgfGjXT4IIZrCwV4foTBWC6CcMLzdZyoVN
+BsbZtsfT/HYZeiN9aXOxRbqR90Jgqj9lMSikK5nHeH0mnTcuVkG4b9EYxpRxtsrO
+4KQBdGOvvkcQmfOeES1WMyKxvCBOuIMk67fde70JDsrTkI8M3+4P2Of6D2bFWlgH
+inlViMuCwBzebRRAR8KbK5eAxu7HsTiutn2U2zjvm+DTMSfUNgWnZ386pGaYewID
+AQABo4IBjjCCAYowCQYDVR0TBAIwADAtBglghkgBhvhCAQ0EIBYeRWFzeS1SU0Eg
+R2VuZXJhdGVkIENlcnRpZmljYXRlMB0GA1UdDgQWBBSR7cet3Sz22egzy1scH8T4
+Sg1RLDCB9wYDVR0jBIHvMIHsgBSQKZfuAn3Kq0pSu7eea6QKJANgh6GBvaSBujCB
+tzELMAkGA1UEBhMCREUxCzAJBgNVBAgTAkJXMRMwEQYDVQQHEwpSZXV0bGluZ2Vu
+MRowGAYDVQQKExFtZWluZW9yZ2FuaXNhdGlvbjEXMBUGA1UECxMObWVpbmVhYnRl
+aWx1bmcxFzAVBgNVBAMTDm1laW5lZG9tYWluLmRlMRAwDgYDVQQpEwdtZWludnBu
+MSYwJAYJKoZIhvcNAQkBFhdtYW51ZWwuYmFya2V5QGdtYWlsLmNvbYIUEDqwIa6C
+Z5tZ9k/43iHqzmcGwO8wEwYDVR0lBAwwCgYIKwYBBQUHAwIwCwYDVR0PBAQDAgeA
+MBMGA1UdEQQMMAqCCG15Y2xpZW50MA0GCSqGSIb3DQEBCwUAA4IBAQBnPNKRNCs9
+ZIN+A2QugK42noeV5KofTQLfhNg6GlsN4So9ZPj4PQSc2NYaWpiEvSeJSENNTj5i
+v9GIjyALctsZBUHGQGo+DyD2sH3giMgzYapAReNiI3mqPHStxfH87gfo8Q/e54wv
+c+NalDyszpfHmDgs+9j8vE7Z9te9mdXUdeP98AF/gyZqjitQuVlB0EnRC8IDadp8
+FGuLahuEgZb0WPeP3Ljf+QavJbaVtbQrQjAOQu6qvbTIOL2gJGHzHIsekD0prnA5
+4eSFXxCPpXHfkYviS0xHFwCx8ceDkXkruqKJPp+Yf0nRkNmz9JalfyTC6y9wTRlZ
+HWLfyoH7Wi8X
+-----END CERTIFICATE-----

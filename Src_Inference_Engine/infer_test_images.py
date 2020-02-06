@@ -117,7 +117,7 @@ exec_model = infer_model.create_exec_infer_model(
 
 for test_image in test_images:
     image = cv2.imread(test_image)
-    result = exec_model.infer_image(image)
+    result = exec_model.infer_image(image, threshhold=0.2)
     cv2.imwrite(os.path.join(
         output_dir, test_image.split('/')[-1][:-4] + '_' + selected_model[model_ind][1] + '.jpg'), result)
 

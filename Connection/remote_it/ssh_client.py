@@ -4,11 +4,11 @@ import cv2
 from io import BytesIO
 import os
 import subprocess
-
+import pexpect
 
 img = 'test.jpg'
-user_src = 'manuel'
-user_dest = 'pi'
+user_src = 'pi'
+user_dest = 'manuel'
 
 password = 'hiworld'
 
@@ -33,4 +33,7 @@ try:
     print('failed with python... trying with bash')
 except:
     #subprocess.Popen(['scp', ])
-    os.system('scp -P 38564 test.jpg manuel@proxy55.rt3.io:/home/manuel/Bachelor_Arbeit/Connection/remote_it/received')
+    child = pexpect.spawn(
+        'scp -P 38564 test.jpg manuel@proxy55.rt3.io:/home/manuel/Bachelor_Arbeit/Connection/remote_it/received')
+    child.expect("* password:")
+    child.sendline('hiworld')

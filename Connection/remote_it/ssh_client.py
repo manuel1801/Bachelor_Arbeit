@@ -1,60 +1,54 @@
 import paramiko
 from scp import SCPClient
 import cv2
-from io import BytesIO
 import os
 import subprocess
 import pexpect
 
-img = 'test.jpg'
-user_src = 'pi'
-user_dest = 'manuel'
+
+user = 'pi'
+
+if user == 'pi':
+    file = '/home/pi/Bachelor_Arbeit/Connection/remote_it/test.jpg'
+    path = '/home/manuel/Bachelor_Arbeit/Connection/remote_it/received'
+else:
+    file = '/home/manuel/Bachelor_Arbeit/Connection/remote_it/test.jpg'
+    path = '/home/pi/Bachelor_Arbeit/Connection/remote_it/received'
+
 
 password = 'hiworld'
 
-server = 'proxy50.rt3.io'
-port = '36270'
+server = 'proxy55.rt3.io'
+port = '38564'
 
 
-src_path = os.path.join(
-    '/home', user_src, 'Bachelor_Arbeit/Connection/remote_it', img)
-
-dest_path = os.path.join(
-    '/home', user_dest, 'Bachelor_Arbeit/Connection/remote_it/received', img)
-
-
-try:
-    child = pexpect.spawn(
-        'scp -P 38564 test.jpg manuel@proxy55.rt3.io:/home/manuel/Bachelor_Arbeit/Connection/remote_it/received')
-
-    r = child.expect(["manuel@proxy55.rt3.io's password:", pexpect.EOF])
-
-    if r == 0:
-        child.sendline('hiworld')
-        child.expect(pexpect.EOF)
-
-except Exception as e:
-    print(e)
+def send_with_module(server, port, user, password, file, path):
+    try:
+        client = paramiko.SSHClient()
+        client.load_system_host_keys()
+        client.set_missing_host_key_policy(paramiko.AutoAddPolicy())
+        client.connect(server, port, user, password)
+        with SCPClient(client.get_transport()) as scp:
+            scp.put(file, path)
+        print('succesfully send with python')
+    except Exception as e:
+        print(e)
 
 
-# try:
-#     client = paramiko.SSHClient()
-#     client.load_system_host_keys()
-#     client.set_missing_host_key_policy(paramiko.AutoAddPolicy())
-#     client.connect(server, port, user_dest, password)
-#     with SCPClient(client.get_transport()) as scp:
-#         scp.put(src_path, dest_path)
-#     print('succesfully send with python')
-# except:
-#     print('err with python, try with bash command')
+def send_with_command(server, port, user, password, file, path):
+    command = 'scp -P {} {} {}@{}:{}'.format(
+        port,
+        file,
+        user,
+        server,
+        path
+    )
 
-#     child = pexpect.spawn(
-#         'scp -P 38564 test.jpg manuel@proxy55.rt3.io:/home/manuel/Bachelor_Arbeit/Connection/remote_it/received')
-
-#     r = child.expect("manuel@proxy55.rt3.io's password:")
-#     print(r)
-#     if r == 0:
-
-#         child.sendline('hiworld')
-#     child.close()
-#    # print(child.before)
+    try:
+        child = pexpect.spawn(command)
+        r = child.expect(["{}@{} password:".format(user, server), pexpect.EOF])
+        if r == 0:
+            child.sendline(password)
+            child.expect(pexpect.EOF)
+    except Exception as e:
+        print(e)

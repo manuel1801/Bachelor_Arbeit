@@ -6,14 +6,14 @@ import subprocess
 import pexpect
 
 
-user = 'pi'
+user = 'manuel'
 
 if user == 'pi':
-    file = '/home/pi/Bachelor_Arbeit/Connection/remote_it/test.jpg'
-    path = '/home/manuel/Bachelor_Arbeit/Connection/remote_it/received'
-else:
     file = '/home/manuel/Bachelor_Arbeit/Connection/remote_it/test.jpg'
     path = '/home/pi/Bachelor_Arbeit/Connection/remote_it/received'
+else:
+    file = '/home/pi/Bachelor_Arbeit/Connection/remote_it/test.jpg'
+    path = '/home/manuel/Bachelor_Arbeit/Connection/remote_it/received'
 
 
 password = 'hiworld'
@@ -43,12 +43,17 @@ def send_with_command(server, port, user, password, file, path):
         server,
         path
     )
+    print(command)
 
     try:
         child = pexpect.spawn(command)
-        r = child.expect(["{}@{} password:".format(user, server), pexpect.EOF])
+        r = child.expect(["{}@{}'s password:".format(user, server), pexpect.EOF])
         if r == 0:
             child.sendline(password)
             child.expect(pexpect.EOF)
+        elif r == 1:
+            print('end of file')
     except Exception as e:
         print(e)
+
+send_with_command(server, port, user, password, file, path)

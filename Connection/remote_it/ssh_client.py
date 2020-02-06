@@ -15,10 +15,10 @@ port = '36270'
 
 
 src_path = os.path.join(
-    'home', user_src, 'Bachelor_Arbeit/Connection/remote_it', img)
+    '/home', user_src, 'Bachelor_Arbeit/Connection/remote_it', img)
 
 dest_path = os.path.join(
-    'home', user_dest, 'Bachelor_Arbeit/Connection/remote_it/received', img)
+    '/home', user_dest, 'Bachelor_Arbeit/Connection/remote_it/received', img)
 
 
 client = paramiko.SSHClient()
@@ -27,5 +27,5 @@ client.set_missing_host_key_policy(paramiko.AutoAddPolicy())
 client.connect(server, port, user_dest, password)
 
 
-with SCPClient(ssh.get_transport()) as scp:
+with SCPClient(client.get_transport()) as scp:
     scp.put(src_path, dest_path)

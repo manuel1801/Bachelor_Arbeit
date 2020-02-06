@@ -30,10 +30,18 @@ try:
     client.connect(server, port, user_dest, password)
     with SCPClient(client.get_transport()) as scp:
         scp.put(src_path, dest_path)
-    print('failed with python... trying with bash')
+    print('succesfully send with python')
 except:
+    print('err with python, try with bash command')
     #subprocess.Popen(['scp', ])
+    
     child = pexpect.spawn(
         'scp -P 38564 test.jpg manuel@proxy55.rt3.io:/home/manuel/Bachelor_Arbeit/Connection/remote_it/received')
-    child.expect("* password:")
-    child.sendline('hiworld')
+    
+    r = child.expect("manuel@proxy55.rt3.io's password:")
+    print(r)
+    if r == 0:
+        
+        child.sendline('hiworld')
+    child.close()
+   # print(child.before)

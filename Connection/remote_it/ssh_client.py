@@ -24,24 +24,37 @@ dest_path = os.path.join(
 
 
 try:
-    client = paramiko.SSHClient()
-    client.load_system_host_keys()
-    client.set_missing_host_key_policy(paramiko.AutoAddPolicy())
-    client.connect(server, port, user_dest, password)
-    with SCPClient(client.get_transport()) as scp:
-        scp.put(src_path, dest_path)
-    print('succesfully send with python')
-except:
-    print('err with python, try with bash command')
-    #subprocess.Popen(['scp', ])
-    
     child = pexpect.spawn(
         'scp -P 38564 test.jpg manuel@proxy55.rt3.io:/home/manuel/Bachelor_Arbeit/Connection/remote_it/received')
-    
-    r = child.expect("manuel@proxy55.rt3.io's password:")
-    print(r)
+
+    r = child.expect(["manuel@proxy55.rt3.io's password:", pexpect.EOF])
+
     if r == 0:
-        
         child.sendline('hiworld')
-    child.close()
-   # print(child.before)
+        child.expect(pexpect.EOF)
+
+except Exception as e:
+    print(e)
+
+
+# try:
+#     client = paramiko.SSHClient()
+#     client.load_system_host_keys()
+#     client.set_missing_host_key_policy(paramiko.AutoAddPolicy())
+#     client.connect(server, port, user_dest, password)
+#     with SCPClient(client.get_transport()) as scp:
+#         scp.put(src_path, dest_path)
+#     print('succesfully send with python')
+# except:
+#     print('err with python, try with bash command')
+
+#     child = pexpect.spawn(
+#         'scp -P 38564 test.jpg manuel@proxy55.rt3.io:/home/manuel/Bachelor_Arbeit/Connection/remote_it/received')
+
+#     r = child.expect("manuel@proxy55.rt3.io's password:")
+#     print(r)
+#     if r == 0:
+
+#         child.sendline('hiworld')
+#     child.close()
+#    # print(child.before)

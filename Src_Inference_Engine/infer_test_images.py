@@ -10,7 +10,7 @@ model_dir = os.path.join(os.environ['HOME'], 'Bachelor_Arbeit/models')
 
 
 # Directories to Test images
-flickr_images = os.path.join(dataset_dir, 'FlickrAnimals', 'Animals_9')
+flickr_images = os.path.join(dataset_dir, 'FlickrAnimals', 'validation')
 flickr_images_gray = os.path.join(
     dataset_dir, 'FlickrAnimals', 'Animals_9_gray')
 

@@ -1,0 +1,11 @@
+proxy51.rt3.io
+34228
+
+ssh -l pi proxy51.rt3.io -p 34228
+ssh -l root proxy51.rt3.io -p 34228
+
+für laptop
+
+36159
+
+

@@ -1,6 +1,6 @@
 
 import detection_v3 as detection
-import connection_ssh as connection
+import connection
 import os
 import cv2
 import numpy as np
@@ -10,45 +10,20 @@ from datetime import datetime
 
 
 # Settings:
-# import picamera.array
-# import picamera
+import picamera.array
+import picamera
+raspi = True
+ip_addr = '10.10.73.89'
 
-
-password = 'hiworld'
-raspi = False
-
-if raspi:
-    workspace_dir = '/home/pi/Bachelor_Arbeit/'
-    remote_user = 'manuel'
-    remote_output_dir = '/home/manuel/Bachelor_Arbeit/Application_Raspberry/detected'
-    remote_divice_name = 'ssh-Pc'
-else:
-    workspace_dir = '/home/manuel/Bachelor_Arbeit/'
-    remote_user = 'pi'
-    remote_output_dir = '/home/pi/Bachelor_Arbeit/Application_Raspberry/detected'
-    remote_divice_name = 'ssh-Pi'
-
-
-output_dir = os.path.join(workspace_dir,
-                          'Application_Raspberry', 'detected')
-assert os.path.isdir(output_dir)
-
-
-conn = connection.SSHConnect()
-device_address = None
-if conn.login(remote_it_user='manuel.barkey@gmail.com',
-              remote_it_pw=password):  # returns false if wrong user data
-    device_address = conn.get_device_adress(device_name=remote_divice_name)
-
-
-buffer_size = 200    # zum zwischen speichern wenn infer langsamer stream
-infer_requests = 3   # für parallele inferenzen
+buffer_size = 200  # zum zwischen speichern wenn infer langsamer stream
+infer_requests = 3  # für parallele inferenzen
 view_results = True  # für raspi ohne monitor auf False
-threshhold = 0.6     # Für Detections
+threshhold = 0.6
 send_all_every = 60  # sec
 
+workspace_dir = os.path.join(os.environ['HOME'], 'Bachelor_Arbeit')
+# workspace_dir = '/home/pi/Bachelor_Arbeit/'  # für autostart in raspi geht kein os.environ['HOME']
 models_dir = os.path.join(workspace_dir, 'openvino_models')
-assert os.path.isdir(models_dir)
 
 print('select model')
 selected_model = {}
@@ -84,7 +59,7 @@ assert os.path.isfile(model_xml)
 # Load Model to Device
 infer_model = detection.InferenceModel()
 exec_model = infer_model.create_exec_infer_model(
-    model_xml, model_bin, labels, num_requests=3)
+    model_xml, model_bin, labels, num_requests=3, conn_ip=ip_addr)
 
 # init motion detector
 motion_detector = detection.MotionDetect()
@@ -107,14 +82,12 @@ else:
 
 infered_frames = 0
 no_detections = 0
-send_request = False
 start_time = None
 send_time = time.time()
-
+key = 0
 
 while True:
 
-    # Capture Frame
     if raspi:
         camera.capture(capture, 'bgr', use_video_port=True)
     else:
@@ -122,12 +95,12 @@ while True:
         if not ret:
             break
 
-    # Detect Motion in Captured Frame and save to buffer
+    # Detect Motion
     if motion_detector.detect_motion(capture):
         has_motion = True
         motion_frames.insert(0, capture)
         if len(motion_frames) >= buffer_size:
-            # print('buffer len ', str(len(motion_frames)))
+            #print('buffer len ', str(len(motion_frames)))
            # print('del index ', str(del_idx))
            # print('')
             del motion_frames[-del_idx]
@@ -137,13 +110,13 @@ while True:
     else:
         has_motion = False
 
+    # Infer Frame
+    #ret, infered_frame = exec_model.infer_frame_non_blocking(motion_frames)
     if not start_time:
         start_time = time.time()
 
-    # Infer Frames
     result = exec_model.infer_frames(motion_frames)
 
-    # Preocess infered Frames
     for rois, frame in result:
         infered_frames += 1
         fps = infered_frames/(time.time() - start_time)
@@ -153,47 +126,32 @@ while True:
               + '\tmotione: ' + str(has_motion)
               + '\tbuffer lenght: ' + str(len(motion_frames)), end='\r', flush=True)
 
-        detection, saved = exec_model.prossec_result(
-            frame, rois, threshhold, output_dir, fps=fps, view_result=view_results)
+        processed_frame = exec_model.prossec_result(
+            frame, rois, threshhold=threshhold, output_dir=os.path.join(workspace_dir,
+                                                                        'Application_Raspberry', 'detected'), fps=fps)
 
-        # Handle infered Frames with no detections
-        if not detection:
+        if processed_frame is None:
             no_detections += 1
 
         if no_detections > 15 * fps:  # alle 15 sec
-            print('reset motion detector')
+            print('10th motion frame with no detection: RESET motion detector' + (' '*10))
             motion_detector.reset_background()
             motion_frames = []
             no_detections = 0
 
-            # Send all current Detections
-        if (time.time() - send_time) > send_all_every:
-            send_time = time.time()
-            if exec_model.save_all(output_dir):
-                send_request = True
+        if view_results:
+            cv2.imshow('infer result', processed_frame)
+            key = cv2.waitKey(1)
 
-        # Send saved frames to remote Devices
-        if not device_address:  # kein adresse zu senden
-            continue
+            if key == 32:
+                motion_detector.reset_background()
 
-        if saved or send_request:
-            print('try to send')
-            conn_info = conn.connect(device_address)
-            if not conn_info:  # verbindung nicht mögl
-                print('Error: could not connect to ', remote_divice_name)
-                continue
-            send_request = False
-            for image in os.listdir(output_dir):
-                image_path = os.path.join(output_dir, image)
-                if conn.send(conn_info[0], conn_info[1], remote_user, password,
-                             image_path, remote_output_dir):
-                    os.remove(image_path)
-                    print('Successfully send image ', image)
-                else:
-                    send_request = True
-                    print('Error while sending ', image)
-            conn.disconnect(device_address, conn_info[2])
+    if key == 113:
+        break
 
+    if (time.time() - send_time) > send_all_every:
+        send_time = time.time()
+        exec_model.send_all(os.path.join(
+            workspace_dir, 'Application_Raspberry', 'detected'))
 
-if view_results:
-    cv2.destroyAllWindows()
+cv2.destroyAllWindows()

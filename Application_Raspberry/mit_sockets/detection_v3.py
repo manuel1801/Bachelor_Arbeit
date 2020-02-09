@@ -5,6 +5,7 @@ from datetime import datetime
 import sys
 import os
 import cv2
+import connection
 
 
 class MotionDetect:
@@ -36,7 +37,7 @@ class InferenceModel:
         self.ie = IECore()
         self.device = device
 
-    def create_exec_infer_model(self, model_xml, model_bin, labels=None, num_requests=2):
+    def create_exec_infer_model(self, model_xml, model_bin, labels=None, num_requests=2, conn_ip=None):
 
         assert os.path.isfile(model_bin)
         assert os.path.isfile(model_xml)
@@ -65,12 +66,14 @@ class InferenceModel:
         if img_info_input_blob:
             feed_dict[img_info_input_blob] = [h, w, 1]
 
-        return ExecInferModel(exec_net, input_blob, out_blob, feed_dict, n, c, h, w, num_requests, labels)
+        return ExecInferModel(exec_net, input_blob, out_blob, feed_dict, n, c, h, w, num_requests, labels, conn_ip)
 
 
 class ExecInferModel:
-    def __init__(self, exec_net, input_blob, out_blob, feed_dict, n, c, h, w, num_requests, labels):
+    def __init__(self, exec_net, input_blob, out_blob, feed_dict, n, c, h, w, num_requests, labels, conn_ip):
         self.exec_net = exec_net
+        self.conn_ip = conn_ip
+        self.conn = connection.RaspyConnection()
         self.labels = labels
         self.input_blob = input_blob
         self.out_blob = out_blob
@@ -150,10 +153,10 @@ class ExecInferModel:
 
         return results
 
-    def prossec_result(self, frame, res, threshhold, output_dir, fps=1, view_result=False):
+    def prossec_result(self, frame, res, threshhold, output_dir, fps=1):
 
         height, width = frame.shape[:2]
-        detection, saved = False, False
+        detection = False
 
         for obj in res[0][0]:
             if obj[2] > threshhold:
@@ -184,10 +187,6 @@ class ExecInferModel:
                 cv2.putText(frame, det_label + ' ' + str(round(obj[2] * 100, 1)) + ' %', (xmin, ymin - 7),
                             cv2.FONT_HERSHEY_COMPLEX, 0.6, color, 1)
 
-                if view_result:
-                    cv2.imshow('infer result', frame)
-                    cv2.waitKey(1)
-
                 # detected_objects -> class_id:(nr, roi, proba)
                 if not class_id in self.detected_objects:
                     # print(
@@ -208,31 +207,35 @@ class ExecInferModel:
                         self.detected_objects[class_id][2] = obj[2]
 
                     # send detected roi of current class after 10 detections
-                if self.detected_objects[class_id][0] > 50 * fps:
-                    print('saving ', det_label)
+                if self.detected_objects[class_id][0] > 10 * fps:
+                    print('SERVER_INFO: Class ' + det_label +
+                          ' reached max detections. ==> try to send SEND')
 
                     image_name = 'detected_' + det_label + '_' + \
                         datetime.now().strftime("%d-%b-%Y_%H-%M-%S")
                     image_array = self.detected_objects[class_id][1]
 
-                    # save image local
-                    cv2.imwrite(os.path.join(
-                        output_dir, image_name + '.png'), image_array)
-
-                    saved = True
-
-                    # send image to remote device
+                    try:
+                        self.conn.start_client(self.conn_ip)
+                        self.conn.send_data(image_name, 'text')
+                        self.conn.send_data(image_array, 'image')
+                        self.conn.end_connection()
+                        print('sending succesfull')
+                    except:
+                        cv2.imwrite(os.path.join(
+                            output_dir, image_name + '.png'), image_array)
 
                     del self.detected_objects[class_id]
 
-        return detection, saved
+        if detection:
+            return frame
+        return None
 
-    def save_all(self, output_dir):
+    def send_all(self, output_dir):
 
-        print('svaing all')
+        print('sending all')
         # detected_objects -> class_id:(nr, roi, proba)
         class_ids = list(self.detected_objects.keys())
-        saved = False
         for class_id in class_ids:
 
             if self.labels:
@@ -240,17 +243,23 @@ class ExecInferModel:
             else:
                 det_label = 'class id ' + str(class_id)
 
-            print('saving: ', det_label)
+            print('sending: ', det_label)
             image_name = 'detected_' + det_label + '_' + \
                 datetime.now().strftime("%d-%b-%Y_%H-%M-%S")
             image_array = self.detected_objects[class_id][1]
 
-            cv2.imwrite(os.path.join(
-                        output_dir, image_name + '.png'), image_array)
+            try:
+                self.conn.start_client(self.conn_ip)
+                self.conn.send_data(image_name, 'text')
+                self.conn.send_data(image_array, 'image')
+                self.conn.end_connection()
+                print('sending succesfull')
+            except:
+                cv2.imwrite(os.path.join(
+                    output_dir, image_name + '.png'), image_array)
+                print('could not connect to server. Saved image locally')
 
-            saved = True
             del self.detected_objects[class_id]
-        return saved
 
     def view_result(self, capture, processed_frame,  t_capture_str=None,
                     t_infer_str=None, has_motion=None, len_motion_frames=None, buffer_size=None):

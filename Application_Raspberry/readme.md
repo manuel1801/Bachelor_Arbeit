@@ -1,4 +1,6 @@
-# Autostart Apllikations Script auf Raspberry
+# Apllikation Raspberry
+
+## Autostart
 
 1. Script **launcher.sh** erstellen und
 
@@ -52,3 +54,10 @@ sudo systemctl disable  myscript
 ```
 sudo systemctl status my_init.service
 ```
+
+## Connection
+
+### a) SCP über remote SSH
+
+
+### b) Sockt über Tcp

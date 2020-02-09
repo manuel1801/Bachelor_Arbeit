@@ -96,9 +96,9 @@ insgesammt 4 loss werte verwendet.
 \begin{table}[htb]
   \centering
   \label{table:modelvgl}
-  \begin{tabular}{|m{0.2\textwidth}<{\centering}|m{0.2\textwidth}<{\centering}m{0.2\textwidth}<{\centering}m{0.2\textwidth}<{\centering}|}
+  \begin{tabular}{m{0.2\textwidth}|m{0.2\textwidth}<{\centering}m{0.2\textwidth}<{\centering}m{0.2\textwidth}<{\centering}}
   \hline
-                & mAP                                           & Loss                                          & Augmentation                                      \\ \hline
+                & mAP                                           & Loss                                          & Augmentation                                      \\ \hline\hline
   SSD Mobilenet & \begin{tabular}[c]{@{}l@{}}x\\ x\end{tabular} & \begin{tabular}[c]{@{}l@{}}x\\ x\end{tabular} & \begin{tabular}[c]{@{}l@{}}ja\\ nein\end{tabular} \\ \hline
   SSD Inception & \begin{tabular}[c]{@{}l@{}}x\\ x\end{tabular} & \begin{tabular}[c]{@{}l@{}}x\\ x\end{tabular} & \begin{tabular}[c]{@{}l@{}}ja\\ nein\end{tabular} \\ \hline
   Faster R-CNN  & \begin{tabular}[c]{@{}l@{}}0,67 \\ 0,69\end{tabular} & \begin{tabular}[c]{@{}l@{}}0,82\\ 0,67\end{tabular} & \begin{tabular}[c]{@{}l@{}}ja\\ nein\end{tabular} \\ \hline
@@ -168,9 +168,24 @@ test script mit open vino zum vgl der modelle bzg infer ergebnisse (bilder/zeit)
 
 \subsection{Infere zeit}
 
-\begin{itemize}
-  \item ssd, faster, sync, async
-\end{itemize}
+inferenz zeiten wurden in FPS für 100 bilder gemessen. Bei 
+mehr als ein Inferenz Request wurde die Asynchrone Api der InferenceEngine 
+verwendet.
+
+
+\begin{table}[htb]
+  \centering
+  \label{table:infer_zeit}
+  \begin{tabular}{m{0.3\textwidth}|m{0.15\textwidth}<{\centering}|m{0.15\textwidth}<{\centering}|m{0.15\textwidth}<{\centering}|m{0.15\textwidth}<{\centering}}
+  \hline
+  Modus                & Synchron & \multicolumn{3}{c}{Asynchron} \\ \hline
+  Inferenz Requests    & 1        & 2        & 3        & 4        \\ \hline\hline
+  SSD MobilenetV2      & 12,63    & 25,14    & 33,46    & 33,63    \\
+  SSD InceptionV2      & 10,71    & 21,22    & 28,10    & 28,29    \\
+  Faster R-CNN Incept. & 0,55     & 0,61     & 0,68     & 0,72     \\ \hline
+  \end{tabular}
+  \caption{Vergeich von Inferenz Zeiten}
+\end{table}
 
 
 %----------------- SECTION: optimierung ---------------------
@@ -239,9 +254,9 @@ nur für die erste stufe angewendet.
 
 \begin{table}[htb]
   \centering
-  \begin{tabular}{|m{0.2\textwidth}<{\centering}|m{0.2\textwidth}<{\centering}m{0.2\textwidth}<{\centering}m{0.2\textwidth}<{\centering}|}
+  \begin{tabular}{m{0.2\textwidth}|m{0.2\textwidth}<{\centering}m{0.2\textwidth}<{\centering}m{0.2\textwidth}<{\centering}}
   \hline
-  \textgreater 400k & mAP  & Loss (Gesammt) & Loss (RPN) \\ \hline
+  \textgreater 400k & mAP  & Loss (Gesammt) & Loss (RPN) \\ \hline\hline
   Augmentierung     & 0,7  & 0,74           &  0,12          \\
   +Dropout          & 0,7  & 0,73           &            \\
   +L2 Reg (0.01)    & 0,7  & 0,69           &            \\

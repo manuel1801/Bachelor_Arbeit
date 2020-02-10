@@ -15,4 +15,16 @@ faster_rcnn_inception, infer req 2: Fps 0.6151926754435308
 faster_rcnn_inception, infer req 3: Fps 0.68447859026412444
 faster_rcnn_inception, infer req 4: Fps 0.71737922640299567
 
-
+manuel@hpNotebook:~/Bachelor_Arbeit/Inference_Engine_Tools/benchmark_tool$ python3 auto_benchmark.py 
+Animals/ssd_mobilenet_v2, infer req 1: Fps 12.680352392712464
+Animals/ssd_mobilenet_v2, infer req 2: Fps 24.847219763947606
+Animals/ssd_mobilenet_v2, infer req 3: Fps 32.814369854953714
+Animals/ssd_mobilenet_v2, infer req 4: Fps 32.890461294363586
+Animals/ssd_inception_v2, infer req 1: Fps 10.504815998842397
+Animals/ssd_inception_v2, infer req 2: Fps 20.858053254482014
+Animals/ssd_inception_v2, infer req 3: Fps 27.969542880595405
+Animals/ssd_inception_v2, infer req 4: Fps 28.066228386683143
+Animals/faster_rcnn_inception_v2, infer req 1: Fps 0.5502666158794535
+Animals/faster_rcnn_inception_v2, infer req 2: Fps 0.6274575614866689
+Animals/faster_rcnn_inception_v2, infer req 3: Fps 0.69460403125844995
+Animals/faster_rcnn_inception_v2, infer req 4: Fps 0.71058982253143197

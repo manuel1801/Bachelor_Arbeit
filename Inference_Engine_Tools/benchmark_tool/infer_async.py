@@ -75,7 +75,3 @@ class ExecInferModel:
                     request_id=req_idx, inputs=self.feed_dict)
 
         return results
-
-
-if __name__ == "__main__":
-    main()

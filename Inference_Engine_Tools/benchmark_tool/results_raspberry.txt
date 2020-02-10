@@ -1,0 +1,12 @@
+Animals/ssd_mobilenet_v2, infer req 1: Fps 18.658438094085717
+Animals/ssd_mobilenet_v2, infer req 2: Fps 35.412998678049135
+Animals/ssd_mobilenet_v2, infer req 3: Fps 41.018396539290244
+Animals/ssd_mobilenet_v2, infer req 4: Fps 41.073794432716376
+Animals/ssd_inception_v2, infer req 1: Fps 14.911736844341318
+Animals/ssd_inception_v2, infer req 2: Fps 27.827161476717873
+Animals/ssd_inception_v2, infer req 3: Fps 31.444370789115982
+Animals/ssd_inception_v2, infer req 4: Fps 31.529904701587256
+Animals/faster_rcnn_inception_v2, infer req 1: Fps 0.5929360393479801
+Animals/faster_rcnn_inception_v2, infer req 2: Fps 0.41556440770746796
+Animals/faster_rcnn_inception_v2, infer req 3: Fps 0.33017735396372416
+Animals/faster_rcnn_inception_v2, infer req 4: Fps 0.27285108681129244

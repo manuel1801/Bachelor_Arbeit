@@ -17,9 +17,17 @@ validation_images = os.path.join(
 validation_images_gray = os.path.join(
     workspace_dir, 'OI_Animals_Augmented_9_3000_gray', 'validation_gray')
 
+assert os.path.isdir(validation_images)
+assert os.path.isdir(validation_images_gray)
+
+
 # Eigne Bilder
 handy_images = os.path.join(workspace_dir, 'test')
 handy_images_gray = os.path.join(workspace_dir, 'test_gray')
+
+assert os.path.isdir(handy_images)
+assert os.path.isdir(handy_images_gray)
+
 
 infer_images_list = [validation_images, validation_images_gray,
                      handy_images, handy_images_gray]

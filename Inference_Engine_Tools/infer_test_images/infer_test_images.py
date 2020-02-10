@@ -14,15 +14,26 @@ flickr_images = os.path.join(dataset_dir, 'FlickrAnimals', 'validation')
 flickr_images_gray = os.path.join(
     dataset_dir, 'FlickrAnimals', 'Animals_9_gray')
 
+assert os.path.isdir(flickr_images)
+assert os.path.isdir(flickr_images_gray)
+
+
 # Aus Validierungsset
 validation_images = os.path.join(
     workspace_dir, 'OI_Animals_Augmented_9_3000', 'validation')
 validation_images_gray = os.path.join(
     workspace_dir, 'OI_Animals_Augmented_9_3000_gray', 'validation_gray')
 
+assert os.path.isdir(validation_images)
+assert os.path.isdir(validation_images_gray)
+
 # Eigne Bilder
 handy_images = os.path.join(workspace_dir, 'test')
 handy_images_gray = os.path.join(workspace_dir, 'test_gray')
+
+assert os.path.isdir(handy_images)
+assert os.path.isdir(handy_images_gray)
+
 
 infer_images = {
     1: flickr_images,

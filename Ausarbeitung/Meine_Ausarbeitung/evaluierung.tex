@@ -99,9 +99,9 @@ insgesammt 4 loss werte verwendet.
   \begin{tabular}{m{0.2\textwidth}|m{0.2\textwidth}<{\centering}m{0.2\textwidth}<{\centering}m{0.2\textwidth}<{\centering}}
   \hline
                 & mAP                                           & Loss                                          & Augmentation                                      \\ \hline\hline
-  SSD Mobilenet & \begin{tabular}[c]{@{}l@{}}x\\ x\end{tabular} & \begin{tabular}[c]{@{}l@{}}x\\ x\end{tabular} & \begin{tabular}[c]{@{}l@{}}ja\\ nein\end{tabular} \\ \hline
-  SSD Inception & \begin{tabular}[c]{@{}l@{}}x\\ x\end{tabular} & \begin{tabular}[c]{@{}l@{}}x\\ x\end{tabular} & \begin{tabular}[c]{@{}l@{}}ja\\ nein\end{tabular} \\ \hline
-  Faster R-CNN  & \begin{tabular}[c]{@{}l@{}}0,67 \\ 0,69\end{tabular} & \begin{tabular}[c]{@{}l@{}}0,82\\ 0,67\end{tabular} & \begin{tabular}[c]{@{}l@{}}ja\\ nein\end{tabular} \\ \hline
+  SSD Mobilenet & \begin{tabular}[c]{@{}l@{}}0,62 \\ 0,61\end{tabular} & \begin{tabular}[c]{@{}l@{}}3,56\\ 3,42\end{tabular} & \begin{tabular}[c]{@{}l@{}}neim\\ ja\end{tabular} \\ \hline
+  SSD Inception & \begin{tabular}[c]{@{}l@{}}0,65\\ 0,62\end{tabular} & \begin{tabular}[c]{@{}l@{}}4,41\\ 3,71\end{tabular} & \begin{tabular}[c]{@{}l@{}}nein\\ ja\end{tabular} \\ \hline
+  Faster R-CNN  & \begin{tabular}[c]{@{}l@{}}0,67 \\ 0,69\end{tabular} & \begin{tabular}[c]{@{}l@{}}0,82\\ 0,67\end{tabular} & \begin{tabular}[c]{@{}l@{}}neim\\ ja\end{tabular} \\ \hline
   \end{tabular}
   \captionof{table}{Vergleich Modelle}
 \end{table}
@@ -200,60 +200,85 @@ bei faster > 400k steps:
   \item l2 (rpn loss anschauen)
 \end{itemize}
 
-\begin{figure}[htb]
+hier loss und mAP für 500k steps
+\\[1cm]
+\begin{minipage}{0.5\textwidth}
   \centering
-  \label{plot:dropout}
-  \def\svgwidth{0.6\textwidth}
-  \input{Bilder/aug_dropout_total_loss.pdf_tex}
-  \caption{Loss, Dropout}
-\end{figure}
+  \label{plot:map}
+  \def\svgwidth{0.9\textwidth}
+  \input{Bilder/aug_mAP.pdf_tex}
+  \captionof{figure}{mAP: nur Augmentierung}
+\end{minipage}
+\begin{minipage}{0.5\textwidth}
+  \centering
+  \label{plot:loss}
+  \def\svgwidth{0.9\textwidth}
+  \input{Bilder/aug_total_loss.pdf_tex}
+  \captionof{figure}{Loss: nur Augmentierung}
+\end{minipage}
+\\[1cm]
+und hier die stufen im deteil
+\\[1cm]
+\begin{minipage}{0.5\textwidth}
+  \centering
+  \label{plot:map}
+  \def\svgwidth{0.9\textwidth}
+  \input{Bilder/aug_classifier_loss.pdf_tex}
+  \captionof{figure}{Classifier Loss: nur Augmentierung}
+\end{minipage}
+\begin{minipage}{0.5\textwidth}
+  \centering
+  \label{plot:loss}
+  \def\svgwidth{0.9\textwidth}
+  \input{Bilder/aug_rpn_loss.pdf_tex}
+  \captionof{figure}{RPN Loss: nur Augmentierung}
+\end{minipage}
+\\[1cm]
+durch l2 regulierung in der ersten stufe (rpn), konnte 
+dass overfitting verringert werden.
+\\[1cm]
+\begin{minipage}{0.5\textwidth}
+  \centering
+  \label{plot:map}
+  \def\svgwidth{0.9\textwidth}
+  \input{Bilder/aug_l2_classifier_loss.pdf_tex}
+  \captionof{figure}{Classifier Loss: nur Augmentierung}
+\end{minipage}
+\begin{minipage}{0.5\textwidth}
+  \centering
+  \label{plot:loss}
+  \def\svgwidth{0.9\textwidth}
+  \input{Bilder/aug_l2_rpn_loss.pdf_tex}
+  \captionof{figure}{RPN Loss: nur Augmentierung}
+\end{minipage}
+\\[1cm]
+Auch auf den gesammt Loss hatte es einen geringen
+einfluss.
+\\[1cm]
+\begin{minipage}{0.5\textwidth}
+  \centering
+  \label{plot:map}
+  \def\svgwidth{0.9\textwidth}
+  \input{Bilder/aug_l2_mAP.pdf_tex}
+  \captionof{figure}{mAP: nur Augmentierung}
+\end{minipage}
+\begin{minipage}{0.5\textwidth}
+  \centering
+  \label{plot:loss}
+  \def\svgwidth{0.9\textwidth}
+  \input{Bilder/aug_l2_total_loss.pdf_tex}
+  \captionof{figure}{Loss: nur Augmentierung}
+\end{minipage}
+\\[1cm]
+weitere regularisierungs techniken, die angewendet wurden 
+sind Dropout, und l2 mit $\lambda = 0.02$ und sind in 
+\ref{table:reg} dargestelt.
 
-% Legende: Overfitting
+
+
 \begin{table}[htb]
   \centering
-  \begin{tabular}{m{0.2\textwidth}l}
-      $\color[RGB]{255,100,30}\medbullet$  Augmentierung & $\color[RGB]{50,90,200}\medbullet$  Aug + Dropout
-  \end{tabular}    
-\end{table}
-
-und hier die loss funktionen für die stufen des Faster R-CNN 
-seperat\dots
-
-%\begin{figure}[htb]
-  \begin{minipage}{0.5\textwidth}
-    \centering
-    \label{plot:dropout_obj}
-    \def\svgwidth{0.9\textwidth}
-    \input{Bilder/aug_dropout_obj_loss.pdf_tex}
-    \captionof{figure}{Loss: 1st Stage (RPN)}
-  \end{minipage}
-  \begin{minipage}{0.5\textwidth}
-    \centering
-    \label{plot:dropout_class}
-    \def\svgwidth{0.9\textwidth}
-    \input{Bilder/aug_dropout_class_loss.pdf_tex}
-    \captionof{figure}{Loss: 1st Stage (RPN)}
-  \end{minipage}
-%\end{figure}
-
-% Legende: Overfitting
-\begin{table}[htb]
-  \centering
-  %\begin{tabular}{m{0.3\textwidth}<{\centering}m{0.3\textwidth}<{\centering}}
-  \begin{tabular}{m{0.2\textwidth}l}
-    $\color[RGB]{255,100,30}\medbullet$  Augmentierung & $\color[RGB]{50,90,200}\medbullet$  Aug + Dropout
-  \end{tabular}    
-\end{table}
-
-\vspace{1cm}
-
-overfitting findet also in der ersten stufe, dem Region Proposial Network (RPN) statt.
-Daher wird im folgenden gezielt mit weigt decay (l2, quadr aufsummieren aller gewichte)
-nur für die erste stufe angewendet.
-
-
-\begin{table}[htb]
-  \centering
+  \label{table:reg}
   \begin{tabular}{m{0.2\textwidth}|m{0.2\textwidth}<{\centering}m{0.2\textwidth}<{\centering}m{0.2\textwidth}<{\centering}}
   \hline
   \textgreater 400k & mAP  & Loss (Gesammt) & Loss (RPN) \\ \hline\hline
@@ -262,6 +287,7 @@ nur für die erste stufe angewendet.
   +L2 Reg (0.01)    & 0,7  & 0,69           &            \\
   +L2 Reg (0.02)    & 0,69 & 0,7            &            \\ \hline
   \end{tabular}
+  \caption{Regularisierungen}
 \end{table}
 
 \subsection{Graustufen}
@@ -270,43 +296,7 @@ training in graustufen bilder zu besseren erg führt, ... nicht so.
 
 
 
-\subsection{Regularisierung}\label{subsec:regularisierung}
-
-
-Zum Vergleich der Loss ohne Augmentierung nimmt stark zu. Mit Overfitting 
-wird am aktuellen Wert angehalten, der mAP kann jedoch seinen Endwert nicht 
-erreichen. mit Aumentierung bleibt der Loss klein, nimmt jedoch nach
-vielen Schritten auch wieder zu.
-
-
-
-
-
-durch l2 regularisierung an der ersten stufe (rpn), konnte 
-der Objecness loss (orange kurve) verbessert werden (blaue kurve)
-
-
-
-\begin{minipage}[t]{0.5\textwidth}
-    \centering
-    \label{fig:speed_acc}
-    \def\svgwidth{0.9\textwidth}
-    \input{Bilder/overfitting_aug_and_l2_mAP.pdf_tex}
-    %\captionof{figure}{mAP}
-\end{minipage}
-\begin{minipage}[t]{0.5\textwidth}
-    \centering
-    \label{fig:speed_acc}
-    \def\svgwidth{0.9\textwidth}
-    \input{Bilder/overfitting_aug_and_l2_objectness_loss.pdf_tex}
-    %\captionof{figure}{loss}
-\end{minipage}
-
-
-eine übersicht über alle verwendeten regularisierungsmechanismen ist in 
-Tabelle \ref{tab:overfitting} dargestellt.
-
-
+\subsection{weitere tabellen}\label{subsec:regularisierung}
 
 
 
@@ -324,7 +314,6 @@ Tabelle \ref{tab:overfitting} dargestellt.
     \end{tabular}        
     \caption{Regularization}
 \end{table}
-
 
 
 
@@ -351,28 +340,5 @@ Tabelle \ref{tab:overfitting} dargestellt.
     \end{tabular}        
     \caption{Grayscale}
 \end{table}
-
-
-% \begin{figure}[htb]
-%     \centering
-%     \begin{subfigure}{5cm}
-%         \centering
-%         \includegraphics[width=5cm]{./Bilder/eval/rgb.png}
-%         \subcaption{rbg}
-%     \end{subfigure}
-%     \begin{subfigure}{5cm}
-%         \centering
-%         \includegraphics[width=5cm]{./Bilder/eval/gray_1ch.png}
-%         \subcaption{grau (1channel)}
-%     \end{subfigure}
-%     \begin{subfigure}{5cm}
-%         \centering
-%         \includegraphics[width=5cm]{./Bilder/eval/gray_3ch.png}
-%         \subcaption{grau (3channel)}
-%     \end{subfigure}
-%     \caption{Vergleich der Inferenz von grau bildern für verschiedene Modelle}
-%     \label{img:raspy_cam}
-% \end{figure}
-
 
 

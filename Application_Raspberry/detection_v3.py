@@ -208,7 +208,7 @@ class ExecInferModel:
                         self.detected_objects[class_id][2] = obj[2]
 
                     # send detected roi of current class after 10 detections
-                if self.detected_objects[class_id][0] > 50 * fps:
+                if self.detected_objects[class_id][0] > 10 * fps:
                     print('saving ', det_label)
 
                     image_name = 'detected_' + det_label + '_' + \

@@ -89,13 +89,11 @@ image_number = 300
 
 
 def preprocess_worker(image_queue, n, c, h, w):
-    test_images_dir = os.path.join(
-        os.environ['HOME'], 'Bachelor_Arbeit/TensorFlow/workspace/OI_Animals/test')
+    test_image_dir = os.path.join(
+        os.environ['HOME'], '/Bachelor_Arbeit/Inference_Engine_Tools/benchmark_tool/car.png')
 
-    images = [
-        os.path.join(test_images_dir, img) for img in os.listdir(test_images_dir) if img[-3:] == 'jpg']
-    for img_path in images:
-        image = cv2.imread(img_path)
+    for i in range(image_number):
+        image = cv2.imread(test_image_dir)
         image = cv2.resize(image, (w, h))
         image = image.transpose((2, 0, 1))
         image = image.reshape((n, c, h, w))

@@ -11,6 +11,8 @@ models_dir = os.path.join(
 
 infer_model = detection.InferenceModel()
 
+n = 100
+
 # Aus Validierungsset
 validation_images = os.path.join(
     workspace_dir, 'OI_Animals_Augmented_9_3000', 'validation')
@@ -29,23 +31,36 @@ assert os.path.isdir(handy_images)
 assert os.path.isdir(handy_images_gray)
 
 
-infer_images_list = [validation_images, validation_images_gray,
-                     handy_images, handy_images_gray]
+kaggle_iWildCam = os.path.join(dataset_dir, 'kaggle_iWildCam')
+assert os.path.isdir(kaggle_iWildCam)
 
 
-def get_image_paths(imgs_dir):
+# infer_images_list = [validation_images, validation_images_gray,
+#                      handy_images, handy_images_gray, kaggle_iWildCam]
+
+
+infer_images_list = [kaggle_iWildCam]
+
+
+def get_image_paths(imgs_dir, max_images=None):  # hier shuffle
     test_images = []
     for img_dir in os.listdir(imgs_dir):
         abs_img_dir = os.path.join(imgs_dir, img_dir)
         if img_dir[-3:] == 'jpg':
             test_images.append(abs_img_dir)
         elif os.path.isdir(abs_img_dir):
-            for sub_img_dir in os.listdir(abs_img_dir):
+            for i, sub_img_dir in enumerate(os.listdir(abs_img_dir)):
                 abs_sub_img_dir = os.path.join(abs_img_dir, sub_img_dir)
                 if sub_img_dir[-3:] == 'jpg':
                     test_images.append(abs_sub_img_dir)
+                if max_images and i == max_images:
+                    break
     return test_images
 
+
+# dataset_dir = os.path.join(models_dir, 'Animals')
+# labels = [l.strip() for l in open(os.path.join(
+#     dataset_dir, 'classes.txt')).readlines()]
 
 for dataset in os.listdir(models_dir):
     if dataset != 'Animals':
@@ -55,6 +70,7 @@ for dataset in os.listdir(models_dir):
         continue
 
     for model in os.listdir(dataset_dir):
+
         model_dir = os.path.join(dataset_dir, model)
         if not os.path.isdir(model_dir):
             continue
@@ -62,7 +78,7 @@ for dataset in os.listdir(models_dir):
         model_xml = os.path.join(model_dir, 'frozen_inference_graph.xml')
         model_bin = os.path.join(model_dir, 'frozen_inference_graph.bin')
 
-        if os.path.isfile(os.path.join(dataset, 'classes.txt')):
+        if os.path.isfile(os.path.join(dataset_dir, 'classes.txt')):
             labels = [l.strip() for l in open(os.path.join(
                 dataset_dir, 'classes.txt')).readlines()]
         else:
@@ -72,7 +88,7 @@ for dataset in os.listdir(models_dir):
             model_xml, model_bin, labels, num_requests=3)
 
         for infer_images in infer_images_list:
-            test_images = get_image_paths(infer_images)
+            test_images = get_image_paths(infer_images, max_images=n)
 
             eval_dir = os.path.join(
                 os.environ['HOME'], 'Bachelor_Arbeit/Inference_Engine_Tools/infer_test_images/results')
@@ -106,5 +122,5 @@ for dataset in os.listdir(models_dir):
                 eval_dir, infer_results, dataset)
             if not os.path.isdir(os.path.join(dataset_eval_dir, 'all')):
                 os.mkdir(os.path.join(dataset_eval_dir, 'all'))
-            subprocess.Popen(['find', dataset_eval_dir, '-name', '*.jpg', '-exec', 'cp', '{}', os.path.join(dataset_eval_dir, 'all'), ';'],
+            subprocess.Popen(['find', dataset_eval_dir, '-name', '*.jpg', '-exec', 'mv', '{}', os.path.join(dataset_eval_dir, 'all'), ';'],
                              stdout=subprocess.PIPE)

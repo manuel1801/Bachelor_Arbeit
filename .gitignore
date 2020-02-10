@@ -155,10 +155,10 @@ __latexindent_temp.tex
 
 
 
-/doc/ma_ba
-/doc/books
-/doc/anmeldeformular_thesis_master_-_2014-08-12_01_Update.pdf
-/doc/hardware/
+/documents/ma_ba
+/documents/books
+/documents/anmeldeformular_thesis_master_-_2014-08-12_01_Update.pdf
+/documents/hardware/
 
 /Application_Raspberry/detected/*
 /Application_Raspberry/remote_client_test.py
@@ -167,7 +167,7 @@ __latexindent_temp.tex
 
 /TensorFlow/models
 
-/Caffe/
+
 
 Dataset/kaggle.json
 Dataset/handy_videos
@@ -184,16 +184,4 @@ Dataset/OI_Samples
 /evaluation/
 /Connection/remote_it/received
 
-
-
-
-
-
-
-
-
-
-
-
-
-
+kaggle_iWildCam

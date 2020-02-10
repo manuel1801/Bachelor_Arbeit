@@ -82,53 +82,6 @@ LEDs montiert wird. \ref{sec:raspicam}
 
 
 %##########################  SECTION 2: OPENVINO  #######################
-\section{OpenVino Toolkit}\label{sec:openvino}
-
-% doku:
-% https://docs.openvinotoolkit.org/latest/_docs_IE_DG_Introduction.html
-% tutorial (mit guten diagrammen)
-% Car
-% https://github.com/intel-iot-devkit/inference-tutorials-generic/tree/openvino_toolkit_2019_r1_0/car_detection_tutorial#tutorial-step-3-add-the-second-model-vehicle-attributes-detection
-% Face
-% https://github.com/intel-iot-devkit/inference-tutorials-generic/blob/openvino_toolkit_2019_r1_0/face_detection_tutorial/Readme.md
-
-Die Implementierung der Inferenz des trainierten Models wurde 
-mithilfe des OpenVino Toolkits vorgenommen, eine Anwendung 
-zur Optimierung und Ausführung von CNNs auf Intel Hardware.
-
-Es vereinfacht und Optimiert damit die Verbindung zwischen 
-Training des Models und bereitstellen in einer Anwender 
-Applikation, wie in Abbildung \ref{img:openvinoworkflow} 
-schematisch dargestellt.
-
-\begin{figure}[htb]
-    \centering
-    \includegraphics[width=10cm]{./Bilder/open_vino_workflow_steps.png}
-    \caption{Workflow: OpenVino Toolkit}
-    \label{img:openvinoworkflow}
-\end{figure}
-
-Das Toolkit besteht im Wesentlichen aus den zwei Komponenten 
-\textit{Model Optimizer} und \textit{Inference Engine}
-
-Mit dem Model Optimizer können Netze die in den Frameworks 
-TensorFlow, Caffe, MXNet, Kaldi oder ONNX trainiert wurden 
-in die von OpenVino verwendete Intermediate Representation 
-des Modells gebracht werden.
-
-Diese ist ein Framework unspezifisch Dateiformat, welches aus 
-einer .xml Datei für die Struktur/Architektur des Modells
-und einer .bin Datei fpr die trainierten gewichten besteht.
-
-
-Die InferenceEngine ist eine Runtime welche eine API für die 
-Sprachen C++ und Python zur Integration und Nutzung der Inferenz 
-in der Anwendung bereitstellt.
-
-Dafür werden die IR Dateien des Models in ein Hardware spezifisches 
-Plugin geladen. Dieses kann die User Applikatin für die Inferenz 
-von Image Classification, ObjectDetection sowie Instance Segmentation
-Modellen nutzen.
 
 
 

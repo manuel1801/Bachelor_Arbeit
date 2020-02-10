@@ -3,20 +3,28 @@
 \section{Evaluierungs Metriken}\label{sec:metricen}
 
 \subsection*{Mean Average Precision (mAP)}
-Als Maß für die Genauigkeit wird für die Objekterkennung häufig 
-die \textit{Mean Average Precision (mAP)} verwendet, welche sowohl
-die Lokalisierung- als auch die Klassifizierungsgenauigkeit 
-mit einbezieht. Dafür wird zunächst die \textit{Intersection over 
-Union} berechnet, welche wie in Abbildung \ref{fig:iou} dargestellt das Verhältnis
-des Überlappungsgrad der gelabelten (Ground Truth) und der
-geschätzete Boundig Box zu dem Gesammtbereich beider Boxen darstellt.
-\\
+
+Als Metrik für die Genauigkeit eines Object Detection Models 
+dient die \textit{Mean Average Precision (mAP)}, welche 
+sowohl Klassifizierung als auch Lokalisierung mit einbezieht 
+und sich aus folgenden Werten berechenn lässt.
+
+
+\begin{itemize}
+  \item \textit{True Positive (TP)}: 
+  \item \textit{True Negative (TN)}: 
+  \item \textit{False Positive (FP)}: 
+  \item \textit{False Negative (FN)}: 
+\end{itemize}
+
+Zur bestimmung von TPs wird die \textit{Intersection over unioun}
+verwendet, welche Überlappungsgrad der gelabelten (Ground Truth) und der
+geschätzete Boundig Box zu dem Gesammtbereich beider Boxen darstellt 
+
 Beträgt dieser mehr als ein Bestimmter Threshhold, häufig 50\%
 gilt die Schätzung als \textit{True Positive}, andernfalls als 
-\textit{False Positive}. Werden die Falsschätzungen, also Negative 
-noch hinzugenommen, für fälschlicherweise daneben FN und für richtiger 
-weise daneben TN, lässt sich daraus eine \textit{Confusion Matrix}
-bilden.
+\textit{False Positive}. 
+
 
 % für confusion matrix
 \newcommand\MyBox[2]{
@@ -53,25 +61,42 @@ bilden.
 
 \vspace{0.5cm}
     
+Daraus lassen sich dann Precision und Recall berechnen. 
 
-Mit diesen Werten lassen sich dann der \textit{Recall}, welcher angibt wie 
-viele Objekte das Modell gefunden hat und die \textit{Precision}
+\textit{Recall}
+welcher angibt wie 
+viele Objekte das Modell gefunden hat
+\begin{equation}
+  Recall = \frac{TP}{TP + FN}
+\end{equation}
+TP + FN allen Objekten im Bild entspricht, somit also das 
+Verhälltnis der Gefunden zu allen Objekten im Bild
+
+
+\textit{Precision}
 die angibt mit welcher Genauigkeit die Objekte gefunden wurden
-berechnen.
-\\
-Der \textit{Recall} ist definiert durch TP/TP + FN
-wobei TP + FN allen Objekten im Bild entspricht, somit also das 
-Verhälltnis der Gefunden zu allen Objekten im Bild.
-\\
-Die \textit{Precision} kann durch TP/TP + FP, also die richtig 
+\begin{equation}
+  Precision = \frac{TP}{TP + FP}
+\end{equation}
+also die richtig 
 geschätzen durch alle gemachten schätzunge und gibt somit die 
 genauigkeit mit der das Model die Objekte findet an.
-\\
+
+
+\textit{Average Precision}
+\begin{equation}
+  Average Precision = \frac{1}{N}\sum(Precision(Recall))
+\end{equation}
+
 Daraus kann nun die durchschnittliche Precision für alle Recall 
 Werte bestimmt werden, welche als \textit{Average Precision}
 bezeichnet wird und die Genauigkeit des Models bezogen auf 
-eine bestimmte Klasse angibt. Für alle Klassen gemittel 
+eine bestimmte Klasse angibt
+
+\textit{mean Average Precision}
+Für alle Klassen gemittel 
 erhält man die mittlere durchschnittliche Precision (mAP)
+
 
 
 \subsection*{Fehlerfunktion (Loss)}
@@ -84,14 +109,18 @@ Bei Faster R-CNN werden diese beiden Loss Werte dann sowohl für
 RPN(1st stage) als auch für classifier(2nd stage) also 
 insgesammt 4 loss werte verwendet.
 
+
+
 %----------------- SECTION: validtaion ---------------------
-\section{Validierung}
+\section{Vergleich der Modelle}
 \begin{itemize}
   \item Tab vgl SSD, Faster, mit/ohne Aug, für mAP, Loss
   \item Overfiiting bei Faster: Aug vs Early Stopping
 \end{itemize}
 
+\subsection{Evaluierung/Validierung}
 
+hier mit validierungs set
 
 \begin{table}[htb]
   \centering
@@ -158,19 +187,22 @@ Datensets besser.
 
 
 
-
 %----------------- SECTION: Test Inferenz ---------------------
-\section{Test Inferenz}
+\subsection{Test Inferenz}
+hier mit test set und weitere
 test script mit open vino zum vgl der modelle bzg infer ergebnisse (bilder/zeit)
-\subsection{Test Bilder}
 \subsubsection{test set}
+\subsubsection{kaggle set}
 \subsubsection{eigene}
 
-\subsection{Infere zeit}
+
+\subsection{Inferenz zeit}
 
 inferenz zeiten wurden in FPS für 100 bilder gemessen. Bei 
 mehr als ein Inferenz Request wurde die Asynchrone Api der InferenceEngine 
 verwendet.
+
+hier noch für Raspberry
 
 
 \begin{table}[htb]
@@ -189,16 +221,22 @@ verwendet.
 
 
 %----------------- SECTION: optimierung ---------------------
-\section{Optimierungen}
+\section{Optimierungen: Faster r-CNN}
 mit faster r-cnn wurden nun noch optimierungen durchgeführt, da 
 trotz augmentierung bei mehr epochen overfitting auftrat.
 
-\subsection{Parameter}
+
+\subsection{Validierung}
+
 bei faster > 400k steps:
 \begin{itemize}
   \item dropout
   \item l2 (rpn loss anschauen)
+  \item mehr daten (4000 statt 3000)
+  \item early stopping (bei zb 300000)
 \end{itemize}
+
+
 
 hier loss und mAP für 500k steps
 \\[1cm]
@@ -289,6 +327,13 @@ sind Dropout, und l2 mit $\lambda = 0.02$ und sind in
   \end{tabular}
   \caption{Regularisierungen}
 \end{table}
+
+\subsection{Test Inferenz}
+da nicht sehr eindeutig, welche optimierung die 
+beste ist, wurd auch hier test inferenz für 
+kaggle und eigen durchgeführt.
+
+
 
 \subsection{Graustufen}
 da kamerea graustufen bilder liefert, wurde getestet, ob ein 

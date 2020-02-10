@@ -11,23 +11,13 @@ test_image = cv2.imread(os.path.join(
 
 iterations = 100
 
-all_models = {}
-i = 1
-for dataset in os.listdir(models_dir):
-    dataset_dir = os.path.join(models_dir, dataset)
-    if os.path.isdir(dataset_dir):
-        for model in os.listdir(dataset_dir):
-            model_dir = os.path.join(dataset_dir, model)
-            if os.path.isdir(model_dir):
-                all_models[i] = dataset, model
-                i += 1
 
-for _, model in all_models.items():
+for model in ['Animals/ssd_mobilenet_v2', 'Animals/ssd_inception_v2', 'Animals/faster_rcnn_inception_v2']:
 
     model_xml = os.path.join(
-        models_dir, model[0], model[1], 'frozen_inference_graph.xml')
+        models_dir, model, 'frozen_inference_graph.xml')
     model_bin = os.path.join(
-        models_dir, model[0], model[1], 'frozen_inference_graph.bin')
+        models_dir, model, 'frozen_inference_graph.bin')
 
     assert os.path.isfile(model_bin)
     assert os.path.isfile(model_xml)
@@ -67,7 +57,7 @@ for _, model in all_models.items():
                     res = exec_net.requests[0].outputs[output_blop]
                     infered_images += 1
                     fps = str(infered_images / (time.time() - t_start))
-                    print(model[0] + ', ' + model[1] + ', infer req ' + str(infer_req) +
+                    print(model + ', infer req ' + str(infer_req) +
                           ': Fps ' + fps, end='\r', flush=True)
             del exec_net
         else:
@@ -86,13 +76,13 @@ for _, model in all_models.items():
                 for res in results:
                     infered_images += 1
                     fps = str(infered_images / (time.time() - t_start))
-                    print(model[0] + ', ' + model[1] + ', infer req ' + str(infer_req) +
+                    print(model + ', infer req ' + str(infer_req) +
                           ': Fps ' + fps, end='\r', flush=True)
 
                 if not test_images:
                     break
             del exec_model
-        print(model[0] + ', ' + model[1] + ', infer req ' +
+        print(model + ', infer req ' +
               str(infer_req) + ': Fps ' + fps)
 
     del ie

@@ -35,13 +35,18 @@ assert os.path.isdir(handy_images)
 assert os.path.isdir(handy_images_gray)
 
 
+kaggle_iWildCam = os.path.join(dataset_dir, 'kaggle_iWildCam')
+assert os.path.isdir(kaggle_iWildCam)
+
+
 infer_images = {
     1: flickr_images,
     2: validation_images,
     3: handy_images,
     4: flickr_images_gray,
     5: validation_images_gray,
-    6: handy_images_gray
+    6: handy_images_gray,
+    7: kaggle_iWildCam
 }
 
 for i in infer_images.items():
@@ -68,6 +73,10 @@ for dataset in os.listdir(models_dir):
 model_ind = int(input())
 print(selected_model[model_ind], ' selected')
 
+print('select max images. -1 für kein limit')
+n = int(input())
+if n < 0:
+    n = None
 
 model_xml = os.path.join(
     models_dir, selected_model[model_ind][0], selected_model[model_ind][1], 'frozen_inference_graph.xml')
@@ -81,21 +90,23 @@ else:
     labels = None
 
 
-def get_image_paths(imgs_dir):
+def get_image_paths(imgs_dir, max_images=None):  # hier shuffle
     test_images = []
     for img_dir in os.listdir(imgs_dir):
         abs_img_dir = os.path.join(imgs_dir, img_dir)
         if img_dir[-3:] == 'jpg':
             test_images.append(abs_img_dir)
         elif os.path.isdir(abs_img_dir):
-            for sub_img_dir in os.listdir(abs_img_dir):
+            for i, sub_img_dir in enumerate(os.listdir(abs_img_dir)):
                 abs_sub_img_dir = os.path.join(abs_img_dir, sub_img_dir)
                 if sub_img_dir[-3:] == 'jpg':
                     test_images.append(abs_sub_img_dir)
+                if max_images and i == max_images:
+                    break
     return test_images
 
 
-test_images = get_image_paths(infer_images[infer_images_ind])
+test_images = get_image_paths(infer_images[infer_images_ind], max_images=n)
 
 eval_dir = os.path.join(
     os.environ['HOME'], 'Bachelor_Arbeit/Inference_Engine_Tools/infer_test_images/results')

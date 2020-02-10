@@ -10,7 +10,7 @@ class InferenceModel:
         self.ie = IECore()
         self.device = device
 
-    def create_exec_infer_model(self, model_xml, model_bin, labels=None, num_requests=2):
+    def create_exec_infer_model(self, model_xml, model_bin, labels, num_requests=2):
 
         assert os.path.isfile(model_bin)
         assert os.path.isfile(model_xml)
@@ -79,7 +79,7 @@ class ExecInferModel:
                     ymax = int(obj[6] * height)
 
                     class_id = int(obj[1])
-                    color = (0, 0, 255)
+                    color = (255, 0, 0)
                     cv2.rectangle(image, (xmin, ymin),
                                   (xmax, ymax), color, 2)
 

@@ -17,10 +17,9 @@ from datetime import datetime
 from statistics import median
 from openvino.inference_engine import IENetwork, IECore, get_version
 
-from .utils.constants import CPU_DEVICE_NAME, MULTI_DEVICE_NAME, GPU_DEVICE_NAME, MYRIAD_DEVICE_NAME
-from .utils.logging import logger
-from .utils.utils import get_duration_seconds, parse_value_per_device, parse_devices
-
+from utils.constants import CPU_DEVICE_NAME, MULTI_DEVICE_NAME, GPU_DEVICE_NAME, MYRIAD_DEVICE_NAME
+from utils.logging import logger
+from utils.utils import get_duration_seconds, parse_value_per_device, parse_devices
 
 
 class Benchmark:
@@ -29,31 +28,38 @@ class Benchmark:
         self.ie = IECore()
         self.nireq = number_infer_requests
         self.niter = number_iterations
-        self.duration_seconds = get_duration_seconds(duration_seconds, self.niter, self.device)
+        self.duration_seconds = get_duration_seconds(
+            duration_seconds, self.niter, self.device)
         self.api_type = api_type
         self.device_number_streams = {}
 
     def __del__(self):
         del self.ie
 
-    def add_extension(self, path_to_extension: str=None, path_to_cldnn_config: str=None):
+    def add_extension(self, path_to_extension: str = None, path_to_cldnn_config: str = None):
         if GPU_DEVICE_NAME in self.device:
             if path_to_cldnn_config:
-                self.ie.set_config({'CONFIG_FILE': path_to_cldnn_config}, GPU_DEVICE_NAME)
-                logger.info('GPU extensions is loaded {}'.format(path_to_cldnn_config))
+                self.ie.set_config(
+                    {'CONFIG_FILE': path_to_cldnn_config}, GPU_DEVICE_NAME)
+                logger.info('GPU extensions is loaded {}'.format(
+                    path_to_cldnn_config))
         if CPU_DEVICE_NAME in self.device or MYRIAD_DEVICE_NAME in self.device:
             if path_to_extension:
-                self.ie.add_extension(extension_path=path_to_extension, device_name=CPU_DEVICE_NAME)
-                logger.info('CPU extensions is loaded {}'.format(path_to_extension))
+                self.ie.add_extension(
+                    extension_path=path_to_extension, device_name=CPU_DEVICE_NAME)
+                logger.info('CPU extensions is loaded {}'.format(
+                    path_to_extension))
 
     def get_version_info(self) -> str:
-        logger.info('InferenceEngine:\n{: <9}{:.<24} {}'.format('', 'API version', get_version()))
+        logger.info('InferenceEngine:\n{: <9}{:.<24} {}'.format(
+            '', 'API version', get_version()))
         version_string = 'Device info\n'
         for device, version in self.ie.get_versions(self.device).items():
             version_string += '{: <9}{}\n'.format('', device)
             version_string += '{: <9}{:.<24}{} {}.{}\n'.format('', version.description, ' version', version.major,
                                                                version.minor)
-            version_string += '{: <9}{:.<24} {}\n'.format('', 'Build', version.build_number)
+            version_string += '{: <9}{:.<24} {}\n'.format(
+                '', 'Build', version.build_number)
         return version_string
 
     @staticmethod
@@ -79,35 +85,45 @@ class Benchmark:
     def set_config(self, number_streams: int, api_type: str = 'async',
                    number_threads: int = None, infer_threads_pinning: int = None):
         devices = parse_devices(self.device)
-        self.device_number_streams = parse_value_per_device(devices, number_streams)
+        self.device_number_streams = parse_value_per_device(
+            devices, number_streams)
         for device in devices:
             if device == CPU_DEVICE_NAME:  # CPU supports few special performance-oriented keys
                 # limit threading for CPU portion of inference
                 if number_threads:
-                    self.ie.set_config({'CPU_THREADS_NUM': str(number_threads)}, device)
+                    self.ie.set_config(
+                        {'CPU_THREADS_NUM': str(number_threads)}, device)
 
                 if MULTI_DEVICE_NAME in self.device and GPU_DEVICE_NAME in self.device:
-                    self.ie.set_config({'CPU_BIND_THREAD': 'NO'}, CPU_DEVICE_NAME)
+                    self.ie.set_config(
+                        {'CPU_BIND_THREAD': 'NO'}, CPU_DEVICE_NAME)
                 else:
                     # pin threads for CPU portion of inference
-                    self.ie.set_config({'CPU_BIND_THREAD': infer_threads_pinning}, device)
+                    self.ie.set_config(
+                        {'CPU_BIND_THREAD': infer_threads_pinning}, device)
 
                 # for CPU execution, more throughput-oriented execution via streams
                 # for pure CPU execution, more throughput-oriented execution via streams
                 if api_type == 'async':
-                    cpu_throughput = {'CPU_THROUGHPUT_STREAMS': 'CPU_THROUGHPUT_AUTO'}
+                    cpu_throughput = {
+                        'CPU_THROUGHPUT_STREAMS': 'CPU_THROUGHPUT_AUTO'}
                     if device in self.device_number_streams.keys():
-                        cpu_throughput['CPU_THROUGHPUT_STREAMS'] = str(self.device_number_streams.get(device))
+                        cpu_throughput['CPU_THROUGHPUT_STREAMS'] = str(
+                            self.device_number_streams.get(device))
                     self.ie.set_config(cpu_throughput, device)
-                    self.device_number_streams[device] = self.ie.get_config(device, 'CPU_THROUGHPUT_STREAMS')
+                    self.device_number_streams[device] = self.ie.get_config(
+                        device, 'CPU_THROUGHPUT_STREAMS')
 
             elif device == GPU_DEVICE_NAME:
                 if api_type == 'async':
-                    gpu_throughput = {'GPU_THROUGHPUT_STREAMS': 'GPU_THROUGHPUT_AUTO'}
+                    gpu_throughput = {
+                        'GPU_THROUGHPUT_STREAMS': 'GPU_THROUGHPUT_AUTO'}
                     if device in self.device_number_streams.keys():
-                        gpu_throughput['GPU_THROUGHPUT_STREAMS'] = str(self.device_number_streams.get(device))
+                        gpu_throughput['GPU_THROUGHPUT_STREAMS'] = str(
+                            self.device_number_streams.get(device))
                     self.ie.set_config(gpu_throughput, device)
-                    self.device_number_streams[device] = self.ie.get_config(device, 'GPU_THROUGHPUT_STREAMS')
+                    self.device_number_streams[device] = self.ie.get_config(
+                        device, 'GPU_THROUGHPUT_STREAMS')
 
                 if MULTI_DEVICE_NAME in self.device and CPU_DEVICE_NAME in self.device:
                     # multi-device execution with the CPU+GPU performs best with GPU trottling hint,
@@ -138,7 +154,8 @@ class Benchmark:
         if self.api_type == 'sync':
             infer_request.infer(requests_input_data[infer_request.req_id])
         else:
-            infer_request.start_async(requests_input_data[infer_request.req_id])
+            infer_request.start_async(
+                requests_input_data[infer_request.req_id])
 
         request_queue.wait_all()
         request_queue.reset_times()
@@ -159,7 +176,8 @@ class Benchmark:
             if self.api_type == 'sync':
                 infer_request.infer(requests_input_data[infer_request.req_id])
             else:
-                infer_request.start_async(requests_input_data[infer_request.req_id])
+                infer_request.start_async(
+                    requests_input_data[infer_request.req_id])
             iteration += 1
 
             exec_time = (datetime.now() - start_time).total_seconds()
@@ -169,7 +187,8 @@ class Benchmark:
                 # depends on the current iteration time and time of each progress interval.
                 # Previously covered progress intervals must be skipped.
                 progress_interval_time = self.duration_seconds / progress_bar.total_num
-                new_progress = int(exec_time / progress_interval_time - progress_count)
+                new_progress = int(
+                    exec_time / progress_interval_time - progress_count)
                 progress_bar.add_progress(new_progress)
                 progress_count += new_progress
             elif self.niter:

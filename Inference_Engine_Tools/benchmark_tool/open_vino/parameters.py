@@ -1,7 +1,7 @@
 import argparse
 from fnmatch import fnmatch
 
-from openvino.tools.benchmark.utils.constants import XML_EXTENSION_PATTERN
+from utils.constants import XML_EXTENSION_PATTERN
 
 
 def str2bool(v):
@@ -15,9 +15,11 @@ def str2bool(v):
 
 def validate_args(args):
     if args.number_iterations is not None and args.number_iterations < 0:
-        raise Exception("Number of iterations should be positive (invalid -niter option value)")
+        raise Exception(
+            "Number of iterations should be positive (invalid -niter option value)")
     if args.number_infer_requests and args.number_infer_requests < 0:
-        raise Exception("Number of inference requests should be positive (invalid -nireq option value)")
+        raise Exception(
+            "Number of inference requests should be positive (invalid -nireq option value)")
     if not fnmatch(args.path_to_model, XML_EXTENSION_PATTERN):
         raise Exception('Path {} is not xml file.')
 
@@ -82,7 +84,8 @@ def parse_args():
     args.add_argument('-pc', '--perf_counts', type=str2bool, required=False, default=False, nargs='?', const=True,
                       help='Optional. Report performance counters.', )
     args.add_argument('--report_type', type=str, required=False,
-                      choices=['no_counters', 'average_counters', 'detailed_counters'],
+                      choices=['no_counters', 'average_counters',
+                               'detailed_counters'],
                       help="Optional. Enable collecting statistics report. \"no_counters\" report contains "
                            "configuration options specified, resulting FPS and latency. \"average_counters\" "
                            "report extends \"no_counters\" report and additionally includes average PM "

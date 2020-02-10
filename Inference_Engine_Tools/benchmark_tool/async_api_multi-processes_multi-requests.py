@@ -40,7 +40,7 @@ def async_infer_worker(exe_net, request_number, image_queue, input_blob, out_blo
                     exe_net.start_async(request_id=_request_id, inputs={
                                         input_blob: buffers[_request_id - request_number]})
                 else:
-                    #print("image at index " + str(_request_id - request_number) + " is none." )
+                    # print("image at index " + str(_request_id - request_number) + " is none." )
                     last_batch = _request_id - request_number
                     break
             else:
@@ -48,7 +48,7 @@ def async_infer_worker(exe_net, request_number, image_queue, input_blob, out_blo
                     exe_net.start_async(request_id=_request_id, inputs={
                                         input_blob: buffers[_request_id]})
                 else:
-                    #print("image at index " + str(_request_id) + " is none." )
+                    # print("image at index " + str(_request_id) + " is none." )
                     last_batch = _request_id
                     break
 
@@ -56,7 +56,7 @@ def async_infer_worker(exe_net, request_number, image_queue, input_blob, out_blo
             if exe_net.requests[_request_id].wait(-1) == 0:
                 res = exe_net.requests[_request_id].outputs[out_blob]
                 infered_images = infered_images + 1
-                #print("infer result: label:%f confidence:%f left:%f top:%f right:%f bottom:%f" %(res[0][0][0][1], res[0][0][0][2], res[0][0][0][3], res[0][0][0][4], res[0][0][0][5], res[0][0][0][6]))
+                # print("infer result: label:%f confidence:%f left:%f top:%f right:%f bottom:%f" %(res[0][0][0][1], res[0][0][0][2], res[0][0][0][3], res[0][0][0][4], res[0][0][0][5], res[0][0][0][6]))
                 duration = time.time() - start_time
                 print("inferred images: " + str(infered_images) + ", average fps: " +
                       str(infered_images/duration) + "\r", end='', flush=False)
@@ -78,22 +78,20 @@ def async_infer_worker(exe_net, request_number, image_queue, input_blob, out_blo
         if exe_net.requests[_request_id].wait(-1) == 0:
             res = exe_net.requests[_request_id].outputs[out_blob]
             infered_images = infered_images + 1
-            #print("infer result: label:%f confidence:%f left:%f top:%f right:%f bottom:%f" %(res[0][0][0][1], res[0][0][0][2], res[0][0][0][3], res[0][0][0][4], res[0][0][0][5], res[0][0][0][6]))
+            # print("infer result: label:%f confidence:%f left:%f top:%f right:%f bottom:%f" %(res[0][0][0][1], res[0][0][0][2], res[0][0][0][3], res[0][0][0][4], res[0][0][0][5], res[0][0][0][6]))
             duration = time.time() - start_time
             print("inferred images: " + str(infered_images) + ", average fps: " +
                   str(infered_images/duration) + "\r", end='', flush=False)
 
 
 # for test purpose only
-image_number = 300
+image_number = 200
 
 
 def preprocess_worker(image_queue, n, c, h, w):
-    test_image_dir = os.path.join(
-        os.environ['HOME'], '/Bachelor_Arbeit/Inference_Engine_Tools/benchmark_tool/car.png')
-
-    for i in range(image_number):
-        image = cv2.imread(test_image_dir)
+    for i in range(1, 1 + image_number):
+        image = cv2.imread(os.path.join(
+            os.environ['HOME'], 'Bachelor_Arbeit/Inference_Engine_Tools/benchmark_tool/car.png'))
         image = cv2.resize(image, (w, h))
         image = image.transpose((2, 0, 1))
         image = image.reshape((n, c, h, w))
@@ -113,7 +111,7 @@ def main():
     image_queue = multiprocessing.Queue(maxsize=request_number*3)
 
     workspace_dir = os.path.join(os.environ['HOME'], 'Bachelor_Arbeit')
-    #workspace_dir = '/home/pi/Bachelor_Arbeit/'
+    # workspace_dir = '/home/pi/Bachelor_Arbeit/'
     models_dir = os.path.join(workspace_dir, 'openvino_models')
 
     print('select model')
@@ -145,7 +143,7 @@ def main():
 
     plugin = IEPlugin(device="MYRIAD")
     net = IENetwork(model=model_xml, weights=model_bin)
-    #input_blob = next(iter(net.inputs))
+    # input_blob = next(iter(net.inputs))
     for blob_name in net.inputs:
         if len(net.inputs[blob_name].shape) == 4:
             input_blob = blob_name

@@ -2,7 +2,7 @@ import cv2
 import os
 import connection_ssh as connection
 
-user = 'pi'
+user = 'manuel'
 password = 'animalsdetection'
 puplic_ip = '129.143.140.51'
 

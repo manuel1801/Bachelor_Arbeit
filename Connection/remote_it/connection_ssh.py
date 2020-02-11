@@ -10,7 +10,7 @@ class SSHConnect:
         self.token = None
         self.public_ip = requests.get('https://api.ipify.org').text
 
-    def login(self, remote_it_user='animals.detectin@gmail.com', remote_it_pw='animalsdetection'):
+    def login(self, remote_it_user='animals.detection@gmail.com', remote_it_pw='animalsdetection'):
         headers = {
             "developerkey": self.developer_key
         }

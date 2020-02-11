@@ -130,7 +130,7 @@ def main():
     server, port, con_id = conn.connect(addr)
     print(addr)
     print(server, port, con_id)
-    conn.send(server, port, 'pi', 'animalsdetection', '/home/manuel/Bachelor_Arbeit/Connection/remote_it/test.jpg',
+    conn.send(server, port, 'manuel', 'animalsdetection', '/home/manuel/Bachelor_Arbeit/Connection/remote_it/test.jpg',
               '/home/pi/Bachelor_Arbeit/Connection/remote_it/received')
     conn.disconnect(addr, con_id)
 

@@ -11,8 +11,8 @@ test_image = cv2.imread(os.path.join(
 
 iterations = 50
 
-for model in ['Animals/ssd_mobilenet_v2', 'Animals/ssd_inception_v2', 'Animals/faster_rcnn_inception_v2']:
-    # for model in ['Animals/ssd_mobilenet_v2']:
+# for model in ['Animals/ssd_mobilenet_v2', 'Animals/ssd_inception_v2', 'Animals/faster_rcnn_inception_v2']:
+for model in ['Animals/faster_rcnn_inception_v2']:
 
     model_xml = os.path.join(
         models_dir, model, 'frozen_inference_graph.xml')
@@ -25,7 +25,8 @@ for model in ['Animals/ssd_mobilenet_v2', 'Animals/ssd_inception_v2', 'Animals/f
     ie = IECore()
     net = IENetwork(model=model_xml, weights=model_bin)
 
-    for infer_req in reversed(range(5)):
+    # for infer_req in reversed(range(5)):
+    for infer_req in range(5):
 
         if infer_req == 0:
 

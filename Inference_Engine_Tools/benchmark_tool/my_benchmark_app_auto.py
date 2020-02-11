@@ -9,10 +9,10 @@ models_dir = os.path.join(workspace_dir, 'openvino_models')
 test_image = cv2.imread(os.path.join(
     workspace_dir, 'Inference_Engine_Tools/benchmark_tool/car.png'))
 
-iterations = 100
-
+iterations = 50
 
 for model in ['Animals/ssd_mobilenet_v2', 'Animals/ssd_inception_v2', 'Animals/faster_rcnn_inception_v2']:
+    # for model in ['Animals/ssd_mobilenet_v2']:
 
     model_xml = os.path.join(
         models_dir, model, 'frozen_inference_graph.xml')
@@ -25,9 +25,9 @@ for model in ['Animals/ssd_mobilenet_v2', 'Animals/ssd_inception_v2', 'Animals/f
     ie = IECore()
     net = IENetwork(model=model_xml, weights=model_bin)
 
-    for infer_req in range(1, 5):
+    for infer_req in reversed(range(5)):
 
-        if infer_req == 1:
+        if infer_req == 0:
 
             # Syncron
 
@@ -57,7 +57,7 @@ for model in ['Animals/ssd_mobilenet_v2', 'Animals/ssd_inception_v2', 'Animals/f
                     res = exec_net.requests[0].outputs[output_blop]
                     infered_images += 1
                     fps = str(infered_images / (time.time() - t_start))
-                    print(model + ', infer req ' + str(infer_req) +
+                    print(model + ', infer req ' + str(1) +
                           ': Fps ' + fps, end='\r', flush=True)
             del exec_net
         else:

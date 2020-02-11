@@ -11,7 +11,7 @@ models_dir = os.path.join(
 
 infer_model = detection.InferenceModel()
 
-n = 100
+n = 200
 
 # Aus Validierungsset
 validation_images = os.path.join(

@@ -23,11 +23,20 @@ Animals/ssd_inception_v2, infer req 3: Fps 31.136914276471995
 Animals/ssd_inception_v2, infer req 2: Fps 27.723366981631184
 Animals/ssd_inception_v2, infer req 1: Fps 15.624832914914215
 Animals/ssd_inception_v2, infer req 0: Fps 15.007895570365326
+
 Animals/faster_rcnn_inception_v2, infer req 4: Fps 0.7048828829638505
 Animals/faster_rcnn_inception_v2, infer req 3: Fps 0.64116787902192137
 Animals/faster_rcnn_inception_v2, infer req 2: Fps 0.58449432672503893
 Animals/faster_rcnn_inception_v2, infer req 1: Fps 0.5350475287244645
 Animals/faster_rcnn_inception_v2, infer req 0: Fps 0.5333834668974636
+
+
+normal: 0 -> 4
+Animals/faster_rcnn_inception_v2, infer req 0: Fps 0.6291775093665651
+Animals/faster_rcnn_inception_v2, infer req 1: Fps 0.6209201247477232
+Animals/faster_rcnn_inception_v2, infer req 2: Fps 0.58757180285163445
+Animals/faster_rcnn_inception_v2, infer req 3: Fps 0.58722551751913675
+Animals/faster_rcnn_inception_v2, infer req 4: Fps 0.57954963752582254
 
 
 

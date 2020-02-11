@@ -26,7 +26,7 @@ conn.login()
 addr = conn.get_device_adress(device_name=my_device)
 
 server, port, device_id = conn.connect(
-    device_address=addr, my_puplic_ip=puplic_ip)
+    device_address=addr)
 print('connected: ', server, port, device_id)
 conn.send(server, port, user, password, file=file, path=path)
 print('send file1')
@@ -37,7 +37,7 @@ print('disconnected')
 
 
 server, port, device_id = conn.connect(
-    device_address=addr, my_puplic_ip=puplic_ip)
+    device_address=addr)
 print('connected: ', server, port, device_id)
 conn.send(server, port, user, password, file=file3, path=path)
 print('send file3')

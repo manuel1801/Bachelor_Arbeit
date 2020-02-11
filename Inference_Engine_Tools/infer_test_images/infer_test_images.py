@@ -34,6 +34,9 @@ handy_images_gray = os.path.join(workspace_dir, 'test_gray')
 assert os.path.isdir(handy_images)
 assert os.path.isdir(handy_images_gray)
 
+handy_videos = os.path.join(dataset_dir, 'handy_videos/frames')
+assert os.path.isdir(handy_videos)
+
 
 kaggle_iWildCam = os.path.join(dataset_dir, 'kaggle_iWildCam')
 assert os.path.isdir(kaggle_iWildCam)
@@ -46,7 +49,8 @@ infer_images = {
     4: flickr_images_gray,
     5: validation_images_gray,
     6: handy_images_gray,
-    7: kaggle_iWildCam
+    7: kaggle_iWildCam,
+    8: handy_videos
 }
 
 for i in infer_images.items():

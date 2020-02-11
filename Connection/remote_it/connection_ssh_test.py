@@ -3,7 +3,7 @@ import os
 import connection_ssh as connection
 
 user = 'pi'
-password = 'hiworld'
+password = 'animalsdetection'
 puplic_ip = '129.143.140.51'
 
 if user == 'pi':

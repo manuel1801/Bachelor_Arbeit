@@ -59,5 +59,43 @@ sudo systemctl status my_init.service
 
 ### a) SCP über remote SSH
 
+Auf [remot3.it](https://remote.it/) registrieren oder einloggen:
+
+
+1. **remoteit** installieren
+```bash
+curl -LkO https://raw.githubusercontent.com/remoteit/installer/master/scripts/auto-install.sh
+chmod +x ./auto-install.sh
+sudo ./auto-install.sh
+```
+und auführen
+
+```bash
+sudo connectd_installer
+```
+mit anmeldedaten:
+* email: animals.detection@gmail.com
+* pw: animalsdetection
+
+einloggen oder neuen [account](https://remote.it/) anlegen.
+(dann *api key* in main.py anpassen: [Developer API Key](https://app.remote.it/#account))
+
+2. Gerät *remote-Pc* hinzufügen
+3. SSH service *ssh-Pc* anlegen
+4. exit
+
+(bei anderen namen muss in main.py angepasst werden)
+
+
+
+
 
 ### b) Sockt über Tcp
+
+## Mobiles Internet
+
+### Huawei E3531 SurfStick
+
+[Huawei E3531 SurfStick](https://www.amazon.de/gp/product/B00HSZEY34/ref=ppx_yo_dt_b_asin_title_o00_s00?ie=UTF8&psc=1)
+am Rasperry [einrichten](https://tutorials-raspberrypi.de/raspberry-pi-gsm-modul-mobiles-internet/) 
+

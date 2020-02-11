@@ -14,7 +14,7 @@ from datetime import datetime
 # import picamera
 
 
-password = 'hiworld'
+password = 'animalsdetection'
 raspi = False
 
 if raspi:
@@ -36,7 +36,7 @@ assert os.path.isdir(output_dir)
 
 conn = connection.SSHConnect()
 device_address = None
-if conn.login(remote_it_user='manuel.barkey@gmail.com',
+if conn.login(remote_it_user='animals.detection@gmail.com',
               remote_it_pw=password):  # returns false if wrong user data
     device_address = conn.get_device_adress(device_name=remote_divice_name)
 

@@ -39,4 +39,9 @@ Animals/faster_rcnn_inception_v2, infer req 3: Fps 0.58722551751913675
 Animals/faster_rcnn_inception_v2, infer req 4: Fps 0.57954963752582254
 
 
+4 -> 4 -> 4 -> 4 (iter: 50)
+
+
+4 -> 4 -> 4 -> 4 (iter: 100)
+
 

@@ -5,12 +5,12 @@ import pexpect
 
 
 class SSHConnect:
-    def __init__(self, dev_key='OENDQjg2ODktNUU5Qy00MUI2LThBMUYtRkE0MjdBMkE2Mzky'):
+    def __init__(self, dev_key='NEU3RTVFNEMtNjRGRi00MzBFLUIyNTgtOUVFQjRGMjcxOTRB'):
         self.developer_key = dev_key
         self.token = None
         self.public_ip = requests.get('https://api.ipify.org').text
 
-    def login(self, remote_it_user='manuel.barkey@gmail.com', remote_it_pw='hiworld'):
+    def login(self, remote_it_user='animals.detection@gmail.com', remote_it_pw='animalsdetection'):
         headers = {
             "developerkey": self.developer_key
         }
@@ -130,7 +130,7 @@ def main():
     server, port, con_id = conn.connect(addr)
     print(addr)
     print(server, port, con_id)
-    conn.send(server, port, 'pi', 'hiworld', '/home/manuel/Bachelor_Arbeit/Connection/remote_it/test.jpg',
+    conn.send(server, port, 'pi', 'animalsdetection', '/home/manuel/Bachelor_Arbeit/Connection/remote_it/test.jpg',
               '/home/pi/Bachelor_Arbeit/Connection/remote_it/received')
     conn.disconnect(addr, con_id)
 

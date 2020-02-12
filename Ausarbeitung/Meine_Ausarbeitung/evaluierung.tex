@@ -202,20 +202,20 @@ inferenz zeiten wurden in FPS für 100 bilder gemessen. Bei
 mehr als ein Inferenz Request wurde die Asynchrone Api der InferenceEngine 
 verwendet.
 Folgende Tabelle Zeigt für verschiedene Modelle die 
-Inferenz zeit auf ncs2 über raspberry pi
+Inferenz zeit auf ncs2 über raspberry pi für 100 frames.
 
-\begin{table}[htb]
+
+
+\begin{table}[hpb]
   \centering
-  \label{table:infer_zeit}
-  \begin{tabular}{m{0.3\textwidth}|m{0.15\textwidth}<{\centering}|m{0.15\textwidth}<{\centering}|m{0.15\textwidth}<{\centering}|m{0.15\textwidth}<{\centering}}
+  \begin{tabular}{m{0.25\textwidth}|m{0.1\textwidth}<{\centering}|m{0.1\textwidth}<{\centering}|m{0.1\textwidth}<{\centering}|m{0.1\textwidth}<{\centering}}
   \hline
-  Modus                & Synchron & \multicolumn{3}{c}{Asynchron} \\ \hline
-  Inferenz Requests    & 1        & 2        & 3        & 4        \\ \hline\hline
-  SSD MobilenetV2      & 12,63    & 25,14    & 33,46    & 33,63    \\
-  SSD InceptionV2      & 10,71    & 21,22    & 28,10    & 28,29    \\
-  Faster R-CNN Incept. & 0,55     & 0,61     & 0,68     & 0,72     \\ \hline
+  \multirow{2}{*}{Model} & \multicolumn{4}{c}{Asynchronge Inferenz Requests} \\ \cline{2-5} 
+                         & 1           & 2          & 3          & 4          \\ \hline\hline
+  SSD MobilenetV2        & 19,5           & 35,2          & 40,6          & 40,3          \\
+  SSD InceptionV2        & 15,6           & 27,7          & 31,1          & 31,7          \\
+  Faster R-CNN Incept.   & 0,63           & 0,67          & 0,75          & 0,74          \\ \hline
   \end{tabular}
-  \caption{Vergeich von Inferenz Zeiten}
 \end{table}
 
 

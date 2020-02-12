@@ -9,3 +9,6 @@ raspberrypi4
 https://www.reichelt.de/raspberry-pi-4-b-4x-1-5-ghz-4-gb-ram-wlan-bt-rasp-pi-4-b-4gb-p259920.html
 
 
+over under fitting
+https://pythonmachinelearning.pro/a-guide-to-improving-deep-learnings-performance/
+

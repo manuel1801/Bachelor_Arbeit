@@ -10,7 +10,20 @@ dataset_dir=$1
 # remove_spaces.py
 
 # 2. collect files from subfolders
-./collect_files_from_subfolders.sh $dataset_dir
+mkdir $dataset_dir/train/labels
+find $dataset_dir/train/ -name "*.txt" -exec mv "{}" $dataset_dir/train/labels/ \;
+find $dataset_dir/train/ -name "*.jpg" -exec mv "{}" $dataset_dir/train/ \;
+
+mkdir $dataset_dir/test/labels
+find $dataset_dir/test/ -name "*.txt" -exec mv "{}" $dataset_dir/test/labels/ \;
+find $dataset_dir/test/ -name "*.jpg" -exec mv "{}" $dataset_dir/test/ \;
+
+mkdir $dataset_dir/validation/labels
+find $dataset_dir/validation/ -name "*.txt" -exec mv "{}" $dataset_dir/validation/labels/ \;
+find $dataset_dir/validation/ -name "*.jpg" -exec mv "{}" $dataset_dir/validation/ \;
+
+find $dataset_dir/ -depth -type d -empty -exec rmdir {} \;
+
 
 # 3. convert oi txt labels to pascal voc xml labels
 python3 oi_to_pascal_voc_xml.py --dataset_path $dataset_dir/

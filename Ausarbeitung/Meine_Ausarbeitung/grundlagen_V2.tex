@@ -2,12 +2,12 @@
 
 %####################  CHAPTER 1: Grundlagen  #################
 
-Im folgende Kapitel wird zunächst auf die Grundlegenden Techniken
- des Machine Learings, insbesondere auf die für die Bilderkennung 
-verwendeten Convolutional Neural Networks eingegangen.
+Das vorliegende Kaptitel beschreibt zunächst die Grundlagen des Machine 
+Learnings, mit Neuronalen Netzen allgemein und anschließend im 
+Einsatz des maschinellen Sehens.
 
-Anschließend wird es um die verwendete Hardware, den Neural 
-Compute Stick 2 un seine Anwendungen gehen.
+Desweiteren wird die für die Inferenz, verwendete Hardware, 
+der Neural Compute Stick 2 vorgestellt.
 
 
 %------------------- SECTION: Machine Learning ------------------
@@ -15,14 +15,14 @@ Compute Stick 2 un seine Anwendungen gehen.
 \section{Machine Learning}\label{sec:ml}
 
 Beim Machine Lerining, welches ein Teilgebiet der Computerwissenschafen
-ist, geht es um Algorithmen, die Zusammenhänge in großen Datenmengen 
-erkennen sollen, ohne expliziet darauf programmiert worden zu sein.
+ist, geht es um die Erstellung von Algorithmen, die Zusammenhänge in großen
+Datenmengen erkennen, ohne explizit darauf programmiert worden zu sein.
 
-Eine Form davon ist das \textit{Supervised Learning}, bei der das Programm 
-neben den Input Daten auch die Zugehörigen Ausgaben erhällt und daraus 
-dann die Regeln für Zusammenhänge herleiten soll.
+Eine Form davon ist das \textit{Supervised Learning}, bei dem das Programm 
+neben den Input Daten auch die Zugehörigen Ausgaben erhält und daraus 
+dann die Regeln für Zusammenhänge ableiten soll.
 Dadurch unterscheidet sich das Vorgehen wesentlich zur klassischen Programmierung,
-bei bei der die Regeln vorab definiert werden.
+bei bei der die Regeln vorab definiert werden müssen.
 
 \vspace{0.5cm}
 \begin{figure}[htb]
@@ -33,22 +33,27 @@ bei bei der die Regeln vorab definiert werden.
 \end{figure}
 \vspace{0.5cm}
 
-Das herleiten der Regeln erfolgt beim Machine Learning dabei in einem 
+
+
+Das ableiten der Regeln erfolgt beim Machine Learning in einem 
 iterativen Prozess, welcher als Training bezeichnet wird.
-Dabei soll eine math. Funktion, welche die Zusammenhänge beschreibt 
-numerisch angenähert werden. Ist der Zusammenhang linear, spricht man 
-von einer Regrassion, handelt es sich um Kategorische, liegt 
-ein Klassifizierung problem vor.
-\\
+Dabei werden die Zusammenhänge zwischen In- und Output Daten 
+als mathematische Funktion betrachtet, welche numerisch 
+angenähert wird.
+
+Bei einem linearen Zusammenhang, handelt es sich
+um eine Regression und bei einem kategorischen um 
+eine Klassifizierung.
+
+
 Weitere Formen neben dem \textit{Supervised Learning} sind das 
 \textit{Unsupervised Learning}, bei der das Programm keine Labels 
 erhällt, sondern diese durch Clustering Verfahren selber finden 
 soll, oder das \textit{Reinfocement Learning}, bei dem das Programm 
 mit der Umwelt interagieren soll.
 \\
-Da hier jedoch ausschließlich mit dem Supervised Learing gearbeitet
-wurde, werden diese Techniken nicht näher erläutert.
-
+Diese techniken wurden in der Bachelor Arbeit nicht verwendet 
+und werden daher nicht näher erläutert.
 
 %------------------- SECTION: Neuronale Netze -------------------
 
@@ -72,13 +77,14 @@ gefunden werden.
 \end{figure}
 
 
-Die richtige einstellung der Gewichte, welche zunächst zufällig initialisiert werden, 
+Die richtige Einstellung der Gewichte, welche zunächst zufällig initialisiert werden, 
 erfolgt dabei im Trainingsprozess, welcher in \ref{fig:train} schematisch
- dargestellt ist und sich in die drei Schritte:
+ dargestellt ist aus folgenden drei Schritten besteht.
+
 \begin{itemize}
-    \item Feed Forward anhand aktueller Gewichte vorhersage aus den Inputs treffen
-    \item Lossfuction Abweichung zu tatsächlichen werten bestimmen
-    \item Backpropagation minimierung der Fhlerfunktion durch anpassung der Gewichte
+    \item \textit{Forward Pass} anhand aktueller Gewichte vorhersage aus den Inputs treffen
+    \item \textit{Fehlerbestimmung} Abweichung zum tatsächlichen werten berechnen
+    \item \textit{Backpropagation} minimierung der Fehlerfunktion durch Anpassung der Gewichte
 \end{itemize}
 
 \begin{figure}[htb]
@@ -89,16 +95,18 @@ erfolgt dabei im Trainingsprozess, welcher in \ref{fig:train} schematisch
     \caption{Trainingsablauf NN}
 \end{figure}
 
-Durch häufiges wiederholen dieser Schritte kann die Fehlerfunktion soweit minimiert werde, 
-dass das Modell auch für neue Input Daten die richtigen Aussagen treffen kann.
+Durch merhfaches durchlaufen der Schritte wird die Fehlerfunktion soweit minimiert, 
+sodass das Modell auch für neue Input Daten die richtigen Aussagen treffen kann.
 
 
-\subsubsection{Vorwärts}
-Im Vorwärtsdurchgang wird der Input durch alle Schichten hindurch 
+\subsubsection{Forward Pass}
+Im \textit{Forward Pass} werden die Inputs durch alle Schichten hindurch 
 gereicht, um in der letzten Schicht den gewünschten Output zu liefern.
-Dabei erhält jedes Neuron wie in \ref{fig:neuron} dargestellt, die Ausgabewerte
-aller Neuronen der vorherigen Schicht, summiert diese auf und übergibt den Wert
-an eine Aktivierungsfunktion, die den Wert auf einen bestimmten Bereich skaliert.
+Dabei erhält jedes Neuron die mit $w_{i}$ gewichteten Ausgabewerte aller
+Neuronen der vorherigen Schicht und summiert diese zusammen mit einem konstanten 
+Bias Wert $b$ auf. 
+Mithilfe einer Aktivierungsfunktion wird der Wert auf eienen bestimmenten Bereich 
+skalliert \ref{fig:neuron}
 
 
 \begin{figure}[h]
@@ -110,22 +118,23 @@ an eine Aktivierungsfunktion, die den Wert auf einen bestimmten Bereich skaliert
 
 
 
+Um den Forward Pass für eine gesmmte Schicht, besthend aus 
+einer Vielzahl an Neuronen, zu berechnen, werden die Schichten 
+als Vektren und die Gewichte als Mtrizen dargestellt.
+\\
+Die Matrixmultiplikation aus dem Vektor der vorherigen 
+Schicht $x$ der Gecwichtsmatrix $W$ ergibt die Werte des Vektors 
+der aktuellen Schicht,
 
-
-
-Die Berechnung des Vorwärtsdurchgangs einer ges Schicht aus Neuronen
-als Vektor $z$ dargestellt, erfolgt wie in \cite{goodfellowDeepLearning2016a}
-beschrieben, über die Matrixmultiplikation des Vektors
-$x$ der vorherigen Schicht mit der Gewichtsmatrix $W$.
 
 \begin{equation}
     \label{eq:forward}
     z = W^{T}x+b
 \end{equation}
 
-und wird anschließend elementweise einer nichtlinearen Aktivierungsfunktion
-$g(z)$ übergeben.\\
-Für Hidden Schichten wird dabei üblicherweisse in \ref{eq:relu} dargestellte
+welcher anschließend elementweise einer nichtlinearen Aktivierungsfunktion
+$g(z)$ übergeben wird.\\
+Für mittlere Schichten wird dabei oft die in \ref{eq:relu} dargestellte
 \textit{ReLU} verwendet eine Funktion die negative Werte zu 0 setzt.
 
 \begin{equation}
@@ -134,31 +143,35 @@ Für Hidden Schichten wird dabei üblicherweisse in \ref{eq:relu} dargestellte
 \end{equation}
 
 Da die Ausgabe meist einen Wahrscheinlichkeites Wert zwischen 0 und 1 
-haben soll wird für die letzte Schicht bei einer binären Klassifikation 
-die \textit{Sigmoid} Funktion \ref{eq:sidmoid}
+Um für die Outputs einen Wahrscheinlichkeits Wert zwischen 0 und 1 
+zu erhalten, wird an der Ausgabeschicht für eine binäre Klassifikation 
+die Sigmoid Funktion (\ref{eq:sidmoid}) verwendet,
+welche S-Förmig zwischne 0 und 1 verläuft.
 
 \begin{equation}
     \label{eq:sidmoid}
     g(z) = \frac{1}{1 + e^{-x}}
 \end{equation}
 
-verwendet und für kategorische Ausgaben die \textit{Softmax} \ref{eq:softmax}
-Funktion.
+
+Für eine Kategorische Ausgabe mit mehr als zwei Werten wird 
+die Softmax (\ref{eq:softmax}) Funktion verwendet, welche eine Wahrscheinlichkeits 
+Verteilung über alle Ausgebe Neuronen generiert.
+
 \begin{equation}
     \label{eq:softmax}
     g(z) = \frac{e^{z}}{\sum e^{x}}
 \end{equation}
 
 
-
-\subsubsection{Fehlerfunktion}
+\subsubsection{Fehlerbestimmung}
 Die Abweichung der Schätzung, welche an den Neuronen der letzen Schicht 
-vorliegen, zu den tatsächlichen Werten, den Labels, wird mithilfe geeigneter 
-Fehlerfunktion bestimmt. Für Ragression z.B. abs oder rms und für Kategorisch
-häufig logarithmisch.
+vorliegen, zu den tatsächlichen Werten, den Labels, wird mithilfe einer geeigneten
+Fehlerfunktion bestimmt. Für die lineare Regression wird dabei z.B. 
+der absolute oder quadratischen Abstand verwendet, für ein 
+Klassifizierungs Modell ist jedoch eine logarithmische Fehlerberechnung 
+mit der Cross Entropy Funktion, in \ref{eq:crossentropy} dargestellt effektiver.
 
-hier am beispiel einer binären klassifikation (erg 0 oder 1) mit log loss
- (crossentropy) dargestellt.
 
  \begin{equation}
     \label{eq:crossentropy}
@@ -171,29 +184,28 @@ tatsächlichen Wert $\hat{y}$ abweicht.
 
 
 \subsubsection{Backpropagation}
-Durch berechnung des Gradienten der Fehlerfunktion kann ermittelt 
-werden in welche Richtung die Gewichte angepasst werden müssen, sodass sie sich 
+
+Durch Berechnung des Gradienten der Fehlerfunktion kann ermittelt 
+werden in welche Richtung die Gewichte angepasst werden müssen, sodass diese sich 
 im nächsten Durchgang minimiert.
-Dafür wird die die Fehlerfunktion für jede Schicht partiell nach den 
-Gewichten abgeleitet, was wie in gl. \ref{eq:backprop} dargestellt mithilfe der 
-Kettenregel für die Aktivierungsfunktion geschieht.
+
+Dafür wird die die Fehlerfunktion $L$ für jede Schicht partiell nach den 
+Gewichten $w$ abgeleitet, was wie in gl. \ref{eq:backprop} dargestellt mithilfe der 
+Kettenregel über die Aktivierungsfunktion $z$ geschieht.
 
 
 \begin{equation}
     \label{eq:backprop}
     \frac{\partial L}{\partial w} = \frac{\partial L}{\partial z}\frac{\partial z}{\partial w}
 \end{equation}
-Damit werden die Gewichte dann nach Gleichung \ref{eq:update_wieghts} angepasst.
+Mit dem ermittelten Gradienten werden dann die Gewichte nach Gleichung \ref{eq:update_wieghts} angepasst.
 \begin{equation}
     \label{eq:update_wieghts}
     w  \leftarrow w - \eta \frac{\partial L}{\partial w}
 \end{equation}
 
-wobei die \textit{Leariningrate} $\eta$ die Schrittweite mit der die Anpassung vorgenommen
-werden soll angibt.
-
-
-
+wobei die \textit{Lernrate} $\eta$ die Schrittweite ist, mit der die
+Anpassungen vorgenommen werden.
 
 
 
@@ -202,40 +214,44 @@ werden soll angibt.
 %------------------- SUBSECTION: Validierung -------------------
 \subsection{Validierung und Overfitting}\label{subsec:validation}
 
-um überprüfen zu können ob ein Modell die Trainingsdaten tatsächlich generalisiert 
-hat, dh auch für neue daten anwendbar ist, oder diese nur auswendig gelernt hat, 
-wird häufig der Datensatz in einen Trainingsanteil und einen Testanteil aufgeteilt.
+Um überprüfen zu können, ob und wie gut ein Modell die Zusammenhänge
+in den Trainingsdaten generalisiert hat, dh auch für neue Daten
+anwendbar ist,
+wird der Datensatz in einen Trainings- und einen Testdatensatz aufgeteilt.
 
-Mit dem Testdatensatz wird dann schon wärend des Trainings regelmäßig zwischen geprüft, 
-veringert sich irgendwann nur noch der fehler der trainingsdaten, findet overfitting statt.
+Während des Trainings wird für beide Sätze der Fehler berechnet, 
+die korrektur der Gewichte mittels Backpropagation erfolgt
+jedoch nur anhand der Trainingsdaten.
 
-% \begin{figure}[htb]
-%     \centering
-%     \input{Bilder/plot.tex}
-%     \caption{irgend ein plot}
-%     \label{fig:ptl}
-% \end{figure}
+Entsteht eine Abweichung der beiden Fehlerfunktion wie in 
+[plot overfitting] dargestellt, findet eine Überanpassung 
+an die trainingsdate \textit{Overfitting} statt.
 
-Häufig sind zu wenige Trainingsdaten oder zu komplexe/überparametrisierte
- Modelle und damit zuviele freiheitsgrade, grund für overfitting.
+Gründe dafür sind zu wenig Trainingsdaten oder ein zu komplexes Model, 
+welches sich ähnlich einer polynomialen Funktion mit hohem Grad 
+an jeden datenpunkt anpassen kann, damit kein generalisierbare 
+Aussage für neue Daten mehr getroffen werden kann.
 
-% hier plots von linie durch datenpunkte
+
+\begin{figure}[htb]
+    \centering
+    \includegraphics[width=0.8\textwidth]{over_under_fit.png}
+    \caption{Quelle: \cite{deshpGuideImprovingDeep2017a}}
+    \label{fig:over_under_fit}
+\end{figure}
 
 % Overfitting -> hohe varianz: varianz = train_err - test_error
 % Underfitting -> hoher Bias: Bias = 
 
-Techniken um Overfitting zu vermeiden sind z.B.
-\begin{itemize}
-    \item Augmentierung der Daten
-    \item Regularisierung der Parameter (L1/L2)
-    \item Dropout
-    \item early stopping
-\end{itemize}
-
+Um Overfitting, auch wenn nicht mehr Trainingsdaten 
+zur Verfügung stehen zu vermeiden, gibt es verschiedene
+Techniken:\\\\
+\textit{Augmentierung}\\
 Bei Augmentierung werden aus den vorhandenen Daten künstlich mehr 
 Daten generiert, in dem an den Bildern geometrische transformationen 
 oder manipulationen der pixelwerte vorgenommen werden.
-\\
+\\\\
+\textit{Regularisierung der Parameter (L1/L2)}\\
 Bei Regularisierung wird an die Lossfuction als weiterer Term
  eine aufsummierung der Gewichte gehängt, wodurch diese bei der Minimierung 
   klein gehalten werden, wodurch weniger potential zur überanpassung da ist.
@@ -243,21 +259,22 @@ Bei Regularisierung wird an die Lossfuction als weiterer Term
     \label{eq:regularization}
     J(w) = E + \lambda \sum_{i} w_{i}^{2}
 \end{equation}
-
+\textit{Dropout}\\
 Beim Dropout werden zufällig gewichte zu 0 gesetzt.
-\\
-early stopping: stoppen des trainings, wenn sich overfitting einstellt.
+\\\\
+\textit{Early Stopping}\\
+stoppen des trainings, wenn sich overfitting einstellt.
 
 
 
 \section{Computer Vision}
 
-was ist Computer Vision, einordnung in ML
+Deep Learning + Techniken der Bildverarbeitung
 
 %---------------- SUBSECTION: Convolutional ----------------
 \subsection{Convolutional Neural Networks}\label{subsec:cnn}
 
-Für die Bilderkennung werden typischerweise Convolutionael 
+Für die Bilderkennung werden üblicherweise Convolutionael 
 Neural Networks (CNNs) verwendet. Hierbei handelt es sich um eine Erweiterung
 der in \ref{sec:nn} beschriebenen Neuronalen Netze. Beim CNN 
 sollen vor der Klassifikation, Merkemale des Input Bildes,
@@ -303,10 +320,10 @@ Faltung zustande kommende räumliche invarianz für das zu erkennende
 Objekt auf dem Bild.
 \\
 Um die Features, welche insbesondere in den vordersten ConvLayern für 
-alle klassen sehr ähnlich sind, nicht bei jedem Modell von grund auf 
+alle klassen sehr ähnlich sind, nicht bei jedem Modell
 neu lernen zu müssen, wird häufig \textit{Transfer Learing} angewendet, 
 d.h. es werden die auf ein allg Datenset wie z.B. ImageNet vortrainierten
-Gewichte verwendet und müssen so nur noch leicht für den eigenen Datensatz 
+Gewichte verwendet und müssen so nur noch etwas für den eigenen Datensatz 
 fine getuned werden.
 
 

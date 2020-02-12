@@ -107,8 +107,19 @@ kann verwendet werden, wenn beide im Gleichen Netzwerk sind.
 
 ## Mobiles Internet
 
-### Huawei E3531 SurfStick
-
 [Huawei E3531 SurfStick](https://www.amazon.de/gp/product/B00HSZEY34/ref=ppx_yo_dt_b_asin_title_o00_s00?ie=UTF8&psc=1)
-am Rasperry [einrichten](https://tutorials-raspberrypi.de/raspberry-pi-gsm-modul-mobiles-internet/) 
+
+
+1. prüfen ob stick erkannt wird:
+```bash
+lsudb
+```
+ausgabe:
+```
+Bus 001 Device 004: ID 12d1:14dc Huawei Technologies Co., Ltd. E33372 LTE/UMTS/GSM HiLink Modem/Networkcard
+```
+
+2. Browser öffnen und auf 129.168.8.1 gehen
+
+3. Pin eingeben (Pin prüfung deaktivieren)
 

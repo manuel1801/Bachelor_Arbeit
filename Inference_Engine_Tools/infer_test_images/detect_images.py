@@ -39,6 +39,8 @@ class InferenceModel:
         if img_info_input_blob:
             feed_dict[img_info_input_blob] = [h, w, 1]
 
+        del net
+
         return ExecInferModel(exec_net, input_blob, out_blob, feed_dict, n, c, h, w, num_requests, labels)
 
 
@@ -79,7 +81,7 @@ class ExecInferModel:
                     ymax = int(obj[6] * height)
 
                     class_id = int(obj[1])
-                    color = (0, 80, 255)
+                    color = (255, 0, 0)
                     cv2.rectangle(image, (xmin, ymin),
                                   (xmax, ymax), color, 2)
 

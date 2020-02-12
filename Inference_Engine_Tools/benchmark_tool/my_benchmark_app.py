@@ -38,13 +38,15 @@ assert os.path.isfile(model_bin)
 assert os.path.isfile(model_xml)
 
 
-print('select infer requests')
+print('select infer requests (0 für synchron)')
 infer_req = int(input())
 
 ie = IECore()
 net = IENetwork(model=model_xml, weights=model_bin)
 
-if infer_req == 1:
+fps_50 = 0
+
+if infer_req == 0:
 
     print('starting sync with 1 requests')
 
@@ -74,6 +76,9 @@ if infer_req == 1:
         feed_dict[input_blob] = image
         exec_net.start_async(request_id=0, inputs=feed_dict)
 
+        if iterations == 50:
+            fps_50 = fps
+
         if exec_net.requests[0].wait(-1) == 0:
             res = exec_net.requests[0].outputs[output_blop]
             infered_images += 1
@@ -81,7 +86,7 @@ if infer_req == 1:
             print('FPS: ', fps,
                   end='\r', flush=True)
 
-    print(fps)
+    print('FPS at 50: ', fps_50, 'fps at 100: ', fps)
 
 else:
 
@@ -100,7 +105,8 @@ else:
             infered_images += 1
             fps = str(infered_images / (time.time() - t_start))
             print('FPS: ', fps, end='\r', flush=True)
-
+        if len(test_images) == 50:
+            fps_50 = fps
         if not test_images:
             break
-    print(fps)
+    print('FPS at 50: ', fps_50, 'fps at 100: ', fps)

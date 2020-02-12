@@ -26,8 +26,8 @@ for model in ['Animals/faster_rcnn_inception_v2']:
     net = IENetwork(model=model_xml, weights=model_bin)
 
     # for infer_req in reversed(range(5)):
-    for _ in range(5):
-        infer_req = 4
+    for infer_req in range(5):
+        #infer_req = 4
 
         if infer_req == 0:
 

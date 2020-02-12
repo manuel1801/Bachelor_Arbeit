@@ -28,3 +28,10 @@ Animals/faster_rcnn_inception_v2, infer req 1: Fps 0.5502666158794535
 Animals/faster_rcnn_inception_v2, infer req 2: Fps 0.6274575614866689
 Animals/faster_rcnn_inception_v2, infer req 3: Fps 0.69460403125844995
 Animals/faster_rcnn_inception_v2, infer req 4: Fps 0.71058982253143197
+
+0->4 (50)
+Animals/faster_rcnn_inception_v2, infer req 0: Fps 0.5490016007747309
+Animals/faster_rcnn_inception_v2, infer req 1: Fps 0.5515657369909969
+Animals/faster_rcnn_inception_v2, infer req 2: Fps 0.62250604968595147
+Animals/faster_rcnn_inception_v2, infer req 3: Fps 0.67496681896767664
+Animals/faster_rcnn_inception_v2, infer req 4: Fps 0.6928507245919291

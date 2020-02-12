@@ -59,8 +59,7 @@ sudo systemctl status my_init.service
 
 ### a) SCP über remote SSH
 
-Auf [remot3.it](https://remote.it/) registrieren oder einloggen:
-
+#### Auf Gerät an das Daten gesendet werden sollen (hier Linux):
 
 1. **remoteit** installieren
 ```bash
@@ -86,11 +85,25 @@ einloggen oder neuen [account](https://remote.it/) anlegen.
 
 (bei anderen namen muss in main.py angepasst werden)
 
+#### Verbindung testen (auf Raspberry)
 
+in /home/pi/Bachelor_Arbeit/Connection/remote_it/connection_ssh_test.py 
+
+```python
+user = ''
+password = ''
+```
+von angemeldeten gerät angeben und Script ausführen.
 
 
 
 ### b) Sockt über Tcp
+
+Varient aus ~/Bachelor_Arbeit/Application_Raspberry/mit_sockets/
+kann verwendet werden, wenn beide im Gleichen Netzwerk sind.
+
+
+
 
 ## Mobiles Internet
 

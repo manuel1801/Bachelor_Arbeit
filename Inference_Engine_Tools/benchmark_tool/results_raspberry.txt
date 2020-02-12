@@ -40,8 +40,21 @@ Animals/faster_rcnn_inception_v2, infer req 4: Fps 0.57954963752582254
 
 
 4 -> 4 -> 4 -> 4 (iter: 50)
+Animals/faster_rcnn_inception_v2, infer req 4: Fps 0.71430520294476695
+Animals/faster_rcnn_inception_v2, infer req 4: Fps 0.6716495923948782
+Animals/faster_rcnn_inception_v2, infer req 4: Fps 0.63820098029475515
+Animals/faster_rcnn_inception_v2, infer req 4: Fps 0.6392404151534494
+Animals/faster_rcnn_inception_v2, infer req 4: Fps 0.6311343165798231
 
 
 4 -> 4 -> 4 -> 4 (iter: 100)
+
+ my_benchmark_app_auto.py 
+Animals/faster_rcnn_inception_v2, infer req 4: Fps 0.6274319500152194
+Animals/faster_rcnn_inception_v2, infer req 4: Fps 0.5891118584007918
+Animals/faster_rcnn_inception_v2, infer req 4: Fps 0.58537975403288867
+Animals/faster_rcnn_inception_v2, infer req 4: Fps 0.57849401035572385
+Animals/faster_rcnn_inception_v2, infer req 4: Fps 0.57058215167221367
+
 
 

@@ -4,7 +4,6 @@ import connection_ssh as connection
 
 user = 'manuel'
 password = 'animalsdetection'
-puplic_ip = '129.143.140.51'
 
 if user == 'pi':
     file = '/home/manuel/Bachelor_Arbeit/Connection/remote_it/test.jpg'

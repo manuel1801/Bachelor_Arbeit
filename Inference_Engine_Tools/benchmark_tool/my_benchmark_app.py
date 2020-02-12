@@ -9,7 +9,7 @@ test_image = cv2.imread(os.path.join(
     workspace_dir, 'Inference_Engine_Tools/benchmark_tool/car.png'))
 models_dir = os.path.join(workspace_dir, 'openvino_models')
 
-iterations = 100
+iterations = 200
 
 
 print('select model')
@@ -44,7 +44,7 @@ infer_req = int(input())
 ie = IECore()
 net = IENetwork(model=model_xml, weights=model_bin)
 
-fps_50 = 0
+fps_all = {}
 
 if infer_req == 0:
 
@@ -76,17 +76,20 @@ if infer_req == 0:
         feed_dict[input_blob] = image
         exec_net.start_async(request_id=0, inputs=feed_dict)
 
-        if iterations == 50:
-            fps_50 = fps
+        if (i+1) % 50 == 0:
+            print('saving: ')
+            fps_all[i+1] = fps_current
 
         if exec_net.requests[0].wait(-1) == 0:
             res = exec_net.requests[0].outputs[output_blop]
             infered_images += 1
-            fps = str(infered_images / (time.time() - t_start))
-            print('FPS: ', fps,
+            fps_current = str(infered_images / (time.time() - t_start))
+            print('FPS: ', fps_current,
                   end='\r', flush=True)
 
-    print('FPS at 50: ', fps_50, 'fps at 100: ', fps)
+    for it, fps in fps_all.items():
+        print('At iter: ', it, ' FPS: ', fps)
+
 
 else:
 
@@ -103,10 +106,11 @@ else:
         results = exec_model.infer_frames(test_images)
         for res in results:
             infered_images += 1
-            fps = str(infered_images / (time.time() - t_start))
-            print('FPS: ', fps, end='\r', flush=True)
-        if len(test_images) == 50:
-            fps_50 = fps
-        if not test_images:
+            fps_current = str(infered_images / (time.time() - t_start))
+            print('FPS: ', fps_current, end='\r', flush=True)
+        if (infered_images + 1) % 50 == 0:
+            fps_all[infered_images + 1] = fps_current
+        if infered_images == iterations:
             break
-    print('FPS at 50: ', fps_50, 'fps at 100: ', fps)
+    for it, fps in fps_all.items():
+        print('At iter: ', it, ' FPS: ', fps)

@@ -57,4 +57,11 @@ Animals/faster_rcnn_inception_v2, infer req 4: Fps 0.57849401035572385
 Animals/faster_rcnn_inception_v2, infer req 4: Fps 0.57058215167221367
 
 
+ausführung mit pause:
+starting async with  4  requests
+FPS at 50:  0.7046745053850237 fps at 100:  0.7202497990078022
+FPS at 50:  0.6724887728331849 fps at 100:  0.6760107487608716
+
+
+
 

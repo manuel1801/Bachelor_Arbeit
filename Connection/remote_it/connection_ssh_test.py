@@ -21,8 +21,6 @@ else:
     my_device = 'ssh-Pc'
 
 
-sleep(10)
-
 conn = connection.SSHConnect()
 conn.login()
 addr = conn.get_device_adress(device_name=my_device)

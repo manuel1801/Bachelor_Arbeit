@@ -9,6 +9,7 @@ class SSHConnect:
         self.developer_key = dev_key
         self.token = None
         self.public_ip = requests.get('https://api.ipify.org').text
+        #self.public_ip = '129.143.140.51'
 
     def login(self, remote_it_user='animals.detection@gmail.com', remote_it_pw='animalsdetection'):
         headers = {
@@ -57,8 +58,8 @@ class SSHConnect:
         body = {
             "deviceaddress": device_address,
             "wait": "true",
-            # "hostip": self.public_ip
-            "hostip": requests.get('https://api.ipify.org').text
+            "hostip": self.public_ip
+            # "hostip": requests.get('https://api.ipify.org').text
         }
 
         url = "https://api.remot3.it/apv/v27/device/connect"
@@ -126,12 +127,17 @@ class SSHConnect:
 def main():
 
     conn = SSHConnect()
+    print(conn.public_ip)
     conn.login()
     addr = conn.get_device_adress(device_name='ssh-Pi')
-    server, port, con_id = conn.connect(addr)
-    print(addr)
-    print(server, port, con_id)
-    conn.send(server, port, 'manuel', 'animalsdetection', '/home/manuel/Bachelor_Arbeit/Connection/remote_it/test.jpg',
+    ret = conn.connect(addr)
+    print(ret)
+    if ret:
+        server, port, con_id = ret
+
+    # print(addr)
+    # print(server, port, con_id)
+    conn.send(server, port, 'pi', 'animalsdetection', '/home/manuel/Bachelor_Arbeit/Connection/remote_it/test.jpg',
               '/home/pi/Bachelor_Arbeit/Connection/remote_it/received')
     conn.disconnect(addr, con_id)
 

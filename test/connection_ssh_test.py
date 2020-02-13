@@ -32,11 +32,10 @@ addr = conn.get_device_adress(device_name=my_device)
 print('TEST: got address')
 
 conn_ret = conn.connect(device_address=addr)
-
 if conn_ret:
     print('TEST: connected sucessfully')
     print(conn_ret)
-    server, port, device_id = conn_ret
+    server, port, conn_id = conn_ret
     print('sendign file 1')
     conn.send(server, port, user, password, file, path)
     conn.disconnect(addr, conn_id)
@@ -44,13 +43,14 @@ if conn_ret:
 else:
     print('TEST: connected errot')
 
+conn_ret = conn.connect(device_address=addr)
 if conn_ret:
     print('TEST: connected sucessfully')
     print(conn_ret)
-    server, port, device_id = conn_ret
+    server, port, conn_id = conn_ret
     print('sendign file 1')
     conn.send(server, port, user, password, file2, path)
-    print('sendign file 1'
+    print('sendign file 1')
     conn.send(server, port, user, password, file3, path)
     conn.disconnect(addr, conn_id)
 

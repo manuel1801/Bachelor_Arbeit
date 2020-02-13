@@ -43,8 +43,8 @@ if conn.login(remote_it_user='animals.detection@gmail.com',
 
 buffer_size = 200    # zum zwischen speichern wenn infer langsamer stream
 infer_requests = 3   # für parallele inferenzen
-view_results = True  # für raspi ohne monitor auf False
-threshhold = 0.6     # Für Detections
+view_results = False  # für raspi ohne monitor auf False
+threshhold = 0.5     # Für Detections
 send_all_every = 60  # sec
 
 models_dir = os.path.join(workspace_dir, 'openvino_models')
@@ -63,8 +63,8 @@ for dataset in os.listdir(models_dir):
                 print(i, dataset, model)
                 i += 1
 
-model_ind = int(input())
-# model_ind = 4  # für autostart model ind hier festlegen
+#model_ind = int(input())
+model_ind = 8  # für autostart model ind hier festlegen
 print(selected_model[model_ind], ' selected')
 
 model_xml = os.path.join(

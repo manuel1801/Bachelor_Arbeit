@@ -8,7 +8,8 @@ class SSHConnect:
     def __init__(self, dev_key='NEU3RTVFNEMtNjRGRi00MzBFLUIyNTgtOUVFQjRGMjcxOTRB'):
         self.developer_key = dev_key
         self.token = None
-        self.public_ip = requests.get('https://api.ipify.org').text
+        #self.public_ip = requests.get('https://api.ipify.org').text
+        self.public_ip = '129.143.140.51'
 
     def login(self, remote_it_user='animals.detection@gmail.com', remote_it_pw='animalsdetection'):
         headers = {

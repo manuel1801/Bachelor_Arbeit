@@ -1,6 +1,7 @@
 import cv2
 import os
 import connection_ssh as connection
+from time import sleep
 
 user = 'manuel'
 password = 'animalsdetection'
@@ -19,6 +20,8 @@ else:
     path = '/home/manuel/Bachelor_Arbeit/Connection/remote_it/received'
     my_device = 'ssh-Pc'
 
+
+sleep(10)
 
 conn = connection.SSHConnect()
 conn.login()

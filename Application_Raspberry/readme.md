@@ -7,9 +7,10 @@
 ```bash
 cd <workspce_dir>
 source /opt/intl/openvino/bin/setupvars.sh
-/usr/bin/python3 main.py
+/usr/bin/python3 -u main.py
 cd /
 ```
+(mit -u werden ausgaben von main.py in status von service angezeigt)
 
 
 
@@ -25,6 +26,8 @@ Description=init
 After=multi-user.target
 
 [Service]
+User=pi
+Group=pi
 Type=idle
 ExecStart=bash /path/to/launcher.sh &
 

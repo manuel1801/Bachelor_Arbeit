@@ -25,34 +25,31 @@ conn = connection.SSHConnect()
 conn.login()
 addr = conn.get_device_adress(device_name=my_device)
 
+print('try to connect with: ', conn.public_ip)
 ret = conn.connect(
     device_address=addr)
 
-if not ret:
-    print('connection error')
-    exit()
+if ret:
+    server, port, device_id = ret
+    print('connected: ', server, port, device_id)
+    conn.send(server, port, user, password, file=file, path=path)
+    print('send file1')
+    conn.send(server, port, user, password, file=file2, path=path)
+    print('send file2')
+    conn.disconnect(addr, device_id)
+    print('disconnected')
 
-server, port, device_id = ret
-
-print('connected: ', server, port, device_id)
-conn.send(server, port, user, password, file=file, path=path)
-print('send file1')
-conn.send(server, port, user, password, file=file2, path=path)
-print('send file2')
-conn.disconnect(addr, device_id)
-print('disconnected')
+else:
+    print('conn err 1')
 
 ret = conn.connect(
     device_address=addr)
 
-if not ret:
-    print('connection error')
-    exit()
-
-server, port, device_id = ret
-
-print('connected: ', server, port, device_id)
-conn.send(server, port, user, password, file=file3, path=path)
-print('send file3')
-conn.disconnect(addr, device_id)
-print('disconnected')
+if ret:
+    server, port, device_id = ret
+    print('connected: ', server, port, device_id)
+    conn.send(server, port, user, password, file=file3, path=path)
+    print('send file3')
+    conn.disconnect(addr, device_id)
+    print('disconnected')
+print('conn err 2')

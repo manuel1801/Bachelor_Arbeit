@@ -56,12 +56,11 @@ infer_images_list = [
 ]
 
 # set maximum number for each dataset
-max_images = 500
+max_images = 1000
 
 # select specific model (if None all frome models_dir will be taken)
 select_model = None
-#select_model = 'ssd_mobilenet_v2'
-exclude_model = 'faster_rcnn_inception_v2_4000'
+exclude_model = None
 
 
 def get_image_paths(imgs_dir, max_images=None):

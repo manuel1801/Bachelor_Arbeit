@@ -126,3 +126,24 @@ Bus 001 Device 004: ID 12d1:14dc Huawei Technologies Co., Ltd. E33372 LTE/UMTS/G
 
 3. Pin eingeben (Pin prüfung deaktivieren)
 
+als standart Verbindung fenstlegen:
+```bash
+route -n # aktuelle metrik rausfinden
+```
+```bash
+ifmetric eth1 100 # niedriger als die anderen für höhere proi
+```
+
+für permant:  
+in
+```bash
+sudo nano /etc/dhcpcd.conf
+```
+hinzufügen:
+
+
+```bash
+interface eth1
+metric 350
+static ip_address=192.168.8.1
+```

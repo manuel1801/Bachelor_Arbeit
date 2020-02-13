@@ -37,6 +37,15 @@ assert os.path.isdir(handy_videos)
 handy_videos = os.path.join(dataset_dir, 'handy_videos/frames')
 assert os.path.isdir(handy_videos)
 
+labels = ['Brown_bear',
+          'Deer',
+          'Fox',
+          'Goat',
+          'Hedgehog',
+          'Owl',
+          'Rabbit',
+          'Raccoon',
+          'Squirrel']
 
 # select dataset by commenting out
 infer_images_list = [
@@ -105,12 +114,6 @@ model_dir = os.path.join(models_dir, model)
 model_xml = os.path.join(model_dir, 'frozen_inference_graph.xml')
 model_bin = os.path.join(model_dir, 'frozen_inference_graph.bin')
 
-
-if os.path.isfile(os.path.join(model_dir, 'classes.txt')):
-    labels = [l.strip() for l in open(os.path.join(
-        model_dir, 'classes.txt')).readlines()]
-else:
-    labels = None
 
 exec_model = infer_model.create_exec_infer_model(
     model_xml, model_bin, labels, num_requests=3)

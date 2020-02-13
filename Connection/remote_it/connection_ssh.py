@@ -9,7 +9,7 @@ class SSHConnect:
         self.developer_key = dev_key
         self.token = None
         self.public_ip = requests.get('https://api.ipify.org').text
-        #self.public_ip = '129.143.140.51'
+        #self.public_ip = '123.456.789'
 
     def login(self, remote_it_user='animals.detection@gmail.com', remote_it_pw='animalsdetection'):
         headers = {
@@ -63,13 +63,9 @@ class SSHConnect:
         }
 
         url = "https://api.remot3.it/apv/v27/device/connect"
-        try:
-            conn_resp = requests.post(
-                url, data=json.dumps(body), headers=headers)
-        except Exception as e:
-            print('exception during connection: ', e)
-            return False
 
+        conn_resp = requests.post(
+            url, data=json.dumps(body), headers=headers)
         conn_resp = conn_resp.json()
 
         if conn_resp['status'] == 'false':

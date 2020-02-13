@@ -8,9 +8,7 @@ class SSHConnect:
     def __init__(self, dev_key='NEU3RTVFNEMtNjRGRi00MzBFLUIyNTgtOUVFQjRGMjcxOTRB'):
         self.developer_key = dev_key
         self.token = None
-        #self.public_ip = requests.get('https://api.ipify.org').text
-        #self.public_ip = '129.143.140.51'
-        self.public_ip = '82.113.98.26'
+        self.public_ip = requests.get('https://api.ipify.org').text
 
     def login(self, remote_it_user='animals.detection@gmail.com', remote_it_pw='animalsdetection'):
         headers = {
@@ -59,7 +57,8 @@ class SSHConnect:
         body = {
             "deviceaddress": device_address,
             "wait": "true",
-            "hostip": self.public_ip
+            # "hostip": self.public_ip
+            "hostip": requests.get('https://api.ipify.org').text
         }
 
         url = "https://api.remot3.it/apv/v27/device/connect"

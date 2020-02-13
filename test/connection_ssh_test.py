@@ -7,17 +7,17 @@ user = 'manuel'
 password = 'animalsdetection'
 
 if user == 'pi':
-    file = '/home/manuel/Bachelor_Arbeit/Connection/remote_it/test.jpg'
-    file2 = '/home/manuel/Bachelor_Arbeit/Connection/remote_it/test2.jpg'
-    file3 = '/home/manuel/Bachelor_Arbeit/Connection/remote_it/test3.jpg'
-    path = '/home/pi/Bachelor_Arbeit/Connection/remote_it/received/'
+    file = '/home/manuel/Bachelor_Arbeit/test/test.jpg'
+    file2 = '/home/manuel/Bachelor_Arbeit/test/test2.jpg'
+    file3 = '/home/manuel/Bachelor_Arbeit/test/test3.jpg'
+    path = '/home/pi/Bachelor_Arbeit/test/received/'
     my_device = 'ssh-Pi'
 
 else:
-    file = '/home/pi/Bachelor_Arbeit/Connection/remote_it/test.jpg'
-    file2 = '/home/pi/Bachelor_Arbeit/Connection/remote_it/test2.jpg'
-    file3 = '/home/pi/Bachelor_Arbeit/Connection/remote_it/test3.jpg'
-    path = '/home/manuel/Bachelor_Arbeit/Connection/remote_it/received'
+    file = '/home/pi/Bachelor_Arbeit/test/test.jpg'
+    file2 = '/home/pi/Bachelor_Arbeit/test/test2.jpg'
+    file3 = '/home/pi/Bachelor_Arbeit/test/test3.jpg'
+    path = '/home/manuel/Bachelor_Arbeit/test/received'
     my_device = 'ssh-Pc'
 
 

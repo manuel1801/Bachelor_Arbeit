@@ -10,12 +10,12 @@ from datetime import datetime
 
 
 # Settings:
-# import picamera.array
-# import picamera
+import picamera.array
+import picamera
 
 
 password = 'animalsdetection'
-raspi = False
+raspi = True
 
 if raspi:
     workspace_dir = '/home/pi/Bachelor_Arbeit/'
@@ -166,12 +166,6 @@ while True:
             motion_frames = []
             no_detections = 0
 
-            # Send all current Detections
-        if (time.time() - send_time) > send_all_every:
-            send_time = time.time()
-            if exec_model.save_all(output_dir):
-                send_request = True
-
         # Send saved frames to remote Devices
         if not device_address:  # kein adresse zu senden
             continue
@@ -194,6 +188,11 @@ while True:
                     print('Error while sending ', image)
             conn.disconnect(device_address, conn_info[2])
 
+    # Send all current Detections
+    if (time.time() - send_time) > send_all_every:
+        send_time = time.time()
+        if exec_model.save_all(output_dir):
+            send_request = True
 
 if view_results:
     cv2.destroyAllWindows()

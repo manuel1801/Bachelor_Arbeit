@@ -7,7 +7,7 @@ import cv2
 
 class InferenceModel:
     def __init__(self, device='MYRIAD'):
-        self.ie = IECore()
+        #self.ie = IECore()
         self.device = device
 
     def create_exec_infer_model(self, model_xml, model_bin, labels, num_requests=2):
@@ -15,6 +15,7 @@ class InferenceModel:
         assert os.path.isfile(model_bin)
         assert os.path.isfile(model_xml)
 
+        ie = IECore()
         net = IENetwork(model=model_xml, weights=model_bin)
 
         # return ExecInferModel()
@@ -33,13 +34,14 @@ class InferenceModel:
         assert len(
             net.outputs) == 1, "Demo supports only single output topologies"
         out_blob = next(iter(net.outputs))
-        exec_net = self.ie.load_network(
+        exec_net = ie.load_network(
             network=net, num_requests=num_requests, device_name=self.device)
         n, c, h, w = net.inputs[input_blob].shape
         if img_info_input_blob:
             feed_dict[img_info_input_blob] = [h, w, 1]
 
         del net
+        del ie
 
         return ExecInferModel(exec_net, input_blob, out_blob, feed_dict, n, c, h, w, num_requests, labels)
 
@@ -81,12 +83,12 @@ class ExecInferModel:
                     ymax = int(obj[6] * height)
 
                     class_id = int(obj[1])
-                    color = (255, 0, 0)
+                    color = (0, 255, 255)
                     cv2.rectangle(image, (xmin, ymin),
                                   (xmax, ymax), color, 2)
 
                     if self.labels:
-                        det_label = self.labels[class_id - 1]
+                        det_label = self.labels[class_id-1]
                     else:
                         det_label = 'class id ' + str(class_id)
                     cv2.putText(image, det_label + ' ' + str(round(obj[2] * 100, 1)) + ' %', (xmin, ymin - 7),

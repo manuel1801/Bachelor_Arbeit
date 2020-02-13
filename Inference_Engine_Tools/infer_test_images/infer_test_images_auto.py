@@ -37,6 +37,15 @@ assert os.path.isdir(handy_videos)
 handy_videos = os.path.join(dataset_dir, 'handy_videos/frames')
 assert os.path.isdir(handy_videos)
 
+labels = ['Brown_bear',
+          'Deer',
+          'Fox',
+          'Goat',
+          'Hedgehog',
+          'Owl',
+          'Rabbit',
+          'Raccoon',
+          'Squirrel']
 
 # select dataset by commenting out
 infer_images_list = [
@@ -47,11 +56,12 @@ infer_images_list = [
 ]
 
 # set maximum number for each dataset
-max_images = 100
+max_images = 500
 
 # select specific model (if None all frome models_dir will be taken)
-#select_model = None
-select_model = 'faster_rcnn_inception_v2_4000'
+select_model = None
+#select_model = 'ssd_mobilenet_v2'
+exclude_model = 'faster_rcnn_inception_v2_4000'
 
 
 def get_image_paths(imgs_dir, max_images=None):
@@ -92,16 +102,13 @@ for model in os.listdir(models_dir):
     if select_model and select_model != model:
         continue
 
+    if exclude_model and exclude_model == model:
+        continue
+
     print('starting Model:   ', model)
 
     model_xml = os.path.join(model_dir, 'frozen_inference_graph.xml')
     model_bin = os.path.join(model_dir, 'frozen_inference_graph.bin')
-
-    if os.path.isfile(os.path.join(models_dir, 'classes.txt')):
-        labels = [l.strip() for l in open(os.path.join(
-            dataset_dir, 'classes.txt')).readlines()]
-    else:
-        labels = None
 
     exec_model = infer_model.create_exec_infer_model(
         model_xml, model_bin, labels, num_requests=3)
@@ -156,4 +163,5 @@ for model in os.listdir(models_dir):
             if max_images and ind > max_images:
                 break
 
+    del exec_model.exec_net
     del exec_model

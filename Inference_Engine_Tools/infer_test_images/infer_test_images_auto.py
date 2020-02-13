@@ -4,52 +4,54 @@ import cv2
 import subprocess
 from random import shuffle
 
+# Directory of the Datasets
 dataset_dir = os.path.join(os.environ['HOME'], 'Bachelor_Arbeit/Dataset')
-workspace_dir = os.path.join(
-    os.environ['HOME'], 'Bachelor_Arbeit/TensorFlow/workspace')
-models_dir = os.path.join(
-    os.environ['HOME'], 'Bachelor_Arbeit/openvino_models')
 
+# Path to converted openvino Models
+# .../Animals/<model_name>/frozen_inference_graph.xml (and .bin)
+models_dir = os.path.join(
+    os.environ['HOME'], 'Bachelor_Arbeit/openvino_models/Animals/')
+
+# Directory to write results into
 eval_dir = os.path.join(
     os.environ['HOME'], 'Bachelor_Arbeit/Inference_Engine_Tools/infer_test_images/results')
 
 
-infer_model = detection.InferenceModel()
-
-n = 200
-
-# Aus Validierungsset
-validation_images = os.path.join(
-    workspace_dir, 'OI_Animals_Augmented_9_3000', 'validation')
-validation_images_gray = os.path.join(
-    workspace_dir, 'OI_Animals_Augmented_9_3000_gray', 'validation_gray')
-
+# Validation Datensatz
+validation_images = os.path.join(dataset_dir, 'OI_Animals/validation')
 assert os.path.isdir(validation_images)
-assert os.path.isdir(validation_images_gray)
+
+
+# iWild Datensatz von Kaggle
+kaggle_iWildCam = os.path.join(dataset_dir, 'kaggle_iWildCam')
+assert os.path.isdir(kaggle_iWildCam)
 
 
 # Eigne Bilder
-handy_images = os.path.join(workspace_dir, 'test')
-handy_images_gray = os.path.join(workspace_dir, 'test_gray')
-
+handy_images = os.path.join(dataset_dir, 'handy_bilder')
 assert os.path.isdir(handy_images)
-assert os.path.isdir(handy_images_gray)
 
 handy_videos = os.path.join(dataset_dir, 'handy_videos/frames')
 assert os.path.isdir(handy_videos)
 
-kaggle_iWildCam = os.path.join(dataset_dir, 'kaggle_iWildCam')
-assert os.path.isdir(kaggle_iWildCam)
-
-# infer_images_list = [validation_images, validation_images_gray,
-#                      handy_images, handy_images_gray, kaggle_iWildCam, handy_videos]
+handy_videos = os.path.join(dataset_dir, 'handy_videos/frames')
+assert os.path.isdir(handy_videos)
 
 
-infer_images_list = [handy_images, kaggle_iWildCam]
-# infer_images_list = [handy_videos, handy_images,
-#                      handy_images_gray, kaggle_iWildCam]
+# select dataset by commenting out
+infer_images_list = [
+    # validation_images,
+    kaggle_iWildCam,
+    handy_images,
+    handy_videos
+]
 
-max_images = 50
+# set maximum number for each dataset
+max_images = 100
+
+# select specific model (if None all frome models_dir will be taken)
+#select_model = None
+select_model = 'faster_rcnn_inception_v2_4000'
 
 
 def get_image_paths(imgs_dir, max_images=None):
@@ -77,73 +79,81 @@ dataset_dict = {name: data for name, data in list(
 for name, data in dataset_dict.items():
     shuffle(data)
 
-for dataset in os.listdir(models_dir):
-    if dataset != 'Animals':
+
+infer_model = detection.InferenceModel()
+
+
+for model in os.listdir(models_dir):
+
+    model_dir = os.path.join(models_dir, model)
+    if not os.path.isdir(model_dir):
         continue
-    dataset_dir = os.path.join(models_dir, dataset)
-    if not os.path.isdir(dataset_dir):
+
+    if select_model and select_model != model:
         continue
 
-    for model in os.listdir(dataset_dir):
+    print('starting Model:   ', model)
 
-        model_dir = os.path.join(dataset_dir, model)
-        if not os.path.isdir(model_dir):
-            continue
-        if 'faster' in model:
-            continue
-        print('starting ', model)
-        model_xml = os.path.join(model_dir, 'frozen_inference_graph.xml')
-        model_bin = os.path.join(model_dir, 'frozen_inference_graph.bin')
+    model_xml = os.path.join(model_dir, 'frozen_inference_graph.xml')
+    model_bin = os.path.join(model_dir, 'frozen_inference_graph.bin')
 
-        if os.path.isfile(os.path.join(dataset_dir, 'classes.txt')):
-            labels = [l.strip() for l in open(os.path.join(
-                dataset_dir, 'classes.txt')).readlines()]
-        else:
-            labels = None
+    if os.path.isfile(os.path.join(models_dir, 'classes.txt')):
+        labels = [l.strip() for l in open(os.path.join(
+            dataset_dir, 'classes.txt')).readlines()]
+    else:
+        labels = None
 
-        exec_model = infer_model.create_exec_infer_model(
-            model_xml, model_bin, labels, num_requests=3)
+    exec_model = infer_model.create_exec_infer_model(
+        model_xml, model_bin, labels, num_requests=3)
 
-        for dataset_name, dataset_files in dataset_dict.items():
+    for dataset_name, dataset_files in dataset_dict.items():
             # for infer_images in infer_images_list:
 
-            if not os.path.isdir(eval_dir):
-                os.mkdir(eval_dir)
+        if not os.path.isdir(eval_dir):
+            os.mkdir(eval_dir)
 
-            infer_results = 'infer_results_' + dataset_name
+        infer_results = 'infer_results_' + dataset_name
 
-            output_dir = os.path.join(eval_dir, infer_results, dataset, model)
-            output_dir_all = os.path.join(
-                eval_dir, infer_results, dataset, 'all')
+        output_dir = os.path.join(eval_dir, infer_results, model)
+        output_dir_all = os.path.join(
+            eval_dir, infer_results, 'all')
 
-            print('starting ', infer_results)
+        print('starting Dataset: ', infer_results)
 
-            if not os.path.isdir(os.path.join(eval_dir, infer_results)):
-                os.mkdir(os.path.join(eval_dir, infer_results))
+        if not os.path.isdir(os.path.join(eval_dir, infer_results)):
+            os.mkdir(os.path.join(eval_dir, infer_results))
 
-            if not os.path.isdir(os.path.join(eval_dir, infer_results, dataset)):
-                os.mkdir(os.path.join(eval_dir, infer_results, dataset))
+        if not os.path.isdir(output_dir):
+            os.mkdir(output_dir)
 
-            if not os.path.isdir(output_dir):
-                os.mkdir(output_dir)
+        if not os.path.isdir(output_dir_all):
+            os.mkdir(output_dir_all)
 
-            if not os.path.isdir(output_dir_all):
-                os.mkdir(output_dir_all)
+        for ind, test_image in enumerate(dataset_files):
 
-            for ind, test_image in enumerate(dataset_files):
+            # load image to infer
+            image = cv2.imread(test_image)
 
-                image = cv2.imread(test_image)
-                result = exec_model.infer_image(image, threshhold=0.7)
-                image_name = test_image.split(
-                    '/')[-1][:-4] + '_' + model + '.jpg'
-                image_path = os.path.join(output_dir, image_name)
+            # infer image
+            result = exec_model.infer_image(image, threshhold=0.7)
+            image_name = test_image.split(
+                '/')[-1][:-4] + '_' + model + '.jpg'
+            image_path = os.path.join(output_dir, image_name)
 
-                cv2.imwrite(image_path, result)
+            # write infered image to outputdir
+            cv2.imwrite(image_path, result)
 
-                os.symlink(image_path, os.path.join(
+            # delete existing links
+            if os.path.islink(os.path.join(
+                    output_dir_all, image_name)):
+                os.remove(os.path.join(
                     output_dir_all, image_name))
 
-                if max_images and ind > max_images:
-                    break
+            # create symbolik link to infered image in 'all/'
+            os.symlink(image_path, os.path.join(
+                output_dir_all, image_name))
 
-        del exec_model
+            if max_images and ind > max_images:
+                break
+
+    del exec_model

@@ -128,7 +128,7 @@ class SSHConnect:
             "deviceaddress": self.device_adress,
             "wait": "true",
             # "hostip": self.public_ip
-            "hostip": host_ip
+            "hostip": 'host_ip'
             # "hostip": '123.456.789'
         }
 

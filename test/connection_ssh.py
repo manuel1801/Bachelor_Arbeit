@@ -20,7 +20,13 @@ class SSHConnect:
             "username": remote_it_user
         }
         url = "https://api.remot3.it/apv/v27/user/login"
-        log_resp = requests.post(url, data=json.dumps(body), headers=headers)
+        try:
+            log_resp = requests.post(
+                url, data=json.dumps(body), headers=headers)
+        except:
+            print('login failed because postreq')
+            return False
+
         log_resp = log_resp.json()
 
         if log_resp['status'] == 'false':

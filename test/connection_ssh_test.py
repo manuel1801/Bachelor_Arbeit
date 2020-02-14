@@ -27,10 +27,12 @@ print('TEST: connection created')
 conn.login()
 print('TEST: logged in')
 
-exit()
 
 addr = conn.get_device_adress(device_name=my_device)
 print('TEST: got address')
+
+exit()
+
 
 conn_ret = None
 try:

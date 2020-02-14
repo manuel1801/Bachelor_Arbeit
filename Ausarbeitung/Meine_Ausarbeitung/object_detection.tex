@@ -2,33 +2,37 @@
 
 \section{Datensatz}\label{sec:dataset}
 
-Um ein Deep Learning Modell vernünftig trainieren zu können, 
+Um ein Deep Learning Modell richtig trainieren zu können, 
 wird eine große Menge an gelabelten Trainingsdaten benötigt.
 Im Falle der Objekterkennung enthalten die labels neben der 
-Klasse auch die Koordinaten der Bounding Boxen.
+Klasse auch die Koordinaten der Bounding Boxen, 
+welche das zu erkennende Objekt auf dem Bild umrahmen.
 
 
 Für die vorliegende Arbeit wurden dafür aus dem Open Source 
 Dataset \textit{OpenImages} \cite{kuznetsovaOpenImagesDataset2018} 
-von Google 9 Klassen die Wildtiere enthalten heruntergeladen.
+von Google 9 Klassen, welche Wildtiere enthalten heruntergeladen.
 
 Dieses besteht aus einem Trainingsset mit 200 bis 2000 Bildern pro 
-Klasse sowie einem Test- und einem Validierungsset. Um für alle Klassen 
+Klasse sowie kleineren Test- und Validierungssets. Um für alle Klassen 
 die gleiche Anzahl an Trainingsdaten zu erhalten und um Overfitting zu 
 verhindern wurden wie im folgenden beschrieben die Trainingsdaten 
 augmentiert.
 
 \subsection{Augmentierung}
 
-Augmentierung ist eine Technik aus den vorhandenen Daten 
-künstlich mehr Daten zu generieren, indem diese leicht 
-abgeändert werden. Im Falle des für diese Arbeit verwendeten
-OpenImages Datensatzes wurden Geometrische Transormationen 
-wie Sklierung, Verschiebung Rotieren oder Spiegeln und 
-Manipulationen der Pixelwerte wie ändern der 
-Farbwerte, Helligkeit, Kontrast oder Rauschen vorgenommen.
+Augmentierung ist eine Technik, mit der aus den vorhandenen 
+Daten künstlich mehr Daten generiert werden können. Dafür werden 
+z.B. geometrische Transormationen, wie etwa Sklierung, Verschiebung 
+Rotieren und Spiegelungen oder manipulationen der Pixelwerte 
+zur veränderung der Farbwerte, Helligkeit, Kontrast oder 
+Rauschen vorgenommen.
 
-\begin{figure}[htb]
+Mithilfe eines Python Scripts und der Library \textit{imgaug} \cite{imgaug}
+konnten so verschiedene Augmentierungstechniken auf das Datenset angewendet
+werden.
+
+\begin{figure}[H]
     \centering
     \label{fig:augmentierung}
     \includegraphics[width=0.8\columnwidth]{Bilder/augmentierung.png}
@@ -43,17 +47,18 @@ für die traininerten Modelle verwendet, musste bei der Auswahl
 eines Frameworks sowie Models auf die Kompatibilität zu OpenVino 
 geachtet werden. 
 
-Verwendete wurde daher das untersstütze Framework Tensorflow, 
-um zwei Ansätze zu verfolgen. Der eine verwendet die Api Keras, 
-und versucht neben der Klassifikation die Lokalisierung mit 
-dieser vorzunahemen, der andere verwendet eine speziell für die 
-Objekterkennung konzipierte Api für wie in Abschnitt
- \ref{sec:related_work} beschriebene End-to-End lösungen.
+% Verwendete wurde daher das untersstütze Framework Tensorflow, 
+% um zwei Ansätze zu verfolgen. Der eine verwendet die Api Keras, 
+% und versucht neben der Klassifikation die Lokalisierung mit 
+% dieser vorzunahemen, der andere verwendet eine speziell für die 
+% Objekterkennung konzipierte Api für wie in Abschnitt
+%  \ref{sec:related_work} beschriebene End-to-End lösungen.
+
 
 \subsection{Tensorflow Object Detection Api}
 
 Die Tensorflow Object Detection Api ist unter den Research Modellen
-\cite{HttpsGithubCom} des offiziellen Tensorflow Repository zu
+\cite{tfobjdet} des offiziellen Tensorflow Repository zu
 finden und enthällt implementierungen einiger gängiger Object Detectin
 Modelle, wie Single Shot Detectors (SSD) und Faster R-CNNs mit 
 verschiedenen Basis CNNs mit vortrainierten Geweichten.
@@ -65,15 +70,25 @@ darstellung der Bilder und Labels als Protocol Buffer für
 effizienten Zugriff auf diese.
 
 Trainiert wurde mit hilfe \textit{Google Colab}, eine cloudbasierte VM,
-welche eine \dots Gpu zur verfügung stellt.
+welche eine geeignete Gpu zur verfügung stellt.
 
-\subsection{Trainingsoptimierung}
 
-Um zu einem guten Ergebnis zu kommen werden, wie in ... dargestellt, 
-häufig Anpassung bezogen auf Datensatz Augmentierungstechniken, 
-verschiedene Modell und Basis CNNs, sowie dessen Hyperparameter vorgenommen.
+\subsection{Trainingsworkflow}
 
-\begin{figure}[htb]
+Das Ergebnis des Trainings kann neben der Auswahl eines geeigneten 
+Modell, sowie auswahl und aufbereitung des Datensatzes auch durch 
+anpassungen sogenannter Hyperparameter beeinflusst werden.
+
+Mit diesen können in \ref{subsec:validation} beschriebene 
+Verfahren realisiert werden.
+
+Durch eine Evaluierung zur Laufzeit des Trainings können so Fehler 
+in der Konfigureation des Trainings erkannt und durch anpassen von 
+entweder Datensatz, Modell oder Parameter korrigiert/verbessert 
+werden.
+Es ergibt sich folgender Workflow.
+
+\begin{figure}[H]
     \centering
     \def\svgwidth{0.7\textwidth}
     \input{Bilder/train_workflow_gesammt.pdf_tex}
@@ -81,40 +96,4 @@ verschiedene Modell und Basis CNNs, sowie dessen Hyperparameter vorgenommen.
     \label{fig:train_workflow}
 \end{figure}
 
-\begin{itemize}
-    \item Datensatz
-    \begin{itemize}
-        \item Augmentierungstechniken
-        \begin{itemize}
-            \item Geometrische
-            \item Farbwerte
-        \end{itemize}
-        \item Graustufen
-        \begin{itemize}
-            \item 1 Channel
-            \item 3 Channel
-        \end{itemize}
-    \end{itemize}
-    \item Modelle
-    \begin{itemize}
-        \item Faster R-CNNs
-        \begin{itemize}
-            \item InceptionV2
-            \item Resnet
-        \end{itemize}
-        \item SSD
-        \begin{itemize}
-            \item Mobilenet
-            \item InceptionV2
-        \end{itemize}
-    \end{itemize}
-    \item Hyperparameter
-    \begin{itemize}
-        \item Dropout
-        \item L2 Realisierung
-        \item Early Stopping
-    \end{itemize}
-\end{itemize}
-
-
-
+Die Ergebnisse werden im nächsten Kapitel (\ref{kap:eval}) diskutiert.

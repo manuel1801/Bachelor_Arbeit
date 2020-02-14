@@ -1,5 +1,16 @@
 \chapter{Evaluierung}\label{kap:eval}
 
+Bevor die Ergebnisse der trainierten Modell diskutiert 
+werden, behandelt dieses Kapitel zunächst einige der für die 
+Objekterkennung üblicherweiser verwendeten Metriken zur Messung
+der Genauigkeit. 
+
+
+Anschließend werden die Modell in \ref{sec:model_vergleich}
+miteinander verglichen und in \ref{sec:optimierung_faster_rcnn}
+optimierungsverfahren für das Faster R-CNN Model ausgewertet.
+
+
 \section{Evaluierungs Metriken}\label{sec:metricen}
 
 \subsection*{Mean Average Precision (mAP)}
@@ -17,7 +28,7 @@ und sich aus folgenden Werten berechenn lässt.
   \item \textit{False Negative (FN)}: 
 \end{itemize}
 
-Zur bestimmung von TPs wird die \textit{Intersection over unioun}
+Zur bestimmung dieser Werte wird die \textit{Intersection over unioun}
 verwendet, welche Überlappungsgrad der gelabelten (Ground Truth) und der
 geschätzete Boundig Box zu dem Gesammtbereich beider Boxen darstellt 
 
@@ -112,7 +123,7 @@ insgesammt 4 loss werte verwendet.
 
 
 %----------------- SECTION: validtaion ---------------------
-\section{Vergleich der Modelle}
+\section{Vergleich der Modelle}\label{sec:model_vergleich}
 \begin{itemize}
   \item Tab vgl SSD, Faster, mit/ohne Aug, für mAP, Loss
   \item Overfiiting bei Faster: Aug vs Early Stopping
@@ -188,7 +199,7 @@ Datensets besser.
 
 
 %----------------- SECTION: Test Inferenz ---------------------
-\subsection{Test Inferenz}
+\subsection{Test Inferenz}\label{sec:test_inferenz}
 hier mit test set und weitere
 test script mit open vino zum vgl der modelle bzg infer ergebnisse (bilder/zeit)
 \subsubsection{test set}
@@ -220,7 +231,7 @@ Inferenz zeit auf ncs2 über raspberry pi für 100 frames.
 
 
 %----------------- SECTION: optimierung ---------------------
-\section{Optimierungen: Faster r-CNN}
+\section{Optimierungen: Faster r-CNN}\label{sec:optimierung_faster_rcnn}
 mit faster r-cnn wurden nun noch optimierungen durchgeführt, da 
 trotz augmentierung bei mehr epochen overfitting auftrat.
 

@@ -10,20 +10,25 @@ Dabei sollte neben der reinen Erkennung auch eine Lokalisierung
 der erkannten Tiere im Bild stattfinden. Gängige Techniken dafür 
 werden im nächsten Abschnitt erläutert.
 \\
-Anforderungen an die Erkennung waren ein möglichst hohe 
-Genauigkeit und Robustheit des Models zu schaffen, sodass 
-diese auch für die weniger detailreichen graustufen Bilder 
-der Infrarot kamera noch funktioniert. Echtzeit Inferenz 
-war nicht notwendig, dennoch sollten alle relevanten Informationen 
-verarbeitet werden können.
+Dabei soll das Deep Learing Modell im Rahmen der gegebenen 
+möglichkeiten und Limitierungen der Hardware möglichst 
+genau und Robust sein, sodass es auch für die graustufen 
+Bilder der Infrarot Kamera zuverlässig funktioniert.
+Da eine erhöht Genauigkeit auch immer mit einer größeren
+Latenz für der Inferenzzeit einhergeht war dies ein mit 
+zu berücksichtigender Punkt.
 \\
-Die entwicklung der autonome laufenden Anwendung für den Raspberry, 
-sowie die Integration des trainierten Modells in diese war ebenso 
-wichtigier Bestandteil der Arbeit.
+Neben training und evaluierung eines geeigneten Deep Learning Modells,
+war die Implementierung der Anwendung, welche die Inferenz 
+des Modells ausführt ein weiterer Bestandteil der Arbeit.
 \\
-Hierbei waren die anforderungen eine geeignete Kamera (infrarot) 
-auszusuchen, sowie eine Kommunikations/Benachrichtigungs 
-möglichkeit über Netzwerk verbindung zu schaffen.
+Diese soll voll autonom auf dem Raspberry Pi laufen,
+über eine mobile Netzwerk Verbindung verfügen und 
+mittels eines geeigneten Kommunikations Protokolls die 
+die erkannten und abgespeicherten Bilder an einen
+Heim Pc senden.
+Des weiteren sollte eine geeignete Kamera verwendet werden, die 
+sowohl normale, als auch Infrarot Aufnahmen machen kann.
 
 
 \section{Related Work}\label{sec:related_work}
@@ -32,13 +37,15 @@ Für die Objekterkennung werden häufig End-to-End Lösung verwendet,
 Modelle die sowohl Klassifikation als auch Lokalisierung 
 durchführen.
 Diese verwenden meist eines der im Abschnitt 
-\ref{subsubsec:architecture} aufgezeigten Basis CNNs als  
-Feature Extractor und darauf aufbauend ein Framework für die 
-Lokalisierung. 
+\ref{subsubsec:architecture} erläuterten Basis CNNs als  
+\textit{Feature Extractor} und darauf aufbauend ein Framework
+für die Lokalisierung. 
 
+Diese lassen sich, wie in \cite{wengObjectDetectionPart2018} beschrieben,
+in einstufige und zweistufige Verfahren gliedern. 
 
-Diese lassen sich in einstufige und zweistufige Verfahren 
-gliedern \cite{wengObjectDetectionPart2018}. Bei den zweistufigen
+\subsubsection{Region Based CNNs}
+Bei den zweistufigen
 handelt es sich um Regionbased CNNs, die Regionen für
 mögliche Box Locations mithilfe RPN (Region Proposia Network)
 oder selective search verfahren finden soll, um diese dann
@@ -47,12 +54,22 @@ davon ist das in Abbildung \ref{fig:faster_rcnn} schematisch
 dargestellte \textit{Faster R-CNN} \cite{renFasterRCNNRealTime2016a}
 
 
+\begin{figure}[H]
+    \centering
+    \label{fig:faster_rcnn}
+    \includegraphics[width=0.5\textwidth]{faster_rcnn.png}
+    \caption{Faster R-CNN, \cite{renFasterRCNNRealTime2016a}}
+\end{figure}
+
+
+\subsubsection{Single Shot Detectoren}
 Einstufige Verfahren wie Single Shot Detectoren (SSD) 
 führen die lokalisierung zusammen mit dem Feature Extractor 
 aus, indem verschiedene scalierungen/ausmaße der Convolutional 
 Layer in den Classifier/Regressor gegeben werden.
 Dadurch sind diese wie in Abbildung \ref{fig:speed_acc}
 zu erkennen ist, zwar schneller, jedoch auch ungenauer.
+
 
 \begin{minipage}[t]{0.5\textwidth}
     \centering
@@ -66,4 +83,3 @@ zu erkennen ist, zwar schneller, jedoch auch ungenauer.
     \includegraphics[width=\textwidth]{speed_acc_comp.png}
     \captionof{figure}{Geschw vs Genauigkeit, \cite{huangSpeedAccuracyTradeOffs2017}}
 \end{minipage}
-

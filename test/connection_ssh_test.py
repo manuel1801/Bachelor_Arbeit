@@ -2,6 +2,8 @@ import cv2
 import os
 import connection_ssh as connection
 from time import sleep
+import requests
+
 
 user = 'manuel'
 password = 'animalsdetection'
@@ -30,7 +32,7 @@ else:
     print('TEST: failed logging ing')
     exit()
 
-#addr = conn.get_device_adress(device_name=my_device)
+# addr = conn.get_device_adress(device_name=my_device)
 
 
 # if addr:
@@ -39,13 +41,14 @@ else:
 #     print('error getting address')
 #     exit()
 
-
+i = 0
 while True:
-
+    host_ip = requests.get('https://api.ipify.org').text
     conn_ret = conn.connect()
     if conn_ret:
         server, port, conn_id = conn_ret
-        conn.send(server, port, user, password, file, path)
+        conn.send(server, port, user, password, file,
+                  os.path.join(path, str(i) + host_ip + '.jpg'))
         conn.disconnect(conn_id)
     else:
         print('TEST: connected errot')

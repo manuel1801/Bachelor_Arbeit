@@ -117,7 +117,8 @@ class SSHConnect:
         if not self.token or not self.device_adress:
             print('token or device adress not found. login again')
             return False
-
+        host_ip = requests.get('https://api.ipify.org').text
+        print('host ip is ', host_ip)
         headers = {
             "developerkey": self.developer_key,
             # Created using the login API
@@ -125,9 +126,9 @@ class SSHConnect:
         }
         body = {
             "deviceaddress": self.device_adress,
-            "wait": "true"
+            "wait": "true",
             # "hostip": self.public_ip
-            # "hostip": requests.get('https://api.ipify.org').text
+            "hostip": host_ip
             # "hostip": '123.456.789'
         }
 

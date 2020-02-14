@@ -68,7 +68,7 @@ class SSHConnect:
         }
         url = "https://api.remot3.it/apv/v27/user/login"
 
-        for i in retry:
+        for i in range(retry):
             try:
                 log_resp = requests.post(
                     url, data=json.dumps(body), headers=headers)

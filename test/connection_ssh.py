@@ -125,10 +125,10 @@ class SSHConnect:
         }
         body = {
             "deviceaddress": self.device_adress,
-            "wait": "true",
+            "wait": "true"
             # "hostip": self.public_ip
             # "hostip": requests.get('https://api.ipify.org').text
-            "hostip": '123.456.789'
+            # "hostip": '123.456.789'
         }
 
         url = "https://api.remot3.it/apv/v27/device/connect"

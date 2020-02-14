@@ -54,6 +54,7 @@ while True:
         print('TEST: connected errot')
 
     sleep(1)
+    i += 1
 
 
 exit()

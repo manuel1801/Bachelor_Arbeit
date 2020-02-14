@@ -25,7 +25,7 @@ class SSHConnect:
                 url, data=json.dumps(body), headers=headers)
         except:
             print('login failed because postreq')
-            print(requests.get('https://api.ipify.org').text)
+            # print(requests.get('https://api.ipify.org').text)
             return False
 
         log_resp = log_resp.json()

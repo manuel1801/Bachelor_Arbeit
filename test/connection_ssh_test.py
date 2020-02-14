@@ -24,18 +24,20 @@ else:
 conn = connection.SSHConnect()
 print('TEST: connection created')
 
-if conn.login():
+if conn.login_neu():
     print('TEST: logged in')
 else:
-    print('failed logging ing')
+    print('TEST: failed logging ing')
     exit()
 
-addr = conn.get_device_adress(device_name=my_device)
-if addr:
-    print('TEST: got address')
-else:
-    print('error getting address')
-    exit()
+#addr = conn.get_device_adress(device_name=my_device)
+
+
+# if addr:
+#     print('TEST: got address')
+# else:
+#     print('error getting address')
+#     exit()
 
 
 exit()

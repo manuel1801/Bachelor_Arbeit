@@ -8,8 +8,9 @@ class SSHConnect:
     def __init__(self, dev_key='NEU3RTVFNEMtNjRGRi00MzBFLUIyNTgtOUVFQjRGMjcxOTRB'):
         self.developer_key = dev_key
         self.token = None
-        #self.public_ip = requests.get('https://api.ipify.org').text
-        #self.public_ip = '123.456.789'
+        self.device_adress = None
+        # self.public_ip = requests.get('https://api.ipify.org').text
+        # self.public_ip = '123.456.789'
 
     def login(self, remote_it_user='animals.detection@gmail.com', remote_it_pw='animalsdetection'):
         headers = {
@@ -20,6 +21,7 @@ class SSHConnect:
             "username": remote_it_user
         }
         url = "https://api.remot3.it/apv/v27/user/login"
+
         try:
             log_resp = requests.post(
                 url, data=json.dumps(body), headers=headers)
@@ -56,7 +58,61 @@ class SSHConnect:
         print('Device: ', device_name, ' not Exist')
         return None
 
+    def login_neu(self, remote_it_user='animals.detection@gmail.com', remote_it_pw='animalsdetection', device_name='ssh-Pc'):
+        headers = {
+            "developerkey": self.developer_key
+        }
+        body = {
+            "password": remote_it_pw,
+            "username": remote_it_user
+        }
+        url = "https://api.remot3.it/apv/v27/user/login"
+
+        try:
+            log_resp = requests.post(
+                url, data=json.dumps(body), headers=headers)
+        except:
+            print('login failed because postreq')
+            # print(requests.get('https://api.ipify.org').text)
+            return False
+
+        log_resp = log_resp.json()
+
+        if log_resp['status'] == 'false':
+            print('wrong remote.it user name or password')
+            return False
+        else:
+            self.token = log_resp['token']
+
+        headers = {
+            "developerkey": self.developer_key,
+            # Created using the login API
+            "token": self.token
+        }
+
+        url = "https://api.remot3.it/apv/v27/device/list/all"
+
+        try:
+            dev_resp = requests.get(url, headers=headers)
+        except:
+            print('failed to get device list')
+            return False
+
+        dev_resp = dev_resp.json()
+
+        for device in dev_resp['devices']:
+            if device['devicealias'] == device_name:
+                self.device_adress = device['deviceaddress']
+                return True
+
+        print('Device: ', device_name, ' not Exist')
+        return False
+
     def connect(self, device_address):
+        if not self.token or not self.device_adress:
+            print('token or device adress not found. login again')
+            return False
+
         headers = {
             "developerkey": self.developer_key,
             # Created using the login API

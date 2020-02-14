@@ -44,8 +44,10 @@ else:
 i = 0
 while True:
     host_ip = requests.get('https://api.ipify.org').text
+    print('try to connect as ', host_ip)
     conn_ret = conn.connect()
     if conn_ret:
+        print('connected')
         server, port, conn_id = conn_ret
         conn.send(server, port, user, password, file,
                   os.path.join(path, str(i) + host_ip + '.jpg'))

@@ -2,54 +2,81 @@ import cv2
 import os
 import connection_ssh as connection
 from time import sleep
+import requests
+
 
 user = 'manuel'
 password = 'animalsdetection'
 
 if user == 'pi':
-    file = '/home/manuel/Bachelor_Arbeit/Connection/remote_it/test.jpg'
-    file2 = '/home/manuel/Bachelor_Arbeit/Connection/remote_it/test2.jpg'
-    file3 = '/home/manuel/Bachelor_Arbeit/Connection/remote_it/test3.jpg'
-    path = '/home/pi/Bachelor_Arbeit/Connection/remote_it/received/'
+    file = '/home/manuel/Bachelor_Arbeit/test/test.jpg'
+    file2 = '/home/manuel/Bachelor_Arbeit/test/test2.jpg'
+    file3 = '/home/manuel/Bachelor_Arbeit/test/test3.jpg'
+    path = '/home/pi/Bachelor_Arbeit/test/received/'
     my_device = 'ssh-Pi'
 
 else:
-    file = '/home/pi/Bachelor_Arbeit/Connection/remote_it/test.jpg'
-    file2 = '/home/pi/Bachelor_Arbeit/Connection/remote_it/test2.jpg'
-    file3 = '/home/pi/Bachelor_Arbeit/Connection/remote_it/test3.jpg'
-    path = '/home/manuel/Bachelor_Arbeit/Connection/remote_it/received'
+    file = '/home/pi/Bachelor_Arbeit/test/test.jpg'
+    file2 = '/home/pi/Bachelor_Arbeit/test/test2.jpg'
+    file3 = '/home/pi/Bachelor_Arbeit/test/test3.jpg'
+    path = '/home/manuel/Bachelor_Arbeit/test/received'
     my_device = 'ssh-Pc'
 
 
 conn = connection.SSHConnect()
-conn.login()
-addr = conn.get_device_adress(device_name=my_device)
+print('TEST: connection created')
 
-print('try to connect with: ', conn.public_ip)
-ret = conn.connect(
-    device_address=addr)
+if conn.login_neu():
+    print('TEST: logged in')
+else:
+    print('TEST: failed logging ing')
+    exit()
 
-if ret:
-    server, port, device_id = ret
-    print('connected: ', server, port, device_id)
-    conn.send(server, port, user, password, file=file, path=path)
-    print('send file1')
-    conn.send(server, port, user, password, file=file2, path=path)
-    print('send file2')
-    conn.disconnect(addr, device_id)
-    print('disconnected')
+# addr = conn.get_device_adress(device_name=my_device)
+
+
+# if addr:
+#     print('TEST: got address')
+# else:
+#     print('error getting address')
+#     exit()
+
+i = 0
+while True:
+    host_ip = requests.get('https://api.ipify.org').text
+    print('try to connect as ', host_ip)
+    conn_ret = conn.connect()
+    if conn_ret:
+        print('connected')
+        server, port, conn_id = conn_ret
+        conn.send(server, port, user, password, file,
+                  os.path.join(path, str(i) + host_ip + '.jpg'))
+        conn.disconnect(conn_id)
+    else:
+        print('TEST: connected errot')
+
+    sleep(1)
+    i += 1
+
+
+exit()
+
+
+conn_ret = None
+try:
+    conn_ret = conn.connect(device_address=addr)
+except:
+    print('exception 2')
+
+if conn_ret:
+    print('TEST: connected sucessfully')
+    print(conn_ret)
+    server, port, conn_id = conn_ret
+    print('sendign file 2')
+    conn.send(server, port, user, password, file2, path)
+    print('sendign file 3')
+    conn.send(server, port, user, password, file3, path)
+    conn.disconnect(addr, conn_id)
 
 else:
-    print('conn err 1')
-
-ret = conn.connect(
-    device_address=addr)
-
-if ret:
-    server, port, device_id = ret
-    print('connected: ', server, port, device_id)
-    conn.send(server, port, user, password, file=file3, path=path)
-    print('send file3')
-    conn.disconnect(addr, device_id)
-    print('disconnected')
-print('conn err 2')
+    print('TEST: connected errot')

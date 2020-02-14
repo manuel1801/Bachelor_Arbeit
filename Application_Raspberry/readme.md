@@ -126,7 +126,10 @@ Bus 001 Device 004: ID 12d1:14dc Huawei Technologies Co., Ltd. E33372 LTE/UMTS/G
 
 3. Pin eingeben (Pin prüfung deaktivieren)
 
-als standart Verbindung fenstlegen:
+als standart Verbindung fenstlegen, da sonst verbindungswechsel
+stattfinden kann und dann connection script evtl nicht mehr läuft.
+
+
 ```bash
 route -n # aktuelle metrik rausfinden
 ```
@@ -144,6 +147,7 @@ hinzufügen:
 
 ```bash
 interface eth1
-metric 350
+metric 200 # niedrigste
 static ip_address=192.168.8.1
 ```
+

@@ -34,11 +34,11 @@ output_dir = os.path.join(workspace_dir,
 assert os.path.isdir(output_dir)
 
 
-conn = connection.SSHConnect()
-device_address = None
-if conn.login(remote_it_user='animals.detection@gmail.com',
-              remote_it_pw=password):  # returns false if wrong user data
-    device_address = conn.get_device_adress(device_name=remote_divice_name)
+# conn = connection.SSHConnect()
+# device_address = None
+# if conn.login(remote_it_user='animals.detection@gmail.com',
+#               remote_it_pw=password):  # returns false if wrong user data
+#     device_address = conn.get_device_adress(device_name=remote_divice_name)
 
 
 buffer_size = 200    # zum zwischen speichern wenn infer langsamer stream
@@ -89,6 +89,11 @@ exec_model = infer_model.create_exec_infer_model(
 # init motion detector
 motion_detector = detection.MotionDetect()
 motion_frames = []
+
+# init and login connection script
+
+conn = connection.SSHConnect()
+logged_in = conn.login()
 
 has_motion = False
 del_idx = 1
@@ -167,26 +172,30 @@ while True:
             no_detections = 0
 
         # Send saved frames to remote Devices
-        if not device_address:  # kein adresse zu senden
-            continue
+        if not logged_in:  # kein adresse zu senden
+            logged_in = conn.login()
+            if not logged_in:
+                continue
 
         if saved or send_request:
             print('try to send')
-            conn_info = conn.connect(device_address)
+            conn_info = conn.connect()
             if not conn_info:  # verbindung nicht mögl
                 print('Error: could not connect to ', remote_divice_name)
+                logged_in = False
                 continue
+
             send_request = False
             for image in os.listdir(output_dir):
                 image_path = os.path.join(output_dir, image)
-                if conn.send(conn_info[0], conn_info[1], remote_user, password,
-                             image_path, remote_output_dir):
+                if conn.send(server=conn_info[0], port=conn_info[1], user=remote_user, password=password,
+                             file=image_path, path=remote_output_dir):
                     os.remove(image_path)
                     print('Successfully send image ', image)
                 else:
                     send_request = True
                     print('Error while sending ', image)
-            conn.disconnect(device_address, conn_info[2])
+            conn.disconnect(conn_id=conn_info[2])
 
     # Send all current Detections
     if (time.time() - send_time) > send_all_every:

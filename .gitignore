@@ -153,6 +153,12 @@ tempCodeRunnerFile.py
 *_log
 __latexindent_temp.tex
 
+links.*
+*_log.*
+
+/Connection/proxy/
+/Connection/vpn/
+
 
 
 /documents/ma_ba
@@ -181,7 +187,12 @@ Dataset/OI_Samples
 /openvino_models/caffe/vgg16/
 /TensorFlow/workspace
 
-/evaluation/
+/TensorFlow/detection_keras/
+/TensorFlow/eval.sh
+/TensorFlow/image_classification/*.txt
+
 /Connection/remote_it/received
 
 kaggle_iWildCam
+
+/Inference_Engine_Tools/benchmark_tool/open_vino/cpp/

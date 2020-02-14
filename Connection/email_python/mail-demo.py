@@ -27,5 +27,5 @@ for f in os.listdir('.'):
 
 with smtplib.SMTP('smtp.gmail.com', 587) as smtp:
 
-    smtp.login('manuel.barkey@gmail.com', 'stewie55')
+    smtp.login('manuel.barkey@gmail.com', '*****')
     # smtp.send_message(msg)

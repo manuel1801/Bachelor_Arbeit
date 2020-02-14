@@ -2,6 +2,7 @@ import requests
 import json
 import os
 import pexpect
+from time import sleep
 
 
 class SSHConnect:
@@ -69,6 +70,7 @@ class SSHConnect:
         url = "https://api.remot3.it/apv/v27/user/login"
 
         for i in range(retry):
+            print('try to login for ' + str(i+1) + '. time')
             try:
                 log_resp = requests.post(
                     url, data=json.dumps(body), headers=headers)
@@ -77,6 +79,7 @@ class SSHConnect:
                 print('login failed: ' + str(i+1) + '. try')
                 if i == retry - 1:
                     return False
+            sleep(1)
 
         log_resp = log_resp.json()
 

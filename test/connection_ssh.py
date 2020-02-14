@@ -58,7 +58,7 @@ class SSHConnect:
         print('Device: ', device_name, ' not Exist')
         return None
 
-    def login_neu(self, remote_it_user='animals.detection@gmail.com', remote_it_pw='animalsdetection', device_name='ssh-Pc'):
+    def login_neu(self, remote_it_user='animals.detection@gmail.com', remote_it_pw='animalsdetection', device_name='ssh-Pc', retry=5):
         headers = {
             "developerkey": self.developer_key
         }
@@ -68,13 +68,15 @@ class SSHConnect:
         }
         url = "https://api.remot3.it/apv/v27/user/login"
 
-        try:
-            log_resp = requests.post(
-                url, data=json.dumps(body), headers=headers)
-        except:
-            print('login failed because postreq')
-            # print(requests.get('https://api.ipify.org').text)
-            return False
+        for i in retry:
+            try:
+                log_resp = requests.post(
+                    url, data=json.dumps(body), headers=headers)
+                break
+            except:
+                print('login failed: ' + str(i+1) + '. try')
+                if i == retry - 1:
+                    return False
 
         log_resp = log_resp.json()
 

@@ -63,9 +63,13 @@ class SSHConnect:
         }
 
         url = "https://api.remot3.it/apv/v27/device/connect"
+        try:
+            conn_resp = requests.post(
+                url, data=json.dumps(body), headers=headers)
+        except:
+            print('conn failed')
+            return False
 
-        conn_resp = requests.post(
-            url, data=json.dumps(body), headers=headers)
         conn_resp = conn_resp.json()
 
         if conn_resp['status'] == 'false':

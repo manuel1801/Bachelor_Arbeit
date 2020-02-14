@@ -136,9 +136,11 @@ class SSHConnect:
             if r == 0:
                 child.sendline(password)
                 child.expect(pexpect.EOF)
+                return True
             elif r == 1:
                 print('end of file')
-            return True
+                return False
+
         except Exception as e:
             print(e)
             return False

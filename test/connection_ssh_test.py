@@ -40,17 +40,18 @@ else:
 #     exit()
 
 
-conn_ret = conn.connect()
-if conn_ret:
-    print('TEST: connected sucessfully')
-    print(conn_ret)
-    server, port, conn_id = conn_ret
-    print('sendign file 1')
-    conn.send(server, port, user, password, file, path)
-    conn.disconnect(conn_id)
+while True:
 
-else:
-    print('TEST: connected errot')
+    conn_ret = conn.connect()
+    if conn_ret:
+        server, port, conn_id = conn_ret
+        conn.send(server, port, user, password, file, path)
+        conn.disconnect(conn_id)
+    else:
+        print('TEST: connected errot')
+
+    sleep(1)
+
 
 exit()
 

@@ -40,25 +40,19 @@ else:
 #     exit()
 
 
-exit()
-
-
-conn_ret = None
-try:
-    conn_ret = conn.connect(device_address=addr)
-except:
-    print('exception 1')
-
+conn_ret = conn.connect()
 if conn_ret:
     print('TEST: connected sucessfully')
     print(conn_ret)
     server, port, conn_id = conn_ret
-    print('sendign file 1')
-    conn.send(server, port, user, password, file, path)
-    conn.disconnect(addr, conn_id)
+    #print('sendign file 1')
+    #conn.send(server, port, user, password, file, path)
+    conn.disconnect(conn_id)
 
 else:
     print('TEST: connected errot')
+
+exit()
 
 
 conn_ret = None

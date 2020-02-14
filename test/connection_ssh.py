@@ -79,7 +79,7 @@ class SSHConnect:
                 print('login failed: ' + str(i+1) + '. try')
                 if i == retry - 1:
                     return False
-            sleep(1)
+            sleep(0.5)
 
         log_resp = log_resp.json()
 
@@ -113,7 +113,7 @@ class SSHConnect:
         print('Device: ', device_name, ' not Exist')
         return False
 
-    def connect(self, device_address):
+    def connect(self):
         if not self.token or not self.device_adress:
             print('token or device adress not found. login again')
             return False
@@ -124,10 +124,11 @@ class SSHConnect:
             "token": self.token
         }
         body = {
-            "deviceaddress": device_address,
+            "deviceaddress": self.device_adress,
             "wait": "true",
             # "hostip": self.public_ip
-            "hostip": requests.get('https://api.ipify.org').text
+            # "hostip": requests.get('https://api.ipify.org').text
+            "hostip": '123.456.789'
         }
 
         url = "https://api.remot3.it/apv/v27/device/connect"
@@ -135,12 +136,13 @@ class SSHConnect:
             conn_resp = requests.post(
                 url, data=json.dumps(body), headers=headers)
         except:
-            print('conn failed')
+            print('conn req failed')
             return False
 
         conn_resp = conn_resp.json()
 
         if conn_resp['status'] == 'false':
+            print('conn status false')
             return False
 
         server, port = conn_resp['connection']['proxy'].split(
@@ -150,14 +152,18 @@ class SSHConnect:
 
         return server, port, connectionid
 
-    def disconnect(self, address, conn_id):
+    def disconnect(self, conn_id):
+        if not self.device_adress:
+            print('no device to disconnect')
+            return False
+
         headers = {
             "developerkey": self.developer_key,
             # Created using the login API
             "token": self.token
         }
         body = {
-            "deviceaddress": address,
+            "deviceaddress": self.device_adress,
             "connectionid": conn_id
         }
 

@@ -38,7 +38,7 @@
   \newcommand*\fsize{\dimexpr\f@size pt\relax}%
   \newcommand*\lineheight[1]{\fontsize{\fsize}{#1\fsize}\selectfont}%
   \ifx\svgwidth\undefined%
-    \setlength{\unitlength}{230.75244141bp}%
+    \setlength{\unitlength}{234.94044113bp}%
     \ifx\svgscale\undefined%
       \relax%
     \else%
@@ -50,30 +50,32 @@
   \global\let\svgwidth\undefined%
   \global\let\svgscale\undefined%
   \makeatother%
-  \begin{picture}(1,0.64216801)%
+  \begin{picture}(1,0.62752856)%
     \lineheight{1}%
     \setlength\tabcolsep{0pt}%
     \put(0,0){\includegraphics[width=\unitlength,page=1]{aug_l2_mAP.pdf}}%
-    \put(0.08343332,0.11925244){\color[rgb]{0.19607843,0.19215686,0.24705882}\makebox(0,0)[rt]{\lineheight{1.25}\smash{\begin{tabular}[t]{r}0.45\end{tabular}}}}%
-    \put(0.08343332,0.20323165){\color[rgb]{0.19607843,0.19215686,0.24705882}\makebox(0,0)[rt]{\lineheight{1.25}\smash{\begin{tabular}[t]{r}0.5\end{tabular}}}}%
-    \put(0.08343332,0.28721085){\color[rgb]{0.19607843,0.19215686,0.24705882}\makebox(0,0)[rt]{\lineheight{1.25}\smash{\begin{tabular}[t]{r}0.55\end{tabular}}}}%
-    \put(0.08343332,0.37119003){\color[rgb]{0.19607843,0.19215686,0.24705882}\makebox(0,0)[rt]{\lineheight{1.25}\smash{\begin{tabular}[t]{r}0.6\end{tabular}}}}%
-    \put(0.08343332,0.45516922){\color[rgb]{0.19607843,0.19215686,0.24705882}\makebox(0,0)[rt]{\lineheight{1.25}\smash{\begin{tabular}[t]{r}0.65\end{tabular}}}}%
-    \put(0.08343332,0.53914842){\color[rgb]{0.19607843,0.19215686,0.24705882}\makebox(0,0)[rt]{\lineheight{1.25}\smash{\begin{tabular}[t]{r}0.7\end{tabular}}}}%
-    \put(0.08343332,0.62312762){\color[rgb]{0.19607843,0.19215686,0.24705882}\makebox(0,0)[rt]{\lineheight{1.25}\smash{\begin{tabular}[t]{r}0.75\end{tabular}}}}%
+    \put(0.08194605,0.10490801){\color[rgb]{0.19607843,0.19215686,0.24705882}\makebox(0,0)[rt]{\lineheight{1.25}\smash{\begin{tabular}[t]{r}0.61\end{tabular}}}}%
+    \put(0.08194605,0.15351345){\color[rgb]{0.19607843,0.19215686,0.24705882}\makebox(0,0)[rt]{\lineheight{1.25}\smash{\begin{tabular}[t]{r}0.62\end{tabular}}}}%
+    \put(0.08194605,0.20211894){\color[rgb]{0.19607843,0.19215686,0.24705882}\makebox(0,0)[rt]{\lineheight{1.25}\smash{\begin{tabular}[t]{r}0.63\end{tabular}}}}%
+    \put(0.08194605,0.25072436){\color[rgb]{0.19607843,0.19215686,0.24705882}\makebox(0,0)[rt]{\lineheight{1.25}\smash{\begin{tabular}[t]{r}0.64\end{tabular}}}}%
+    \put(0.08194605,0.2993298){\color[rgb]{0.19607843,0.19215686,0.24705882}\makebox(0,0)[rt]{\lineheight{1.25}\smash{\begin{tabular}[t]{r}0.65\end{tabular}}}}%
+    \put(0.08194605,0.34793527){\color[rgb]{0.19607843,0.19215686,0.24705882}\makebox(0,0)[rt]{\lineheight{1.25}\smash{\begin{tabular}[t]{r}0.66\end{tabular}}}}%
+    \put(0.08194605,0.39654071){\color[rgb]{0.19607843,0.19215686,0.24705882}\makebox(0,0)[rt]{\lineheight{1.25}\smash{\begin{tabular}[t]{r}0.67\end{tabular}}}}%
+    \put(0.08194605,0.44514615){\color[rgb]{0.19607843,0.19215686,0.24705882}\makebox(0,0)[rt]{\lineheight{1.25}\smash{\begin{tabular}[t]{r}0.68\end{tabular}}}}%
+    \put(0.08194605,0.49375159){\color[rgb]{0.19607843,0.19215686,0.24705882}\makebox(0,0)[rt]{\lineheight{1.25}\smash{\begin{tabular}[t]{r}0.69\end{tabular}}}}%
+    \put(0.08194605,0.54235704){\color[rgb]{0.19607843,0.19215686,0.24705882}\makebox(0,0)[rt]{\lineheight{1.25}\smash{\begin{tabular}[t]{r}0.7\end{tabular}}}}%
+    \put(0.08194605,0.59096249){\color[rgb]{0.19607843,0.19215686,0.24705882}\makebox(0,0)[rt]{\lineheight{1.25}\smash{\begin{tabular}[t]{r}0.71\end{tabular}}}}%
     \put(0,0){\includegraphics[width=\unitlength,page=2]{aug_l2_mAP.pdf}}%
-    \put(0.12284586,0.03762403){\color[rgb]{0.19607843,0.19215686,0.24705882}\makebox(0,0)[t]{\lineheight{1.25}\smash{\begin{tabular}[t]{c}0\end{tabular}}}}%
-    \put(0.20217952,0.03762403){\color[rgb]{0.19607843,0.19215686,0.24705882}\makebox(0,0)[t]{\lineheight{1.25}\smash{\begin{tabular}[t]{c}50k\end{tabular}}}}%
-    \put(0.28151317,0.03762403){\color[rgb]{0.19607843,0.19215686,0.24705882}\makebox(0,0)[t]{\lineheight{1.25}\smash{\begin{tabular}[t]{c}100k\end{tabular}}}}%
-    \put(0.36084685,0.03762403){\color[rgb]{0.19607843,0.19215686,0.24705882}\makebox(0,0)[t]{\lineheight{1.25}\smash{\begin{tabular}[t]{c}150k\end{tabular}}}}%
-    \put(0.44018049,0.03762403){\color[rgb]{0.19607843,0.19215686,0.24705882}\makebox(0,0)[t]{\lineheight{1.25}\smash{\begin{tabular}[t]{c}200k\end{tabular}}}}%
-    \put(0.51951414,0.03762403){\color[rgb]{0.19607843,0.19215686,0.24705882}\makebox(0,0)[t]{\lineheight{1.25}\smash{\begin{tabular}[t]{c}250k\end{tabular}}}}%
-    \put(0.59884779,0.03762403){\color[rgb]{0.19607843,0.19215686,0.24705882}\makebox(0,0)[t]{\lineheight{1.25}\smash{\begin{tabular}[t]{c}300k\end{tabular}}}}%
-    \put(0.67818146,0.03762403){\color[rgb]{0.19607843,0.19215686,0.24705882}\makebox(0,0)[t]{\lineheight{1.25}\smash{\begin{tabular}[t]{c}350k\end{tabular}}}}%
-    \put(0.75751513,0.03762403){\color[rgb]{0.19607843,0.19215686,0.24705882}\makebox(0,0)[t]{\lineheight{1.25}\smash{\begin{tabular}[t]{c}400k\end{tabular}}}}%
-    \put(0.8368488,0.03762403){\color[rgb]{0.19607843,0.19215686,0.24705882}\makebox(0,0)[t]{\lineheight{1.25}\smash{\begin{tabular}[t]{c}450k\end{tabular}}}}%
-    \put(0.91618242,0.03762403){\color[rgb]{0.19607843,0.19215686,0.24705882}\makebox(0,0)[t]{\lineheight{1.25}\smash{\begin{tabular}[t]{c}500k\end{tabular}}}}%
-    \put(0.99551615,0.03762403){\color[rgb]{0.19607843,0.19215686,0.24705882}\makebox(0,0)[t]{\lineheight{1.25}\smash{\begin{tabular}[t]{c}550k\end{tabular}}}}%
+    \put(0.19216706,0.03695335){\color[rgb]{0.19607843,0.19215686,0.24705882}\makebox(0,0)[t]{\lineheight{1.25}\smash{\begin{tabular}[t]{c}50k\end{tabular}}}}%
+    \put(0.27678156,0.03695335){\color[rgb]{0.19607843,0.19215686,0.24705882}\makebox(0,0)[t]{\lineheight{1.25}\smash{\begin{tabular}[t]{c}100k\end{tabular}}}}%
+    \put(0.36139603,0.03695335){\color[rgb]{0.19607843,0.19215686,0.24705882}\makebox(0,0)[t]{\lineheight{1.25}\smash{\begin{tabular}[t]{c}150k\end{tabular}}}}%
+    \put(0.44601053,0.03695335){\color[rgb]{0.19607843,0.19215686,0.24705882}\makebox(0,0)[t]{\lineheight{1.25}\smash{\begin{tabular}[t]{c}200k\end{tabular}}}}%
+    \put(0.53062502,0.03695335){\color[rgb]{0.19607843,0.19215686,0.24705882}\makebox(0,0)[t]{\lineheight{1.25}\smash{\begin{tabular}[t]{c}250k\end{tabular}}}}%
+    \put(0.61523953,0.03695335){\color[rgb]{0.19607843,0.19215686,0.24705882}\makebox(0,0)[t]{\lineheight{1.25}\smash{\begin{tabular}[t]{c}300k\end{tabular}}}}%
+    \put(0.699854,0.03695335){\color[rgb]{0.19607843,0.19215686,0.24705882}\makebox(0,0)[t]{\lineheight{1.25}\smash{\begin{tabular}[t]{c}350k\end{tabular}}}}%
+    \put(0.78446852,0.03695335){\color[rgb]{0.19607843,0.19215686,0.24705882}\makebox(0,0)[t]{\lineheight{1.25}\smash{\begin{tabular}[t]{c}400k\end{tabular}}}}%
+    \put(0.86908298,0.03695335){\color[rgb]{0.19607843,0.19215686,0.24705882}\makebox(0,0)[t]{\lineheight{1.25}\smash{\begin{tabular}[t]{c}450k\end{tabular}}}}%
+    \put(0.95369745,0.03695335){\color[rgb]{0.19607843,0.19215686,0.24705882}\makebox(0,0)[t]{\lineheight{1.25}\smash{\begin{tabular}[t]{c}500k\end{tabular}}}}%
     \put(0,0){\includegraphics[width=\unitlength,page=3]{aug_l2_mAP.pdf}}%
   \end{picture}%
 \endgroup%

@@ -49,18 +49,31 @@ labels = ['Brown_bear',
 
 # select dataset by commenting out
 infer_images_list = [
-    # validation_images,
+    validation_images,
     kaggle_iWildCam,
     handy_images,
     handy_videos
 ]
 
 # set maximum number for each dataset
-max_images = 1000
+max_images = 500
+config_ind = 'faster_optimierungen'
 
-# select specific model (if None all frome models_dir will be taken)
-select_model = None
-exclude_model = None
+# test configurationen:
+test_config = {
+    'ssd_vs_faster': [
+        'ssd_inception_v2',
+        'ssd_mobilenet_v2',
+        'faster_rcnn_inception_v2_early_stopping',
+        'faster_rcnn_inception_v2_early_stopping_ohne_aug'
+    ],
+    'faster_optimierungen': [
+        'faster_rcnn_inception_v2_3000',
+        'faster_rcnn_inception_v2_l2',
+        'faster_rcnn_inception_v2_4000',
+        'faster_rcnn_inception_v2_early_stopping'
+    ]
+}
 
 
 def get_image_paths(imgs_dir, max_images=None):
@@ -98,10 +111,8 @@ for model in os.listdir(models_dir):
     if not os.path.isdir(model_dir):
         continue
 
-    if select_model and select_model != model:
-        continue
-
-    if exclude_model and exclude_model == model:
+    if not model in test_config[config_ind]:
+        print('skipping ', model)
         continue
 
     print('starting Model:   ', model)
@@ -122,7 +133,7 @@ for model in os.listdir(models_dir):
 
         output_dir = os.path.join(eval_dir, infer_results, model)
         output_dir_all = os.path.join(
-            eval_dir, infer_results, 'all')
+            eval_dir, infer_results, config_ind)
 
         print('starting Dataset: ', infer_results)
 

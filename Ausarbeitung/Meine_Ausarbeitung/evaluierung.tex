@@ -124,32 +124,42 @@ insgesammt 4 loss werte verwendet.
 
 %----------------- SECTION: validtaion ---------------------
 \section{Vergleich der Modelle}\label{sec:model_vergleich}
-\begin{itemize}
-  \item Tab vgl SSD, Faster, mit/ohne Aug, für mAP, Loss
-  \item Overfiiting bei Faster: Aug vs Early Stopping
-\end{itemize}
+In diesem Abschnitt werden die beiden für das Training verwendeten
+Objec Detection Architekturen SSD und Faster R-CNN miteinander 
+verglichen.\\
+Für SSD wurden einmal Mobilenet und einmal InceptionV2 als 
+Basis CNN verwendet und für Faster R-CNN nur InceptionV2.
+
+
 
 \subsection{Evaluierung/Validierung}
 
-hier mit validierungs set
-
-\begin{table}[htb]
+Die Evaluierungsergebnisse beziehen sich auf das 
+Testsets aus dem Open Images Datensatz.
+\\
+SSD wurd mit Batchsize=12 75k durchläufe trainiert.\\
+Faster R-CNN mit Batchsize=1 für 200k durchläufe.(1 weil dynamische input size)\\
+eine epoche sind (teps mal batchsize)/samples
+\\
+\begin{table}[H]
   \centering
-  \label{table:modelvgl}
-  \begin{tabular}{m{0.2\textwidth}|m{0.2\textwidth}<{\centering}m{0.2\textwidth}<{\centering}m{0.2\textwidth}<{\centering}}
+  \begin{tabular}{m{0.25\textwidth}m{0.2\textwidth}|m{0.15\textwidth}<{\centering}m{0.15\textwidth}<{\centering}}
   \hline
-                & mAP                                           & Loss                                          & Augmentation                                      \\ \hline\hline
-  SSD Mobilenet & \begin{tabular}[c]{@{}l@{}}0,62 \\ 0,61\end{tabular} & \begin{tabular}[c]{@{}l@{}}3,56\\ 3,42\end{tabular} & \begin{tabular}[c]{@{}l@{}}neim\\ ja\end{tabular} \\ \hline
-  SSD Inception & \begin{tabular}[c]{@{}l@{}}0,65\\ 0,62\end{tabular} & \begin{tabular}[c]{@{}l@{}}4,41\\ 3,71\end{tabular} & \begin{tabular}[c]{@{}l@{}}nein\\ ja\end{tabular} \\ \hline
-  Faster R-CNN  & \begin{tabular}[c]{@{}l@{}}0,67 \\ 0,69\end{tabular} & \begin{tabular}[c]{@{}l@{}}0,82\\ 0,67\end{tabular} & \begin{tabular}[c]{@{}l@{}}neim\\ ja\end{tabular} \\ \hline
+  Model                                                              & Optimierung                                                                   & mAP                                                        & Loss                                                       \\ \hline\hline
+  SSD + MobilenetV2                                                  & \begin{tabular}[c]{@{}l@{}}Ohne\\ Augmentierung\end{tabular}                  & \begin{tabular}[c]{@{}l@{}}0,62\\ 0,61\end{tabular}        & \begin{tabular}[c]{@{}l@{}}3,56\\ 3,50\end{tabular}        \\ \hline
+  SSD + InceptionV2                                                  & \begin{tabular}[c]{@{}l@{}}Ohne\\ Augmentierung\end{tabular}                  & \begin{tabular}[c]{@{}l@{}}0,65\\ 0,62\end{tabular}        & \begin{tabular}[c]{@{}l@{}}3,86\\ 3,71\end{tabular}        \\ \hline
+  \begin{tabular}[c]{@{}l@{}}Faster R-CN\\ +InceptionV2\end{tabular} & \begin{tabular}[c]{@{}l@{}}Ohne\\ Augmentierung\\ Early Stopping\end{tabular} & \begin{tabular}[c]{@{}l@{}}0,67\\ 0,69\\ 0,67\end{tabular} & \begin{tabular}[c]{@{}l@{}}0,82\\ 0,67\\ 0,69\end{tabular} \\ \hline
   \end{tabular}
-  \captionof{table}{Vergleich Modelle}
 \end{table}
 
-
-Augmentierung hat nur effekt bei Faster R-CNN, da komplexeres Modell
-% Plots: Overfitting
-
+Man kann erkennen das der Feler (Loss) durch Augmentierung etwas 
+veringert wurde.
+Insbesondere beim Faster R-CNN, welches aufgrund der 
+höheren komplexität, schneller zur überanpassung neigt.\\
+Der Verlauf des Trainings ließ sich mihilfe des Evaluierungstools Tensorboard
+Visualisieren, Plots für die drei Konfigurationen des Faster R-CNN sind in 
+Abbildung \ref{plot:mAP} und \ref{plot:loss} dargestellt.
+\vspace{0.5cm}
 
 \begin{figure}[htb]
 \begin{minipage}{0.5\textwidth}
@@ -180,149 +190,242 @@ Augmentierung hat nur effekt bei Faster R-CNN, da komplexeres Modell
   \end{tabular}    
 \end{table}
 
+hier die zwi techniken zur vermeidung von overfitting: augmentierung
+und Loss gegenübergestellt. Augmentierung erzielt bessere ergebnisse, 
+da durch vorzeitiges stoppen des trainings auch keine weitere verbesserung
+bezüglich mAP mehr stattfinden konnte.
 
-\begin{itemize}
-  \item Early Stopping
-  \begin{itemize}
-    \item mAP: 0,67
-    \item Loss: 0,69
-  \end{itemize}
-\end{itemize}
-
-Loss Werte sind für Aug und Early Stopping gleich. jedoch kann 
-mAP bei Training mit Augmentierung noch weiter ansteigen.
-\\
-weitere Beobachtung: wenn eval für anderes Datenset 
-angewendet wird ist auch der Loss des Augmentierten 
-Datensets besser.
+% weitere Beobachtung: wenn eval für anderes Datenset 
+% angewendet wird ist auch der Loss des Augmentierten 
+% Datensets besser.
 
 
 
 %----------------- SECTION: Test Inferenz ---------------------
 \subsection{Test Inferenz}\label{sec:test_inferenz}
-hier mit test set und weitere
-test script mit open vino zum vgl der modelle bzg infer ergebnisse (bilder/zeit)
+
+Um eine bessere Vorstellung davon zu bekommen wie sich die 
+unterschiedlichen Ergebnisse in mAP und Loss in der Anwendung 
+tatsächlich bemerkbar machen, wurde die Inferenz der drei modelle 
+für verschiedene Test Bilder durchgeführt.
+
+Dafür wurden die Modelle in die für OpenVino benötigte Intermediate
+Representation umgewandelt um dann mihilfe eines Python 
+Scripts in die InferenceEngine geladen zu werden.
+
+Mithilfe dieses Scripts konnten nun die Inferenz für 
+folgende Testszenarien:
+
+\begin{itemize}
+  \item inferenz auf Test Set \textit{OpeImages}
+  \item inferenz auf \textit{The iWildCam 2019 Dataset}\cite{beery2019iwildcam}
+  \item inferenz auf eigene Bilder
+\end{itemize}
+
+durchgeführt und die Ergebnisse miteinander verglichen werden.
+
+
 \subsubsection{test set}
-\subsubsection{kaggle set}
+Fast alles wird erkannt.
+\\
+grund: große ähnlich der art der bilder in trainings und testsatz\\
+tiere sind überwiegend mittg zentriert im bild. Abb. \ref{fig:ssd}
+\\[1cm]
+\begin{minipage}{0.5\textwidth}
+  \centering
+  \includegraphics[width=0.9\textwidth]{model_compare_test__ssd_inception_v2.jpg}
+  \captionof{figure}{SSD}
+  \label{fig:ssd}
+\end{minipage}
+\begin{minipage}{0.5\textwidth}
+  \centering
+  \includegraphics[width=0.9\textwidth]{model_compare_test__faster_rcnn_inception_v2_early_stopping.jpg}
+  \captionof{figure}{Faster R-CNN}
+  \label{fig:faster_rcnn}
+\end{minipage}
+\\[1cm]
+Wenn mehrere Tiere im Bild sind, diese weiter weg oder schlechtere
+Bildqualität, erkennt Faster besser. Abb \ref{fig:faster_rcnn}
+
+
+
+
 \subsubsection{eigene}
 
 
-\subsection{Inferenz zeit}
-
-inferenz zeiten wurden in FPS für 100 bilder gemessen. Bei 
-mehr als ein Inferenz Request wurde die Asynchrone Api der InferenceEngine 
-verwendet.
-Folgende Tabelle Zeigt für verschiedene Modelle die 
-Inferenz zeit auf ncs2 über raspberry pi für 100 frames.
-
-
-
-\begin{table}[hpb]
+bilder guter qualität, jedoch unterschied zu openimages dataset 
+bezogen auf background umgebung.
+\\[1cm]
+\begin{minipage}{0.5\textwidth}
   \centering
-  \begin{tabular}{m{0.25\textwidth}|m{0.1\textwidth}<{\centering}|m{0.1\textwidth}<{\centering}|m{0.1\textwidth}<{\centering}|m{0.1\textwidth}<{\centering}}
-  \hline
-  \multirow{2}{*}{Model} & \multicolumn{4}{c}{Asynchronge Inferenz Requests} \\ \cline{2-5} 
-                         & 1           & 2          & 3          & 4          \\ \hline\hline
-  SSD MobilenetV2        & 19,5           & 35,2          & 40,6          & 40,3          \\
-  SSD InceptionV2        & 15,6           & 27,7          & 31,1          & 31,7          \\
-  Faster R-CNN Incept.   & 0,63           & 0,67          & 0,75          & 0,74          \\ \hline
-  \end{tabular}
-\end{table}
+  \includegraphics[width=0.9\textwidth]{model_compare_handy_ssd_mobilenet_v2.jpg}
+  \captionof{figure}{SSD Mobilnet}
+  \label{}
+\end{minipage}
+\begin{minipage}{0.5\textwidth}
+  \centering
+  \includegraphics[width=0.9\textwidth]{model_compare_handy_ssd_inception_v2.jpg}
+  \captionof{figure}{SSD Inception}
+  \label{}
+\end{minipage}
+\\[1cm]
+\begin{minipage}{0.5\textwidth}
+  \centering
+  \includegraphics[width=0.9\textwidth]{model_compare_handy_faster_rcnn_inception_v2_early_stopping_ohne_aug.jpg}
+  \captionof{figure}{Faster R-CNN + Early Stopping}
+  \label{}
+\end{minipage}
+\begin{minipage}{0.5\textwidth}
+  \centering
+  \includegraphics[width=0.9\textwidth]{model_compare_handy_faster_rcnn_inception_v2_early_stopping.jpg}
+  \captionof{figure}{Faster R-CNN + Aug}
+  \label{}
+\end{minipage}
+\\[1cm]
+
+
+\subsubsection{kaggle set}
+
+Aufnahmen von ... enthällt viele dunkle nacht aufnahmen geringer 
+qualität. entspricht daher am ehesten den real world bedingungen.
+wenig wird erkannt. am besten erkennt faster + aug.
+daher wurde versuch faster rcnn zu optimieren und robuster 
+zu machen, was im nächsten Abschnitt beschrieben ist.
+\\
+evtl noch bilder.
+
 
 
 %----------------- SECTION: optimierung ---------------------
 \section{Optimierungen: Faster r-CNN}\label{sec:optimierung_faster_rcnn}
-mit faster r-cnn wurden nun noch optimierungen durchgeführt, da 
-trotz augmentierung bei mehr epochen overfitting auftrat.
+
+Um bessere Ergebnisse für das Faster R-CNN zu erzielen wurde zunächst 
+das im vorherigen beschriebene Faster + Aug 400k statt 200k durläufe 
+trainiert.
 
 
 \subsection{Validierung}
 
-bei faster > 400k steps:
+Trotz Augmentierung hat das Modell ab 250k schritten overfittet.
+Betrachtet man die einzelnen Loss Kurven, aus denen sich der gesammt 
+Loss zusammensezt (insgsammt 4 bei faster R-CNN, 2mal rpn, 2mal fully connected am ende)
+stellt man fest, dass nur das Rpn netz sich überanpasst.
+\\
+Da die L2 Regulierung durch anpassung des Config Files für die 
+Einstellungen der Model Parameter, auf die Stufen seperat angewendet werden 
+kann, wurde diese auf die erste stufe (RPN) mit einem Faktor von 0,001 
+angewendet, wodurch sich das Overfitting verhindern ließ.
+\\
+Auf der anderen Seite hat sich jedoch eine leichte verschlechterung
+des mAP ergeben.
+\\[1cm]
+\begin{minipage}{0.5\textwidth}
+  \centering
+  \def\svgwidth{0.9\textwidth}
+  \input{Bilder/aug_l2_mAP.pdf_tex}
+  \captionof{figure}{mAP}
+  \label{}
+\end{minipage}
+\begin{minipage}{0.5\textwidth}
+  \centering
+  \def\svgwidth{0.9\textwidth}
+  \input{Bilder/aug_l2_total_loss.pdf_tex}
+  \captionof{figure}{Total Loss}
+  \label{}
+\end{minipage}
+\\[1cm]
+\begin{minipage}{0.5\textwidth}
+  \centering
+  \def\svgwidth{0.9\textwidth}
+  \input{Bilder/aug_l2_classifier_loss.pdf_tex}
+  \captionof{figure}{Classifier Loss}
+  \label{}
+\end{minipage}
+\begin{minipage}{0.5\textwidth}
+  \centering
+  \def\svgwidth{0.9\textwidth}
+  \input{Bilder/aug_l2_rpn_loss.pdf_tex}
+  \captionof{figure}{RPN Loss}
+  \label{}
+\end{minipage}
+\\[1cm]
+weitere Trainings Konfigurationen waren
 \begin{itemize}
   \item dropout
   \item l2 (rpn loss anschauen)
   \item mehr daten (4000 statt 3000)
-  \item early stopping (bei zb 300000)
 \end{itemize}
-
-
-
-hier loss und mAP für 500k steps
-\\[1cm]
-\begin{minipage}{0.5\textwidth}
-  \centering
-  \label{plot:map}
-  \def\svgwidth{0.9\textwidth}
-  \input{Bilder/aug_mAP.pdf_tex}
-  \captionof{figure}{mAP: nur Augmentierung}
-\end{minipage}
-\begin{minipage}{0.5\textwidth}
-  \centering
-  \label{plot:loss}
-  \def\svgwidth{0.9\textwidth}
-  \input{Bilder/aug_total_loss.pdf_tex}
-  \captionof{figure}{Loss: nur Augmentierung}
-\end{minipage}
-\\[1cm]
-und hier die stufen im deteil
-\\[1cm]
-\begin{minipage}{0.5\textwidth}
-  \centering
-  \label{plot:map}
-  \def\svgwidth{0.9\textwidth}
-  \input{Bilder/aug_classifier_loss.pdf_tex}
-  \captionof{figure}{Classifier Loss: nur Augmentierung}
-\end{minipage}
-\begin{minipage}{0.5\textwidth}
-  \centering
-  \label{plot:loss}
-  \def\svgwidth{0.9\textwidth}
-  \input{Bilder/aug_rpn_loss.pdf_tex}
-  \captionof{figure}{RPN Loss: nur Augmentierung}
-\end{minipage}
-\\[1cm]
-durch l2 regulierung in der ersten stufe (rpn), konnte 
-dass overfitting verringert werden.
-\\[1cm]
-\begin{minipage}{0.5\textwidth}
-  \centering
-  \label{plot:map}
-  \def\svgwidth{0.9\textwidth}
-  \input{Bilder/aug_l2_classifier_loss.pdf_tex}
-  \captionof{figure}{Classifier Loss: nur Augmentierung}
-\end{minipage}
-\begin{minipage}{0.5\textwidth}
-  \centering
-  \label{plot:loss}
-  \def\svgwidth{0.9\textwidth}
-  \input{Bilder/aug_l2_rpn_loss.pdf_tex}
-  \captionof{figure}{RPN Loss: nur Augmentierung}
-\end{minipage}
-\\[1cm]
-Auch auf den gesammt Loss hatte es einen geringen
-einfluss.
-\\[1cm]
-\begin{minipage}{0.5\textwidth}
-  \centering
-  \label{plot:map}
-  \def\svgwidth{0.9\textwidth}
-  \input{Bilder/aug_l2_mAP.pdf_tex}
-  \captionof{figure}{mAP: nur Augmentierung}
-\end{minipage}
-\begin{minipage}{0.5\textwidth}
-  \centering
-  \label{plot:loss}
-  \def\svgwidth{0.9\textwidth}
-  \input{Bilder/aug_l2_total_loss.pdf_tex}
-  \captionof{figure}{Loss: nur Augmentierung}
-\end{minipage}
-\\[1cm]
-weitere regularisierungs techniken, die angewendet wurden 
-sind Dropout, und l2 mit $\lambda = 0.02$ und sind in 
-\ref{table:reg} dargestelt.
-
-
+und sind in tabelle so und so dargestellt.
+% hier loss und mAP für 500k steps
+% \\[1cm]
+% \begin{minipage}{0.5\textwidth}
+%   \centering
+%   \label{plot:map}
+%   \def\svgwidth{0.9\textwidth}
+%   \input{Bilder/aug_mAP.pdf_tex}
+%   \captionof{figure}{mAP: nur Augmentierung}
+% \end{minipage}
+% \begin{minipage}{0.5\textwidth}
+%   \centering
+%   \label{plot:loss}
+%   \def\svgwidth{0.9\textwidth}
+%   \input{Bilder/aug_total_loss.pdf_tex}
+%   \captionof{figure}{Loss: nur Augmentierung}
+% \end{minipage}
+% \\[1cm]
+% und hier die stufen im deteil
+% \\[1cm]
+% \begin{minipage}{0.5\textwidth}
+%   \centering
+%   \label{plot:map}
+%   \def\svgwidth{0.9\textwidth}
+%   \input{Bilder/aug_classifier_loss.pdf_tex}
+%   \captionof{figure}{Classifier Loss: nur Augmentierung}
+% \end{minipage}
+% \begin{minipage}{0.5\textwidth}
+%   \centering
+%   \label{plot:loss}
+%   \def\svgwidth{0.9\textwidth}
+%   \input{Bilder/aug_rpn_loss.pdf_tex}
+%   \captionof{figure}{RPN Loss: nur Augmentierung}
+% \end{minipage}
+% \\[1cm]
+% durch l2 regulierung in der ersten stufe (rpn), konnte 
+% dass overfitting verringert werden.
+% \\[1cm]
+% \begin{minipage}{0.5\textwidth}
+%   \centering
+%   \label{plot:map}
+%   \def\svgwidth{0.9\textwidth}
+%   \input{Bilder/aug_l2_classifier_loss.pdf_tex}
+%   \captionof{figure}{Classifier Loss: nur Augmentierung}
+% \end{minipage}
+% \begin{minipage}{0.5\textwidth}
+%   \centering
+%   \label{plot:loss}
+%   \def\svgwidth{0.9\textwidth}
+%   \input{Bilder/aug_l2_rpn_loss.pdf_tex}
+%   \captionof{figure}{RPN Loss: nur Augmentierung}
+% \end{minipage}
+% \\[1cm]
+% Auch auf den gesammt Loss hatte es einen geringen
+% einfluss.
+% \\[1cm]
+% \begin{minipage}{0.5\textwidth}
+%   \centering
+%   \label{plot:map}
+%   \def\svgwidth{0.9\textwidth}
+%   \input{Bilder/aug_l2_mAP.pdf_tex}
+%   \captionof{figure}{mAP: nur Augmentierung}
+% \end{minipage}
+% \begin{minipage}{0.5\textwidth}
+%   \centering
+%   \label{plot:loss}
+%   \def\svgwidth{0.9\textwidth}
+%   \input{Bilder/aug_l2_total_loss.pdf_tex}
+%   \captionof{figure}{Loss: nur Augmentierung}
+% \end{minipage}
+% \\[1cm]
 
 \begin{table}[htb]
   \centering
@@ -397,3 +500,25 @@ training in graustufen bilder zu besseren erg führt, ... nicht so.
 \end{table}
 
 
+
+
+
+\section{Inferenz zeit}
+
+inferenz zeiten wurden in FPS für 100 bilder gemessen. Bei 
+mehr als ein Inferenz Request wurde die Asynchrone Api der InferenceEngine 
+verwendet.
+Folgende Tabelle Zeigt für verschiedene Modelle die 
+Inferenz zeit auf ncs2 über raspberry pi für 100 frames.
+
+\begin{table}[hpb]
+  \centering
+  \begin{tabular}{m{0.25\textwidth}|m{0.1\textwidth}<{\centering}|m{0.1\textwidth}<{\centering}|m{0.1\textwidth}<{\centering}|m{0.1\textwidth}<{\centering}}
+  \hline
+  \multirow{2}{*}{Model} & \multicolumn{4}{c}{Asynchronge Inferenz Requests} \\ \cline{2-5} 
+                         & 1           & 2          & 3          & 4          \\ \hline\hline
+  SSD MobilenetV2        & 19,5           & 35,2          & 40,6          & 40,3          \\
+  SSD InceptionV2        & 15,6           & 27,7          & 31,1          & 31,7          \\
+  Faster R-CNN Incept.   & 0,63           & 0,67          & 0,75          & 0,74          \\ \hline
+  \end{tabular}
+\end{table}

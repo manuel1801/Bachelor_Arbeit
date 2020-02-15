@@ -196,3 +196,4 @@ Dataset/OI_Samples
 kaggle_iWildCam
 
 /Inference_Engine_Tools/benchmark_tool/open_vino/cpp/
+/Inference_Engine_Tools/benchmark_tool/results*.txt

@@ -274,11 +274,13 @@ Deep Learning + Techniken der Bildverarbeitung
 %---------------- SUBSECTION: Convolutional ----------------
 \subsection{Convolutional Neural Networks}\label{subsec:cnn}
 
-Für die Bilderkennung werden üblicherweise Convolutionael 
-Neural Networks (CNNs) verwendet. Hierbei handelt es sich um eine Erweiterung
-der in \ref{sec:nn} beschriebenen Neuronalen Netze. Beim CNN 
-sollen vor der Klassifikation, Merkemale des Input Bildes,
-die spezifisch für eine Klasse sind herausextrahiert werden.
+Convolutional Neural Networks sind eine Erweiterung 
+der in \ref{sec:nn} beschriebenen Neuronalen Netze 
+und besonders geeignet für die Bilderkennung.
+
+Befor die Klassifizierung mittels Fully Connected Network 
+stattfindet, sollen für die Klasse spezifische Merkmale 
+aus dem Input Bild heraus extrahiert werden.
 
 Dafür werden über das Bild zeilenweise Filtermatrizen mit kleinerer Dimension
 (3x3, 5x5) geschoben und eine math Faltung angewendet.
@@ -372,9 +374,10 @@ genauer eingegangen wird, verwendet.
 
 
 %------------------- SECTION: Hardware ----------------------
-\section{Hardware/NCS2}\label{sec:hardware}
+\section{Inferenz}\label{sec:hardware}
 %noch eine section zu Hardware allg (cpu, gpu, tpu), Neural Compute Stick und AI on the egde
 
+\subsection{Hardware/NCS2}
 Da das Training und die Inferenz von Deep Learning Algorithmen
  sehr rechenintensiv ist, werden entsprechen leistungsfähige 
 Prozessoren benötigt. Dabei ist die Ausführung auf einer GPU 
@@ -398,7 +401,7 @@ Dieser basiert auf der Movidius Myriad X Vision Processing Unit (VPU)
     \caption{NCS2}
 \end{figure}
 
-\subsection{OpenVino Toolkit}
+\subsection{Software/OpenVino}
 
 
 % doku:
@@ -409,14 +412,32 @@ Dieser basiert auf der Movidius Myriad X Vision Processing Unit (VPU)
 % Face
 % https://github.com/intel-iot-devkit/inference-tutorials-generic/blob/openvino_toolkit_2019_r1_0/face_detection_tutorial/Readme.md
 
-Die Implementierung der Inferenz des trainierten Models wurde 
-mithilfe des OpenVino Toolkits vorgenommen, eine Anwendung 
-zur Optimierung und Ausführung von CNNs auf Intel Hardware.
 
-Es vereinfacht und Optimiert damit die Verbindung zwischen 
-Training des Models und bereitstellen in einer Anwender 
-Applikation, wie in Abbildung \ref{img:openvinoworkflow} 
-schematisch dargestellt.
+
+
+Um die Inferenz eines trainierten Deep Learing Modells auf dem
+Neural Compute Stick ausführen zu können, wird das Toolkit 
+OpenVino verwendet.
+
+Dieses ist eine Plattform zur Otimierung und Inferenz von 
+CNN Basierten Modellen auf unterschiedlicher Intel Hardware.
+
+Dabei wird ein eigenes Dateiformat verwendet, die \textit{Intermediate 
+Representation} (IR), welche die Struktur/Architektur des Modells 
+in einer .xml Datei und die trainierten Parameter/Gewichte in 
+einer Binary (.bin) datei abbildet.
+
+Mit dem \textit{Model Optimizer} können Modelle der Frameworks 
+TensorFlow, Caffe, ONNX, Kaldi, oder MXNET in das IR Format 
+konvertiert werden.
+
+Um diese dann auf die entsprechende Hardware zu laden und anwendbar 
+zu machen, wird die auch in OpenVino enthaltene \textit{InferenceEngeine}
+verwendet.
+
+Diese bietet eine Api mit der aus der Anwendung heraus in den 
+Programmiersprachen C++ oder Python auf die Funktionen der 
+InferenceEngeine zugegriffen werden können.
 
 \begin{figure}[htb]
     \centering
@@ -425,35 +446,75 @@ schematisch dargestellt.
     \label{img:openvinoworkflow}
 \end{figure}
 
-Das Toolkit besteht im Wesentlichen aus den zwei Komponenten 
-\textit{Model Optimizer} und \textit{Inference Engine}
+\subsubsection{InferenceEngine}
 
-Mit dem Model Optimizer können Netze die in den Frameworks 
-TensorFlow, Caffe, MXNet, Kaldi oder ONNX trainiert wurden 
-in die von OpenVino verwendete Intermediate Representation 
-des Modells gebracht werden.
+Folgendes Diagramm zeigt Aplauf und Funktionsweise der InferenceEngeine.
 
-Diese ist ein Framework unspezifisch Dateiformat, welches aus 
-einer .xml Datei für die Struktur/Architektur des Modells
-und einer .bin Datei fpr die trainierten gewichten besteht.
+\begin{enumerate}
+    \item HW Plugin laden
+    \item Model IR einlesen
+    \item In-Output Blobs allokieren 
+    \item ausführbares Model laden
+    \item inferenz request abgeben
+    \item Bild als Array in Input Blob laden
+    \item Inferenz
+    \item Output verarbeiten, wieder zu Schritt 6
+\end{enumerate}
+
+\begin{figure}[htb]
+    \centering
+    \input{Bilder/diagramm}
+    \caption{}
+    \label{}
+\end{figure}
 
 
-Die InferenceEngine ist eine Runtime welche eine API für die 
-Sprachen C++ und Python zur Integration und Nutzung der Inferenz 
-in der Anwendung bereitstellt.
+\begin{python}
+    # 1.
+    plugin = IEPlugin(device='MYRIAD')
 
-Dafür werden die IR Dateien des Models in ein Hardware spezifisches 
-Plugin geladen. Dieses kann die User Applikatin für die Inferenz 
-von Image Classification, ObjectDetection sowie Instance Segmentation
-Modellen nutzen.
+    # 2.
+    net = IENetwork(model=model_xml, weights=model_bin)
+
+    # 3. 
+    input_blob  = net.inputs
+    output_blob = net.outputs
+
+    # 4.
+    exec_net = plugin.load_network(net, n_requests)
+
+    # 5 (ab hier loop)
+    image = preprocess(capture) 
+    # capture dims zu input blob dims transformieren
+    # img_h, img_w, img_c -> blob_n, blob_c, blob_h, blob_w
+
+    # 6. 
+    res = exec_net.infer({input_blob : image})
+
+    # 7.
+    res = res[output_blob] # enthällt zb rois
+
+\end{python}
 
 
+Output Format variert je nach Modell, Image Classification,
+ObjectDetection sowie Instance Segmentation.
 
-\begin{itemize}
-    \item weitere hardware
-    \begin{itemize}
-        \item Raspberry
-        \item RpiCam mit IR Cut Switch
-        \item Wifi Stick
-    \end{itemize}
-\end{itemize}
+
+Um die Ausführungzeit der Inferenz zu verringern, können, 
+je nach Hardware Optimierungen wie Asynchtone Inferenz, 
+Inferenz requests auf mehreren Threads, oder Batching des 
+Inputs vorgenommen werden.
+
+\begin{figure}[htb]
+    \centering
+    \def\svgwidth{0.7\textwidth}
+    \input{Bilder/synch_asynch.pdf_tex}
+    \caption{Asynchron und mehrerere Inferenz Requests}
+    \label{fig:async}
+\end{figure}
+
+In Abbildung \ref{fig:async} dargestellt die Asynchrone ausführung 
+zwischen dem aufbereiten der Frames und der Inferenz, sowie 
+mehrere parallel ausgeführte Inferenz Requests.
+

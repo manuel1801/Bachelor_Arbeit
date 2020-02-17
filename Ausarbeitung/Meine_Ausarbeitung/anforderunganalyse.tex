@@ -33,53 +33,63 @@ sowohl normale, als auch Infrarot Aufnahmen machen kann.
 
 \section{Related Work}\label{sec:related_work}
 
-Für die Objekterkennung werden häufig End-to-End Lösung verwendet,
-Modelle die sowohl Klassifikation als auch Lokalisierung 
-durchführen.
-Diese verwenden meist eines der im Abschnitt 
-\ref{subsubsec:architecture} erläuterten Basis CNNs als  
-\textit{Feature Extractor} und darauf aufbauend ein Framework
-für die Lokalisierung. 
+% papers
+% SSD: \cite{liuSSDSingleShot2016}
+% speed/acc: \cite{huangSpeedAccuracyTradeOffs2017}
+% blogpost: \cite{wengObjectDetectionPart2018}
 
-Diese lassen sich, wie in \cite{wengObjectDetectionPart2018} beschrieben,
-in einstufige und zweistufige Verfahren gliedern. 
+% Bilder:
+% SSD: \cite{SSDSingleShot}
+% speed acc: \cite{huangSpeedAccuracyTradeOffs2017}
 
-\subsubsection{Region Based CNNs}
-Bei den zweistufigen
-handelt es sich um Regionbased CNNs, die Regionen für
-mögliche Box Locations mithilfe RPN (Region Proposia Network)
-oder selective search verfahren finden soll, um diese dann
-zu klassifizieren bzw box regression. Die aktuellste Version 
-davon ist das in Abbildung \ref{fig:faster_rcnn} schematisch 
-dargestellte \textit{Faster R-CNN} \cite{renFasterRCNNRealTime2016a}
+Wie in \ref{subsec:objdet_det} erwähnt, werden für die 
+Object Detection neben einem CNN zur Feature extaction 
+weiteere strukturen/framework benötigt zur lokalisierung 
+des Objekts im Bild
+
+Die entwicklung immer genauerer und effizienterer 
+Frameworks ist Gegenstand aktueller Forschung und lassen 
+sich wie in dem übersichtspaper \cite{ouaknineReviewDeepLearning}
+beschrieben in die zwei grundarten \textit{Region proposal based} 
+und den \textit{Regression/Classification Based} einteilen.
+
+
+
+
+\subsection{Faster R-CNN}
+Region Proposial Based Ansatz, \dots \cite{renFasterRCNNRealTime2016a}
+bei dem das RPN ein Bild als unput erhällt und
+daraus mögliche regionen für objekte im Bild findet.
+
+hier in einem Fully Convolutional realisiert, über dessen 
+Feature Maps im Sliding winow verfahren vordefinierte Anker
+ Boxen konvoliert werden. Der Resultieruende Vektor wird 
+ dann in einen binären FC Layer (cls) zur klassifizierung und 
+einen box-regressor layer (reg) für die Koordinaten gegeben.
 
 
 \begin{figure}[H]
     \centering
     \label{fig:faster_rcnn}
-    \includegraphics[width=0.5\textwidth]{faster_rcnn.png}
-    \caption{Faster R-CNN, \cite{renFasterRCNNRealTime2016a}}
+    \includegraphics[width=0.7\textwidth]{faster-RCNN_architecture.png}
+    \caption{Faster R-CNN, quelle: \cite{ObjectDetectionDummies2017b}}
 \end{figure}
 
 
-\subsubsection{Single Shot Detectoren}
-Einstufige Verfahren wie Single Shot Detectoren (SSD) 
-führen die lokalisierung zusammen mit dem Feature Extractor 
-aus, indem verschiedene scalierungen/ausmaße der Convolutional 
-Layer in den Classifier/Regressor gegeben werden.
-Dadurch sind diese wie in Abbildung \ref{fig:speed_acc}
-zu erkennen ist, zwar schneller, jedoch auch ungenauer.
+
+\subsection{SSD: Single Shot MultiBox Detector}
+Ist ein Regression/Classification Based Ansatz ... \cite{liuSSDSingleShot2016}
+
+Dabei werden dem Backbone CNN wetere feature Layer verschiedener größe 
+angehänget, welche zusammen mit default anker boxen und einem score 
+für die anwesenheit des objakts in der box in einen non max supression 
+layer gegeben, welcher die finalen predictions bestimmt.
 
 
-\begin{minipage}[t]{0.5\textwidth}
+\begin{figure}[H]
     \centering
     \label{fig:faster_rcnn}
-    \includegraphics[width=0.67\textwidth]{faster_rcnn.png}
-    \captionof{figure}{Faster R-CNN, \cite{renFasterRCNNRealTime2016a}}
-\end{minipage}
-\begin{minipage}[t]{0.5\textwidth}
-    \centering
-    \label{fig:speed_acc}
-    \includegraphics[width=\textwidth]{speed_acc_comp.png}
-    \captionof{figure}{Geschw vs Genauigkeit, \cite{huangSpeedAccuracyTradeOffs2017}}
-\end{minipage}
+    \includegraphics[width=0.7\textwidth]{ssd_architecture.png}
+    \caption{SSD, quelle: \cite{SSDSingleShot}}
+\end{figure}
+

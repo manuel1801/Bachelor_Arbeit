@@ -1,122 +1,118 @@
-%##########################################################################
 %##########################  CHAPER 6: APPLICATION  #######################
-%##########################################################################
 
 \chapter{Entwicklung der Anwendung}\label{kap:application}
 
-In diesem Kapitel wird die Entwicklung der Anwendung als Autonomes 
-Edge System auf dem Respberry Pi zusammen mit dem Neural Compute 
-Stick 2 und einer geeigneten Kamera beschrieben.
-Ebenso wird die Integration des trainierten Tensorflow Models in die  
-Applikation sowie die Implementierung der Neztwerk Verbindung zu dem 
-System beschriebn.
-
-%----------------------------------------------------------------------
-
+Dieses Kapitel beschreibt die Entwicklung der Anwendung, als 
+autonomes System welches auf dem Raspberry Pi läuft, 
+Bilder über eine infrarotfähige Kamera aufnimmt und diese
+auf dem Neural Compute Stick 2 mit dem trainierten Modell 
+inferiert.
+Desweiteren wird die Implementierung der verbindugn zu einem 
+Host Pc beschrieben.
 
 
-%##########################  SECTION 1: AUFBAU  ###########################
-\section{Aufbau}\label{sec:aufbau}
+%-------------------------  SECTION 1: AUFBAU  ------------------------
+\section{Aufbau/Hardware}\label{sec:aufbau}
+
+Im folgenden werden die zur Realisierung der Anwendung verwendeten 
+Komponenten erläutert.
+
+\subsection*{Raspberry Pi}
+Der Anwendungs Code läuft auf dem Raspberry Pi. 
+Der Neural Compute Stick 2 wird über eine USB Schnittstelle verbunden.
 
 
-Die Anwendung soll auf dem ein Platinen Computer Raspberry 
-Pi 4 Abbildung \ref{subfig:raspy} 
-laufen, an den die nötigen Komponenten angeschlossen werden. Dazu 
-ghören der Neural Compute Stick 2, zur Ausführung der Inferenz, ein 
-Kamera Modul, mit welchem die Bilder aufgenommen werden, sowie ein 
-WiFi Stick und Powrebank.
-\\
-Der Neural Compute Stick wird über USB angeschlossen und kann 
-nach installation des OpenVino Toolkits \ref{sec:openvino}
- verwendet werden.
-\\
-Bei der Kamere handelt es sich um ein Infrarot Fähiges \textit{RaspberryPi 
-Camera Module} welches zusammen mit zwei Infrarot 
-LEDs montiert wird. \ref{sec:raspicam}
-
-
-\begin{figure}[htb]
+\begin{figure}[H]
     \centering
     \includegraphics[width=6cm]{./Bilder/raspberrypi_4.png}
     \caption{Raspberry Pi 4}
     \label{img:raspberrypi}
 \end{figure}
 
-% \begin{figure}[htb]
-%     \centering
-%     \begin{subfigure}{6cm}
-%         \centering
-%         \includegraphics[width=5cm]{./Bilder/raspberrypi_4.png}
-%         \subcaption{RaspberryPi 4}
-%         \label{subfig:raspy}
-%     \end{subfigure}
-%     \begin{subfigure}{6cm}
-%         \centering
-%         \includegraphics[width=4cm]{./Bilder/RPiCam.jpg}
-%         \subcaption{Quimat Raspberry Pi Kamera}
-%         \label{subfig:rpicam}
-%     \end{subfigure}
-%     \label{img:raspy_cam}
-% \end{figure}
 
 
-\begin{itemize}
-    \item Netzwerkverbindzuung:
-    \begin{itemize}
-        \item GSM Module
-        \item WiFi-Stick
-    \end{itemize}
-    \item Powrebank/Akku aus Sp. Verbrauch von:
-    \begin{itemize}
-        \item NCS2
-        \item Kamera
-        \item LEDs
-        \item WiFi Stick
-    \end{itemize}
-\end{itemize}
+\subsection*{Kamera}
+Verwendet wurde ein Raspberry Pi Kamera Modul mit 5MP OV5647 Sensor 
+und automatschem umschalten der Infrarot Funktion der Marke 
+Longrunner verwendet.
+%https://www.amazon.de/gp/product/B07R4JH2ZV/ref=ppx_yo_dt_b_asin_title_o01_s00?ie=UTF8&psc=1
+Dieses verfügt zusätzlich über zwei Infrarot LEDs, mit 850 nm wellenlänge.
 
-
-%----------------------------------------------------------------------
-
-
-
-
-%##########################  SECTION 2: OPENVINO  #######################
-
-
-
-%------------------------- Inference Engine ---------------------------
-\subsection*{Implementierung}
-
-Die Implementierung der Inferenz wurde in Python vorgenommen. 
-
-Dafür waren folgende Schritte nötig:
-
-% Als Diagramm
- 
-\begin{enumerate}
-    \item HW Plugin laden
-    \item Model IR einlesen
-    \item In-Output Blobs allokieren 
-    \item ausführbares Model laden
-    \item inferenz request abgeben
-    \item Bild als Array in Input Blob laden
-    \item Inferenz
-    \item Output verarbeiten, wieder zu Schritt 6
-\end{enumerate}
-
-
-\begin{figure}[htb]
+\begin{figure}[H]
     \centering
-    \input{./Bilder/diagramm}    
-    \label{fig:diagramm}
+    \includegraphics[width=0.35\textwidth]{longrunner.jpg}
+    \caption{Longruner for Raspberry Pi 4 Camera Kamera Module}
+    \label{fig:rpicam}
 \end{figure}
 
+Für das Umschalten in den Infrarot Modus, wird der Infrarot Filder, welcher sich 
+für normale Aufnahmen vor der Linse befindet entfern, was über einen magnetschalter 
+der mit einem Helligkeitssensor getriggert wird erfolg.
 
-Blobs sind In-Output Tensoren
+ 
+
+\subsection*{sonstiges}
+\begin{itemize}
+    \item Internet Stick%https://www.amazon.de/gp/product/B00HSZEY34/ref=ppx_yo_dt_b_asin_title_o00_s00?ie=UTF8&psc=1
+    \item Hülle
+    \item Powerbank
+\end{itemize}
+
+\section{Implementierung/Software}
+
+in Python, 3 Programme, main, inferenz, connection
+
+hier gesammt programm beschreiben mit entweder 
+Klassendiagramm oder Pseudo code.
+
+\subsection*{Inferenz}
+
+heir die implementierung des infer scripts (mit non blocking, 
+buffer, motion)
 
 
-\begin{lstlisting}[language=Python]
+Um nicht durchgehend die Input Frames welche die Kamera liefert inferieren zu 
+müssen, wurde mithilfe der Library OpenCV ein bewegungserkennung 
+implementiert. Diese speichert bei start der Anwendung ein Frame 
+als Refernz ab, und kann damit alle weiteren Input frames vergleiche, 
+indem der Abstand der einzelnen Pixel werte berechnet und gemittelt wird.
+
+
+%Asynchrone inferenz
+%https://docs.openvinotoolkit.org/latest/_demos_python_demos_object_detection_demo_ssd_async_README.html
+
+
+
+\begin{algorithm}[H]
+    \caption{Asynchrone Inferenz}
+    \begin{algorithmic}
+        \WHILE{\TRUE}
+
+        \STATE capture Frame
+        \IF{frame has moton}
+            \STATE $buffer \leftarrow 1 / frmae$
+        \ENDIF
+
+        \FOR{$inferReq = 0$ to $maxReq$}
+        \STATE status = exec.req(inferReq).wait(0)
+        \IF {status == done}
+            \STATE ROIs = exec.req(inferReq).output
+            \STATE results.add(ROIs, frame[inferReq])
+        \ENDIF
+
+        \ENDFOR
+
+        \ENDWHILE
+
+    \end{algorithmic}
+\end{algorithm}
+
+oder
+
+
+
+
+\begin{python}
     plugin = IEPlugin(device='MYRIAD')
     net = IENetwork(model=model_xml, weights=model_bin)
     input_blob = next(iter(net.inputs))
@@ -126,40 +122,7 @@ Blobs sind In-Output Tensoren
     res = exec_net.infer(inputs={input_blop: image})
     # res enthaellt liste mit allen erkannten klassen auf dem Bild
     # fuer Objekt Detection zusaetzlich noch Bounding Box koordinaten
-\end{lstlisting}
-
-
-Die Inferenz kann entweder Synchron oder Asynchron ausgeführt 
-werden. Der programmatische Ablauf der hier verwendeten 
-asynchronen Inferenz ist im Folgenden als Pseudocode dargestellt.
-
-% \begin{algorithm}[H]
-%     \SetKwData{Current}{Current}\SetKwData{Next}{Next}
-%     \While{true}{
-%      capture frame\;
-%      populate \Current InferRequest\;
-%      \textbf{start}  \Current InferRequest\; 
-%      \textbf{wait} for the \Current InferRequest\ 
-%      display \Current result;
-%     }
-%     \caption{Synchrone Inference}
-% \end{algorithm}
-
-
-% von hier https://docs.openvinotoolkit.org/latest/_demos_python_demos_object_detection_demo_ssd_async_README.html
-\begin{algorithm}[H]
-    \SetKwData{Current}{Current}\SetKwData{Next}{Next}
-    \While{true}{
-     capture frame\;
-     populate \Next InferRequest\;
-     \textbf{start} \Next InferRequest; \tcp{asynchroner aufruf}\
-     \If{\textbf{wait} for \Current done}{ \tcp{wird in eigenem  verarbeitet} \
-         display \Current;
-      }
-      \textbf{swap} \Current and \Next InferRequests;
-    }
-    \caption{Asynchrone Inferenz}
-\end{algorithm}
+\end{python}
 
 
 Das Ergebnis eines InferRequest für Object Detection Modelle 
@@ -177,54 +140,11 @@ davon bestehend aus einem Array mit den Indices:
     \item $y_{max}$ Box Koordinate
 \end{enumerate}
 
-Mit über die Wahrscheinlichkeit ließen sich die Ergebnisse 
-nach einem bestimmte Threshhold ausfiltern.\\
-Die Box Koordinaten wurden in Prozent der Bild- Breit/Höhe 
-angegeben wodurch sie wieder in die Original bild größe 
-für die Bounding Boxes übertragen werden konnent.
 
+\subsection*{Connectoin}
 
-%----------------------------------------------------------------------
-
-
-%##########################  SECTION 3: KAMERA  ########################
-\section{Raspberry Pi Kamera}\label{sec:raspicam}
-
-
-Bei der Kamera handelt es sich um das OV5647 5MP Modul mit regelbarem 
-Infrarotfilter. Zusammen mit zwei Infrarot LEDs von der Firma Quimat 
-Abbildung \ref{subfig:rpicam}
-\\
-Wird der Infrarotfilter ausgeschaltet ist es durch die Infrarot LEDs mit 
-850nm welligen Licht möglich auch bei dunkelheit aufnahmen zu machen, 
-die in Graustufen Werten dargestellt werden.
-
-
-%------------------------------------------------------------------------
-
-
-%##########################  SECTION 4: CONNECTION  #####################
-\section{Server-Client-Connection}\label{sec:serverclient}
-
-
-
-%------------------------------------------------------------------------
-
-
-%##########################  SECTION 1: REST  ###########################
-\section{Anwendung gesamt}\label{sec:ka}
-
-Da die Inferenz sehr rechenaufwendig ist, sollen die Frames der Kamera nur 
-dann inferiert werden, wenn eine Bewegung stattfindet. Dafür wurde der 
-Inferenz ein Bewegungsmelder vorgeschaltet. Dieser wurde mithilfe der Library 
-OpenCV implementiert, indem zu beginn des Kamerea Streams ein referenzbild 
-gespeichert wurde, mit dem die aktuellen Frames verglichen werden. 
-Ist der absolute Abstand der einzelnen Array Elemente/Werte der Bilder größer 
-als ein bestimmter Thresshold, wird dies als Bewegung gewertet.
-
-
-%-------------------------------------------------------------------------
-
+hier prinzip remote Proxy verbindung über SSH und SCP Protokol erkläre
+sowie implementierung mit remote it api und scp command.
 
 
 

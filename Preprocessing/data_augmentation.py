@@ -12,8 +12,9 @@ parser = ArgumentParser(add_help=False)
 parser.add_argument('-t', '--train_dir', required=False,
                     type=str, default='train/')
 parser.add_argument('-n', '--n_max', required=False, type=int, default=3000)
-parser.add_argument('-c', '--color', required=False, type=int, default=1)
-parser.add_argument('-g', '--geometric', required=False, type=int, default=2)
+parser.add_argument('-c', '--color', required=False, type=int, default=0)
+parser.add_argument('-g', '--geometric', required=False, type=int, default=0)
+parser.add_argument('-a', '--all', required=False, type=int, default=1)
 
 args = parser.parse_args()
 
@@ -21,6 +22,30 @@ train_dir = args.train_dir
 n_max = args.n_max
 color_augmentation = args.color
 geometric_augmentation = args.geometric
+all_aumenters = args.all
+
+
+augmenters = [
+    iaa.Dropout(p=(0, 0.1)),
+    iaa.CoarseDropout((0.01, 0.05), size_percent=0.1),
+    iaa.Multiply((0.5, 1.3), per_channel=(0.2)),
+    iaa.GaussianBlur(sigma=(0, 5)),
+    iaa.AdditiveGaussianNoise(scale=((0, 0.2*255))),
+    iaa.ContrastNormalization((0.5, 1.5)),
+    iaa.Grayscale(alpha=((0.1, 1))),
+    iaa.ElasticTransformation(alpha=(0, 5.0), sigma=0.25),
+    iaa.PerspectiveTransform(scale=(0.15)),
+    iaa.MultiplyHueAndSaturation((0.7)),
+
+    iaa.Affine(scale=((0.6, 1.2))),
+    iaa.Affine(translate_percent=(-0.3, 0.3)),
+    iaa.Affine(shear=(-25, 25)),
+    iaa.Affine(translate_percent={"x": (-0.3, 0.3), "y": (-0.2, 0.2)}),
+    iaa.Fliplr(1),
+    iaa.Affine(scale={"x": (0.6, 1.4), "y": (0.6, 1.4)})
+]
+if all_aumenters > 0:
+    some_of_all = iaa.SomeOf(all_aumenters, augmenters)
 
 
 # pixel manipulation
@@ -36,7 +61,9 @@ color_augmenters = [
     iaa.PerspectiveTransform(scale=(0.15)),
     iaa.MultiplyHueAndSaturation((0.7))
 ]
-some_of_color = iaa.SomeOf(color_augmentation, color_augmenters)
+
+if color_augmentation > 0:
+    some_of_color = iaa.SomeOf(color_augmentation, color_augmenters)
 
 # geometrische manipulation
 # kein rotation verwenden, da boxen nur gut bei viertel drehungen passen, sonst oversized
@@ -48,8 +75,9 @@ geometric_augmenters = [
     iaa.Fliplr(1),
     iaa.Affine(scale={"x": (0.6, 1.4), "y": (0.6, 1.4)})
 ]
-some_of_geometric = iaa.SomeOf(
-    geometric_augmentation, geometric_augmenters)
+if geometric_augmentation > 0:
+    some_of_geometric = iaa.SomeOf(
+        geometric_augmentation, geometric_augmenters)
 
 
 def get_index_by_name(label_path):
@@ -163,10 +191,15 @@ for path in os.listdir(train_dir):
         for i_aug in range(n_aug):
 
             print('augmenting ' + path + str(i_aug+1) + ' von ' + str(n_aug))
-            images_aug, labels_aug = some_of_color(
-                images=images, bounding_boxes=labels)
-            images_aug, labels_aug = some_of_geometric(
-                images=images_aug, bounding_boxes=labels_aug)
+
+            if all_aumenters > 0:
+                images_aug, labels_aug = some_of_all(
+                    images=images, bounding_boxes=labels)
+            else:
+                images_aug, labels_aug = some_of_color(
+                    images=images, bounding_boxes=labels)
+                images_aug, labels_aug = some_of_geometric(
+                    images=images_aug, bounding_boxes=labels_aug)
 
             for i in range(len(image_paths_sub)):
 

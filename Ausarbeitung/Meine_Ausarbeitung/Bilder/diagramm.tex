@@ -3,9 +3,20 @@
 \tikzstyle{arrow} = [thick,->,>=stealth]
 
 \begin{tikzpicture}[node distance=1.6cm]
-    \node (start) [process] {HW Plugin laden};
-    \node (mitte) [process, below of=start] {Model IR einlesen};
-    \node (end) [process, below of=mitte] {In-Output Blobs};
-    \draw [arrow] (mitte) -- (end);
-    \draw [arrow] (start) -- (mitte);
+    \node (hw)      [process]                   {HW Plugin laden};
+    \node (ir)      [process, below of=hw]      {Model IR einlesen};
+    \node (io)      [process, below of=ir]      {In-Output Blobs};
+    \node (execNet) [process, below of=io]      {executable Model};
+    \node (prepIn)  [process, below of=execNet] {preprocess Input};
+    \node (infer)   [process, below of=prepIn]  {infer};
+    \node (procOut) [process, below of=infer]   {process Output};
+
+    \draw [arrow] (hw) -- (ir);
+    \draw [arrow] (ir) -- (io);
+    \draw [arrow] (io) -- (execNet);
+    \draw [arrow] (execNet) -- (prepIn);
+    \draw [arrow] (prepIn) -- (infer);
+    \draw [arrow] (infer) -- (procOut);
+    \draw [arrow] (procOut) -- (prepIn);
+    
 \end{tikzpicture}

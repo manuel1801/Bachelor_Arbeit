@@ -107,44 +107,14 @@ indem der Abstand der einzelnen Pixel werte berechnet und gemittelt wird.
     \end{algorithmic}
 \end{algorithm}
 
-oder
 
 
+\subsection*{Connection}
 
-
-\begin{python}
-    plugin = IEPlugin(device='MYRIAD')
-    net = IENetwork(model=model_xml, weights=model_bin)
-    input_blob = next(iter(net.inputs))
-    exec_net = plugin.load_network(network=net)
-    infer_request = exec_net.requests[request_id]
-    # bild mit opencv als numpy arra laden und von hwc nach nchw umstellen
-    res = exec_net.infer(inputs={input_blop: image})
-    # res enthaellt liste mit allen erkannten klassen auf dem Bild
-    # fuer Objekt Detection zusaetzlich noch Bounding Box koordinaten
-\end{python}
-
-
-Das Ergebnis eines InferRequest für Object Detection Modelle 
-enthällt eine Liste mit allen möglichen erkannten Objekten, jedes 
-davon bestehend aus einem Array mit den Indices:
-
-\begin{enumerate}
-    \setcounter{enumi}{-1}
-    \item batch index
-    \item class label
-    \item Wahrscheinlichkeit
-    \item $x_{min}$ Box Koordinate
-    \item $y_{min}$ Box Koordinate
-    \item $x_{max}$ Box Koordinate
-    \item $y_{max}$ Box Koordinate
-\end{enumerate}
-
-
-\subsection*{Connectoin}
-
-hier prinzip remote Proxy verbindung über SSH und SCP Protokol erkläre
+hier prinzip remote Proxy verbindung über SSH und SCP Protokol erklären
 sowie implementierung mit remote it api und scp command.
+
+
 
 
 

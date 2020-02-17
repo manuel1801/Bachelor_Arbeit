@@ -375,15 +375,16 @@ genauer eingegangen wird, verwendet.
 
 
 %------------------- SECTION: Hardware ----------------------
-\section{Inferenz}\label{sec:hardware}
+\section{Neural Compute Stick 2}\label{ncs2}
 %noch eine section zu Hardware allg (cpu, gpu, tpu), Neural Compute Stick und AI on the egde
 
-\subsection{Hardware/NCS2}
 Da das Training und die Inferenz von Deep Learning Algorithmen
  sehr rechenintensiv ist, werden entsprechen leistungsfähige 
 Prozessoren benötigt. Dabei ist die Ausführung auf einer GPU 
 (Graphical Processor Unit) meist effizienter als auf einer 
-CPU (Central Processor Unit). Anwendungen auf eingebetteten Systemen
+CPU (Central Processor Unit).
+
+Anwendungen auf eingebetteten Systemen
 wie z.B. einplatinen Computern wie dem in der Arbeite verwendeten
 Raspberry Pi kommen dabei schnell an ihre Grenzen.
 Möchte man dennoch die Daten auf dem Gerät verrechnen und 
@@ -402,7 +403,9 @@ Dieser basiert auf der Movidius Myriad X Vision Processing Unit (VPU)
     \caption{NCS2}
 \end{figure}
 
-\subsection{Software/OpenVino}
+
+\subsection{OpenVino Toolkit}
+
 
 
 % doku:
@@ -412,7 +415,6 @@ Dieser basiert auf der Movidius Myriad X Vision Processing Unit (VPU)
 % https://github.com/intel-iot-devkit/inference-tutorials-generic/tree/openvino_toolkit_2019_r1_0/car_detection_tutorial#tutorial-step-3-add-the-second-model-vehicle-attributes-detection
 % Face
 % https://github.com/intel-iot-devkit/inference-tutorials-generic/blob/openvino_toolkit_2019_r1_0/face_detection_tutorial/Readme.md
-
 
 
 
@@ -446,90 +448,4 @@ InferenceEngeine zugegriffen werden können.
     \caption{Workflow: OpenVino Toolkit}
     \label{img:openvinoworkflow}
 \end{figure}
-
-\subsubsection{InferenceEngine}
-
-Folgendes Diagramm zeigt Aplauf und Funktionsweise der InferenceEngeine.
-
-\begin{enumerate}
-    \item HW Plugin laden
-    \item Model IR einlesen
-    \item In-Output Blobs allokieren 
-    \item ausführbares Model laden
-    \item inferenz request abgeben
-    \item Bild als Array in Input Blob laden
-    \item Inferenz
-    \item Output verarbeiten, wieder zu Schritt 6
-\end{enumerate}
-
-% \begin{figure}[htb]
-%     \centering
-%     \input{Bilder/diagramm}
-%     \caption{}
-%     \label{}
-% \end{figure}
-\begin{minipage}{0.3\textwidth}
-    \centering
-    \input{Bilder/diagramm}
-    \captionof{figure}{}
-    \label{}
-\end{minipage}
-\begin{minipage}{0.7\textwidth}
-
-    \begin{python}
-
-        # 1. 
-      plugin = IEPlugin(device='MYRIAD')
-    
-       # 2.
-        net = IENetwork(model=model_xml, weights=model_bin)
-    
-        # 3. 
-        input_blob  = net.inputs
-        output_blob = net.outputs
-    
-        # 4.
-        exec_net = plugin.load_network(net, n_requests)
-    
-        # 5 (ab hier loop)
-        image = preprocess(capture) 
-        # capture dims zu input blob dims transformieren
-        # img_h, img_w, img_c -> blob_n, blob_c, blob_h, blob_w
-    
-            # 6. 
-        res = exec_net.infer({input_blob : image})
-    
-        # 7.
-        res = res[output_blob] # enthaellt zb rois
-    
-        
-    \end{python}
-    
-
-\end{minipage}
-
-
-
-
-
-Output Format variert je nach Modell, Image Classification,
-ObjectDetection sowie Instance Segmentation.
-
-
-Um die Ausführungzeit der Inferenz zu verringern, können, 
-je nach Hardware Optimierungen wie Asynchtone Inferenz, 
-Inferenz requests auf mehreren Threads, oder Batching des 
-Inputs vorgenommen werden.
-
-\begin{figure}[htb]
-    \centering
-    \def\svgwidth{0.7\textwidth}
-    \input{Bilder/synch_asynch.pdf_tex}
-    \caption{Asynchron und mehrerere Inferenz Requests}
-    \label{fig:async}
-\end{figure}
-
-In Abbildung \ref{fig:async} dargestellt die Asynchrone ausführung 
-zwischen dem aufbereiten der Frames und der Inferenz, sowie 
-mehrere parallel ausgeführte Inferenz Requests.
 

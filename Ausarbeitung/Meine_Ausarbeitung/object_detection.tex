@@ -97,3 +97,111 @@ Es ergibt sich folgender Workflow.
 \end{figure}
 
 Die Ergebnisse werden im nächsten Kapitel (\ref{kap:eval}) diskutiert.
+
+\section{Inferenz}
+
+\begin{itemize}
+    \item Tensorflow graph exportieren/einfrieren
+    \item mit model opt in ir Format
+    \item mit inf engine inferieren
+\end{itemize}
+
+
+\subsection{OpenVinos InferecneEgine}
+
+% \begin{enumerate}
+%     \item HW Plugin laden
+%     \item Model IR einlesen
+%     \item In-Output Blobs allokieren 
+%     \item ausführbares Model laden
+%     \item inferenz request abgeben
+%     \item Bild als Array in Input Blob laden
+%     \item Inferenz
+%     \item Output verarbeiten, wieder zu Schritt 6
+% \end{enumerate}
+
+% \begin{figure}[htb]
+%     \centering
+%     \input{Bilder/diagramm}
+%     \caption{}
+%     \label{}
+% \end{figure}
+\begin{minipage}{0.35\textwidth}
+    \centering
+    \input{Bilder/diagramm}
+    \captionof{figure}{}
+    \label{}
+\end{minipage}
+\begin{minipage}{0.65\textwidth}
+
+    \begin{python}
+
+    plugin = IEPlugin(device='MYRIAD')
+    
+
+    
+    net = IENetwork(model=model_xml, weights=model_bin)
+    
+    
+
+    input_blob  = net.inputs
+    output_blob = net.outputs
+    
+    
+
+    exec_net = plugin.load_network(net, n_requests)
+    
+    while True:
+
+        image = preprocess(capture) 
+        # capture dims zu input blob dims transformieren
+        # img_h, img_w, img_c -> blob_n, blob_c, blob_h, blob_w    
+        res = exec_net.infer({input_blob : image})
+    
+
+        res = res[output_blob] # enthaellt zb rois    
+    \end{python}
+    
+\end{minipage}
+
+
+Output Format variert je nach Modell, Image Classification,
+ObjectDetection sowie Instance Segmentation.
+
+
+Für Object Detection Modelle 
+enthällt eine Liste mit allen möglichen erkannten Objekten, jedes 
+davon bestehend aus einem Array mit den Indices:
+
+\begin{enumerate}
+    \setcounter{enumi}{-1}
+    \item batch index
+    \item class label
+    \item Wahrscheinlichkeit
+    \item $x_{min}$ Box Koordinate
+    \item $y_{min}$ Box Koordinate
+    \item $x_{max}$ Box Koordinate
+    \item $y_{max}$ Box Koordinate
+\end{enumerate}
+
+
+\subsubsection{Asynchrone Inferenz}
+
+
+Um die Ausführungzeit der Inferenz zu verringern, können, 
+je nach Hardware Optimierungen wie Asynchtone Inferenz, 
+Inferenz requests auf mehreren Threads, oder Batching des 
+Inputs vorgenommen werden.
+
+\begin{figure}[htb]
+    \centering
+    \def\svgwidth{0.7\textwidth}
+    \input{Bilder/synch_asynch.pdf_tex}
+    \caption{Asynchron und mehrerere Inferenz Requests}
+    \label{fig:async}
+\end{figure}
+
+In Abbildung \ref{fig:async} dargestellt die Asynchrone ausführung 
+zwischen dem aufbereiten der Frames und der Inferenz, sowie 
+mehrere parallel ausgeführte Inferenz Requests.
+

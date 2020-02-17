@@ -13,6 +13,8 @@ workspace_dir = os.path.join(os.environ['HOME'], 'Bachelor_Arbeit')
 model_dir = os.path.join(
     workspace_dir, 'openvino_models/Animals/faster_rcnn_inception_v2_l2')
 
+assert os.path.isdir(model_dir)
+
 
 # model_dir = os.path.join(
 #     workspace_dir, 'openvino_models/Animals/ssd_inception_v2')
@@ -28,7 +30,9 @@ ie = IECore()
 
 net = IENetwork(model_xml, model_bin)
 
+
 test_images = os.path.join(workspace_dir, 'Dataset/handy_bilder/images')
+assert os.path.isdir(test_images)
 test_images = [os.path.join(test_images, test_image)
                for test_image in os.listdir(test_images)]
 
@@ -80,7 +84,7 @@ n, c, h, w = net.inputs[input_blob].shape
 if img_info_input_blob:
     feed_dict[img_info_input_blob] = [h, w, 1]
 
-for n, image_path in enumerate(test_images):
+for nr, image_path in enumerate(test_images):
     image = cv2.imread(image_path)
     img_h, img_w = image.shape[:2]
     in_frame = cv2.resize(image, (w, h))
@@ -114,4 +118,4 @@ for n, image_path in enumerate(test_images):
         if cv2.waitKey(0) == 113:
             break
     except:
-        print(str(n), 'imges infered')
+        print(str(nr), 'imges infered')

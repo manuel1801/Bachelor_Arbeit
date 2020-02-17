@@ -6,6 +6,7 @@ import cv2
 
 use_import = True
 do_export = True
+show_result = False
 
 
 workspace_dir = os.path.join(os.environ['HOME'], 'Bachelor_Arbeit')
@@ -113,9 +114,9 @@ for nr, image_path in enumerate(test_images):
                 cv2.putText(image, (class_name + ': ' + str(round(obj[2] * 100, 1)) + '%'),
                             (xmin, ymin - 7), cv2.FONT_HERSHEY_COMPLEX, 0.6, (0, 255, 255), 1)
 
-    try:
+    if show_result:
         cv2.imshow('infer result', image)
         if cv2.waitKey(0) == 113:
             break
-    except:
+    else:
         print(str(nr), 'imges infered')

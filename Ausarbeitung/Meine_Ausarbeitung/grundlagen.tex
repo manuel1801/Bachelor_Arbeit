@@ -462,42 +462,54 @@ Folgendes Diagramm zeigt Aplauf und Funktionsweise der InferenceEngeine.
     \item Output verarbeiten, wieder zu Schritt 6
 \end{enumerate}
 
-\begin{figure}[htb]
+% \begin{figure}[htb]
+%     \centering
+%     \input{Bilder/diagramm}
+%     \caption{}
+%     \label{}
+% \end{figure}
+\begin{minipage}{0.3\textwidth}
     \centering
     \input{Bilder/diagramm}
-    \caption{}
+    \captionof{figure}{}
     \label{}
-\end{figure}
+\end{minipage}
+\begin{minipage}{0.7\textwidth}
+
+    \begin{python}
+
+        # 1. 
+      plugin = IEPlugin(device='MYRIAD')
+    
+       # 2.
+        net = IENetwork(model=model_xml, weights=model_bin)
+    
+        # 3. 
+        input_blob  = net.inputs
+        output_blob = net.outputs
+    
+        # 4.
+        exec_net = plugin.load_network(net, n_requests)
+    
+        # 5 (ab hier loop)
+        image = preprocess(capture) 
+        # capture dims zu input blob dims transformieren
+        # img_h, img_w, img_c -> blob_n, blob_c, blob_h, blob_w
+    
+            # 6. 
+        res = exec_net.infer({input_blob : image})
+    
+        # 7.
+        res = res[output_blob] # enthaellt zb rois
+    
+        
+    \end{python}
+    
+
+\end{minipage}
 
 
 
-\begin{python}
-    # 1.
-    plugin = IEPlugin(device='MYRIAD')
-
-    # 2.
-    {\_}
-    %net = IENetwork(model=model\textunderscore xml, weights=model\textunderscore bin)
-
-%     # 3. 
-%     input_blob  = net.inputs
-%     output_blob = net.outputs
-
-%     # 4.
-%     exec_net = plugin.load_network(net, n_requests)
-
-%     # 5 (ab hier loop)
-%     image = preprocess(capture) 
-%     # capture dims zu input blob dims transformieren
-%     # img_h, img_w, img_c -> blob_n, blob_c, blob_h, blob_w
-
-%     # 6. 
-%     res = exec_net.infer({input_blob : image})
-
-%     # 7.
-%     res = res[output_blob] # enthällt zb rois
-
-\end{python}
 
 
 Output Format variert je nach Modell, Image Classification,

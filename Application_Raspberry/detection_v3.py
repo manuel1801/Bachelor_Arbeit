@@ -36,14 +36,22 @@ class InferenceModel:
         self.ie = IECore()
         self.device = device
 
-    def create_exec_infer_model(self, model_xml, model_bin, labels=None, num_requests=2):
+    def create_exec_infer_model(self, model_dir, num_requests=2):
+
+        model_xml = os.path.join(
+            model_dir, 'frozen_inference_graph.xml')
+        model_bin = os.path.join(
+            model_dir, 'frozen_inference_graph.bin')
+
+        exported_model = os.path.join(model_dir, 'exported_model')
+
+        labels = [line.strip() for line in open(
+            os.path.join(model_dir, 'classes.txt')).readlines()]
 
         assert os.path.isfile(model_bin)
         assert os.path.isfile(model_xml)
 
         net = IENetwork(model=model_xml, weights=model_bin)
-
-        # return ExecInferModel()
 
         img_info_input_blob = None
         feed_dict = {}
@@ -59,8 +67,17 @@ class InferenceModel:
         assert len(
             net.outputs) == 1, "Demo supports only single output topologies"
         out_blob = next(iter(net.outputs))
-        exec_net = self.ie.load_network(
-            network=net, num_requests=num_requests, device_name=self.device)
+
+        if os.path.isfile(exported_model):
+            print('found model to import')
+            exec_net = self.ie.import_network(
+                model_file=exported_model, device_name=self.device, num_requests=num_requests)
+        else:
+            print('creating exec model')
+            exec_net = self.ie.load_network(
+                network=net, num_requests=num_requests, device_name=self.device)
+            exec_net.export(exported_model)
+
         n, c, h, w = net.inputs[input_blob].shape
         if img_info_input_blob:
             feed_dict[img_info_input_blob] = [h, w, 1]
@@ -82,40 +99,7 @@ class ExecInferModel:
         self.num_requests = num_requests
         self.current_frames = {}
         self.detected_objects = {}
-
-    def infer_image(self, image, threshhold=0.7):
-        height, width = image.shape[:2]
-        in_frame = cv2.resize(image, (self.w, self.h))
-        in_frame = in_frame.transpose((2, 0, 1))
-        in_frame = in_frame.reshape(
-            (self.n, self.c, self.h, self.w))
-
-        self.feed_dict[self.input_blob] = in_frame
-        self.exec_net.start_async(
-            request_id=0, inputs=self.feed_dict)
-
-        if self.exec_net.requests[0].wait(-1) == 0:
-            res = self.exec_net.requests[0].outputs[self.out_blob]
-
-            for obj in res[0][0]:
-                if obj[2] > threshhold:
-                    xmin = int(obj[3] * width)
-                    ymin = int(obj[4] * height)
-                    xmax = int(obj[5] * width)
-                    ymax = int(obj[6] * height)
-
-                    class_id = int(obj[1])
-                    color = (0, 255, 0)
-                    cv2.rectangle(image, (xmin, ymin),
-                                  (xmax, ymax), color, 2)
-
-                    if self.labels:
-                        det_label = self.labels[class_id - 1]
-                    else:
-                        det_label = 'class id ' + str(class_id)
-                    cv2.putText(image, det_label + ' ' + str(round(obj[2] * 100, 1)) + ' %', (xmin, ymin - 7),
-                                cv2.FONT_HERSHEY_COMPLEX, 0.6, color, 1)
-        return image
+        self.no_detections = 0
 
     def infer_frames(self, buffer):
 
@@ -150,39 +134,33 @@ class ExecInferModel:
 
         return results
 
-    def prossec_result(self, frame, res, threshhold, output_dir, fps=1, view_result=False):
-
+    def prossec_result(self, result, threshhold, output_dir, fps=1, view_result=False):
+        res, frame = result
         height, width = frame.shape[:2]
-        detection, saved = False, False
+        saved = False
+        self.no_detections += 1
 
         for obj in res[0][0]:
+            confidence = obj[2]
             if obj[2] > threshhold:
-                detection = True
-                # print(self.initial_w)
-                # box koordinaten bezogen auf original image size bestimmen
+
+                self.no_detections = 0
+
+                # get coordinats
                 xmin = int(obj[3] * width)
                 ymin = int(obj[4] * height)
                 xmax = int(obj[5] * width)
                 ymax = int(obj[6] * height)
 
-                # id des erkannten objekts
+                # get class
                 class_id = int(obj[1])
-
-                # box einzeichnen
-                # color = (min(class_id * 12.5, 255),
-                #          min(class_id * 7, 255), min(class_id * 5, 255))
-                color = (0, 255, 0)
+                class_name = self.labels[class_id - 1]
 
                 cv2.rectangle(frame, (xmin, ymin),
-                              (xmax, ymax), color, 2)
+                              (xmax, ymax), color=(0, 255, 255), thickness=2)
 
-                # label dazu schreiben
-                if self.labels:
-                    det_label = self.labels[class_id - 1]
-                else:
-                    det_label = 'class id ' + str(class_id)
-                cv2.putText(frame, det_label + ' ' + str(round(obj[2] * 100, 1)) + ' %', (xmin, ymin - 7),
-                            cv2.FONT_HERSHEY_COMPLEX, 0.6, color, 1)
+                cv2.putText(frame, class_name + ' ' + str(round(confidence * 100, 1)) + '%', (xmin, ymin - 7),
+                            cv2.FONT_HERSHEY_COMPLEX, 0.6, (0, 255, 255), 1)
 
                 if view_result:
                     cv2.imshow('infer result', frame)
@@ -190,28 +168,18 @@ class ExecInferModel:
 
                 # detected_objects -> class_id:(nr, roi, proba)
                 if not class_id in self.detected_objects:
-                    # print(
-                        #    'SERVER_INFO: adding new class: ' + det_label + ' to list')
-                        # self.detected_objects[class_id] = [
-                        #     0, frame[max(0, ymin-20):min(height, ymax+20), max(0, xmin-20):min(width, xmax+20)], obj[2]]
                     self.detected_objects[class_id] = [0, frame, obj[2]]
                 else:
                     self.detected_objects[class_id][0] += 1
-                    # print('SERVER_INFO: detected class: ' + det_label +
-                    #      ' again. Nr of detections: ' + str(self.detected_objects[class_id][0]))
                     if self.detected_objects[class_id][2] < obj[2]:
-                            #    print(
-                            #        'SERVER_INFO: replaced class: ' + det_label + ' because of higher probability')
-                            # self.detected_objects[class_id][1] = frame[max(
-                            #     0, ymin-20):min(height, ymax+20), max(0, xmin-20):min(width, xmax+20)]
                         self.detected_objects[class_id][1] = frame
                         self.detected_objects[class_id][2] = obj[2]
 
-                    # send detected roi of current class after 10 detections
-                if self.detected_objects[class_id][0] > 10 * fps:
-                    print('saving ', det_label)
+                # send detected roi of current class after 10 seconds
+                if self.detected_objects[class_id][0] > 10 * max(1, fps):
+                    print('saving ', class_name)
 
-                    image_name = 'detected_' + det_label + '_' + \
+                    image_name = 'detected_' + class_name + '_' + \
                         datetime.now().strftime("%d-%b-%Y_%H-%M-%S")
                     image_array = self.detected_objects[class_id][1]
 
@@ -221,11 +189,9 @@ class ExecInferModel:
 
                     saved = True
 
-                    # send image to remote device
-
                     del self.detected_objects[class_id]
 
-        return detection, saved
+        return self.no_detections, saved
 
     def save_all(self, output_dir):
 
@@ -236,12 +202,12 @@ class ExecInferModel:
         for class_id in class_ids:
 
             if self.labels:
-                det_label = self.labels[class_id - 1]
+                class_name = self.labels[class_id - 1]
             else:
-                det_label = 'class id ' + str(class_id)
+                class_name = 'class id ' + str(class_id)
 
-            print('saving: ', det_label)
-            image_name = 'detected_' + det_label + '_' + \
+            print('saving: ', class_name)
+            image_name = 'detected_' + class_name + '_' + \
                 datetime.now().strftime("%d-%b-%Y_%H-%M-%S")
             image_array = self.detected_objects[class_id][1]
 
@@ -251,32 +217,3 @@ class ExecInferModel:
             saved = True
             del self.detected_objects[class_id]
         return saved
-
-    def view_result(self, capture, processed_frame,  t_capture_str=None,
-                    t_infer_str=None, has_motion=None, len_motion_frames=None, buffer_size=None):
-
-        both_frames = np.hstack((capture, processed_frame))
-        if t_capture_str:
-            cv2.putText(both_frames, 'time: ' + t_capture_str, (15, 45), cv2.FONT_HERSHEY_COMPLEX,
-                        0.5, (0, 255, 0), 1)
-        if has_motion:
-            cv2.putText(both_frames, 'motion: ' + str(has_motion), (15, 25), cv2.FONT_HERSHEY_COMPLEX,
-                        0.5, (0, 255, 0), 1)
-        if len_motion_frames:
-            cv2.putText(both_frames, 'buffer: (' + str(len_motion_frames) + '/' + str(buffer_size) + ')', (640 + 15, 25), cv2.FONT_HERSHEY_COMPLEX,
-                        0.5, (0, 255, 0), 1)
-        if t_infer_str:
-            cv2.putText(both_frames, 'time: ' + t_infer_str, (640 + 15, 45), cv2.FONT_HERSHEY_COMPLEX,
-                        0.5, (0, 255, 0), 1)
-
-        cv2.imshow('strem', both_frames)
-
-        return cv2.waitKey(delay=1)
-
-
-def main():
-    pass
-
-
-if __name__ == "__main__":
-    main()

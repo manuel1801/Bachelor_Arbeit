@@ -12,53 +12,7 @@ class SSHConnect:
         self.device_adress = None
         # self.public_ip = requests.get('https://api.ipify.org').text
 
-    def login(self, remote_it_user='animals.detection@gmail.com', remote_it_pw='animalsdetection'):
-        headers = {
-            "developerkey": self.developer_key
-        }
-        body = {
-            "password": remote_it_pw,
-            "username": remote_it_user
-        }
-        url = "https://api.remot3.it/apv/v27/user/login"
-
-        try:
-            log_resp = requests.post(
-                url, data=json.dumps(body), headers=headers)
-        except:
-            print('login failed because postreq')
-            # print(requests.get('https://api.ipify.org').text)
-            return False
-
-        log_resp = log_resp.json()
-
-        if log_resp['status'] == 'false':
-            print('wrong remote.it user name or password')
-            return False
-        else:
-            self.token = log_resp['token']
-            return True
-
-    def get_device_adress(self, device_name='ssh-Pc'):
-
-        if not self.token:
-            return None
-
-        headers = {
-            "developerkey": self.developer_key,
-            # Created using the login API
-            "token": self.token
-        }
-        url = "https://api.remot3.it/apv/v27/device/list/all"
-        dev_resp = requests.get(url, headers=headers)
-        dev_resp = dev_resp.json()
-        for device in dev_resp['devices']:
-            if device['devicealias'] == device_name:
-                return device['deviceaddress']
-        print('Device: ', device_name, ' not Exist')
-        return None
-
-    def login_neu(self, remote_it_user='animals.detection@gmail.com', remote_it_pw='animalsdetection', device_name='ssh-Pc', retry=5):
+    def login(self, remote_it_user='animals.detection@gmail.com', remote_it_pw='animalsdetection', device_name='ssh-Pc', retry=5):
         headers = {
             "developerkey": self.developer_key
         }
@@ -182,9 +136,11 @@ class SSHConnect:
             if r == 0:
                 child.sendline(password)
                 child.expect(pexpect.EOF)
+                return True
             elif r == 1:
                 print('end of file')
-            return True
+                return False
+
         except Exception as e:
             print(e)
             return False
@@ -205,19 +161,14 @@ class SSHConnect:
 def main():
 
     conn = SSHConnect()
-    print(conn.public_ip)
-    conn.login()
-    addr = conn.get_device_adress(device_name='ssh-Pi')
-    ret = conn.connect(addr)
-    print(ret)
+    conn.login(device_name='ssh-Pi')
+    ret = conn.connect()
     if ret:
-        server, port, con_id = ret
+        server, port, connectionid = ret
 
-    # print(addr)
-    # print(server, port, con_id)
-    conn.send(server, port, 'pi', 'animalsdetection', '/home/manuel/Bachelor_Arbeit/Connection/remote_it/test.jpg',
-              '/home/pi/Bachelor_Arbeit/Connection/remote_it/received')
-    conn.disconnect(addr, con_id)
+        conn.send(server, port, 'pi', 'hellorworld', '/home/manuel/Bachelor_Arbeit/Connection/remote_it/test.jpg',
+                  '/home/pi/Bachelor_Arbeit/Connection/remote_it/received')
+        conn.disconnect(connectionid)
 
 
 if __name__ == "__main__":

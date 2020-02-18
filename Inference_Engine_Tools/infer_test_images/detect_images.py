@@ -10,7 +10,11 @@ class InferenceModel:
         #self.ie = IECore()
         self.device = device
 
-    def create_exec_infer_model(self, model_xml, model_bin, labels, num_requests=2):
+    def create_exec_infer_model(self, model_dir, labels, num_requests=2):
+
+        model_xml = os.path.join(model_dir, 'frozen_inference_graph.xml')
+        model_bin = os.path.join(model_dir, 'frozen_inference_graph.bin')
+        exported_model = os.path.join(model_dir, 'exported_model')
 
         assert os.path.isfile(model_bin)
         assert os.path.isfile(model_xml)
@@ -34,8 +38,17 @@ class InferenceModel:
         assert len(
             net.outputs) == 1, "Demo supports only single output topologies"
         out_blob = next(iter(net.outputs))
-        exec_net = ie.load_network(
-            network=net, num_requests=num_requests, device_name=self.device)
+
+        if os.path.isfile(exported_model):  # found exported mode
+            print('found model to import')
+            exec_net = ie.import_network(
+                model_file=exported_model, device_name=self.device)
+        else:
+            print('creating exec model')
+            exec_net = ie.load_network(
+                network=net, num_requests=num_requests, device_name=self.device)
+            exec_net.export(exported_model)
+
         n, c, h, w = net.inputs[input_blob].shape
         if img_info_input_blob:
             feed_dict[img_info_input_blob] = [h, w, 1]

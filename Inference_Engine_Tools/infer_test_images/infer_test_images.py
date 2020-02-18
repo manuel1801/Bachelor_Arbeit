@@ -49,7 +49,7 @@ labels = ['Brown_bear',
 
 # select dataset by commenting out
 infer_images_list = [
-    validation_images,
+    # validation_images,
     kaggle_iWildCam,
     handy_images,
     handy_videos
@@ -111,12 +111,9 @@ model = models[int(input())]
 # create exec Model
 infer_model = detection.InferenceModel()
 model_dir = os.path.join(models_dir, model)
-model_xml = os.path.join(model_dir, 'frozen_inference_graph.xml')
-model_bin = os.path.join(model_dir, 'frozen_inference_graph.bin')
-
 
 exec_model = infer_model.create_exec_infer_model(
-    model_xml, model_bin, labels, num_requests=3)
+    model_dir, labels, num_requests=3)
 
 
 if not os.path.isdir(eval_dir):

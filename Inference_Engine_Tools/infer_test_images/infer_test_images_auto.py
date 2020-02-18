@@ -49,10 +49,10 @@ labels = ['Brown_bear',
 
 # select dataset by commenting out
 infer_images_list = [
-    validation_images,
-    kaggle_iWildCam,
-    handy_images,
-    handy_videos
+    # validation_images,
+    kaggle_iWildCam
+    # handy_images,
+    # handy_videos
 ]
 
 # set maximum number for each dataset
@@ -68,6 +68,7 @@ test_config = {
         'faster_rcnn_inception_v2_early_stopping_ohne_aug'
     ],
     'faster_optimierungen': [
+        'faster_rcnn_inception_v2_less_aug',
         'faster_rcnn_inception_v2_3000',
         'faster_rcnn_inception_v2_l2',
         'faster_rcnn_inception_v2_4000',
@@ -117,11 +118,8 @@ for model in os.listdir(models_dir):
 
     print('starting Model:   ', model)
 
-    model_xml = os.path.join(model_dir, 'frozen_inference_graph.xml')
-    model_bin = os.path.join(model_dir, 'frozen_inference_graph.bin')
-
     exec_model = infer_model.create_exec_infer_model(
-        model_xml, model_bin, labels, num_requests=3)
+        model_dir, labels, num_requests=3)
 
     for dataset_name, dataset_files in dataset_dict.items():
             # for infer_images in infer_images_list:

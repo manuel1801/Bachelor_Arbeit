@@ -10,90 +10,70 @@ from datetime import datetime
 
 
 # Settings:
-import picamera.array
-import picamera
+# import picamera.array
+# import picamera
 
 
-password = 'animalsdetection'
-raspi = True
+password = 'helloworld'
+raspi = False
+
 
 if raspi:
-    workspace_dir = '/home/pi/Bachelor_Arbeit/'
+    user = 'pi'
     remote_user = 'manuel'
-    remote_output_dir = '/home/manuel/Bachelor_Arbeit/Application_Raspberry/detected'
     remote_divice_name = 'ssh-Pc'
+    view_result = False
 else:
-    workspace_dir = '/home/manuel/Bachelor_Arbeit/'
+    user = 'manuel'
     remote_user = 'pi'
-    remote_output_dir = '/home/pi/Bachelor_Arbeit/Application_Raspberry/detected'
     remote_divice_name = 'ssh-Pi'
+    view_result = False
 
 
-output_dir = os.path.join(workspace_dir,
-                          'Application_Raspberry', 'detected')
-assert os.path.isdir(output_dir)
+workspace_dir = os.path.join('/home', user, 'Bachelor_Arbeit')
+local_output_dir = os.path.join(workspace_dir,
+                                'Application_Raspberry/detected')
+
+remote_output_dir = os.path.join(
+    '/home', remote_user, 'Bachelor_Arbeit', 'Application_Raspberry/detected')
 
 
-# conn = connection.SSHConnect()
-# device_address = None
-# if conn.login(remote_it_user='animals.detection@gmail.com',
-#               remote_it_pw=password):  # returns false if wrong user data
-#     device_address = conn.get_device_adress(device_name=remote_divice_name)
+assert os.path.isdir(local_output_dir)
 
 
 buffer_size = 200    # zum zwischen speichern wenn infer langsamer stream
-infer_requests = 3   # für parallele inferenzen
-view_results = False  # für raspi ohne monitor auf False
 threshhold = 0.5     # Für Detections
 send_all_every = 60  # sec
+num_requests = 3     # anzahl paralleler inferenz requests, recommended:3
+send_results = True
 
-models_dir = os.path.join(workspace_dir, 'openvino_models')
+if send_results:
+    conn = connection.SSHConnect()
+
+models_dir = os.path.join(workspace_dir, 'Application_Raspberry/models')
 assert os.path.isdir(models_dir)
 
-print('select model')
-selected_model = {}
-i = 1
-for dataset in os.listdir(models_dir):
-    dataset_dir = os.path.join(models_dir, dataset)
-    if os.path.isdir(dataset_dir):
-        for model in os.listdir(dataset_dir):
-            model_dir = os.path.join(dataset_dir, model)
-            if os.path.isdir(model_dir):
-                selected_model[i] = dataset, model
-                print(i, dataset, model)
-                i += 1
+models = []
+for i, m in enumerate(os.listdir(models_dir)):
+    models.append(m)
+    print(i, m)
+model_dir = os.path.join(models_dir, models[int(input())])
+# model_dir = os.path.join(models_dir, models[2])
 
-#model_ind = int(input())
-model_ind = 8  # für autostart model ind hier festlegen
-print(selected_model[model_ind], ' selected')
+print('selected model: ', model_dir)
+assert os.path.isdir(model_dir)
 
-model_xml = os.path.join(
-    models_dir, selected_model[model_ind][0], selected_model[model_ind][1], 'frozen_inference_graph.xml')
-model_bin = os.path.join(
-    models_dir, selected_model[model_ind][0], selected_model[model_ind][1], 'frozen_inference_graph.bin')
-
-if os.path.isfile(os.path.join(models_dir, selected_model[model_ind][0], 'classes.txt')):
-    labels = [l.strip() for l in open(os.path.join(
-        models_dir, selected_model[model_ind][0], 'classes.txt')).readlines()]
-else:
-    labels = None
-
-assert os.path.isfile(model_bin)
-assert os.path.isfile(model_xml)
 
 # Load Model to Device
 infer_model = detection.InferenceModel()
 exec_model = infer_model.create_exec_infer_model(
-    model_xml, model_bin, labels, num_requests=3)
+    model_dir, num_requests=num_requests)
+
 
 # init motion detector
 motion_detector = detection.MotionDetect()
 motion_frames = []
 
-# init and login connection script
-
-conn = connection.SSHConnect()
-logged_in = conn.login()
 
 has_motion = False
 del_idx = 1
@@ -110,11 +90,9 @@ else:
     cap = cv2.VideoCapture(0)
 
 
-infered_frames = 0
-no_detections = 0
-send_request = False
-start_time = None
-send_time = time.time()
+infered_frames, fps = 0, 1
+start_time, send_time = time.time(), time.time()
+logged_in, connected, send_request = False, False, False
 
 
 while True:
@@ -132,9 +110,6 @@ while True:
         has_motion = True
         motion_frames.insert(0, capture)
         if len(motion_frames) >= buffer_size:
-            # print('buffer len ', str(len(motion_frames)))
-           # print('del index ', str(del_idx))
-           # print('')
             del motion_frames[-del_idx]
             del_idx += 1
         else:
@@ -142,66 +117,85 @@ while True:
     else:
         has_motion = False
 
-    if not start_time:
-        start_time = time.time()
+    if not motion_frames and connected:
+        conn.disconnect()
+        print('dissconnecting')
+        connected = False
 
     # Infer Frames
-    result = exec_model.infer_frames(motion_frames)
+    results = exec_model.infer_frames(motion_frames)
+
+    send_request = False
 
     # Preocess infered Frames
-    for rois, frame in result:
+    for result in results:
         infered_frames += 1
         fps = infered_frames/(time.time() - start_time)
-
+        # fps berechnung stimmt nicht wenn zeitweise
+        # keine inferenz
         print('infered frames: ' + str(infered_frames)
               + '\tFps: ' + str(fps)
               + '\tmotione: ' + str(has_motion)
               + '\tbuffer lenght: ' + str(len(motion_frames)), end='\r', flush=True)
 
-        detection, saved = exec_model.prossec_result(
-            frame, rois, threshhold, output_dir, fps=fps, view_result=view_results)
+        no_detections, saved = exec_model.prossec_result(
+            result, threshhold, local_output_dir, fps=fps, view_result=view_result)
 
-        # Handle infered Frames with no detections
-        if not detection:
-            no_detections += 1
+        if saved:
+            send_results = True
 
-        if no_detections > 15 * fps:  # alle 15 sec
-            print('reset motion detector')
+        if no_detections > 20 * max(1, fps):
+            print('reset background')
             motion_detector.reset_background()
             motion_frames = []
-            no_detections = 0
+            exec_model.no_detections = 0
 
-        # Send saved frames to remote Devices
-        if not logged_in:  # kein adresse zu senden
-            logged_in = conn.login()
-            if not logged_in:
-                continue
-
-        if saved or send_request:
-            print('try to send')
-            conn_info = conn.connect()
-            if not conn_info:  # verbindung nicht mögl
-                print('Error: could not connect to ', remote_divice_name)
-                logged_in = False
-                continue
-
-            send_request = False
-            for image in os.listdir(output_dir):
-                image_path = os.path.join(output_dir, image)
-                if conn.send(server=conn_info[0], port=conn_info[1], user=remote_user, password=password,
-                             file=image_path, path=remote_output_dir):
-                    os.remove(image_path)
-                    print('Successfully send image ', image)
-                else:
-                    send_request = True
-                    print('Error while sending ', image)
-            conn.disconnect(conn_id=conn_info[2])
+            if connected:
+                print('disconnection')
+                conn.disconnect()
+                connected = False
 
     # Send all current Detections
-    if (time.time() - send_time) > send_all_every:
+    if send_results and (time.time() - send_time) > send_all_every:
         send_time = time.time()
-        if exec_model.save_all(output_dir):
+
+        if exec_model.save_all(local_output_dir):
             send_request = True
 
-if view_results:
+    if send_results and send_request:
+
+        if not logged_in:
+            print('try to log in')
+            logged_in = conn.login(device_name=remote_divice_name)
+            if not logged_in:
+                print('could not log in')
+                continue
+            print('logged in')
+
+        if not connected:
+            print('try to connect')
+            connected = conn.connect()
+            if not connected:
+                logged_in = False
+                print('could not connect to ', remote_divice_name)
+                continue
+            print('connected')
+
+        server, port = connected
+
+        send_request = False
+        for image in os.listdir(local_output_dir):
+            image_path = os.path.join(local_output_dir, image)
+
+            if conn.send(server, port, remote_user, password, image_path, remote_output_dir):
+                os.remove(image_path)
+                print('Successfully send image ', image)
+            else:
+                send_request = True
+                print('Error while sending ', image)
+
+if view_result:
     cv2.destroyAllWindows()
+
+if send_results:
+    conn.disconnect()

@@ -142,7 +142,7 @@ while True:
             result, threshhold, local_output_dir, fps=fps, view_result=view_result)
 
         if saved:
-            send_results = True
+            send_request = True
 
         if no_detections > 20 * max(1, fps):
             print('reset background')

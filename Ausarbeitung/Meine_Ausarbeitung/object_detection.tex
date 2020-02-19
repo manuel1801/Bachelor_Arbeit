@@ -109,61 +109,52 @@ Die Ergebnisse werden im nächsten Kapitel (\ref{kap:eval}) diskutiert.
 
 \subsection{OpenVinos InferecneEgine}
 
-% \begin{enumerate}
-%     \item HW Plugin laden
-%     \item Model IR einlesen
-%     \item In-Output Blobs allokieren 
-%     \item ausführbares Model laden
-%     \item inferenz request abgeben
-%     \item Bild als Array in Input Blob laden
-%     \item Inferenz
-%     \item Output verarbeiten, wieder zu Schritt 6
-% \end{enumerate}
+Folgend der prinzipielle Ablauf der Inference Engine für 
+die Inferenz eines Modells auf dem Neural Comput Stick
 
-% \begin{figure}[htb]
-%     \centering
-%     \input{Bilder/diagramm}
-%     \caption{}
-%     \label{}
-% \end{figure}
-\begin{minipage}{0.35\textwidth}
+
+\begin{minipage}{0.30\textwidth}
     \centering
     \input{Bilder/diagramm}
     \captionof{figure}{}
     \label{}
 \end{minipage}
-\begin{minipage}{0.65\textwidth}
+\begin{minipage}{0.70\textwidth}
 
-    \begin{python}
+%\begin{python}
+\begin{lstlisting}[language=Python]
 
     plugin = IEPlugin(device='MYRIAD')
-    
 
+        
+    net = IENetwork(model_xml, model_bin)
+        
     
-    net = IENetwork(model=model_xml, weights=model_bin)
-    
-    
-
     input_blob  = net.inputs
     output_blob = net.outputs
-    
-    
+        
 
-    exec_net = plugin.load_network(net, n_requests)
-    
+    exec_net = plugin.load_network(net, n_req)
+        
     while True:
 
-        image = preprocess(capture) 
-        # capture dims zu input blob dims transformieren
-        # img_h, img_w, img_c -> blob_n, blob_c, blob_h, blob_w    
+        image = preprocess(capture) # hwc -> nchw
+        
+        
         res = exec_net.infer({input_blob : image})
-    
+        
 
-        res = res[output_blob] # enthaellt zb rois    
-    \end{python}
-    
+        res = res[output_blob] #
+        
+        
+\end{lstlisting}
+%\end{python}
+\vspace{1.5cm}
 \end{minipage}
 
+% transform:
+% # capture dims zu input blob dims transformieren
+% # img_h, img_w, img_c -> blob_n, blob_c, blob_h, blob_w
 
 Output Format variert je nach Modell, Image Classification,
 ObjectDetection sowie Instance Segmentation.

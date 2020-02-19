@@ -16,7 +16,9 @@
     \draw [arrow] (io) -- (execNet);
     \draw [arrow] (execNet) -- (prepIn);
     \draw [arrow] (prepIn) -- (infer);
-    \draw [arrow] (infer) -- (procOut);
-    \draw [arrow] (procOut) -- (prepIn);
+    \draw [arrow] (infer) --  (procOut);
+
+    \draw [arrow] (procOut.west) -- +(-1,0) |- node[pos=0.25] {infer loop} (prepIn);
+
     
 \end{tikzpicture}

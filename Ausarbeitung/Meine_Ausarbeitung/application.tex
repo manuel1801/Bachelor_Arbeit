@@ -60,15 +60,32 @@ der mit einem Helligkeitssensor getriggert wird erfolg.
 
 \section{Implementierung/Software}
 
-in Python, 3 Programme, main, inferenz, connection
+Bestht aus 3 Scripten:
 
-hier gesammt programm beschreiben mit entweder 
-Klassendiagramm oder Pseudo code.
+\begin{itemize}
+    \item main
+    \begin{itemize}
+        \item 
+    \end{itemize}
+    \item detection
+    \begin{itemize}
+        \item init
+        \item motion
+        \item create exec net
+        \item infer frames
+        \item process result
+    \end{itemize}
+    \item connection
+    \begin{itemize}
+        \item init
+        \item login
+        \item connect
+        \item send
+        \item disconnect
+    \end{itemize}
+\end{itemize}
 
 \subsection*{Inferenz}
-
-heir die implementierung des infer scripts (mit non blocking, 
-buffer, motion)
 
 
 Um nicht durchgehend die Input Frames welche die Kamera liefert inferieren zu 
@@ -77,35 +94,114 @@ implementiert. Diese speichert bei start der Anwendung ein Frame
 als Refernz ab, und kann damit alle weiteren Input frames vergleiche, 
 indem der Abstand der einzelnen Pixel werte berechnet und gemittelt wird.
 
+Der Ablauf der reinen Asynchronen Inferenz ist grob in 
+folgendem Pseudocode dargestellt. 
+
 
 %Asynchrone inferenz
 %https://docs.openvinotoolkit.org/latest/_demos_python_demos_object_detection_demo_ssd_async_README.html
 
+% main
+% \begin{algorithm}[H]
+%     \caption{Main Program}
+%     \begin{algorithmic}
+
+%     %\STATE INIT EXEC_NET, CAM
+
+%     \WHILE{\TRUE}
+%         \STATE capture frame
+        
+%         \IF{frame has motion}
+%             \STATE $buffer \leftarrow frmae$
+%         \ENDIF
+
+%         \IF{buffer is empty}
+%             \STATE disconnect
+%         \ENDIF
+
+%         \STATE result = inferFrames (buffer)
+
+%         \FOR{all results}
+%             \STATE process results
+%             \IF {saved}
+%                 \STATE sendRequest = \TRUE
+%             \ENDIF
+        
+
+%             \IF {no detectoin for 20 times}
+%                 \STATE reset motion background
+%                 \STATE delete buffer
+%                 \IF {connected}
+%                     \STATE disconnect
+%                 \ENDIF
+%             \ENDIF
+
+%         \ENDFOR
+
+%         \IF {send all every minute}
+%             \STATE save current detections
+%             \STATE sendRequest = \TRUE
+%         \ENDIF
+
+%         \IF{sendRequest == \TRUE}
+%             \IF{not logged in}
+%                 \STATE log in
+%             \ENDIF
+
+%             \IF{not connected}
+%                 \STATE connect
+%             \ENDIF
+
+%             \STATE server, port $\leftarrow$ connection
+
+%             \STATE sendRequest = \FALSE
+%             \FOR{all saved images}
+%                 \IF{send image $\rightarrow$ server, port}
+%                     \STATE delete image
+%                 \ELSE
+%                     \STATE sendRequest = \TRUE
+%                 \ENDIF
+%             \ENDFOR
+
+%         \ENDIF
+%     \ENDWHILE
 
 
+%     \end{algorithmic}
+% \end{algorithm}
+
+
+% inferenz
 \begin{algorithm}[H]
     \caption{Asynchrone Inferenz}
     \begin{algorithmic}
-        \WHILE{\TRUE}
-
+    \WHILE{\TRUE}
         \STATE capture Frame
-        \IF{frame has moton}
-            \STATE $buffer \leftarrow 1 / frmae$
+        \IF{Frame has Motion}
+            \STATE Buffer $\leftarrow$ Frame
         \ENDIF
-
-        \FOR{$inferReq = 0$ to $maxReq$}
-        \STATE status = exec.req(inferReq).wait(0)
-        \IF {status == done}
-            \STATE ROIs = exec.req(inferReq).output
-            \STATE results.add(ROIs, frame[inferReq])
-        \ENDIF
-
+        \FOR{$reqId$ = 0 to $reqMax$}
+            \IF {Model.reqests[$reqId$].wait(0)}
+                \STATE result = Model.reqests[$reqId$].output
+                \STATE inferedFrames $\leftarrow$ (result, currentFrames[$reqId$])
+                \IF {Buffer not empty}
+                    \STATE currentFrames[$reqId$] $\leftarrow$ Buffer 
+                    \STATE inFrame = preprocess: currentFrames[$reqId$]
+                    \STATE Model.inferAsync($reqId$, inFrame)
+                \ENDIF
+            \ENDIF
         \ENDFOR
-
-        \ENDWHILE
-
+        \RETURN inferedFrames
+    \ENDWHILE
     \end{algorithmic}
 \end{algorithm}
+
+wobei die wait Funktion mit Timeout = 0 nicht blockierend ist.
+
+Dadurch war es möglich trotz langsamerer inferenz zeit als 
+capture zeit, durch zwischenspeichern alle frames zu inferieren, 
+unter der Annahme, das nur zeitweise bewegung erkannt und damit 
+inferiert werden muss.
 
 
 

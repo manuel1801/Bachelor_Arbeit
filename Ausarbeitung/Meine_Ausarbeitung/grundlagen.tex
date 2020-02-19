@@ -88,13 +88,15 @@ welcher aus den drei schritten:
 besthet und in Appildung \ref{fig:train} schematisch dargestellt ist.
 
 
+
 \begin{figure}[H]
     \centering
     \label{fig:train}
-    \def\svgwidth{0.5\columnwidth}
-    \input{Bilder/train_workflow.pdf_tex}
+    \input{Bilder/train_workflow.tex}
     \caption{Trainingsablauf NN}
 \end{figure}
+
+
 
 
 Durch merhfaches durchlaufen der Schritte wird die Fehlerfunktion soweit minimiert, 
@@ -136,24 +138,50 @@ des Vektors $z$ der aktuellen Schicht,
 Dieser wird dann elementweise einer nichtlinearen Aktivierungsfunktion
 $g(z)$ übergeben wird.
 
-Für mittlere Schichten (Hidden Layer) wird dabei oft die in \ref{eq:relu} dargestellte
+Für mittlere Schichten (Hidden Layer) wird dabei oft die in \ref{plot:relu} dargestellte
 \textit{ReLU Funktion} verwendet welche positive Werte beibehällt und negative 
 Werte zu 0 setzt.
 
-\begin{equation}
-    \label{eq:relu}
-    g(z) = max\{0,z\}
-\end{equation}
- 
+Das hat den Vorteil, \dots
+
 Um für die Outputs einen Wahrscheinlichkeits Wert zwischen 0 und 1 
 zu erhalten, wird in der letzten Schicht für eine binäre Klassifikation 
-die Sigmoid Funktion (\ref{eq:sidmoid}) verwendet,
+die Sigmoid Funktion (\ref{plot:sidmoid}) verwendet,
 welche S-Förmig zwischen 0 und 1 verläuft.
 
-\begin{equation}
-    \label{eq:sidmoid}
-    g(z) = \frac{1}{1 + e^{-x}}
-\end{equation}
+\vspace{1cm}
+
+\begin{minipage}{0.5\textwidth}
+    \centering
+    \begin{equation*}
+        \label{eq:relu}
+        g(z) = max\{0,z\}
+    \end{equation*}
+\end{minipage}
+\begin{minipage}{0.5\textwidth}
+    \centering
+    \begin{equation*}
+        \label{eq:sidmoid}
+        g(z) = \frac{1}{1 + e^{-x}}
+    \end{equation*}    
+\end{minipage}
+
+\vspace{1cm}
+
+\begin{minipage}{0.5\textwidth}
+    \centering
+    \label{plot:relu}
+    \input{Bilder/relu.tex}
+    \captionof{figure}{ReLU Funktion} 
+\end{minipage}
+\begin{minipage}{0.5\textwidth}
+    \centering
+    \label{plot:sigmoid}
+    \input{Bilder/sigmoid.tex}
+    \captionof{figure}{Sigmoid Funktion} 
+\end{minipage}
+
+\vspace{1cm}
 
 
 Für eine Kategorische Ausgabe mit mehr als zwei Werten wird 

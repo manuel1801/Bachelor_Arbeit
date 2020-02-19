@@ -178,17 +178,21 @@ Abbildung \ref{plot:mAP} und \ref{plot:loss} dargestellt.
 \end{minipage}
 \end{figure}
 
-% \definecolor{orange}{rgb}{255,100,30}
-% \definecolor{blue}{rgb}{50,90,200}
-% \definecolor{red}{rgb}{220,10,0}
 
 % Legende: Overfitting
 \begin{table}[htb]
   \centering
   \begin{tabular}{m{0.1\textwidth}<{\centering}m{0.2\textwidth}<{\centering}m{0.2\textwidth}<{\centering}}
-    $\color[RGB]{255,100,30}\medbullet$  Ohne & $\color[RGB]{50,90,200}\medbullet$  Early Stopping & $\color[RGB]{220,10,0}\medbullet$  Augmentierung
+    $\color[HTML]{FF7043}\medbullet$  Ohne & $\color[HTML]{0077BB}\medbullet$  Early Stopping & $\color[HTML]{CC3311}\medbullet$  Augmentierung
   \end{tabular}    
 \end{table}
+
+% colors
+% orange: FF7043
+% blue  : 0077BB
+% red   : CC3311
+
+
 
 hier die zwi techniken zur vermeidung von overfitting: augmentierung
 und Loss gegenübergestellt. Augmentierung erzielt bessere ergebnisse, 
@@ -302,6 +306,45 @@ evtl noch bilder.
 Um bessere Ergebnisse für das Faster R-CNN zu erzielen wurde zunächst 
 das im vorherigen beschriebene Faster + Aug 400k statt 200k durläufe 
 trainiert.
+
+\subsection{Verschiedene Augmentierungen}
+
+Folgende Plots zeigen Faster R-CNN mit einer Augment pro 
+Bildv, zwei Augment pro Bild (3000Samples) und 
+zwei Augment pro Bild (4000Samples)
+\\[1cm]
+\begin{minipage}{0.5\textwidth}
+  \centering
+  \label{plot:map_diff_aug}
+  \def\svgwidth{0.9\textwidth}
+  \input{Bilder/diff_aug_map.pdf_tex}
+  \captionof{figure}{mAP}
+\end{minipage}
+\begin{minipage}{0.5\textwidth}
+  \centering
+  \label{plot:loss_diff_aug}
+  \def\svgwidth{0.9\textwidth}
+  \input{Bilder/diff_aug_loss.pdf_tex}
+  \captionof{figure}{Loss}
+\end{minipage}
+
+% Legende
+\begin{table}[htb]
+  \centering
+  \begin{tabular}{m{0.1\textwidth}<{\centering}m{0.2\textwidth}<{\centering}m{0.2\textwidth}<{\centering}}
+    $\color[HTML]{CC3311}\medbullet$  Ohne & $\color[HTML]{FF7043}\medbullet$  Early Stopping & $\color[HTML]{0077BB}\medbullet$  Augmentierung
+  \end{tabular}    
+\end{table}
+
+Mehr Augmentierung führt zu weniger loss, 
+jedoch auch schlechterem mAP.
+
+
+% colors
+% orange: FF7043
+% blue  : 0077BB
+% red   : CC3311
+
 
 
 \subsection{Validierung}

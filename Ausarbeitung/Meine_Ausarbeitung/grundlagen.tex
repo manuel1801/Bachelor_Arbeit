@@ -26,7 +26,7 @@ bei bei der die Regeln vorab definiert werden müssen.
 
 
 \vspace{0.5cm}
-\begin{figure}[htb]
+\begin{figure}[H]
     \centering
     \def\svgwidth{0.8\columnwidth}
     \footnotesize
@@ -114,7 +114,7 @@ Mithilfe einer Aktivierungsfunktion wird der Wert auf einen bestimmenten Bereich
 skalliert \ref{fig:neuron}
 
 
-\begin{figure}[h]
+\begin{figure}[H]
     \centering
     \label{fig:neuron}
     \input{Bilder/neuron}
@@ -272,9 +272,9 @@ anzupassen und damit nicht mehr generalisierbare Aussagen
 für neue Datenpunkte treffen kann.
 
 
-\begin{figure}[htb]
+\begin{figure}[H]
     \centering
-    \includegraphics[width=0.8\textwidth]{over_under_fit.png}
+    \includegraphics[width=0.9\textwidth]{over_under_fit.png}
     \caption{Quelle: \cite{deshpGuideImprovingDeep2017a}}
     \label{fig:over_under_fit}
 \end{figure}
@@ -390,13 +390,12 @@ Abbildung \ref{fig:lenet} dargestellt ist, wurde eine
 vielzahl an neuen Architekturen für genauere und effizientere
 Ergebnisse entwickelt.
 
-Um diese einheitlich miteinander zu vergleichen und zu 
-bewerten wurde die \textit{Large Scale Visual Recognition Challenge (ILSVRC)}
+Zur bewertung dieser anhand einheitlicher Kriterien,
+wurde die \textit{Large Scale Visual Recognition Challenge (ILSVRC)}
 \cite{ImageNetLargeScale} von ImageNet gegründet.
 
 Bekannte Modelle, welche die Challenge gewonnen haben 
-sind, wie in \cite{StanfordCS231nConvolutional} nachzulesen ist:
-
+sind, wie in \cite{StanfordCS231nConvolutional} aufgelistet ist:
 
 
 \begin{itemize}
@@ -412,14 +411,18 @@ sind, wie in \cite{StanfordCS231nConvolutional} nachzulesen ist:
 %---------------- SUBSECTION: Obj Detection ----------------
 \subsection{Objekt erkennung}\label{subsec:objdet_det}
 
-Neben der Information, was sich auf einem Bild geht bei der 
-Objekt Erkennung auch darum herausfinden wo sich das 
+Neben der Information, was sich auf einem Bild befindet geht 
+es bei der Objekt Erkennung auch darum herausfinden wo sich das 
 Objekt auf dem Bild befindet.
 
-Dafür wird ein in \ref{subsec:cnn} beschriebenes CNN als Basis 
-in einem Framework welches die Lokalisierung vornimmt verwendet.
+Dafür wird die CNN Architektur so erweitert, das das Modell 
+Neben den Input Bildern auch die Koordinaten für das 
+Training erhällt, und dadurch diese mitlernt.
 
-\begin{figure}[htb]
+Dafür gibt es verschiedene Ansätze, welche im Abschnitt \ref{sec:related_work}
+genauer beschrieben werden.
+
+\begin{figure}[H]
     \centering
     \label{fig:class_vs_det}
     \includegraphics[width=0.8\textwidth]{classification_detection_small.jpeg}
@@ -527,7 +530,7 @@ Diese bietet eine Api mit der aus der Anwendung heraus in den
 Programmiersprachen C++ oder Python auf die Funktionen der 
 InferenceEngeine zugegriffen werden können.
 
-\begin{figure}[htb]
+\begin{figure}[H]
     \centering
     \includegraphics[width=0.8\textwidth]{./Bilder/open_vino_workflow_steps.png}
     \caption{Workflow: OpenVino Toolkit}

@@ -10,12 +10,12 @@ from datetime import datetime
 
 
 # Settings:
-# import picamera.array
-# import picamera
+import picamera.array
+import picamera
 
 
 password = 'helloworld'
-raspi = False
+raspi = True
 
 
 if raspi:

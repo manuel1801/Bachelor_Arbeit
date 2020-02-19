@@ -1,0 +1,23 @@
+\begin{tikzpicture}[scale=0.6]
+    \begin{axis}
+        %scale only axis=true,
+        [
+            scale only axis=true,
+            width=0.8\textwidth,
+            height=5cm,
+            axis x line=middle,
+            axis y line=center,
+            tick align=outside
+        ]
+        
+        \addplot
+        [
+            blue,
+            mark=none,
+            smooth,
+            domain=-3:6
+        ] 
+        (x,{(x>=0)*x});
+
+	\end{axis}
+\end{tikzpicture}

@@ -159,7 +159,7 @@ class SSHConnect:
 def main():
 
     password = 'helloworld'
-    raspi = False
+    raspi = True
 
     if raspi:
         user = 'pi'
@@ -190,15 +190,15 @@ def main():
         ret = conn.connect()
         sleep(1)
 
-    server, port, connectionid = ret
+    server, port = ret
 
-    print('server; ', server, 'port ', port)
-    print('local file path', os.path.join(local_output_dir,
-                                          os.listdir(local_output_dir)[0]))
-    print('remote output die', remote_output_dir)
-    print('remote user', remote_user)
-    print('pw ', password)
-    exit()
+    #print('server; ', server, 'port ', port)
+    #print('local file path', os.path.join(local_output_dir,
+    #                                      os.listdir(local_output_dir)[0]))
+    #print('remote output die', remote_output_dir)
+    #print('remote user', remote_user)
+    #print('pw ', password)
+    #exit()
 
     for test_image in test_images:
         if conn.send(server, port, remote_user, password, test_image, remote_output_dir):
@@ -206,7 +206,7 @@ def main():
         else:
             print('could not send')
 
-    conn.disconnect(connectionid)
+    conn.disconnect()
 
 
 if __name__ == "__main__":

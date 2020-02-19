@@ -5,17 +5,26 @@ import os
 import cv2
 import numpy as np
 import sys
-import time
 from datetime import datetime
+from time import time
 
 
 # Settings:
-import picamera.array
-import picamera
+# import picamera.array
+# import picamera
 
 
 password = 'helloworld'
-raspi = True
+
+raspi = False
+
+buffer_size = 200    # zum zwischen speichern wenn infer langsamer stream
+threshhold = 0.5     # Für Detections
+num_requests = 3     # anzahl paralleler inferenz requests, recommended:3
+send_results = False  # falls nein wird local gespeichert)
+send_email = False   #
+n_save = 10          # nach wie vielen detections einer klasse save and send
+send_all_every = 60  # wie oft alle detections senden (in sekunden, 0 für nie)
 
 
 if raspi:
@@ -27,7 +36,7 @@ else:
     user = 'manuel'
     remote_user = 'pi'
     remote_divice_name = 'ssh-Pi'
-    view_result = False
+    view_result = True
 
 
 workspace_dir = os.path.join('/home', user, 'Bachelor_Arbeit')
@@ -40,43 +49,37 @@ remote_output_dir = os.path.join(
 
 assert os.path.isdir(local_output_dir)
 
-
-buffer_size = 200    # zum zwischen speichern wenn infer langsamer stream
-threshhold = 0.5     # Für Detections
-send_all_every = 60  # sec
-num_requests = 3     # anzahl paralleler inferenz requests, recommended:3
-send_results = True
-
-if send_results:
-    conn = connection.SSHConnect()
-
 models_dir = os.path.join(workspace_dir, 'Application_Raspberry/models')
 assert os.path.isdir(models_dir)
 
+
+# SSH Connection Objekt anlegen
+if send_results:
+    conn = connection.SSHConnect()
+
+
+# Ausgabe zur Model auswahl
 models = []
 for i, m in enumerate(os.listdir(models_dir)):
     models.append(m)
     print(i, m)
 model_dir = os.path.join(models_dir, models[int(input())])
 # model_dir = os.path.join(models_dir, models[2])
-
 print('selected model: ', model_dir)
 assert os.path.isdir(model_dir)
 
 
 # Load Model to Device
-infer_model = detection.InferenceModel()
+infer_model = detection.InferenceModel(device='MYRIAD')
 exec_model = infer_model.create_exec_infer_model(
-    model_dir, num_requests=num_requests)
+    model_dir, local_output_dir, num_requests)
+del infer_model
 
 
 # init motion detector
 motion_detector = detection.MotionDetect()
 motion_frames = []
 
-
-has_motion = False
-del_idx = 1
 
 # Init Cam
 if raspi:
@@ -90,9 +93,14 @@ else:
     cap = cv2.VideoCapture(0)
 
 
-infered_frames, fps = 0, 1
-start_time, send_time = time.time(), time.time()
+# interne variablen (nicht ändern)
+no_detections = 0
+send_time = time()
 logged_in, connected, send_request = False, False, False
+save_all = False
+has_motion = False
+del_idx = 1
+n_infered = 0
 
 
 while True:
@@ -117,82 +125,97 @@ while True:
     else:
         has_motion = False
 
+    # disconnect from remote device
     if not motion_frames and connected:
         conn.disconnect()
         print('dissconnecting')
         connected = False
 
+    # Send all current Detections
+    if send_all_every > 0 and time() - send_time > send_all_every:
+        send_time = time()
+        save_all = True
+
+    # damit nur zeit in der inferiert wird berüksicktigt
+    if n_infered == 0 and not motion_frames:
+        start_time = time()
+        infered_frames, fps = 0, 0
+    else:
+        # fps berechnung
+        infered_frames += n_infered
+        fps = infered_frames / (time() - start_time)
+
+    print('Fps: ' + str(fps)
+          + '\tMotion: ' + str(has_motion)
+          + '\tBuffer: ' + str(len(motion_frames)) + '/' + str(buffer_size),
+          end='\r', flush=True)
+
     # Infer Frames
-    results = exec_model.infer_frames(motion_frames)
+    n_infered, n_detected, n_saved = exec_model.infer_frames(
+        motion_frames, threshhold, view_result, n_save, fps, save_all)
 
-    send_request = False
+    # set send request
+    if n_saved > 0:
+        save_all = False
+        send_request = True
 
-    # Preocess infered Frames
-    for result in results:
-        infered_frames += 1
-        fps = infered_frames/(time.time() - start_time)
-        # fps berechnung stimmt nicht wenn zeitweise
-        # keine inferenz
-        print('infered frames: ' + str(infered_frames)
-              + '\tFps: ' + str(fps)
-              + '\tmotione: ' + str(has_motion)
-              + '\tbuffer lenght: ' + str(len(motion_frames)), end='\r', flush=True)
-
-        no_detections, saved = exec_model.prossec_result(
-            result, threshhold, local_output_dir, fps=fps, view_result=view_result)
-
-        if saved:
-            send_request = True
-
+    # Handle infered frames without detections
+    if n_infered > 0 and n_detected == 0:
+        no_detections += 1
         if no_detections > 20 * max(1, fps):
-            print('reset background')
+            print('resetting motion detector')
             motion_detector.reset_background()
             motion_frames = []
-            exec_model.no_detections = 0
+            no_detections = 0
 
             if connected:
                 print('disconnection')
                 conn.disconnect()
                 connected = False
+    else:
+        no_detections = 0
 
-    # Send all current Detections
-    if send_results and (time.time() - send_time) > send_all_every:
-        send_time = time.time()
+    # check send request status
+    if not send_results or not send_request:
+        continue
 
-        if exec_model.save_all(local_output_dir):
-            send_request = True
-
-    if send_results and send_request:
-
+    # check login status
+    if not logged_in:
+        print('try to log in')
+        logged_in = conn.login(device_name=remote_divice_name)
         if not logged_in:
-            print('try to log in')
-            logged_in = conn.login(device_name=remote_divice_name)
-            if not logged_in:
-                print('could not log in')
-                continue
-            print('logged in')
+            print('could not log in')
+            continue
+        print('logged in')
 
+    # check connection status
+    if not connected:
+        print('try to connect')
+        connected = conn.connect()
         if not connected:
-            print('try to connect')
-            connected = conn.connect()
-            if not connected:
-                logged_in = False
-                print('could not connect to ', remote_divice_name)
-                continue
-            print('connected')
+            logged_in = False
+            print('could not connect to ', remote_divice_name)
+            continue
+        print('connected')
 
-        server, port = connected
+    # get remote server and port name
+    server, port = connected
 
-        send_request = False
-        for image in os.listdir(local_output_dir):
-            image_path = os.path.join(local_output_dir, image)
+    # reset send request and start to send all files in output dir
+    send_request = False
+    for image in os.listdir(local_output_dir):
+        image_path = os.path.join(local_output_dir, image)
 
-            if conn.send(server, port, remote_user, password, image_path, remote_output_dir):
-                os.remove(image_path)
-                print('Successfully send image ', image)
-            else:
-                send_request = True
-                print('Error while sending ', image)
+        # try to send and delete local file
+        if conn.send(server, port, remote_user, password, image_path, remote_output_dir):
+            os.remove(image_path)
+            print('Successfully send image ', image)
+
+        # when erro: set send request again for next iteration
+        else:
+            send_request = True
+            print('Error while sending ', image)
+
 
 if view_result:
     cv2.destroyAllWindows()

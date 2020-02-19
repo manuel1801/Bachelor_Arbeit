@@ -36,7 +36,7 @@ class InferenceModel:
         self.ie = IECore()
         self.device = device
 
-    def create_exec_infer_model(self, model_dir, num_requests=2):
+    def create_exec_infer_model(self, model_dir, output_dir, num_requests=2):
 
         model_xml = os.path.join(
             model_dir, 'frozen_inference_graph.xml')
@@ -78,142 +78,122 @@ class InferenceModel:
                 network=net, num_requests=num_requests, device_name=self.device)
             exec_net.export(exported_model)
 
-        n, c, h, w = net.inputs[input_blob].shape
-        if img_info_input_blob:
-            feed_dict[img_info_input_blob] = [h, w, 1]
+        nchw = net.inputs[input_blob].shape
 
-        return ExecInferModel(exec_net, input_blob, out_blob, feed_dict, n, c, h, w, num_requests, labels)
+        del net
+
+        if img_info_input_blob:
+            feed_dict[img_info_input_blob] = [nchw[2], nchw[3], 1]
+
+        return ExecInferModel(exec_net, input_blob, out_blob, feed_dict, nchw, num_requests, labels, output_dir)
 
 
 class ExecInferModel:
-    def __init__(self, exec_net, input_blob, out_blob, feed_dict, n, c, h, w, num_requests, labels):
+    def __init__(self, exec_net, input_blob, out_blob, feed_dict, nchw, num_requests, labels, output_dir):
         self.exec_net = exec_net
         self.labels = labels
         self.input_blob = input_blob
         self.out_blob = out_blob
         self.feed_dict = feed_dict
-        self.n = n
-        self.c = c
-        self.h = h
-        self.w = w
+        self.n, self.c, self.h, self.w = nchw
         self.num_requests = num_requests
         self.current_frames = {}
         self.detected_objects = {}
-        self.no_detections = 0
+        self.output_dir = output_dir
 
-    def infer_frames(self, buffer):
+    def infer_frames(self, buffer, threshhold=0.6, view_result=True, n_save=20, fps=1, save_all=False):
 
-        results = []
+        n_infered, n_detected, n_saved = 0, 0, 0
 
         for req_idx in range(self.num_requests):
 
+            res, frame = None, None
+
+            # get infer status for current req number
             status = self.exec_net.requests[req_idx].wait(0)
 
-            if status == 0 and req_idx in self.current_frames:
+            if status != 0 and status != -11:
+                continue
 
-                 # get result
+            # get result of current req number
+            if req_idx in self.current_frames:
                 res = self.exec_net.requests[req_idx].outputs[self.out_blob]
-                results.append(
-                    (res, self.current_frames.pop(req_idx)))
+                frame = self.current_frames[req_idx]
+                n_infered += 1
 
-            if (status == 0 or status == -11) and len(buffer) > 0:
-                # start new inference
+            # start new infer request
+            if len(buffer):
                 self.current_frames[req_idx] = buffer.pop()
                 in_frame = cv2.resize(
                     self.current_frames[req_idx], (self.w, self.h))
-
                 in_frame = in_frame.transpose((2, 0, 1))
-
                 in_frame = in_frame.reshape(
                     (self.n, self.c, self.h, self.w))
-
                 self.feed_dict[self.input_blob] = in_frame
-
                 self.exec_net.start_async(
                     request_id=req_idx, inputs=self.feed_dict)
 
-        return results
+            # process result of curent infer req number
+            if res is None or frame is None:
+                continue
 
-    def prossec_result(self, result, threshhold, output_dir, fps=1, view_result=False):
-        res, frame = result
-        height, width = frame.shape[:2]
-        saved = False
-        self.no_detections += 1
+            height, width = frame.shape[:2]
+            for obj in res[0][0]:
 
-        for obj in res[0][0]:
-            confidence = obj[2]
-            if obj[2] > threshhold:
+                if obj[2] < threshhold:
+                    continue
 
-                self.no_detections = 0
+                n_detected += 1
 
-                # get coordinats
+                # get coordinates
                 xmin = int(obj[3] * width)
                 ymin = int(obj[4] * height)
                 xmax = int(obj[5] * width)
                 ymax = int(obj[6] * height)
 
-                # get class
+                # get class id
                 class_id = int(obj[1])
-                class_name = self.labels[class_id - 1]
 
+                # draw box and text into image
                 cv2.rectangle(frame, (xmin, ymin),
                               (xmax, ymax), color=(0, 255, 255), thickness=2)
 
-                cv2.putText(frame, class_name + ' ' + str(round(confidence * 100, 1)) + '%', (xmin, ymin - 7),
+                cv2.putText(frame, self.labels[class_id - 1] + ' ' + str(round(obj[2] * 100, 1)) + '%', (xmin, ymin - 7),
                             cv2.FONT_HERSHEY_COMPLEX, 0.6, (0, 255, 255), 1)
-
-                if view_result:
-                    cv2.imshow('infer result', frame)
-                    cv2.waitKey(1)
 
                 # detected_objects -> class_id:(nr, roi, proba)
                 if not class_id in self.detected_objects:
-                    self.detected_objects[class_id] = [0, frame, obj[2]]
+                    self.detected_objects[class_id] = [
+                        0, frame, obj[2]]
                 else:
                     self.detected_objects[class_id][0] += 1
                     if self.detected_objects[class_id][2] < obj[2]:
                         self.detected_objects[class_id][1] = frame
                         self.detected_objects[class_id][2] = obj[2]
 
-                # send detected roi of current class after 10 seconds
-                if self.detected_objects[class_id][0] > 10 * max(1, fps):
-                    print('saving ', class_name)
-
-                    image_name = 'detected_' + class_name + '_' + \
-                        datetime.now().strftime("%d-%b-%Y_%H-%M-%S")
-                    image_array = self.detected_objects[class_id][1]
-
-                    # save image local
-                    cv2.imwrite(os.path.join(
-                        output_dir, image_name + '.png'), image_array)
-
-                    saved = True
-
+                if self.detected_objects[class_id][0] > n_save * max(1, fps):
+                    n_saved += 1
+                    self._save(class_id)
                     del self.detected_objects[class_id]
 
-        return self.no_detections, saved
+            if view_result:
+                cv2.imshow('infer result', frame)
+                cv2.waitKey(1)
 
-    def save_all(self, output_dir):
+        if save_all:
+            print('saving all')
+            for class_id in self.detected_objects.keys():
+                self._save(class_id)
+                n_saved += 1
+            self.detected_objects = {}
+        return n_infered, n_detected, n_saved
 
-        print('svaing all')
-        # detected_objects -> class_id:(nr, roi, proba)
-        class_ids = list(self.detected_objects.keys())
-        saved = False
-        for class_id in class_ids:
-
-            if self.labels:
-                class_name = self.labels[class_id - 1]
-            else:
-                class_name = 'class id ' + str(class_id)
-
-            print('saving: ', class_name)
-            image_name = 'detected_' + class_name + '_' + \
-                datetime.now().strftime("%d-%b-%Y_%H-%M-%S")
-            image_array = self.detected_objects[class_id][1]
-
-            cv2.imwrite(os.path.join(
-                        output_dir, image_name + '.png'), image_array)
-
-            saved = True
-            del self.detected_objects[class_id]
-        return saved
+    def _save(self, class_id):
+        class_name = self.labels[class_id - 1]
+        print('saving ', class_name)
+        time_stamp = datetime.now().strftime("%d-%b-%Y_%H-%M-%S")
+        file_name = class_name + '_' + time_stamp + '.jpg'
+        image_array = self.detected_objects[class_id][1]
+        # save image local
+        cv2.imwrite(os.path.join(
+            self.output_dir, file_name), image_array)

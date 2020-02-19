@@ -124,7 +124,7 @@ class SSHConnect:
         response_body = response.json()
 
     def send(self, server, port, user, password, file, path):
-        command = 'scp -o StrictHostKeyChecking=no -P {} {} {}@{}:{}'.format(
+        command = 'scp -o ConnectTimeout=60 -o StrictHostKeyChecking=no -P {} {} {}@{}:{}'.format(
             port, file, user, server, path)
 
         try:
@@ -193,12 +193,12 @@ def main():
     server, port = ret
 
     #print('server; ', server, 'port ', port)
-    #print('local file path', os.path.join(local_output_dir,
+    # print('local file path', os.path.join(local_output_dir,
     #                                      os.listdir(local_output_dir)[0]))
     #print('remote output die', remote_output_dir)
     #print('remote user', remote_user)
     #print('pw ', password)
-    #exit()
+    # exit()
 
     for test_image in test_images:
         if conn.send(server, port, remote_user, password, test_image, remote_output_dir):

@@ -124,7 +124,7 @@ class SSHConnect:
         response_body = response.json()
 
     def send(self, server, port, user, password, file, path):
-        command = 'scp -o ConnectTimeout=60 -o StrictHostKeyChecking=no -P {} {} {}@{}:{}'.format(
+        command = 'scp -o StrictHostKeyChecking=no -P {} {} {}@{}:{}'.format(
             port, file, user, server, path)
 
         try:

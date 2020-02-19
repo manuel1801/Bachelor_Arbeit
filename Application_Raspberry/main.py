@@ -10,21 +10,24 @@ from time import time
 
 
 # Settings:
-# import picamera.array
-# import picamera
+import picamera.array
+import picamera
 
 
 password = 'helloworld'
 
-raspi = False
+raspi = True
 
 buffer_size = 200    # zum zwischen speichern wenn infer langsamer stream
 threshhold = 0.5     # Für Detections
 num_requests = 3     # anzahl paralleler inferenz requests, recommended:3
-send_results = False  # falls nein wird local gespeichert)
+send_results = True  # falls nein wird local gespeichert)
 send_email = False   #
-n_save = 10          # nach wie vielen detections einer klasse save and send
-send_all_every = 60  # wie oft alle detections senden (in sekunden, 0 für nie)
+send_all_every = 100  # wie oft alle detections senden (in sekunden, 0 für nie)
+
+# nach wie vielen detections einer klasse save and send
+n_save = 500       # für SSDs mit ca 30 FPS
+# n_save = 10        # für Faster R-CNNs mit ca 0,7 FPS
 
 
 if raspi:
@@ -102,7 +105,6 @@ has_motion = False
 del_idx = 1
 n_infered = 0
 
-
 while True:
 
     # Capture Frame
@@ -152,7 +154,7 @@ while True:
 
     # Infer Frames
     n_infered, n_detected, n_saved = exec_model.infer_frames(
-        motion_frames, threshhold, view_result, n_save, fps, save_all)
+        motion_frames, threshhold, view_result, n_save, save_all)
 
     # set send request
     if n_saved > 0:

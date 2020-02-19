@@ -101,7 +101,7 @@ class ExecInferModel:
         self.detected_objects = {}
         self.output_dir = output_dir
 
-    def infer_frames(self, buffer, threshhold=0.6, view_result=True, n_save=20, fps=1, save_all=False):
+    def infer_frames(self, buffer, threshhold=0.6, view_result=True, n_save=20, save_all=False):
 
         n_infered, n_detected, n_saved = 0, 0, 0
 
@@ -171,14 +171,14 @@ class ExecInferModel:
                         self.detected_objects[class_id][1] = frame
                         self.detected_objects[class_id][2] = obj[2]
 
-                if self.detected_objects[class_id][0] > n_save * max(1, fps):
+                if self.detected_objects[class_id][0] > n_save:
                     n_saved += 1
                     self._save(class_id)
                     del self.detected_objects[class_id]
 
-            if view_result:
-                cv2.imshow('infer result', frame)
-                cv2.waitKey(1)
+                if view_result:
+                    cv2.imshow('infer result', frame)
+                    cv2.waitKey(1)
 
         if save_all:
             print('saving all')

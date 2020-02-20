@@ -85,18 +85,17 @@ class InferenceModel:
         if img_info_input_blob:
             feed_dict[img_info_input_blob] = [nchw[2], nchw[3], 1]
 
-        return ExecInferModel(exec_net, input_blob, out_blob, feed_dict, nchw, num_requests, labels, output_dir)
+        return ExecInferModel(exec_net, input_blob, out_blob, feed_dict, nchw, labels, output_dir)
 
 
 class ExecInferModel:
-    def __init__(self, exec_net, input_blob, out_blob, feed_dict, nchw, num_requests, labels, output_dir):
+    def __init__(self, exec_net, input_blob, out_blob, feed_dict, nchw, labels, output_dir):
         self.exec_net = exec_net
         self.labels = labels
         self.input_blob = input_blob
         self.out_blob = out_blob
         self.feed_dict = feed_dict
         self.n, self.c, self.h, self.w = nchw
-        self.num_requests = num_requests
         self.current_frames = {}
         self.detected_objects = {}
         self.output_dir = output_dir
@@ -105,33 +104,32 @@ class ExecInferModel:
 
         n_infered, n_detected, n_saved = 0, 0, 0
 
-        for req_idx in range(self.num_requests):
+        for inf_img_ind, infer_request in enumerate(self.exec_net.requests):
 
             res, frame = None, None
 
             # get infer status for current req number
-            status = self.exec_net.requests[req_idx].wait(0)
+            status = infer_request.wait(0)
 
             if status != 0 and status != -11:
                 continue
 
             # get result of current req number
-            if req_idx in self.current_frames:
-                res = self.exec_net.requests[req_idx].outputs[self.out_blob]
-                frame = self.current_frames[req_idx]
+            if inf_img_ind in self.current_frames:
+                res = infer_request.outputs[self.out_blob]
+                frame = self.current_frames[inf_img_ind]
                 n_infered += 1
 
             # start new infer request
             if len(buffer):
-                self.current_frames[req_idx] = buffer.pop()
+                self.current_frames[inf_img_ind] = buffer.pop()
                 in_frame = cv2.resize(
-                    self.current_frames[req_idx], (self.w, self.h))
+                    self.current_frames[inf_img_ind], (self.w, self.h))
                 in_frame = in_frame.transpose((2, 0, 1))
                 in_frame = in_frame.reshape(
                     (self.n, self.c, self.h, self.w))
                 self.feed_dict[self.input_blob] = in_frame
-                self.exec_net.start_async(
-                    request_id=req_idx, inputs=self.feed_dict)
+                infer_request.async_infer(self.feed_dict)
 
             # process result of curent infer req number
             if res is None or frame is None:

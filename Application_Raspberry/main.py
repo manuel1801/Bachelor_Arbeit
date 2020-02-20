@@ -66,8 +66,8 @@ models = []
 for i, m in enumerate(os.listdir(models_dir)):
     models.append(m)
     print(i, m)
-model_dir = os.path.join(models_dir, models[int(input())])
-# model_dir = os.path.join(models_dir, models[2])
+#model_dir = os.path.join(models_dir, models[int(input())])
+model_dir = os.path.join(models_dir, models[2])
 print('selected model: ', model_dir)
 assert os.path.isdir(model_dir)
 

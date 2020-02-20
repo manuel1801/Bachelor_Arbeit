@@ -82,7 +82,7 @@ class SSHConnect:
             "deviceaddress": self.device_adress,
             "wait": "true",
             "hostip": host_ip
-            "hostip": None
+            # "hostip": None
         }
 
         url = "https://api.remot3.it/apv/v27/device/connect"

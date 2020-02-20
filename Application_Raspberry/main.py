@@ -122,7 +122,8 @@ while True:
         motion_frames.insert(0, capture)
         if len(motion_frames) >= buffer_size:
             del motion_frames[-del_idx]
-            del_idx += 1
+            if del_idx < len(motion_frames):
+                del_idx += 1
         else:
             del_idx = 1
     else:

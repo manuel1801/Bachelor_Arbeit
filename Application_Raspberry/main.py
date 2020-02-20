@@ -6,7 +6,7 @@ import cv2
 import numpy as np
 import sys
 from datetime import datetime
-from time import time
+from time import time, sleep
 
 
 # Settings:
@@ -67,8 +67,8 @@ for i, m in enumerate(os.listdir(models_dir)):
     models.append(m)
     print(i, m)
 #model_dir = os.path.join(models_dir, models[int(input())])
-model_dir = os.path.join(models_dir, 'samples_faster_rcnn_inception')
-# model_dir = os.path.join(models_dir, 'samples_ssd_inception')
+# model_dir = os.path.join(models_dir, 'samples_faster_rcnn_inception')
+model_dir = os.path.join(models_dir, 'samples_ssd_inception')
 # model_dir = os.path.join(models_dir, 'animals_faster_rcnn_inception')
 # model_dir = os.path.join(models_dir, 'animals_ssd_inception')
 
@@ -108,12 +108,21 @@ save_all = False
 has_motion = False
 del_idx = 1
 n_infered = 0
+try_camera = 0
 
 while True:
 
     # Capture Frame
     if raspi:
-        camera.capture(capture_empty, 'bgr', use_video_port=True)
+        try:
+            camera.capture(capture_empty, 'bgr', use_video_port=True)
+        except:
+            sleep(2)
+            if try_camera < 5:
+                try_camera += 1
+                continue
+            break
+
         capture = np.copy(capture_empty)
     else:
         ret, capture = cap.read()

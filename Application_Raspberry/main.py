@@ -19,7 +19,7 @@ password = 'helloworld'
 raspi = True
 
 buffer_size = 200    # zum zwischen speichern wenn infer langsamer stream
-threshhold = 0.5     # Für Detections
+threshhold = 0.7     # Für Detections
 num_requests = 3     # anzahl paralleler inferenz requests, recommended:3
 send_results = True  # falls nein wird local gespeichert)
 send_email = False   #
@@ -67,7 +67,7 @@ for i, m in enumerate(os.listdir(models_dir)):
     models.append(m)
     print(i, m)
 #model_dir = os.path.join(models_dir, models[int(input())])
-model_dir = os.path.join(models_dir, models[2])
+model_dir = os.path.join(models_dir, 'samples_faster_rcnn_inception')
 print('selected model: ', model_dir)
 assert os.path.isdir(model_dir)
 

@@ -10,18 +10,18 @@ from time import time
 
 
 # Settings:
-import picamera.array
-import picamera
+# import picamera.array
+# import picamera
 
 
 password = 'helloworld'
 
-raspi = True
+raspi = False
 
 buffer_size = 200    # zum zwischen speichern wenn infer langsamer stream
 threshhold = 0.7     # Für Detections
 num_requests = 3     # anzahl paralleler inferenz requests, recommended:3
-send_results = True  # falls nein wird local gespeichert)
+send_results = False  # falls nein wird local gespeichert)
 send_email = False   #
 send_all_every = 100  # wie oft alle detections senden (in sekunden, 0 für nie)
 
@@ -39,7 +39,7 @@ else:
     user = 'manuel'
     remote_user = 'pi'
     remote_divice_name = 'ssh-Pi'
-    view_result = True
+    view_result = False
 
 
 workspace_dir = os.path.join('/home', user, 'Bachelor_Arbeit')

@@ -226,14 +226,13 @@ folgende Testszenarien:
   \item inferenz auf eigene Bilder
 \end{itemize}
 
-durchgeführt und die Ergebnisse miteinander verglichen werden.
 
+\subsubsection{Test Set (OpenImages)}
+Sowohl SSD als auch Faster R-CNN erkennen das meiste, da gr 
+ähnlichkeit zu Trainingssatz.
 
-\subsubsection{test set}
-Fast alles wird erkannt.
-\\
-grund: große ähnlich der art der bilder in trainings und testsatz\\
-tiere sind überwiegend mittg zentriert im bild. Abb. \ref{fig:ssd}
+Wenn jedoch mehrere Tiere im Bild sind, diese weiter weg oder schlechtere
+Bildqualität, erkennt Faster R-CNN besser. Abb \ref{fig:faster_rcnn}
 \\[1cm]
 \begin{minipage}{0.5\textwidth}
   \centering
@@ -247,19 +246,11 @@ tiere sind überwiegend mittg zentriert im bild. Abb. \ref{fig:ssd}
   \captionof{figure}{Faster R-CNN}
   \label{fig:faster_rcnn}
 \end{minipage}
-\\[1cm]
-Wenn mehrere Tiere im Bild sind, diese weiter weg oder schlechtere
-Bildqualität, erkennt Faster besser. Abb \ref{fig:faster_rcnn}
 
 
+\subsubsection{Eigene Aufnahmen}
 
 
-\subsubsection{eigene}
-
-
-bilder guter qualität, jedoch unterschied zu openimages dataset 
-bezogen auf background umgebung.
-\\[1cm]
 \begin{minipage}{0.5\textwidth}
   \centering
   \includegraphics[width=0.9\textwidth]{model_compare_handy_ssd_mobilenet_v2.jpg}
@@ -285,27 +276,24 @@ bezogen auf background umgebung.
   \captionof{figure}{Faster R-CNN + Aug}
   \label{}
 \end{minipage}
-\\[1cm]
 
 
-\subsubsection{kaggle set}
+\subsubsection{iWildCam}
 
-Aufnahmen von ... enthällt viele dunkle nacht aufnahmen geringer 
-qualität. entspricht daher am ehesten den real world bedingungen.
-wenig wird erkannt. am besten erkennt faster + aug.
-daher wurde versuch faster rcnn zu optimieren und robuster 
-zu machen, was im nächsten Abschnitt beschrieben ist.
-\\
-evtl noch bilder.
+Aufnahmen von ... enthällt viele schlecht beleuchtete nacht Aufnahmen 
+mit Infrarot Kamera, also ähnlich dem gewünschten Anwendungsfall.
+Auch hier erkennt das Faster R-CNN am beste, jedoch 
+schneiden hier alle schlecht ab.
 
+Daher wurde, wie im nächsten Abschnitt beschrieben, versuch
+das Faster R-CNN noch weiter zu optimieren.
 
 
 %----------------- SECTION: optimierung ---------------------
 \section{Optimierungen: Faster r-CNN}\label{sec:optimierung_faster_rcnn}
 
-Um bessere Ergebnisse für das Faster R-CNN zu erzielen wurde zunächst 
-das im vorherigen beschriebene Faster + Aug 400k statt 200k durläufe 
-trainiert.
+Um bessere Ergebnisse für das Faster R-CNN zu erzielen wurde dieses 
+nun für mehr durchläufe trainiert. (500k statt 200k)
 
 \subsection{Verschiedene Augmentierungen}
 
@@ -485,10 +473,8 @@ und sind in tabelle so und so dargestellt.
 \end{table}
 
 \subsection{Test Inferenz}
-da nicht sehr eindeutig, welche optimierung die 
-beste ist, wurd auch hier test inferenz für 
-kaggle und eigen durchgeführt.
 
+Auf die drei Datensätze um 
 
 
 \subsection{Graustufen}
@@ -497,50 +483,48 @@ training in graustufen bilder zu besseren erg führt, ... nicht so.
 
 
 
-\subsection{weitere tabellen}\label{subsec:regularisierung}
+% \subsection{weitere tabellen}\label{subsec:regularisierung}
 
-
-
-\begin{table}[htb]
-    \centering
-    \label{tab:regularization}
-    \begin{tabular}{| l || c | c | c | c |} 
-        \hline
-        Regularisierung & $mAP_{orig}$ & $mAP_{handy}$ & $Loss_{orig}$ &  $Loss_{handy}$\\
-        \hline
-        Early Stopping (100k steps) & 0.6715 & 0.4265 & 0.6742 & 0.267\\
-        \hline
-        Augmentierung (200k steps) & 0.6914 & 0.4537 & 0.6738 & 0.2503\\ % hier noch verschiedene kombinationen von augmentierungen
-        \hline
-    \end{tabular}        
-    \caption{Regularization}
-\end{table}
+% \begin{table}[htb]
+%     \centering
+%     \label{tab:regularization}
+%     \begin{tabular}{| l || c | c | c | c |} 
+%         \hline
+%         Regularisierung & $mAP_{orig}$ & $mAP_{handy}$ & $Loss_{orig}$ &  $Loss_{handy}$\\
+%         \hline
+%         Early Stopping (100k steps) & 0.6715 & 0.4265 & 0.6742 & 0.267\\
+%         \hline
+%         Augmentierung (200k steps) & 0.6914 & 0.4537 & 0.6738 & 0.2503\\ % hier noch verschiedene kombinationen von augmentierungen
+%         \hline
+%     \end{tabular}        
+%     \caption{Regularization}
+% \end{table}
 
 
 
 
-\subsection{Graustufen/Infrarot Bilder}\label{subsec:eval_gray}
+% \subsection{Graustufen/Infrarot Bilder}\label{subsec:eval_gray}
 
 
-\begin{table}[htb]
-    \centering
-    \label{tab:eval_gray}
-    \begin{tabular}{| l | l || c | c |} 
-        \hline
-        Modell & Dataset & mAP & Loss\\
-        \hline
-        \multirow{2}{*}{rgb} & original & 0.6556 & 0.1451 \\
-        & handy & 0.4155 & 0.2389 \\
-        \hline
-        \multirow{2}{*}{gray 1 channel} & original & 0.5625 & 0.1716 \\
-        & handy & 0.3226 & 0.2747 \\
-        \hline
-        \multirow{2}{*}{gray 3 channel} & original & 0.664 & 0.1653 \\
-        & handy & 0.438 & 0.2492 \\
-        \hline
-    \end{tabular}        
-    \caption{Grayscale}
-\end{table}
+% \begin{table}[htb]
+%     \centering
+%     \label{tab:eval_gray}
+%     \begin{tabular}{| l | l || c | c |} 
+%         \hline
+%         Modell & Dataset & mAP & Loss\\
+%         \hline
+%         \multirow{2}{*}{rgb} & original & 0.6556 & 0.1451 \\
+%         & handy & 0.4155 & 0.2389 \\
+%         \hline
+%         \multirow{2}{*}{gray 1 channel} & original & 0.5625 & 0.1716 \\
+%         & handy & 0.3226 & 0.2747 \\
+%         \hline
+%         \multirow{2}{*}{gray 3 channel} & original & 0.664 & 0.1653 \\
+%         & handy & 0.438 & 0.2492 \\
+%         \hline
+%     \end{tabular}        
+%     \caption{Grayscale}
+% \end{table}
 
 
 
@@ -548,11 +532,12 @@ training in graustufen bilder zu besseren erg führt, ... nicht so.
 
 \section{Inferenz zeit}
 
-inferenz zeiten wurden in FPS für 100 bilder gemessen. Bei 
-mehr als ein Inferenz Request wurde die Asynchrone Api der InferenceEngine 
-verwendet.
-Folgende Tabelle Zeigt für verschiedene Modelle die 
-Inferenz zeit auf ncs2 über raspberry pi für 100 frames.
+Verglichen wurde, wie viele Frames die verschieden Modelle jeweils, 
+pro Sekunde inferieren können. Dafür wurden jeweils 100 Bilder 
+inferiert aund daraus die Fps errechnet. 
+Ausgefüher wurde auf dem über den raspberry auf dem ncs2.
+
+Es wurden die Asynchrone Inferenz für 1 bis 4 inferenz Requests gemessen.
 
 \begin{table}[hpb]
   \centering

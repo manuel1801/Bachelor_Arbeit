@@ -192,7 +192,7 @@ class ExecInferModel:
         class_name = self.labels[class_id - 1]
         print('saving ', class_name)
         time_stamp = datetime.now().strftime("%d-%b-%Y_%H-%M-%S")
-        file_name = class_name + '_' + time_stamp + '.jpg'
+        file_name = time_stamp + '_' + class_name + '.jpg'
         image_array = self.detected_objects[class_id][1]
         # save image local
         cv2.imwrite(os.path.join(

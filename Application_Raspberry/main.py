@@ -91,7 +91,7 @@ if raspi:
     camera.resolution = (640, 480)
     camera.saturation = -75
     camera.rotation = 180
-    capture = np.empty((480, 640, 3), dtype=np.uint8)
+    capture_empty = np.empty((480, 640, 3), dtype=np.uint8)
 
 else:
     cap = cv2.VideoCapture(0)
@@ -110,7 +110,8 @@ while True:
 
     # Capture Frame
     if raspi:
-        camera.capture(capture, 'bgr', use_video_port=True)
+        camera.capture(capture_empty, 'bgr', use_video_port=True)
+        capture = np.copy(capture_empty)
     else:
         ret, capture = cap.read()
         if not ret:

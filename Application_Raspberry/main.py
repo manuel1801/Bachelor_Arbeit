@@ -26,8 +26,8 @@ send_email = False   #
 send_all_every = 100  # wie oft alle detections senden (in sekunden, 0 für nie)
 
 # nach wie vielen detections einer klasse save and send
-n_save = 300       # für SSDs mit ca 30 FPS
-# n_save = 10        # für Faster R-CNNs mit ca 0,7 FPS
+# n_save = 300       # für SSDs mit ca 30 FPS
+n_save = 10        # für Faster R-CNNs mit ca 0,7 FPS
 
 
 if raspi:
@@ -67,8 +67,11 @@ for i, m in enumerate(os.listdir(models_dir)):
     models.append(m)
     print(i, m)
 #model_dir = os.path.join(models_dir, models[int(input())])
-#model_dir = os.path.join(models_dir, 'samples_faster_rcnn_inception')
-model_dir = os.path.join(models_dir, 'samples_ssd_inception')
+model_dir = os.path.join(models_dir, 'samples_faster_rcnn_inception')
+# model_dir = os.path.join(models_dir, 'samples_ssd_inception')
+# model_dir = os.path.join(models_dir, 'animals_faster_rcnn_inception')
+# model_dir = os.path.join(models_dir, 'animals_ssd_inception')
+
 print('selected model: ', model_dir)
 assert os.path.isdir(model_dir)
 

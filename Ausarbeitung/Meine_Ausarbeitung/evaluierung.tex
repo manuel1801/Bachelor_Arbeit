@@ -125,10 +125,8 @@ insgesammt 4 loss werte verwendet.
 %----------------- SECTION: validtaion ---------------------
 \section{Vergleich der Modelle}\label{sec:model_vergleich}
 In diesem Abschnitt werden die beiden für das Training verwendeten
-Objec Detection Architekturen SSD und Faster R-CNN miteinander 
-verglichen.\\
-Für SSD wurden einmal Mobilenet und einmal InceptionV2 als 
-Basis CNN verwendet und für Faster R-CNN nur InceptionV2.
+Objec Detection Architekturen Single Shot Detector (SSD)
+und Faster R-CNN miteinander verglichen.
 
 
 
@@ -377,6 +375,12 @@ des mAP ergeben.
   \captionof{figure}{RPN Loss}
   \label{}
 \end{minipage}
+\begin{table}[htb]
+  \centering
+  \begin{tabular}{m{0.3\textwidth}<{\centering}m{0.4\textwidth}<{\centering}}
+    $\color[HTML]{CC3311}\medbullet$  nur Augmentierung & $\color[HTML]{0077BB}\medbullet$  Augmentierung+L2 Regulierung
+  \end{tabular}    
+\end{table}
 \\[1cm]
 weitere Trainings Konfigurationen waren
 \begin{itemize}
@@ -385,76 +389,6 @@ weitere Trainings Konfigurationen waren
   \item mehr daten (4000 statt 3000)
 \end{itemize}
 und sind in tabelle so und so dargestellt.
-% hier loss und mAP für 500k steps
-% \\[1cm]
-% \begin{minipage}{0.5\textwidth}
-%   \centering
-%   \label{plot:map}
-%   \def\svgwidth{0.9\textwidth}
-%   \input{Bilder/aug_mAP.pdf_tex}
-%   \captionof{figure}{mAP: nur Augmentierung}
-% \end{minipage}
-% \begin{minipage}{0.5\textwidth}
-%   \centering
-%   \label{plot:loss}
-%   \def\svgwidth{0.9\textwidth}
-%   \input{Bilder/aug_total_loss.pdf_tex}
-%   \captionof{figure}{Loss: nur Augmentierung}
-% \end{minipage}
-% \\[1cm]
-% und hier die stufen im deteil
-% \\[1cm]
-% \begin{minipage}{0.5\textwidth}
-%   \centering
-%   \label{plot:map}
-%   \def\svgwidth{0.9\textwidth}
-%   \input{Bilder/aug_classifier_loss.pdf_tex}
-%   \captionof{figure}{Classifier Loss: nur Augmentierung}
-% \end{minipage}
-% \begin{minipage}{0.5\textwidth}
-%   \centering
-%   \label{plot:loss}
-%   \def\svgwidth{0.9\textwidth}
-%   \input{Bilder/aug_rpn_loss.pdf_tex}
-%   \captionof{figure}{RPN Loss: nur Augmentierung}
-% \end{minipage}
-% \\[1cm]
-% durch l2 regulierung in der ersten stufe (rpn), konnte 
-% dass overfitting verringert werden.
-% \\[1cm]
-% \begin{minipage}{0.5\textwidth}
-%   \centering
-%   \label{plot:map}
-%   \def\svgwidth{0.9\textwidth}
-%   \input{Bilder/aug_l2_classifier_loss.pdf_tex}
-%   \captionof{figure}{Classifier Loss: nur Augmentierung}
-% \end{minipage}
-% \begin{minipage}{0.5\textwidth}
-%   \centering
-%   \label{plot:loss}
-%   \def\svgwidth{0.9\textwidth}
-%   \input{Bilder/aug_l2_rpn_loss.pdf_tex}
-%   \captionof{figure}{RPN Loss: nur Augmentierung}
-% \end{minipage}
-% \\[1cm]
-% Auch auf den gesammt Loss hatte es einen geringen
-% einfluss.
-% \\[1cm]
-% \begin{minipage}{0.5\textwidth}
-%   \centering
-%   \label{plot:map}
-%   \def\svgwidth{0.9\textwidth}
-%   \input{Bilder/aug_l2_mAP.pdf_tex}
-%   \captionof{figure}{mAP: nur Augmentierung}
-% \end{minipage}
-% \begin{minipage}{0.5\textwidth}
-%   \centering
-%   \label{plot:loss}
-%   \def\svgwidth{0.9\textwidth}
-%   \input{Bilder/aug_l2_total_loss.pdf_tex}
-%   \captionof{figure}{Loss: nur Augmentierung}
-% \end{minipage}
-% \\[1cm]
 
 \begin{table}[htb]
   \centering

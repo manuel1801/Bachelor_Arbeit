@@ -10,18 +10,18 @@ from time import time, sleep
 
 
 # Settings:
-import picamera.array
-import picamera
+#import picamera.array
+#import picamera
 
 
 password = 'animalsdetection'
 
-raspi = True
+raspi = False
 
 buffer_size = 200    # zum zwischen speichern wenn infer langsamer stream
 threshhold = 0.7     # Für Detections
 num_requests = 3     # anzahl paralleler inferenz requests, recommended:3
-send_results = True  # falls nein wird local gespeichert)
+send_results = False  # falls nein wird local gespeichert)
 send_email = False   #
 send_all_every = 100  # wie oft alle detections senden (in sekunden, 0 für nie)
 
@@ -78,8 +78,20 @@ assert os.path.isdir(model_dir)
 
 # Load Model to Device
 infer_model = detection.InferenceModel(device='MYRIAD')
+
+
 exec_model = infer_model.create_exec_infer_model(
     model_dir, local_output_dir, num_requests)
+retry = 0
+while not exec_model:
+    print('could not create exec net. try again ', str(retry), '. time.')
+    sleep(1)
+    exec_model = infer_model.create_exec_infer_model(
+        model_dir, local_output_dir, num_requests)
+    if retry > 10:
+        exit()
+
+
 del infer_model
 
 
@@ -170,6 +182,7 @@ while True:
     # Infer Frames
     n_infered, n_detected, n_saved = exec_model.infer_frames(
         motion_frames, threshhold, view_result, n_save, save_all)
+    # aus 'motion_frames' werden inferierte frames entfernt (call by ref)
 
     # set send request
     if n_saved > 0:

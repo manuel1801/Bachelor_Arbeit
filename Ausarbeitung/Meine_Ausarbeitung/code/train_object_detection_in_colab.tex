@@ -1,0 +1,656 @@
+\documentclass[11pt]{article}
+
+    \usepackage[breakable]{tcolorbox}
+    \usepackage{parskip} % Stop auto-indenting (to mimic markdown behaviour)
+    
+    \usepackage{iftex}
+    \ifPDFTeX
+    	\usepackage[T1]{fontenc}
+    	\usepackage{mathpazo}
+    \else
+    	\usepackage{fontspec}
+    \fi
+
+    % Basic figure setup, for now with no caption control since it's done
+    % automatically by Pandoc (which extracts ![](path) syntax from Markdown).
+    \usepackage{graphicx}
+    % Maintain compatibility with old templates. Remove in nbconvert 6.0
+    \let\Oldincludegraphics\includegraphics
+    % Ensure that by default, figures have no caption (until we provide a
+    % proper Figure object with a Caption API and a way to capture that
+    % in the conversion process - todo).
+    \usepackage{caption}
+    \DeclareCaptionFormat{nocaption}{}
+    \captionsetup{format=nocaption,aboveskip=0pt,belowskip=0pt}
+
+    \usepackage[Export]{adjustbox} % Used to constrain images to a maximum size
+    \adjustboxset{max size={0.9\linewidth}{0.9\paperheight}}
+    \usepackage{float}
+    \floatplacement{figure}{H} % forces figures to be placed at the correct location
+    \usepackage{xcolor} % Allow colors to be defined
+    \usepackage{enumerate} % Needed for markdown enumerations to work
+    \usepackage{geometry} % Used to adjust the document margins
+    \usepackage{amsmath} % Equations
+    \usepackage{amssymb} % Equations
+    \usepackage{textcomp} % defines textquotesingle
+    % Hack from http://tex.stackexchange.com/a/47451/13684:
+    \AtBeginDocument{%
+        \def\PYZsq{\textquotesingle}% Upright quotes in Pygmentized code
+    }
+    \usepackage{upquote} % Upright quotes for verbatim code
+    \usepackage{eurosym} % defines \euro
+    \usepackage[mathletters]{ucs} % Extended unicode (utf-8) support
+    \usepackage{fancyvrb} % verbatim replacement that allows latex
+    \usepackage{grffile} % extends the file name processing of package graphics 
+                         % to support a larger range
+    \makeatletter % fix for grffile with XeLaTeX
+    \def\Gread@@xetex#1{%
+      \IfFileExists{"\Gin@base".bb}%
+      {\Gread@eps{\Gin@base.bb}}%
+      {\Gread@@xetex@aux#1}%
+    }
+    \makeatother
+
+    % The hyperref package gives us a pdf with properly built
+    % internal navigation ('pdf bookmarks' for the table of contents,
+    % internal cross-reference links, web links for URLs, etc.)
+    \usepackage{hyperref}
+    % The default LaTeX title has an obnoxious amount of whitespace. By default,
+    % titling removes some of it. It also provides customization options.
+    \usepackage{titling}
+    \usepackage{longtable} % longtable support required by pandoc >1.10
+    \usepackage{booktabs}  % table support for pandoc > 1.12.2
+    \usepackage[inline]{enumitem} % IRkernel/repr support (it uses the enumerate* environment)
+    \usepackage[normalem]{ulem} % ulem is needed to support strikethroughs (\sout)
+                                % normalem makes italics be italics, not underlines
+    \usepackage{mathrsfs}
+    
+
+    
+    % Colors for the hyperref package
+    \definecolor{urlcolor}{rgb}{0,.145,.698}
+    \definecolor{linkcolor}{rgb}{.71,0.21,0.01}
+    \definecolor{citecolor}{rgb}{.12,.54,.11}
+
+    % ANSI colors
+    \definecolor{ansi-black}{HTML}{3E424D}
+    \definecolor{ansi-black-intense}{HTML}{282C36}
+    \definecolor{ansi-red}{HTML}{E75C58}
+    \definecolor{ansi-red-intense}{HTML}{B22B31}
+    \definecolor{ansi-green}{HTML}{00A250}
+    \definecolor{ansi-green-intense}{HTML}{007427}
+    \definecolor{ansi-yellow}{HTML}{DDB62B}
+    \definecolor{ansi-yellow-intense}{HTML}{B27D12}
+    \definecolor{ansi-blue}{HTML}{208FFB}
+    \definecolor{ansi-blue-intense}{HTML}{0065CA}
+    \definecolor{ansi-magenta}{HTML}{D160C4}
+    \definecolor{ansi-magenta-intense}{HTML}{A03196}
+    \definecolor{ansi-cyan}{HTML}{60C6C8}
+    \definecolor{ansi-cyan-intense}{HTML}{258F8F}
+    \definecolor{ansi-white}{HTML}{C5C1B4}
+    \definecolor{ansi-white-intense}{HTML}{A1A6B2}
+    \definecolor{ansi-default-inverse-fg}{HTML}{FFFFFF}
+    \definecolor{ansi-default-inverse-bg}{HTML}{000000}
+
+    % commands and environments needed by pandoc snippets
+    % extracted from the output of `pandoc -s`
+    \providecommand{\tightlist}{%
+      \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+    \DefineVerbatimEnvironment{Highlighting}{Verbatim}{commandchars=\\\{\}}
+    % Add ',fontsize=\small' for more characters per line
+    \newenvironment{Shaded}{}{}
+    \newcommand{\KeywordTok}[1]{\textcolor[rgb]{0.00,0.44,0.13}{\textbf{{#1}}}}
+    \newcommand{\DataTypeTok}[1]{\textcolor[rgb]{0.56,0.13,0.00}{{#1}}}
+    \newcommand{\DecValTok}[1]{\textcolor[rgb]{0.25,0.63,0.44}{{#1}}}
+    \newcommand{\BaseNTok}[1]{\textcolor[rgb]{0.25,0.63,0.44}{{#1}}}
+    \newcommand{\FloatTok}[1]{\textcolor[rgb]{0.25,0.63,0.44}{{#1}}}
+    \newcommand{\CharTok}[1]{\textcolor[rgb]{0.25,0.44,0.63}{{#1}}}
+    \newcommand{\StringTok}[1]{\textcolor[rgb]{0.25,0.44,0.63}{{#1}}}
+    \newcommand{\CommentTok}[1]{\textcolor[rgb]{0.38,0.63,0.69}{\textit{{#1}}}}
+    \newcommand{\OtherTok}[1]{\textcolor[rgb]{0.00,0.44,0.13}{{#1}}}
+    \newcommand{\AlertTok}[1]{\textcolor[rgb]{1.00,0.00,0.00}{\textbf{{#1}}}}
+    \newcommand{\FunctionTok}[1]{\textcolor[rgb]{0.02,0.16,0.49}{{#1}}}
+    \newcommand{\RegionMarkerTok}[1]{{#1}}
+    \newcommand{\ErrorTok}[1]{\textcolor[rgb]{1.00,0.00,0.00}{\textbf{{#1}}}}
+    \newcommand{\NormalTok}[1]{{#1}}
+    
+    % Additional commands for more recent versions of Pandoc
+    \newcommand{\ConstantTok}[1]{\textcolor[rgb]{0.53,0.00,0.00}{{#1}}}
+    \newcommand{\SpecialCharTok}[1]{\textcolor[rgb]{0.25,0.44,0.63}{{#1}}}
+    \newcommand{\VerbatimStringTok}[1]{\textcolor[rgb]{0.25,0.44,0.63}{{#1}}}
+    \newcommand{\SpecialStringTok}[1]{\textcolor[rgb]{0.73,0.40,0.53}{{#1}}}
+    \newcommand{\ImportTok}[1]{{#1}}
+    \newcommand{\DocumentationTok}[1]{\textcolor[rgb]{0.73,0.13,0.13}{\textit{{#1}}}}
+    \newcommand{\AnnotationTok}[1]{\textcolor[rgb]{0.38,0.63,0.69}{\textbf{\textit{{#1}}}}}
+    \newcommand{\CommentVarTok}[1]{\textcolor[rgb]{0.38,0.63,0.69}{\textbf{\textit{{#1}}}}}
+    \newcommand{\VariableTok}[1]{\textcolor[rgb]{0.10,0.09,0.49}{{#1}}}
+    \newcommand{\ControlFlowTok}[1]{\textcolor[rgb]{0.00,0.44,0.13}{\textbf{{#1}}}}
+    \newcommand{\OperatorTok}[1]{\textcolor[rgb]{0.40,0.40,0.40}{{#1}}}
+    \newcommand{\BuiltInTok}[1]{{#1}}
+    \newcommand{\ExtensionTok}[1]{{#1}}
+    \newcommand{\PreprocessorTok}[1]{\textcolor[rgb]{0.74,0.48,0.00}{{#1}}}
+    \newcommand{\AttributeTok}[1]{\textcolor[rgb]{0.49,0.56,0.16}{{#1}}}
+    \newcommand{\InformationTok}[1]{\textcolor[rgb]{0.38,0.63,0.69}{\textbf{\textit{{#1}}}}}
+    \newcommand{\WarningTok}[1]{\textcolor[rgb]{0.38,0.63,0.69}{\textbf{\textit{{#1}}}}}
+    
+    
+    % Define a nice break command that doesn't care if a line doesn't already
+    % exist.
+    \def\br{\hspace*{\fill} \\* }
+    % Math Jax compatibility definitions
+    \def\gt{>}
+    \def\lt{<}
+    \let\Oldtex\TeX
+    \let\Oldlatex\LaTeX
+    \renewcommand{\TeX}{\textrm{\Oldtex}}
+    \renewcommand{\LaTeX}{\textrm{\Oldlatex}}
+    % Document parameters
+    % Document title
+    \title{train\_object\_detection\_in\_colab}
+    
+    
+    
+    
+    
+% Pygments definitions
+\makeatletter
+\def\PY@reset{\let\PY@it=\relax \let\PY@bf=\relax%
+    \let\PY@ul=\relax \let\PY@tc=\relax%
+    \let\PY@bc=\relax \let\PY@ff=\relax}
+\def\PY@tok#1{\csname PY@tok@#1\endcsname}
+\def\PY@toks#1+{\ifx\relax#1\empty\else%
+    \PY@tok{#1}\expandafter\PY@toks\fi}
+\def\PY@do#1{\PY@bc{\PY@tc{\PY@ul{%
+    \PY@it{\PY@bf{\PY@ff{#1}}}}}}}
+\def\PY#1#2{\PY@reset\PY@toks#1+\relax+\PY@do{#2}}
+
+\expandafter\def\csname PY@tok@w\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.73,0.73,0.73}{##1}}}
+\expandafter\def\csname PY@tok@c\endcsname{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{0.25,0.50,0.50}{##1}}}
+\expandafter\def\csname PY@tok@cp\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.74,0.48,0.00}{##1}}}
+\expandafter\def\csname PY@tok@k\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\expandafter\def\csname PY@tok@kp\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\expandafter\def\csname PY@tok@kt\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.69,0.00,0.25}{##1}}}
+\expandafter\def\csname PY@tok@o\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\expandafter\def\csname PY@tok@ow\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.67,0.13,1.00}{##1}}}
+\expandafter\def\csname PY@tok@nb\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\expandafter\def\csname PY@tok@nf\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.00,0.00,1.00}{##1}}}
+\expandafter\def\csname PY@tok@nc\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.00,1.00}{##1}}}
+\expandafter\def\csname PY@tok@nn\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.00,1.00}{##1}}}
+\expandafter\def\csname PY@tok@ne\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.82,0.25,0.23}{##1}}}
+\expandafter\def\csname PY@tok@nv\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.10,0.09,0.49}{##1}}}
+\expandafter\def\csname PY@tok@no\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.53,0.00,0.00}{##1}}}
+\expandafter\def\csname PY@tok@nl\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.63,0.63,0.00}{##1}}}
+\expandafter\def\csname PY@tok@ni\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.60,0.60,0.60}{##1}}}
+\expandafter\def\csname PY@tok@na\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.49,0.56,0.16}{##1}}}
+\expandafter\def\csname PY@tok@nt\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\expandafter\def\csname PY@tok@nd\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.67,0.13,1.00}{##1}}}
+\expandafter\def\csname PY@tok@s\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\expandafter\def\csname PY@tok@sd\endcsname{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\expandafter\def\csname PY@tok@si\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.73,0.40,0.53}{##1}}}
+\expandafter\def\csname PY@tok@se\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.73,0.40,0.13}{##1}}}
+\expandafter\def\csname PY@tok@sr\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.73,0.40,0.53}{##1}}}
+\expandafter\def\csname PY@tok@ss\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.10,0.09,0.49}{##1}}}
+\expandafter\def\csname PY@tok@sx\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\expandafter\def\csname PY@tok@m\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\expandafter\def\csname PY@tok@gh\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.00,0.50}{##1}}}
+\expandafter\def\csname PY@tok@gu\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.50,0.00,0.50}{##1}}}
+\expandafter\def\csname PY@tok@gd\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.63,0.00,0.00}{##1}}}
+\expandafter\def\csname PY@tok@gi\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.00,0.63,0.00}{##1}}}
+\expandafter\def\csname PY@tok@gr\endcsname{\def\PY@tc##1{\textcolor[rgb]{1.00,0.00,0.00}{##1}}}
+\expandafter\def\csname PY@tok@ge\endcsname{\let\PY@it=\textit}
+\expandafter\def\csname PY@tok@gs\endcsname{\let\PY@bf=\textbf}
+\expandafter\def\csname PY@tok@gp\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.00,0.50}{##1}}}
+\expandafter\def\csname PY@tok@go\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.53,0.53,0.53}{##1}}}
+\expandafter\def\csname PY@tok@gt\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.00,0.27,0.87}{##1}}}
+\expandafter\def\csname PY@tok@err\endcsname{\def\PY@bc##1{\setlength{\fboxsep}{0pt}\fcolorbox[rgb]{1.00,0.00,0.00}{1,1,1}{\strut ##1}}}
+\expandafter\def\csname PY@tok@kc\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\expandafter\def\csname PY@tok@kd\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\expandafter\def\csname PY@tok@kn\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\expandafter\def\csname PY@tok@kr\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\expandafter\def\csname PY@tok@bp\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\expandafter\def\csname PY@tok@fm\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.00,0.00,1.00}{##1}}}
+\expandafter\def\csname PY@tok@vc\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.10,0.09,0.49}{##1}}}
+\expandafter\def\csname PY@tok@vg\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.10,0.09,0.49}{##1}}}
+\expandafter\def\csname PY@tok@vi\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.10,0.09,0.49}{##1}}}
+\expandafter\def\csname PY@tok@vm\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.10,0.09,0.49}{##1}}}
+\expandafter\def\csname PY@tok@sa\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\expandafter\def\csname PY@tok@sb\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\expandafter\def\csname PY@tok@sc\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\expandafter\def\csname PY@tok@dl\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\expandafter\def\csname PY@tok@s2\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\expandafter\def\csname PY@tok@sh\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\expandafter\def\csname PY@tok@s1\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\expandafter\def\csname PY@tok@mb\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\expandafter\def\csname PY@tok@mf\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\expandafter\def\csname PY@tok@mh\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\expandafter\def\csname PY@tok@mi\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\expandafter\def\csname PY@tok@il\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\expandafter\def\csname PY@tok@mo\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\expandafter\def\csname PY@tok@ch\endcsname{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{0.25,0.50,0.50}{##1}}}
+\expandafter\def\csname PY@tok@cm\endcsname{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{0.25,0.50,0.50}{##1}}}
+\expandafter\def\csname PY@tok@cpf\endcsname{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{0.25,0.50,0.50}{##1}}}
+\expandafter\def\csname PY@tok@c1\endcsname{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{0.25,0.50,0.50}{##1}}}
+\expandafter\def\csname PY@tok@cs\endcsname{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{0.25,0.50,0.50}{##1}}}
+
+\def\PYZbs{\char`\\}
+\def\PYZus{\char`\_}
+\def\PYZob{\char`\{}
+\def\PYZcb{\char`\}}
+\def\PYZca{\char`\^}
+\def\PYZam{\char`\&}
+\def\PYZlt{\char`\<}
+\def\PYZgt{\char`\>}
+\def\PYZsh{\char`\#}
+\def\PYZpc{\char`\%}
+\def\PYZdl{\char`\$}
+\def\PYZhy{\char`\-}
+\def\PYZsq{\char`\'}
+\def\PYZdq{\char`\"}
+\def\PYZti{\char`\~}
+% for compatibility with earlier versions
+\def\PYZat{@}
+\def\PYZlb{[}
+\def\PYZrb{]}
+\makeatother
+
+
+    % For linebreaks inside Verbatim environment from package fancyvrb. 
+    \makeatletter
+        \newbox\Wrappedcontinuationbox 
+        \newbox\Wrappedvisiblespacebox 
+        \newcommand*\Wrappedvisiblespace {\textcolor{red}{\textvisiblespace}} 
+        \newcommand*\Wrappedcontinuationsymbol {\textcolor{red}{\llap{\tiny$\m@th\hookrightarrow$}}} 
+        \newcommand*\Wrappedcontinuationindent {3ex } 
+        \newcommand*\Wrappedafterbreak {\kern\Wrappedcontinuationindent\copy\Wrappedcontinuationbox} 
+        % Take advantage of the already applied Pygments mark-up to insert 
+        % potential linebreaks for TeX processing. 
+        %        {, <, #, %, $, ' and ": go to next line. 
+        %        _, }, ^, &, >, - and ~: stay at end of broken line. 
+        % Use of \textquotesingle for straight quote. 
+        \newcommand*\Wrappedbreaksatspecials {% 
+            \def\PYGZus{\discretionary{\char`\_}{\Wrappedafterbreak}{\char`\_}}% 
+            \def\PYGZob{\discretionary{}{\Wrappedafterbreak\char`\{}{\char`\{}}% 
+            \def\PYGZcb{\discretionary{\char`\}}{\Wrappedafterbreak}{\char`\}}}% 
+            \def\PYGZca{\discretionary{\char`\^}{\Wrappedafterbreak}{\char`\^}}% 
+            \def\PYGZam{\discretionary{\char`\&}{\Wrappedafterbreak}{\char`\&}}% 
+            \def\PYGZlt{\discretionary{}{\Wrappedafterbreak\char`\<}{\char`\<}}% 
+            \def\PYGZgt{\discretionary{\char`\>}{\Wrappedafterbreak}{\char`\>}}% 
+            \def\PYGZsh{\discretionary{}{\Wrappedafterbreak\char`\#}{\char`\#}}% 
+            \def\PYGZpc{\discretionary{}{\Wrappedafterbreak\char`\%}{\char`\%}}% 
+            \def\PYGZdl{\discretionary{}{\Wrappedafterbreak\char`\$}{\char`\$}}% 
+            \def\PYGZhy{\discretionary{\char`\-}{\Wrappedafterbreak}{\char`\-}}% 
+            \def\PYGZsq{\discretionary{}{\Wrappedafterbreak\textquotesingle}{\textquotesingle}}% 
+            \def\PYGZdq{\discretionary{}{\Wrappedafterbreak\char`\"}{\char`\"}}% 
+            \def\PYGZti{\discretionary{\char`\~}{\Wrappedafterbreak}{\char`\~}}% 
+        } 
+        % Some characters . , ; ? ! / are not pygmentized. 
+        % This macro makes them "active" and they will insert potential linebreaks 
+        \newcommand*\Wrappedbreaksatpunct {% 
+            \lccode`\~`\.\lowercase{\def~}{\discretionary{\hbox{\char`\.}}{\Wrappedafterbreak}{\hbox{\char`\.}}}% 
+            \lccode`\~`\,\lowercase{\def~}{\discretionary{\hbox{\char`\,}}{\Wrappedafterbreak}{\hbox{\char`\,}}}% 
+            \lccode`\~`\;\lowercase{\def~}{\discretionary{\hbox{\char`\;}}{\Wrappedafterbreak}{\hbox{\char`\;}}}% 
+            \lccode`\~`\:\lowercase{\def~}{\discretionary{\hbox{\char`\:}}{\Wrappedafterbreak}{\hbox{\char`\:}}}% 
+            \lccode`\~`\?\lowercase{\def~}{\discretionary{\hbox{\char`\?}}{\Wrappedafterbreak}{\hbox{\char`\?}}}% 
+            \lccode`\~`\!\lowercase{\def~}{\discretionary{\hbox{\char`\!}}{\Wrappedafterbreak}{\hbox{\char`\!}}}% 
+            \lccode`\~`\/\lowercase{\def~}{\discretionary{\hbox{\char`\/}}{\Wrappedafterbreak}{\hbox{\char`\/}}}% 
+            \catcode`\.\active
+            \catcode`\,\active 
+            \catcode`\;\active
+            \catcode`\:\active
+            \catcode`\?\active
+            \catcode`\!\active
+            \catcode`\/\active 
+            \lccode`\~`\~ 	
+        }
+    \makeatother
+
+    \let\OriginalVerbatim=\Verbatim
+    \makeatletter
+    \renewcommand{\Verbatim}[1][1]{%
+        %\parskip\z@skip
+        \sbox\Wrappedcontinuationbox {\Wrappedcontinuationsymbol}%
+        \sbox\Wrappedvisiblespacebox {\FV@SetupFont\Wrappedvisiblespace}%
+        \def\FancyVerbFormatLine ##1{\hsize\linewidth
+            \vtop{\raggedright\hyphenpenalty\z@\exhyphenpenalty\z@
+                \doublehyphendemerits\z@\finalhyphendemerits\z@
+                \strut ##1\strut}%
+        }%
+        % If the linebreak is at a space, the latter will be displayed as visible
+        % space at end of first line, and a continuation symbol starts next line.
+        % Stretch/shrink are however usually zero for typewriter font.
+        \def\FV@Space {%
+            \nobreak\hskip\z@ plus\fontdimen3\font minus\fontdimen4\font
+            \discretionary{\copy\Wrappedvisiblespacebox}{\Wrappedafterbreak}
+            {\kern\fontdimen2\font}%
+        }%
+        
+        % Allow breaks at special characters using \PYG... macros.
+        \Wrappedbreaksatspecials
+        % Breaks at punctuation characters . , ; ? ! and / need catcode=\active 	
+        \OriginalVerbatim[#1,codes*=\Wrappedbreaksatpunct]%
+    }
+    \makeatother
+
+    % Exact colors from NB
+    \definecolor{incolor}{HTML}{303F9F}
+    \definecolor{outcolor}{HTML}{D84315}
+    \definecolor{cellborder}{HTML}{CFCFCF}
+    \definecolor{cellbackground}{HTML}{F7F7F7}
+    
+    % prompt
+    \makeatletter
+    \newcommand{\boxspacing}{\kern\kvtcb@left@rule\kern\kvtcb@boxsep}
+    \makeatother
+    \newcommand{\prompt}[4]{
+        \ttfamily\llap{{\color{#2}[#3]:\hspace{3pt}#4}}\vspace{-\baselineskip}
+    }
+    
+
+    
+    % Prevent overflowing lines due to hard-to-break entities
+    \sloppy 
+    % Setup hyperref package
+    \hypersetup{
+      breaklinks=true,  % so long urls are correctly broken across lines
+      colorlinks=true,
+      urlcolor=urlcolor,
+      linkcolor=linkcolor,
+      citecolor=citecolor,
+      }
+    % Slightly bigger margins than the latex defaults
+    
+    \geometry{verbose,tmargin=1in,bmargin=1in,lmargin=1in,rmargin=1in}
+    
+    
+
+\begin{document}
+    
+    \maketitle
+    
+    
+
+    
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{ }{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{c+c1}{\PYZsh{} Original Notebook}
+\PY{c+c1}{\PYZsh{} https://colab.research.google.com/github/Tony607/object\PYZus{}detection\PYZus{}demo/blob/master/tensorflow\PYZus{}object\PYZus{}detection\PYZus{}training\PYZus{}colab.ipynb}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{ }{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{c+c1}{\PYZsh{} Mount Google Drive}
+\PY{k+kn}{from} \PY{n+nn}{google}\PY{n+nn}{.}\PY{n+nn}{colab} \PY{k}{import} \PY{n}{drive}
+\PY{n}{drive}\PY{o}{.}\PY{n}{mount}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{/content/drive}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+
+\PY{c+c1}{\PYZsh{} Install Tensorflow Object Detection Api}
+\PY{o}{!}apt\PYZhy{}get install protobuf\PYZhy{}compiler python\PYZhy{}pil python\PYZhy{}lxml python\PYZhy{}tk
+\PY{o}{!}pip install Cython
+\PY{o}{!}git clone https://github.com/tensorflow/models.git
+\PY{o}{\PYZpc{}}\PY{k}{cd} /content/models/research
+\PY{o}{!}protoc object\PYZus{}detection/protos/*.proto \PYZhy{}\PYZhy{}python\PYZus{}out\PY{o}{=}.
+\PY{o}{\PYZpc{}}\PY{k}{set\PYZus{}env} PYTHONPATH=\PYZdl{}PYTHONPATH:/content/models/research:/content/models/research/slim:/content/models/models/research/object\PYZus{}detection
+\PY{o}{!}python object\PYZus{}detection/builders/model\PYZus{}builder\PYZus{}test.py
+
+\PY{c+c1}{\PYZsh{} Inatall Tensorflow Gpu V1.14}
+\PY{o}{!}pip uninstall \PYZhy{}y tensorflow
+\PY{o}{!}pip install tensorflow\PYZhy{}gpu\PY{o}{=}\PY{o}{=}\PY{l+m}{1}.14
+\PY{k+kn}{import} \PY{n+nn}{tensorflow} \PY{k}{as} \PY{n+nn}{tf}
+\PY{k+kn}{import} \PY{n+nn}{os}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{ }{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{c+c1}{\PYZsh{} Name of Dataset}
+\PY{n}{dataset\PYZus{}name} \PY{o}{=} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{OI\PYZus{}Animals\PYZus{}Augmented\PYZus{}9\PYZus{}3000}\PY{l+s+s1}{\PYZsq{}}
+
+\PY{n}{selected\PYZus{}model} \PY{o}{=} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{faster\PYZus{}rcnn\PYZus{}inception\PYZus{}v2}\PY{l+s+s1}{\PYZsq{}}
+
+\PY{n}{epochs} \PY{o}{=} \PY{l+m+mi}{50}
+
+\PY{n}{eval\PYZus{}metrics} \PY{o}{=} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{coco\PYZus{}detection\PYZus{}metrics}\PY{l+s+s1}{\PYZsq{}}
+
+\PY{n}{convert\PYZus{}to\PYZus{}grayscale} \PY{o}{=} \PY{k+kc}{False}
+
+\PY{n}{fixed\PYZus{}size} \PY{o}{=} \PY{k+kc}{False} \PY{c+c1}{\PYZsh{} für faster rcnn}
+
+\PY{n}{is\PYZus{}faster\PYZus{}rcnn} \PY{o}{=} \PY{k+kc}{True}
+
+\PY{n}{use\PYZus{}dropout} \PY{o}{=} \PY{k+kc}{False}
+
+\PY{n}{l2\PYZus{}regularizer} \PY{o}{=} \PY{l+m+mi}{0}
+
+\PY{n}{output\PYZus{}postfix} \PY{o}{=} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{\PYZsq{}}
+
+\PY{n}{MODELS\PYZus{}CONFIG} \PY{o}{=} \PY{p}{\PYZob{}}
+    \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{ssd\PYZus{}mobilenet\PYZus{}v2}\PY{l+s+s1}{\PYZsq{}}\PY{p}{:} \PY{p}{\PYZob{}}
+        \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{model\PYZus{}name}\PY{l+s+s1}{\PYZsq{}}\PY{p}{:} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{ssd\PYZus{}mobilenet\PYZus{}v2\PYZus{}coco\PYZus{}2018\PYZus{}03\PYZus{}29}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}
+        \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{pipeline\PYZus{}file}\PY{l+s+s1}{\PYZsq{}}\PY{p}{:} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{ssd\PYZus{}mobilenet\PYZus{}v2\PYZus{}coco.config}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}
+        \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{batch\PYZus{}size}\PY{l+s+s1}{\PYZsq{}}\PY{p}{:} \PY{l+m+mi}{12}
+    \PY{p}{\PYZcb{}}\PY{p}{,}
+    \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{ssd\PYZus{}inception\PYZus{}v2}\PY{l+s+s1}{\PYZsq{}}\PY{p}{:} \PY{p}{\PYZob{}}
+        \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{model\PYZus{}name}\PY{l+s+s1}{\PYZsq{}}\PY{p}{:} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{ssd\PYZus{}inception\PYZus{}v2\PYZus{}coco\PYZus{}2018\PYZus{}01\PYZus{}28}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}
+        \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{pipeline\PYZus{}file}\PY{l+s+s1}{\PYZsq{}}\PY{p}{:} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{ssd\PYZus{}inception\PYZus{}v2\PYZus{}coco.config}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}
+        \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{batch\PYZus{}size}\PY{l+s+s1}{\PYZsq{}}\PY{p}{:} \PY{l+m+mi}{12}
+    \PY{p}{\PYZcb{}}\PY{p}{,}
+    \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{faster\PYZus{}rcnn\PYZus{}inception\PYZus{}v2}\PY{l+s+s1}{\PYZsq{}}\PY{p}{:} \PY{p}{\PYZob{}}
+        \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{model\PYZus{}name}\PY{l+s+s1}{\PYZsq{}}\PY{p}{:} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{faster\PYZus{}rcnn\PYZus{}inception\PYZus{}v2\PYZus{}coco\PYZus{}2018\PYZus{}01\PYZus{}28}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}
+        \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{pipeline\PYZus{}file}\PY{l+s+s1}{\PYZsq{}}\PY{p}{:} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{faster\PYZus{}rcnn\PYZus{}inception\PYZus{}v2\PYZus{}coco.config}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}
+        \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{batch\PYZus{}size}\PY{l+s+s1}{\PYZsq{}}\PY{p}{:} \PY{l+m+mi}{1}
+    \PY{p}{\PYZcb{}}\PY{p}{,}
+    \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{rfcn\PYZus{}resnet101}\PY{l+s+s1}{\PYZsq{}}\PY{p}{:} \PY{p}{\PYZob{}}
+        \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{model\PYZus{}name}\PY{l+s+s1}{\PYZsq{}}\PY{p}{:} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{rfcn\PYZus{}resnet101\PYZus{}coco\PYZus{}2018\PYZus{}01\PYZus{}28}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}
+        \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{pipeline\PYZus{}file}\PY{l+s+s1}{\PYZsq{}}\PY{p}{:} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{rfcn\PYZus{}resnet101\PYZus{}pets.config}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}
+        \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{batch\PYZus{}size}\PY{l+s+s1}{\PYZsq{}}\PY{p}{:} \PY{l+m+mi}{1}
+    \PY{p}{\PYZcb{}}\PY{p}{,}
+    \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{faster\PYZus{}rcnn\PYZus{}resnet50}\PY{l+s+s1}{\PYZsq{}}\PY{p}{:} \PY{p}{\PYZob{}}
+        \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{model\PYZus{}name}\PY{l+s+s1}{\PYZsq{}}\PY{p}{:} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{faster\PYZus{}rcnn\PYZus{}resnet50\PYZus{}coco\PYZus{}2018\PYZus{}01\PYZus{}28}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}
+        \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{pipeline\PYZus{}file}\PY{l+s+s1}{\PYZsq{}}\PY{p}{:} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{faster\PYZus{}rcnn\PYZus{}resnet50\PYZus{}coco.config}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}
+        \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{batch\PYZus{}size}\PY{l+s+s1}{\PYZsq{}}\PY{p}{:} \PY{l+m+mi}{1}
+    \PY{p}{\PYZcb{}}
+\PY{p}{\PYZcb{}}
+
+\PY{n}{MODEL} \PY{o}{=} \PY{n}{MODELS\PYZus{}CONFIG}\PY{p}{[}\PY{n}{selected\PYZus{}model}\PY{p}{]}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{model\PYZus{}name}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}
+\PY{n}{pipeline\PYZus{}file} \PY{o}{=} \PY{n}{MODELS\PYZus{}CONFIG}\PY{p}{[}\PY{n}{selected\PYZus{}model}\PY{p}{]}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{pipeline\PYZus{}file}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}
+\PY{n}{batch\PYZus{}size} \PY{o}{=} \PY{n}{MODELS\PYZus{}CONFIG}\PY{p}{[}\PY{n}{selected\PYZus{}model}\PY{p}{]}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{batch\PYZus{}size}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}
+\PY{n}{output\PYZus{}dir} \PY{o}{=} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{/content/drive/My}\PY{l+s+s1}{\PYZbs{}}\PY{l+s+s1}{ Drive/}\PY{l+s+s1}{\PYZsq{}} \PY{o}{+} \PY{n}{dataset\PYZus{}name} \PY{o}{+} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{/}\PY{l+s+s1}{\PYZsq{}} \PY{o}{+} \PY{n}{MODEL} \PY{o}{+} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{\PYZus{}out}\PY{l+s+s1}{\PYZsq{}} \PY{o}{+} \PY{n}{output\PYZus{}postfix}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{ }{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{c+c1}{\PYZsh{} option 1: clone dataset from git reposity}
+
+\PY{c+c1}{\PYZsh{} replace: \PYZlt{}user\PYZgt{}, \PYZlt{}passwort\PYZgt{}, \PYZlt{}repo\PYZus{}name\PYZgt{}}
+\PY{o}{\PYZpc{}} \PY{n}{cd} \PY{o}{/}\PY{n}{content}\PY{o}{/}
+\PY{o}{!}git clone https://\PYZlt{}user\PYZgt{}:\PYZlt{}passwort\PYZgt{}!@gitlab.com/user/\PYZlt{}repo\PYZus{}name\PYZgt{}.git
+\PY{o}{!}mkdir /content/\PY{n+nv}{\PYZdl{}dataset\PYZus{}name}
+\PY{o}{!}mkdir /content/\PY{n+nv}{\PYZdl{}dataset\PYZus{}name}/data
+\PY{o}{\PYZpc{}} \PY{n}{cd} \PY{o}{/}\PY{n}{content}\PY{o}{/}\PY{err}{\PYZdl{}}\PY{n}{dataset\PYZus{}name}
+\PY{o}{!}mv /content/\PYZlt{}repo\PYZus{}name\PYZgt{}/* data
+\PY{o}{!}rm \PYZhy{}r /content/\PYZlt{}repo\PYZus{}name\PYZgt{}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{ }{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{c+c1}{\PYZsh{} option 2: copy from drive}
+\PY{o}{!}mkdir /content/\PY{n+nv}{\PYZdl{}dataset\PYZus{}name}
+\PY{o}{\PYZpc{}} \PY{n}{cd} \PY{o}{/}\PY{n}{content}\PY{o}{/}\PY{err}{\PYZdl{}}\PY{n}{dataset\PYZus{}name}
+\PY{o}{!}cp \PYZhy{}r /content/drive/My\PY{l+s+se}{\PYZbs{} }Drive/\PY{n+nv}{\PYZdl{}dataset\PYZus{}name}/data/train.record data
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{ }{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{o}{\PYZpc{}} \PY{n}{cd} \PY{o}{/}\PY{n}{content}\PY{o}{/}\PY{err}{\PYZdl{}}\PY{n}{dataset\PYZus{}name}
+\PY{c+c1}{\PYZsh{} calculate train and eval steps (optional)}
+\PY{n}{num\PYZus{}classes} \PY{o}{=} \PY{n+nb}{len}\PY{p}{(}\PY{p}{[}\PY{n}{c} \PY{k}{for} \PY{n}{c} \PY{o+ow}{in} \PY{n+nb}{open}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{data/label\PYZus{}map.pbtxt}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}\PY{o}{.}\PY{n}{readlines}\PY{p}{(}\PY{p}{)} \PY{k}{if} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{item }\PY{l+s+s1}{\PYZob{}}\PY{l+s+s1}{\PYZsq{}} \PY{o+ow}{in} \PY{n}{c}\PY{p}{]}\PY{p}{)}
+\PY{n}{num\PYZus{}eval\PYZus{}examples} \PY{o}{=} \PY{n+nb}{sum}\PY{p}{(}\PY{l+m+mi}{1} \PY{k}{for} \PY{n}{\PYZus{}} \PY{o+ow}{in} \PY{n}{tf}\PY{o}{.}\PY{n}{python\PYZus{}io}\PY{o}{.}\PY{n}{tf\PYZus{}record\PYZus{}iterator}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{data/test.record}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}\PY{p}{)}
+\PY{n}{num\PYZus{}train\PYZus{}examples}\PY{o}{=}\PY{n+nb}{sum}\PY{p}{(}\PY{l+m+mi}{1} \PY{k}{for} \PY{n}{\PYZus{}} \PY{o+ow}{in} \PY{n}{tf}\PY{o}{.}\PY{n}{python\PYZus{}io}\PY{o}{.}\PY{n}{tf\PYZus{}record\PYZus{}iterator}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{data/train.record}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}\PY{p}{)}
+\PY{n}{num\PYZus{}steps} \PY{o}{=} \PY{n}{epochs} \PY{o}{*} \PY{p}{(}\PY{n}{num\PYZus{}train\PYZus{}examples} \PY{o}{/}\PY{o}{/} \PY{n}{batch\PYZus{}size}\PY{p}{)}
+\PY{n}{num\PYZus{}steps}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{ }{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{c+c1}{\PYZsh{} Download model and config file}
+\PY{o}{\PYZpc{}} \PY{n}{cd} \PY{o}{/}\PY{n}{content}\PY{o}{/}\PY{err}{\PYZdl{}}\PY{n}{dataset\PYZus{}name}
+
+\PY{k+kn}{import} \PY{n+nn}{os}
+\PY{k+kn}{import} \PY{n+nn}{shutil}
+\PY{k+kn}{import} \PY{n+nn}{glob}
+\PY{k+kn}{import} \PY{n+nn}{urllib}\PY{n+nn}{.}\PY{n+nn}{request}
+\PY{k+kn}{import} \PY{n+nn}{tarfile}
+\PY{n}{MODEL\PYZus{}FILE} \PY{o}{=} \PY{n}{MODEL} \PY{o}{+} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{.tar.gz}\PY{l+s+s1}{\PYZsq{}}
+\PY{n}{DOWNLOAD\PYZus{}BASE} \PY{o}{=} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{http://download.tensorflow.org/models/object\PYZus{}detection/}\PY{l+s+s1}{\PYZsq{}}
+\PY{n}{DEST\PYZus{}DIR} \PY{o}{=} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{/content/}\PY{l+s+s1}{\PYZsq{}} \PY{o}{+} \PY{n}{dataset\PYZus{}name} \PY{o}{+} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{/}\PY{l+s+s1}{\PYZsq{}}
+
+\PY{k}{if} \PY{o+ow}{not} \PY{p}{(}\PY{n}{os}\PY{o}{.}\PY{n}{path}\PY{o}{.}\PY{n}{exists}\PY{p}{(}\PY{n}{MODEL\PYZus{}FILE}\PY{p}{)}\PY{p}{)}\PY{p}{:}
+    \PY{n}{urllib}\PY{o}{.}\PY{n}{request}\PY{o}{.}\PY{n}{urlretrieve}\PY{p}{(}\PY{n}{DOWNLOAD\PYZus{}BASE} \PY{o}{+} \PY{n}{MODEL\PYZus{}FILE}\PY{p}{,} \PY{n}{DEST\PYZus{}DIR} \PY{o}{+} \PY{n}{MODEL\PYZus{}FILE}\PY{p}{)}
+\PY{n}{tar} \PY{o}{=} \PY{n}{tarfile}\PY{o}{.}\PY{n}{open}\PY{p}{(}\PY{n}{DEST\PYZus{}DIR} \PY{o}{+} \PY{n}{MODEL\PYZus{}FILE}\PY{p}{)}
+\PY{n}{tar}\PY{o}{.}\PY{n}{extractall}\PY{p}{(}\PY{p}{)}
+\PY{n}{tar}\PY{o}{.}\PY{n}{close}\PY{p}{(}\PY{p}{)}
+\PY{n}{os}\PY{o}{.}\PY{n}{remove}\PY{p}{(}\PY{n}{DEST\PYZus{}DIR} \PY{o}{+} \PY{n}{MODEL\PYZus{}FILE}\PY{p}{)}
+
+\PY{n}{fine\PYZus{}tune\PYZus{}checkpoint} \PY{o}{=} \PY{n}{os}\PY{o}{.}\PY{n}{path}\PY{o}{.}\PY{n}{join}\PY{p}{(}\PY{n}{DEST\PYZus{}DIR} \PY{o}{+} \PY{n}{MODEL}\PY{p}{,} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{model.ckpt}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+
+\PY{n}{pipeline\PYZus{}fname} \PY{o}{=} \PY{n}{os}\PY{o}{.}\PY{n}{path}\PY{o}{.}\PY{n}{join}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{/content/models/research/object\PYZus{}detection/samples/configs/}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{n}{pipeline\PYZus{}file}\PY{p}{)}
+\PY{k}{assert} \PY{n}{os}\PY{o}{.}\PY{n}{path}\PY{o}{.}\PY{n}{isfile}\PY{p}{(}\PY{n}{pipeline\PYZus{}fname}\PY{p}{)}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{`}\PY{l+s+si}{\PYZob{}\PYZcb{}}\PY{l+s+s1}{` not exist}\PY{l+s+s1}{\PYZsq{}}\PY{o}{.}\PY{n}{format}\PY{p}{(}\PY{n}{pipeline\PYZus{}fname}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{ }{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{c+c1}{\PYZsh{} configfile settings and create copy in drive outputdir}
+
+\PY{k+kn}{import} \PY{n+nn}{re}
+\PY{n}{data\PYZus{}dir} \PY{o}{=} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{/content/}\PY{l+s+s1}{\PYZsq{}} \PY{o}{+} \PY{n}{dataset\PYZus{}name} \PY{o}{+} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{/data/}\PY{l+s+s1}{\PYZsq{}}
+\PY{n}{pipeline\PYZus{}config\PYZus{}file} \PY{o}{=} \PY{n}{data\PYZus{}dir} \PY{o}{+} \PY{n}{pipeline\PYZus{}file}
+
+\PY{k}{with} \PY{n+nb}{open}\PY{p}{(}\PY{n}{pipeline\PYZus{}fname}\PY{p}{)} \PY{k}{as} \PY{n}{f}\PY{p}{:}
+    \PY{n}{s} \PY{o}{=} \PY{n}{f}\PY{o}{.}\PY{n}{read}\PY{p}{(}\PY{p}{)}
+\PY{k}{with} \PY{n+nb}{open}\PY{p}{(}\PY{n}{pipeline\PYZus{}config\PYZus{}file}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{w}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)} \PY{k}{as} \PY{n}{f}\PY{p}{:}
+    
+    \PY{c+c1}{\PYZsh{} fine\PYZus{}tune\PYZus{}checkpoint}
+    \PY{n}{s} \PY{o}{=} \PY{n}{re}\PY{o}{.}\PY{n}{sub}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{fine\PYZus{}tune\PYZus{}checkpoint: }\PY{l+s+s1}{\PYZdq{}}\PY{l+s+s1}{.*?}\PY{l+s+s1}{\PYZdq{}}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}
+               \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{fine\PYZus{}tune\PYZus{}checkpoint: }\PY{l+s+s1}{\PYZdq{}}\PY{l+s+si}{\PYZob{}\PYZcb{}}\PY{l+s+s1}{\PYZdq{}}\PY{l+s+s1}{\PYZsq{}}\PY{o}{.}\PY{n}{format}\PY{p}{(}\PY{n}{fine\PYZus{}tune\PYZus{}checkpoint}\PY{p}{)}\PY{p}{,} \PY{n}{s}\PY{p}{)}
+    
+    \PY{c+c1}{\PYZsh{} tfrecord files train and test.}
+    \PY{n}{s} \PY{o}{=} \PY{n}{re}\PY{o}{.}\PY{n}{sub}\PY{p}{(}
+        \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{(input\PYZus{}path: }\PY{l+s+s1}{\PYZdq{}}\PY{l+s+s1}{.*?)(train.record)(.*?}\PY{l+s+s1}{\PYZdq{}}\PY{l+s+s1}{)}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{input\PYZus{}path: }\PY{l+s+s1}{\PYZdq{}}\PY{l+s+si}{\PYZob{}\PYZcb{}}\PY{l+s+s1}{\PYZdq{}}\PY{l+s+s1}{\PYZsq{}}\PY{o}{.}\PY{n}{format}\PY{p}{(}\PY{n}{data\PYZus{}dir} \PY{o}{+} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{train.record}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}\PY{p}{,} \PY{n}{s}\PY{p}{)}
+    \PY{n}{s} \PY{o}{=} \PY{n}{re}\PY{o}{.}\PY{n}{sub}\PY{p}{(}
+        \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{(input\PYZus{}path: }\PY{l+s+s1}{\PYZdq{}}\PY{l+s+s1}{.*?)(val.record)(.*?}\PY{l+s+s1}{\PYZdq{}}\PY{l+s+s1}{)}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{input\PYZus{}path: }\PY{l+s+s1}{\PYZdq{}}\PY{l+s+si}{\PYZob{}\PYZcb{}}\PY{l+s+s1}{\PYZdq{}}\PY{l+s+s1}{\PYZsq{}}\PY{o}{.}\PY{n}{format}\PY{p}{(}\PY{n}{data\PYZus{}dir} \PY{o}{+} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{test.record}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}\PY{p}{,} \PY{n}{s}\PY{p}{)}
+
+    \PY{c+c1}{\PYZsh{} label\PYZus{}map\PYZus{}path}
+    \PY{n}{s} \PY{o}{=} \PY{n}{re}\PY{o}{.}\PY{n}{sub}\PY{p}{(}
+        \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{label\PYZus{}map\PYZus{}path: }\PY{l+s+s1}{\PYZdq{}}\PY{l+s+s1}{.*?}\PY{l+s+s1}{\PYZdq{}}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{label\PYZus{}map\PYZus{}path: }\PY{l+s+s1}{\PYZdq{}}\PY{l+s+si}{\PYZob{}\PYZcb{}}\PY{l+s+s1}{\PYZdq{}}\PY{l+s+s1}{\PYZsq{}}\PY{o}{.}\PY{n}{format}\PY{p}{(}\PY{n}{data\PYZus{}dir} \PY{o}{+} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{label\PYZus{}map.pbtxt}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}\PY{p}{,} \PY{n}{s}\PY{p}{)}
+
+    \PY{c+c1}{\PYZsh{} Set training batch\PYZus{}size.}
+    \PY{n}{s} \PY{o}{=} \PY{n}{re}\PY{o}{.}\PY{n}{sub}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{batch\PYZus{}size: [0\PYZhy{}9]+}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}
+               \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{batch\PYZus{}size: }\PY{l+s+si}{\PYZob{}\PYZcb{}}\PY{l+s+s1}{\PYZsq{}}\PY{o}{.}\PY{n}{format}\PY{p}{(}\PY{n}{batch\PYZus{}size}\PY{p}{)}\PY{p}{,} \PY{n}{s}\PY{p}{)}
+
+    \PY{c+c1}{\PYZsh{} Set training steps, num\PYZus{}steps}
+    \PY{n}{s} \PY{o}{=} \PY{n}{re}\PY{o}{.}\PY{n}{sub}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{num\PYZus{}steps: [0\PYZhy{}9]+}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}
+               \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{num\PYZus{}steps: }\PY{l+s+si}{\PYZob{}\PYZcb{}}\PY{l+s+s1}{\PYZsq{}}\PY{o}{.}\PY{n}{format}\PY{p}{(}\PY{n}{num\PYZus{}steps}\PY{p}{)}\PY{p}{,} \PY{n}{s}\PY{p}{)}
+    
+    \PY{c+c1}{\PYZsh{} Set number of eval examples}
+    \PY{n}{s} \PY{o}{=} \PY{n}{re}\PY{o}{.}\PY{n}{sub}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{num\PYZus{}examples: [0\PYZhy{}9]+}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}
+               \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{num\PYZus{}examples: }\PY{l+s+si}{\PYZob{}\PYZcb{}}\PY{l+s+s1}{\PYZsq{}}\PY{o}{.}\PY{n}{format}\PY{p}{(}\PY{n}{num\PYZus{}eval\PYZus{}examples}\PY{p}{)}\PY{p}{,} \PY{n}{s}\PY{p}{)}
+    
+    \PY{c+c1}{\PYZsh{} Set eval metrics}
+    \PY{n}{metrics\PYZus{}set}\PY{p}{:} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{open\PYZus{}images\PYZus{}V2\PYZus{}detection\PYZus{}metrics}\PY{l+s+s2}{\PYZdq{}}
+    \PY{n}{s} \PY{o}{=} \PY{n}{re}\PY{o}{.}\PY{n}{sub}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{metrics\PYZus{}set: }\PY{l+s+s1}{\PYZdq{}}\PY{l+s+s1}{open\PYZus{}images\PYZus{}V2\PYZus{}detection\PYZus{}metrics}\PY{l+s+s1}{\PYZdq{}}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}
+               \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{metrics\PYZus{}set: }\PY{l+s+s1}{\PYZdq{}}\PY{l+s+si}{\PYZob{}\PYZcb{}}\PY{l+s+s1}{\PYZdq{}}\PY{l+s+s1}{\PYZsq{}}\PY{o}{.}\PY{n}{format}\PY{p}{(}\PY{n}{eval\PYZus{}metrics}\PY{p}{)}\PY{p}{,} \PY{n}{s}\PY{p}{)}
+    
+    \PY{n}{s} \PY{o}{=} \PY{n}{re}\PY{o}{.}\PY{n}{sub}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{max\PYZus{}evals: [0\PYZhy{}9]+}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}
+              \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{metrics\PYZus{}set: }\PY{l+s+s1}{\PYZdq{}}\PY{l+s+si}{\PYZob{}\PYZcb{}}\PY{l+s+s1}{\PYZdq{}}\PY{l+s+s1}{\PYZsq{}}\PY{o}{.}\PY{n}{format}\PY{p}{(}\PY{n}{eval\PYZus{}metrics}\PY{p}{)}\PY{p}{,} \PY{n}{s}\PY{p}{)}
+
+    \PY{c+c1}{\PYZsh{} Set number of classes num\PYZus{}classes.}
+    \PY{n}{s} \PY{o}{=} \PY{n}{re}\PY{o}{.}\PY{n}{sub}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{num\PYZus{}classes: [0\PYZhy{}9]+}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}
+               \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{num\PYZus{}classes: }\PY{l+s+si}{\PYZob{}\PYZcb{}}\PY{l+s+s1}{\PYZsq{}}\PY{o}{.}\PY{n}{format}\PY{p}{(}\PY{n}{num\PYZus{}classes}\PY{p}{)}\PY{p}{,} \PY{n}{s}\PY{p}{)}
+    
+    \PY{k}{if} \PY{n}{l2\PYZus{}regularizer} \PY{o}{!=} \PY{l+m+mi}{0}\PY{p}{:}
+      \PY{n}{s} \PY{o}{=} \PY{n}{re}\PY{o}{.}\PY{n}{sub}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{  weight: 0.0}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}
+                 \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{  weight: }\PY{l+s+si}{\PYZob{}\PYZcb{}}\PY{l+s+s1}{\PYZsq{}}\PY{o}{.}\PY{n}{format}\PY{p}{(}\PY{n}{l2\PYZus{}regularizer}\PY{p}{)}\PY{p}{,} \PY{n}{s}\PY{p}{)}
+
+    \PY{k}{if} \PY{n}{use\PYZus{}dropout}\PY{p}{:}
+      \PY{n}{s} \PY{o}{=} \PY{n}{re}\PY{o}{.}\PY{n}{sub}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{use\PYZus{}dropout: false}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}
+               \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{use\PYZus{}dropout: true}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{n}{s}\PY{p}{)}
+    
+    \PY{k}{if} \PY{n}{is\PYZus{}faster\PYZus{}rcnn}\PY{p}{:}
+      \PY{k}{if} \PY{n}{fixed\PYZus{}size}\PY{p}{:}
+
+        \PY{n}{s} \PY{o}{=} \PY{n}{re}\PY{o}{.}\PY{n}{sub}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{keep\PYZus{}aspect\PYZus{}ratio\PYZus{}resizer }\PY{l+s+s1}{\PYZbs{}}\PY{l+s+s1}{\PYZob{}}\PY{l+s+se}{\PYZbs{}n}\PY{l+s+s1}{        min\PYZus{}dimension: 600}\PY{l+s+se}{\PYZbs{}n}\PY{l+s+s1}{        max\PYZus{}dimension: 1024}\PY{l+s+se}{\PYZbs{}n}\PY{l+s+s1}{      }\PY{l+s+s1}{\PYZbs{}}\PY{l+s+s1}{\PYZcb{}}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}
+                 \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{fixed\PYZus{}shape\PYZus{}resizer }\PY{l+s+s1}{\PYZob{}}\PY{l+s+se}{\PYZbs{}n}\PY{l+s+s1}{        height: 600}\PY{l+s+se}{\PYZbs{}n}\PY{l+s+s1}{        width: 600}\PY{l+s+se}{\PYZbs{}n}\PY{l+s+s1}{        convert\PYZus{}to\PYZus{}grayscale: }\PY{l+s+s1}{\PYZsq{}} \PY{o}{+} \PY{n+nb}{str}\PY{p}{(}\PY{n}{convert\PYZus{}to\PYZus{}grayscale}\PY{p}{)}\PY{o}{.}\PY{n}{lower}\PY{p}{(}\PY{p}{)} \PY{o}{+} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+se}{\PYZbs{}n}\PY{l+s+s1}{        resize\PYZus{}method: AREA}\PY{l+s+se}{\PYZbs{}n}\PY{l+s+s1}{      \PYZcb{}}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{n}{s}\PY{p}{)}
+
+      \PY{k}{else}\PY{p}{:}
+        \PY{k}{if} \PY{n}{convert\PYZus{}to\PYZus{}grayscale}\PY{p}{:}
+        
+          \PY{n}{s} \PY{o}{=} \PY{n}{re}\PY{o}{.}\PY{n}{sub}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{keep\PYZus{}aspect\PYZus{}ratio\PYZus{}resizer }\PY{l+s+s1}{\PYZbs{}}\PY{l+s+s1}{\PYZob{}}\PY{l+s+se}{\PYZbs{}n}\PY{l+s+s1}{        min\PYZus{}dimension: 600}\PY{l+s+se}{\PYZbs{}n}\PY{l+s+s1}{        max\PYZus{}dimension: 1024}\PY{l+s+se}{\PYZbs{}n}\PY{l+s+s1}{      }\PY{l+s+s1}{\PYZbs{}}\PY{l+s+s1}{\PYZcb{}}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}
+                  \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{keep\PYZus{}aspect\PYZus{}ratio\PYZus{}resizer }\PY{l+s+s1}{\PYZob{}}\PY{l+s+se}{\PYZbs{}n}\PY{l+s+s1}{        min\PYZus{}dimension: 600}\PY{l+s+se}{\PYZbs{}n}\PY{l+s+s1}{        max\PYZus{}dimension: 1024}\PY{l+s+se}{\PYZbs{}n}\PY{l+s+s1}{        convert\PYZus{}to\PYZus{}grayscale: }\PY{l+s+s1}{\PYZsq{}} \PY{o}{+} \PY{n+nb}{str}\PY{p}{(}\PY{n}{convert\PYZus{}to\PYZus{}grayscale}\PY{p}{)}\PY{o}{.}\PY{n}{lower}\PY{p}{(}\PY{p}{)} \PY{o}{+} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+se}{\PYZbs{}n}\PY{l+s+s1}{      \PYZcb{}}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{n}{s}\PY{p}{)}
+
+    \PY{k}{elif} \PY{n}{convert\PYZus{}to\PYZus{}grayscale}\PY{p}{:} \PY{c+c1}{\PYZsh{} ssd kann nur fixed}
+
+      \PY{n}{s} \PY{o}{=} \PY{n}{re}\PY{o}{.}\PY{n}{sub}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{fixed\PYZus{}shape\PYZus{}resizer }\PY{l+s+s1}{\PYZbs{}}\PY{l+s+s1}{\PYZob{}}\PY{l+s+se}{\PYZbs{}n}\PY{l+s+s1}{        height: 300}\PY{l+s+se}{\PYZbs{}n}\PY{l+s+s1}{        width: 300}\PY{l+s+se}{\PYZbs{}n}\PY{l+s+s1}{      }\PY{l+s+s1}{\PYZbs{}}\PY{l+s+s1}{\PYZcb{}}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}
+                 \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{fixed\PYZus{}shape\PYZus{}resizer }\PY{l+s+s1}{\PYZob{}}\PY{l+s+se}{\PYZbs{}n}\PY{l+s+s1}{        height: 300}\PY{l+s+se}{\PYZbs{}n}\PY{l+s+s1}{        width: 300}\PY{l+s+se}{\PYZbs{}n}\PY{l+s+s1}{        convert\PYZus{}to\PYZus{}grayscale: true}\PY{l+s+se}{\PYZbs{}n}\PY{l+s+s1}{      \PYZcb{}}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{n}{s}\PY{p}{)}
+
+    \PY{n}{f}\PY{o}{.}\PY{n}{write}\PY{p}{(}\PY{n}{s}\PY{p}{)}
+\PY{o}{!}mkdir \PY{n+nv}{\PYZdl{}output\PYZus{}dir}
+\PY{o}{!}cp \PYZhy{}r \PY{n+nv}{\PYZdl{}pipeline\PYZus{}config\PYZus{}file} \PY{n+nv}{\PYZdl{}output\PYZus{}dir}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{ }{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{c+c1}{\PYZsh{} copy config file from drive outputdir}
+\PY{o}{!}cp \PY{n+nv}{\PYZdl{}output\PYZus{}dir}/\PY{n+nv}{\PYZdl{}pipeline\PYZus{}file} data/\PY{n+nv}{\PYZdl{}pipeline\PYZus{}file}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{ }{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{c+c1}{\PYZsh{} output config file}
+\PY{o}{!}cat \PY{o}{\PYZob{}}pipeline\PYZus{}config\PYZus{}file\PY{o}{\PYZcb{}}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{ }{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{c+c1}{\PYZsh{} start and init tensorboard (only when training already started once)}
+\PY{o}{\PYZpc{}}\PY{k}{load\PYZus{}ext} tensorboard
+\PY{o}{\PYZpc{}}\PY{k}{tensorboard} \PYZhy{}\PYZhy{}logdir \PYZdl{}output\PYZus{}dir
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{ }{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{c+c1}{\PYZsh{} start training}
+\PY{o}{!}python /content/models/research/object\PYZus{}detection/model\PYZus{}main.py \PY{err}{\PYZbs{}}
+    \PY{o}{\PYZhy{}}\PY{o}{\PYZhy{}}\PY{n}{pipeline\PYZus{}config\PYZus{}path}\PY{o}{=}\PY{p}{\PYZob{}}\PY{n}{pipeline\PYZus{}config\PYZus{}file}\PY{p}{\PYZcb{}} \PYZbs{}
+    \PY{o}{\PYZhy{}}\PY{o}{\PYZhy{}}\PY{n}{model\PYZus{}dir}\PY{o}{=}\PY{p}{\PYZob{}}\PY{n}{output\PYZus{}dir}\PY{p}{\PYZcb{}} \PYZbs{}
+    \PY{o}{\PYZhy{}}\PY{o}{\PYZhy{}}\PY{n}{alsologtostderr} \PYZbs{}
+    \PY{o}{\PYZhy{}}\PY{o}{\PYZhy{}}\PY{n}{num\PYZus{}train\PYZus{}steps}\PY{o}{=}\PY{p}{\PYZob{}}\PY{n}{num\PYZus{}steps}\PY{p}{\PYZcb{}}
+\end{Verbatim}
+\end{tcolorbox}
+
+
+    % Add a bibliography block to the postdoc
+    
+    
+    
+\end{document}

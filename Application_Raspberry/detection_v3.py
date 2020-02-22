@@ -70,14 +70,19 @@ class InferenceModel:
 
         if os.path.isfile(exported_model):
             print('found model to import')
-            exec_net = self.ie.import_network(
-                model_file=exported_model, device_name=self.device, num_requests=num_requests)
+            try:
+                exec_net = self.ie.import_network(
+                    model_file=exported_model, device_name=self.device, num_requests=num_requests)
+            except:
+                return False
         else:
             print('creating exec model')
-            exec_net = self.ie.load_network(
-                network=net, num_requests=num_requests, device_name=self.device)
-            exec_net.export(exported_model)
-
+            try:
+                exec_net = self.ie.load_network(
+                    network=net, num_requests=num_requests, device_name=self.device)
+                exec_net.export(exported_model)
+            except:
+                return False
         nchw = net.inputs[input_blob].shape
 
         del net

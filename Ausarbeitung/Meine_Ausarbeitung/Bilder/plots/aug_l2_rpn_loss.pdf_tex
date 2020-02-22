@@ -55,31 +55,31 @@
     \setlength\tabcolsep{0pt}%
     \put(0,0){\includegraphics[width=\unitlength,page=1]{aug_l2_rpn_loss.pdf}}%
     \put(0.10726634,0.07189791){\color[rgb]{0.19607843,0.19215686,0.24705882}\makebox(0,0)[rt]{\lineheight{1.25}\smash{\begin{tabular}[t]{r}0.1\end{tabular}}}}%
-    \put(0.10726634,0.11283113){\color[rgb]{0.19607843,0.19215686,0.24705882}\makebox(0,0)[rt]{\lineheight{1.25}\smash{\begin{tabular}[t]{r}0.105\end{tabular}}}}%
+    \put(0.10726634,0.11283113){\color[rgb]{0.19607843,0.19215686,0.24705882}\makebox(0,0)[rt]{\lineheight{1.25}\smash{\begin{tabular}[t]{r}\end{tabular}}}}%
     \put(0.10726634,0.15376435){\color[rgb]{0.19607843,0.19215686,0.24705882}\makebox(0,0)[rt]{\lineheight{1.25}\smash{\begin{tabular}[t]{r}0.11\end{tabular}}}}%
-    \put(0.10726634,0.19469758){\color[rgb]{0.19607843,0.19215686,0.24705882}\makebox(0,0)[rt]{\lineheight{1.25}\smash{\begin{tabular}[t]{r}0.115\end{tabular}}}}%
+    \put(0.10726634,0.19469758){\color[rgb]{0.19607843,0.19215686,0.24705882}\makebox(0,0)[rt]{\lineheight{1.25}\smash{\begin{tabular}[t]{r}\end{tabular}}}}%
     \put(0.10726634,0.23563083){\color[rgb]{0.19607843,0.19215686,0.24705882}\makebox(0,0)[rt]{\lineheight{1.25}\smash{\begin{tabular}[t]{r}0.12\end{tabular}}}}%
-    \put(0.10726634,0.27656405){\color[rgb]{0.19607843,0.19215686,0.24705882}\makebox(0,0)[rt]{\lineheight{1.25}\smash{\begin{tabular}[t]{r}0.125\end{tabular}}}}%
+    \put(0.10726634,0.27656405){\color[rgb]{0.19607843,0.19215686,0.24705882}\makebox(0,0)[rt]{\lineheight{1.25}\smash{\begin{tabular}[t]{r}\end{tabular}}}}%
     \put(0.10726634,0.3174973){\color[rgb]{0.19607843,0.19215686,0.24705882}\makebox(0,0)[rt]{\lineheight{1.25}\smash{\begin{tabular}[t]{r}0.13\end{tabular}}}}%
-    \put(0.10726634,0.35843052){\color[rgb]{0.19607843,0.19215686,0.24705882}\makebox(0,0)[rt]{\lineheight{1.25}\smash{\begin{tabular}[t]{r}0.135\end{tabular}}}}%
+    \put(0.10726634,0.35843052){\color[rgb]{0.19607843,0.19215686,0.24705882}\makebox(0,0)[rt]{\lineheight{1.25}\smash{\begin{tabular}[t]{r}\end{tabular}}}}%
     \put(0.10726634,0.39936375){\color[rgb]{0.19607843,0.19215686,0.24705882}\makebox(0,0)[rt]{\lineheight{1.25}\smash{\begin{tabular}[t]{r}0.14\end{tabular}}}}%
-    \put(0.10726634,0.44029698){\color[rgb]{0.19607843,0.19215686,0.24705882}\makebox(0,0)[rt]{\lineheight{1.25}\smash{\begin{tabular}[t]{r}0.145\end{tabular}}}}%
+    \put(0.10726634,0.44029698){\color[rgb]{0.19607843,0.19215686,0.24705882}\makebox(0,0)[rt]{\lineheight{1.25}\smash{\begin{tabular}[t]{r}\end{tabular}}}}%
     \put(0.10726634,0.48123022){\color[rgb]{0.19607843,0.19215686,0.24705882}\makebox(0,0)[rt]{\lineheight{1.25}\smash{\begin{tabular}[t]{r}0.15\end{tabular}}}}%
-    \put(0.10726634,0.52216346){\color[rgb]{0.19607843,0.19215686,0.24705882}\makebox(0,0)[rt]{\lineheight{1.25}\smash{\begin{tabular}[t]{r}0.155\end{tabular}}}}%
+    \put(0.10726634,0.52216346){\color[rgb]{0.19607843,0.19215686,0.24705882}\makebox(0,0)[rt]{\lineheight{1.25}\smash{\begin{tabular}[t]{r}\end{tabular}}}}%
     \put(0.10726634,0.56309669){\color[rgb]{0.19607843,0.19215686,0.24705882}\makebox(0,0)[rt]{\lineheight{1.25}\smash{\begin{tabular}[t]{r}0.16\end{tabular}}}}%
-    \put(0.10726634,0.60402992){\color[rgb]{0.19607843,0.19215686,0.24705882}\makebox(0,0)[rt]{\lineheight{1.25}\smash{\begin{tabular}[t]{r}0.165\end{tabular}}}}%
+    \put(0.10726634,0.60402992){\color[rgb]{0.19607843,0.19215686,0.24705882}\makebox(0,0)[rt]{\lineheight{1.25}\smash{\begin{tabular}[t]{r}\end{tabular}}}}%
     \put(0,0){\includegraphics[width=\unitlength,page=2]{aug_l2_rpn_loss.pdf}}%
-    \put(0.14020889,0.03727623){\color[rgb]{0.19607843,0.19215686,0.24705882}\makebox(0,0)[t]{\lineheight{1.25}\smash{\begin{tabular}[t]{c}-50k\end{tabular}}}}%
+    \put(0.14020889,0.03727623){\color[rgb]{0.19607843,0.19215686,0.24705882}\makebox(0,0)[t]{\lineheight{1.25}\smash{\begin{tabular}[t]{c}\end{tabular}}}}%
     \put(0.21218822,0.03727623){\color[rgb]{0.19607843,0.19215686,0.24705882}\makebox(0,0)[t]{\lineheight{1.25}\smash{\begin{tabular}[t]{c}0\end{tabular}}}}%
-    \put(0.28416756,0.03727623){\color[rgb]{0.19607843,0.19215686,0.24705882}\makebox(0,0)[t]{\lineheight{1.25}\smash{\begin{tabular}[t]{c}50k\end{tabular}}}}%
+    \put(0.28416756,0.03727623){\color[rgb]{0.19607843,0.19215686,0.24705882}\makebox(0,0)[t]{\lineheight{1.25}\smash{\begin{tabular}[t]{c}\end{tabular}}}}%
     \put(0.35614689,0.03727623){\color[rgb]{0.19607843,0.19215686,0.24705882}\makebox(0,0)[t]{\lineheight{1.25}\smash{\begin{tabular}[t]{c}100k\end{tabular}}}}%
-    \put(0.42812622,0.03727623){\color[rgb]{0.19607843,0.19215686,0.24705882}\makebox(0,0)[t]{\lineheight{1.25}\smash{\begin{tabular}[t]{c}150k\end{tabular}}}}%
+    \put(0.42812622,0.03727623){\color[rgb]{0.19607843,0.19215686,0.24705882}\makebox(0,0)[t]{\lineheight{1.25}\smash{\begin{tabular}[t]{c}\end{tabular}}}}%
     \put(0.50010553,0.03727623){\color[rgb]{0.19607843,0.19215686,0.24705882}\makebox(0,0)[t]{\lineheight{1.25}\smash{\begin{tabular}[t]{c}200k\end{tabular}}}}%
-    \put(0.57208488,0.03727623){\color[rgb]{0.19607843,0.19215686,0.24705882}\makebox(0,0)[t]{\lineheight{1.25}\smash{\begin{tabular}[t]{c}250k\end{tabular}}}}%
+    \put(0.57208488,0.03727623){\color[rgb]{0.19607843,0.19215686,0.24705882}\makebox(0,0)[t]{\lineheight{1.25}\smash{\begin{tabular}[t]{c}\end{tabular}}}}%
     \put(0.64406419,0.03727623){\color[rgb]{0.19607843,0.19215686,0.24705882}\makebox(0,0)[t]{\lineheight{1.25}\smash{\begin{tabular}[t]{c}300k\end{tabular}}}}%
-    \put(0.71604355,0.03727623){\color[rgb]{0.19607843,0.19215686,0.24705882}\makebox(0,0)[t]{\lineheight{1.25}\smash{\begin{tabular}[t]{c}350k\end{tabular}}}}%
+    \put(0.71604355,0.03727623){\color[rgb]{0.19607843,0.19215686,0.24705882}\makebox(0,0)[t]{\lineheight{1.25}\smash{\begin{tabular}[t]{c}\end{tabular}}}}%
     \put(0.78802285,0.03727623){\color[rgb]{0.19607843,0.19215686,0.24705882}\makebox(0,0)[t]{\lineheight{1.25}\smash{\begin{tabular}[t]{c}400k\end{tabular}}}}%
-    \put(0.86000216,0.03727623){\color[rgb]{0.19607843,0.19215686,0.24705882}\makebox(0,0)[t]{\lineheight{1.25}\smash{\begin{tabular}[t]{c}450k\end{tabular}}}}%
+    \put(0.86000216,0.03727623){\color[rgb]{0.19607843,0.19215686,0.24705882}\makebox(0,0)[t]{\lineheight{1.25}\smash{\begin{tabular}[t]{c}\end{tabular}}}}%
     \put(0.93198151,0.03727623){\color[rgb]{0.19607843,0.19215686,0.24705882}\makebox(0,0)[t]{\lineheight{1.25}\smash{\begin{tabular}[t]{c}500k\end{tabular}}}}%
     \put(0,0){\includegraphics[width=\unitlength,page=3]{aug_l2_rpn_loss.pdf}}%
   \end{picture}%

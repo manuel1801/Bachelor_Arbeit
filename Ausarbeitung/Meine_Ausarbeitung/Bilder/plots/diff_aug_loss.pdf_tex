@@ -55,28 +55,28 @@
     \setlength\tabcolsep{0pt}%
     \put(0,0){\includegraphics[width=\unitlength,page=1]{diff_aug_loss.pdf}}%
     \put(0.08194605,0.05942716){\color[rgb]{0.19607843,0.19215686,0.24705882}\makebox(0,0)[rt]{\lineheight{1.25}\smash{\begin{tabular}[t]{r}0.66\end{tabular}}}}%
-    \put(0.08194605,0.13043982){\color[rgb]{0.19607843,0.19215686,0.24705882}\makebox(0,0)[rt]{\lineheight{1.25}\smash{\begin{tabular}[t]{r}0.68\end{tabular}}}}%
+    \put(0.08194605,0.13043982){\color[rgb]{0.19607843,0.19215686,0.24705882}\makebox(0,0)[rt]{\lineheight{1.25}\smash{\begin{tabular}[t]{r}\end{tabular}}}}%
     \put(0.08194605,0.20145248){\color[rgb]{0.19607843,0.19215686,0.24705882}\makebox(0,0)[rt]{\lineheight{1.25}\smash{\begin{tabular}[t]{r}0.7\end{tabular}}}}%
-    \put(0.08194605,0.27246517){\color[rgb]{0.19607843,0.19215686,0.24705882}\makebox(0,0)[rt]{\lineheight{1.25}\smash{\begin{tabular}[t]{r}0.72\end{tabular}}}}%
+    \put(0.08194605,0.27246517){\color[rgb]{0.19607843,0.19215686,0.24705882}\makebox(0,0)[rt]{\lineheight{1.25}\smash{\begin{tabular}[t]{r}\end{tabular}}}}%
     \put(0.08194605,0.34347786){\color[rgb]{0.19607843,0.19215686,0.24705882}\makebox(0,0)[rt]{\lineheight{1.25}\smash{\begin{tabular}[t]{r}0.74\end{tabular}}}}%
-    \put(0.08194605,0.41449052){\color[rgb]{0.19607843,0.19215686,0.24705882}\makebox(0,0)[rt]{\lineheight{1.25}\smash{\begin{tabular}[t]{r}0.76\end{tabular}}}}%
+    \put(0.08194605,0.41449052){\color[rgb]{0.19607843,0.19215686,0.24705882}\makebox(0,0)[rt]{\lineheight{1.25}\smash{\begin{tabular}[t]{r}\end{tabular}}}}%
     \put(0.08194605,0.48550321){\color[rgb]{0.19607843,0.19215686,0.24705882}\makebox(0,0)[rt]{\lineheight{1.25}\smash{\begin{tabular}[t]{r}0.78\end{tabular}}}}%
-    \put(0.08194605,0.55651588){\color[rgb]{0.19607843,0.19215686,0.24705882}\makebox(0,0)[rt]{\lineheight{1.25}\smash{\begin{tabular}[t]{r}0.8\end{tabular}}}}%
+    \put(0.08194605,0.55651588){\color[rgb]{0.19607843,0.19215686,0.24705882}\makebox(0,0)[rt]{\lineheight{1.25}\smash{\begin{tabular}[t]{r}\end{tabular}}}}%
     \put(0.08194605,0.62752856){\color[rgb]{0.19607843,0.19215686,0.24705882}\makebox(0,0)[rt]{\lineheight{1.25}\smash{\begin{tabular}[t]{r}0.82\end{tabular}}}}%
     \put(0,0){\includegraphics[width=\unitlength,page=2]{diff_aug_loss.pdf}}%
-    \put(0.11254104,0.03695335){\color[rgb]{0.19607843,0.19215686,0.24705882}\makebox(0,0)[t]{\lineheight{1.25}\smash{\begin{tabular}[t]{c}-50k\end{tabular}}}}%
+    \put(0.11254104,0.03695335){\color[rgb]{0.19607843,0.19215686,0.24705882}\makebox(0,0)[t]{\lineheight{1.25}\smash{\begin{tabular}[t]{c}\end{tabular}}}}%
     \put(0.18665131,0.03695335){\color[rgb]{0.19607843,0.19215686,0.24705882}\makebox(0,0)[t]{\lineheight{1.25}\smash{\begin{tabular}[t]{c}0\end{tabular}}}}%
-    \put(0.26076159,0.03695335){\color[rgb]{0.19607843,0.19215686,0.24705882}\makebox(0,0)[t]{\lineheight{1.25}\smash{\begin{tabular}[t]{c}50k\end{tabular}}}}%
+    \put(0.26076159,0.03695335){\color[rgb]{0.19607843,0.19215686,0.24705882}\makebox(0,0)[t]{\lineheight{1.25}\smash{\begin{tabular}[t]{c}\end{tabular}}}}%
     \put(0.33487184,0.03695335){\color[rgb]{0.19607843,0.19215686,0.24705882}\makebox(0,0)[t]{\lineheight{1.25}\smash{\begin{tabular}[t]{c}100k\end{tabular}}}}%
-    \put(0.40898213,0.03695335){\color[rgb]{0.19607843,0.19215686,0.24705882}\makebox(0,0)[t]{\lineheight{1.25}\smash{\begin{tabular}[t]{c}150k\end{tabular}}}}%
+    \put(0.40898213,0.03695335){\color[rgb]{0.19607843,0.19215686,0.24705882}\makebox(0,0)[t]{\lineheight{1.25}\smash{\begin{tabular}[t]{c}\end{tabular}}}}%
     \put(0.4830924,0.03695335){\color[rgb]{0.19607843,0.19215686,0.24705882}\makebox(0,0)[t]{\lineheight{1.25}\smash{\begin{tabular}[t]{c}200k\end{tabular}}}}%
-    \put(0.55720265,0.03695335){\color[rgb]{0.19607843,0.19215686,0.24705882}\makebox(0,0)[t]{\lineheight{1.25}\smash{\begin{tabular}[t]{c}250k\end{tabular}}}}%
+    \put(0.55720265,0.03695335){\color[rgb]{0.19607843,0.19215686,0.24705882}\makebox(0,0)[t]{\lineheight{1.25}\smash{\begin{tabular}[t]{c}\end{tabular}}}}%
     \put(0.63131296,0.03695335){\color[rgb]{0.19607843,0.19215686,0.24705882}\makebox(0,0)[t]{\lineheight{1.25}\smash{\begin{tabular}[t]{c}300k\end{tabular}}}}%
-    \put(0.70542323,0.03695335){\color[rgb]{0.19607843,0.19215686,0.24705882}\makebox(0,0)[t]{\lineheight{1.25}\smash{\begin{tabular}[t]{c}350k\end{tabular}}}}%
+    \put(0.70542323,0.03695335){\color[rgb]{0.19607843,0.19215686,0.24705882}\makebox(0,0)[t]{\lineheight{1.25}\smash{\begin{tabular}[t]{c}\end{tabular}}}}%
     \put(0.7795335,0.03695335){\color[rgb]{0.19607843,0.19215686,0.24705882}\makebox(0,0)[t]{\lineheight{1.25}\smash{\begin{tabular}[t]{c}400k\end{tabular}}}}%
-    \put(0.85364377,0.03695335){\color[rgb]{0.19607843,0.19215686,0.24705882}\makebox(0,0)[t]{\lineheight{1.25}\smash{\begin{tabular}[t]{c}450k\end{tabular}}}}%
+    \put(0.85364377,0.03695335){\color[rgb]{0.19607843,0.19215686,0.24705882}\makebox(0,0)[t]{\lineheight{1.25}\smash{\begin{tabular}[t]{c}\end{tabular}}}}%
     \put(0.92775403,0.03695335){\color[rgb]{0.19607843,0.19215686,0.24705882}\makebox(0,0)[t]{\lineheight{1.25}\smash{\begin{tabular}[t]{c}500k\end{tabular}}}}%
-    \put(1.00186425,0.03695335){\color[rgb]{0.19607843,0.19215686,0.24705882}\makebox(0,0)[t]{\lineheight{1.25}\smash{\begin{tabular}[t]{c}550k\end{tabular}}}}%
+    \put(1.00186425,0.03695335){\color[rgb]{0.19607843,0.19215686,0.24705882}\makebox(0,0)[t]{\lineheight{1.25}\smash{\begin{tabular}[t]{c}\end{tabular}}}}%
     \put(0,0){\includegraphics[width=\unitlength,page=3]{diff_aug_loss.pdf}}%
   \end{picture}%
 \endgroup%

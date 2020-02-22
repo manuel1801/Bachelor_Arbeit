@@ -13,24 +13,28 @@ Für die vorliegende Arbeit wurden dafür aus dem Open Source
 Dataset \textit{OpenImages} \cite{kuznetsovaOpenImagesDataset2018} 
 von Google 9 Klassen, welche Wildtiere enthalten heruntergeladen.
 
-Dieses besteht aus einem Trainingsset mit 200 bis 2000 Bildern pro 
-Klasse sowie kleineren Test- und Validierungssets. Um für alle Klassen 
-die gleiche Anzahl an Trainingsdaten zu erhalten und um Overfitting zu 
-verhindern wurden wie im folgenden beschrieben die Trainingsdaten 
-augmentiert.
+Dabei hat die Anzahl an Bildern pro Klasse zwischen 
+200 und 2000 für die Trainings sätze variert. Die Test und 
+Validierungssätze waren entsprechend kleiner.
+
+Um für alle Klassen die gleiche Anzahl an Trainingsdaten zu erhalten
+und um Overfitting zu verhindern wurden wie im folgenden
+beschrieben die Trainingsdaten augmentiert.
+
 
 \subsection{Augmentierung}
 
-Augmentierung ist eine Technik, mit der aus den vorhandenen 
+Augmentierung in der Bilder/Objekterkennung ist eine Technik,
+mit der aus den vorhandenen 
 Daten künstlich mehr Daten generiert werden können. Dafür werden 
 z.B. geometrische Transormationen, wie etwa Sklierung, Verschiebung 
 Rotieren und Spiegelungen oder manipulationen der Pixelwerte 
 zur veränderung der Farbwerte, Helligkeit, Kontrast oder 
-Rauschen vorgenommen.
+Rauschen an den Bildern vorgenommen.
 
-Mithilfe eines Python Scripts und der Library \textit{imgaug} \cite{imgaug}
-konnten so verschiedene Augmentierungstechniken auf das Datenset angewendet
-werden.
+Mithilfe eines Python Scripts in welchem die Library \textit{imgaug} \cite{imgaug}
+verwendet wurde, konnten so verschiedene
+Augmentierungstechniken auf das Datenset angewendet werden.
 
 \begin{figure}[H]
     \centering
@@ -53,24 +57,35 @@ geachtet werden.
 % dieser vorzunahemen, der andere verwendet eine speziell für die 
 % Objekterkennung konzipierte Api für wie in Abschnitt
 %  \ref{sec:related_work} beschriebene End-to-End lösungen.
-
+Um unabhängig von der leistungsfähigkeit der GPU des eigenen 
+Rechners trainieren zu können wurde \textit{Google Colabe} verwendet.
+Dabei handelt es sich um ein kostnlosen, Cloudbasierten Service 
+welcher eine VM (Virtual Machine) mit GPU in Form eines Jupyter Notebooks zur 
+verfügung stellt.
 
 \subsection{Tensorflow Object Detection Api}
 
 Die Tensorflow Object Detection Api ist unter den Research Modellen
 \cite{tfobjdet} des offiziellen Tensorflow Repository zu
 finden und enthällt implementierungen einiger gängiger Object Detectin
-Modelle, wie Single Shot Detectors (SSD) und Faster R-CNNs mit 
-verschiedenen Basis CNNs mit vortrainierten Geweichten.
+Modelle mit vortrainierten gewichten zur Feature Extraction.
+
+
+Für die Arbeit wurde die Architekturen \textit{Single Shot Detector}
+(SSD) und \textit{Faster R-CNN} verwendet.
+
+Beim SSD wurde das \textit{MobilenetV2} sowie das \textit{InceptionV2} 
+als Basis CNN verwendet.
+
+Bei Faster R-CNN nur \textit{InceptionV2}.
+
 
 Um die Modelle trainieren zu können, mussten zunächst die 
 Trainingsdaten in das binary Dateiformate TFRecords umgewandelt 
 werden, welches die Api verwendet. Dieses ist eine Serialisierte 
-darstellung der Bilder und Labels als Protocol Buffer für
-effizienten Zugriff auf diese.
+darstellung der Bilder und Labels als Protocol Buffer welche einen 
+schnelleren Zugriff auf die Daten ermöglicht.
 
-Trainiert wurde mit hilfe \textit{Google Colab}, eine cloudbasierte VM,
-welche eine geeignete Gpu zur verfügung stellt.
 
 
 \subsection{Trainingsworkflow}

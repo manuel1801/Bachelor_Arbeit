@@ -55,33 +55,33 @@
     \setlength\tabcolsep{0pt}%
     \put(0,0){\includegraphics[width=\unitlength,page=1]{overfitting_kein_early_aug_loss.pdf}}%
     \put(0.08343332,0.06362592){\color[rgb]{0.19607843,0.19215686,0.24705882}\makebox(0,0)[rt]{\lineheight{1.25}\smash{\begin{tabular}[t]{r}0.64\end{tabular}}}}%
-    \put(0.08343332,0.10812915){\color[rgb]{0.19607843,0.19215686,0.24705882}\makebox(0,0)[rt]{\lineheight{1.25}\smash{\begin{tabular}[t]{r}0.66\end{tabular}}}}%
+    \put(0.08343332,0.10812915){\color[rgb]{0.19607843,0.19215686,0.24705882}\makebox(0,0)[rt]{\lineheight{1.25}\smash{\begin{tabular}[t]{r}\end{tabular}}}}%
     \put(0.08343332,0.15263238){\color[rgb]{0.19607843,0.19215686,0.24705882}\makebox(0,0)[rt]{\lineheight{1.25}\smash{\begin{tabular}[t]{r}0.68\end{tabular}}}}%
-    \put(0.08343332,0.19713562){\color[rgb]{0.19607843,0.19215686,0.24705882}\makebox(0,0)[rt]{\lineheight{1.25}\smash{\begin{tabular}[t]{r}0.7\end{tabular}}}}%
+    \put(0.08343332,0.19713562){\color[rgb]{0.19607843,0.19215686,0.24705882}\makebox(0,0)[rt]{\lineheight{1.25}\smash{\begin{tabular}[t]{r}\end{tabular}}}}%
     \put(0.08343332,0.24163888){\color[rgb]{0.19607843,0.19215686,0.24705882}\makebox(0,0)[rt]{\lineheight{1.25}\smash{\begin{tabular}[t]{r}0.72\end{tabular}}}}%
-    \put(0.08343332,0.28614211){\color[rgb]{0.19607843,0.19215686,0.24705882}\makebox(0,0)[rt]{\lineheight{1.25}\smash{\begin{tabular}[t]{r}0.74\end{tabular}}}}%
+    \put(0.08343332,0.28614211){\color[rgb]{0.19607843,0.19215686,0.24705882}\makebox(0,0)[rt]{\lineheight{1.25}\smash{\begin{tabular}[t]{r}\end{tabular}}}}%
     \put(0.08343332,0.33064535){\color[rgb]{0.19607843,0.19215686,0.24705882}\makebox(0,0)[rt]{\lineheight{1.25}\smash{\begin{tabular}[t]{r}0.76\end{tabular}}}}%
-    \put(0.08343332,0.37514858){\color[rgb]{0.19607843,0.19215686,0.24705882}\makebox(0,0)[rt]{\lineheight{1.25}\smash{\begin{tabular}[t]{r}0.78\end{tabular}}}}%
+    \put(0.08343332,0.37514858){\color[rgb]{0.19607843,0.19215686,0.24705882}\makebox(0,0)[rt]{\lineheight{1.25}\smash{\begin{tabular}[t]{r}\end{tabular}}}}%
     \put(0.08343332,0.41965181){\color[rgb]{0.19607843,0.19215686,0.24705882}\makebox(0,0)[rt]{\lineheight{1.25}\smash{\begin{tabular}[t]{r}0.8\end{tabular}}}}%
-    \put(0.08343332,0.46415506){\color[rgb]{0.19607843,0.19215686,0.24705882}\makebox(0,0)[rt]{\lineheight{1.25}\smash{\begin{tabular}[t]{r}0.82\end{tabular}}}}%
+    \put(0.08343332,0.46415506){\color[rgb]{0.19607843,0.19215686,0.24705882}\makebox(0,0)[rt]{\lineheight{1.25}\smash{\begin{tabular}[t]{r}\end{tabular}}}}%
     \put(0.08343332,0.50865829){\color[rgb]{0.19607843,0.19215686,0.24705882}\makebox(0,0)[rt]{\lineheight{1.25}\smash{\begin{tabular}[t]{r}0.84\end{tabular}}}}%
-    \put(0.08343332,0.55316153){\color[rgb]{0.19607843,0.19215686,0.24705882}\makebox(0,0)[rt]{\lineheight{1.25}\smash{\begin{tabular}[t]{r}0.86\end{tabular}}}}%
+    \put(0.08343332,0.55316153){\color[rgb]{0.19607843,0.19215686,0.24705882}\makebox(0,0)[rt]{\lineheight{1.25}\smash{\begin{tabular}[t]{r}\end{tabular}}}}%
     \put(0.08343332,0.59766477){\color[rgb]{0.19607843,0.19215686,0.24705882}\makebox(0,0)[rt]{\lineheight{1.25}\smash{\begin{tabular}[t]{r}0.88\end{tabular}}}}%
-    \put(0.08343332,0.64216801){\color[rgb]{0.19607843,0.19215686,0.24705882}\makebox(0,0)[rt]{\lineheight{1.25}\smash{\begin{tabular}[t]{r}0.9\end{tabular}}}}%
+    \put(0.08343332,0.64216801){\color[rgb]{0.19607843,0.19215686,0.24705882}\makebox(0,0)[rt]{\lineheight{1.25}\smash{\begin{tabular}[t]{r}\end{tabular}}}}%
     \put(0,0){\includegraphics[width=\unitlength,page=2]{overfitting_kein_early_aug_loss.pdf}}%
-    \put(0.11593568,0.03762403){\color[rgb]{0.19607843,0.19215686,0.24705882}\makebox(0,0)[t]{\lineheight{1.25}\smash{\begin{tabular}[t]{c}-20k\end{tabular}}}}%
+    \put(0.11593568,0.03762403){\color[rgb]{0.19607843,0.19215686,0.24705882}\makebox(0,0)[t]{\lineheight{1.25}\smash{\begin{tabular}[t]{c}\end{tabular}}}}%
     \put(0.18960771,0.03762403){\color[rgb]{0.19607843,0.19215686,0.24705882}\makebox(0,0)[t]{\lineheight{1.25}\smash{\begin{tabular}[t]{c}0\end{tabular}}}}%
-    \put(0.26327973,0.03762403){\color[rgb]{0.19607843,0.19215686,0.24705882}\makebox(0,0)[t]{\lineheight{1.25}\smash{\begin{tabular}[t]{c}20k\end{tabular}}}}%
+    \put(0.26327973,0.03762403){\color[rgb]{0.19607843,0.19215686,0.24705882}\makebox(0,0)[t]{\lineheight{1.25}\smash{\begin{tabular}[t]{c}\end{tabular}}}}%
     \put(0.33695176,0.03762403){\color[rgb]{0.19607843,0.19215686,0.24705882}\makebox(0,0)[t]{\lineheight{1.25}\smash{\begin{tabular}[t]{c}40k\end{tabular}}}}%
-    \put(0.41062378,0.03762403){\color[rgb]{0.19607843,0.19215686,0.24705882}\makebox(0,0)[t]{\lineheight{1.25}\smash{\begin{tabular}[t]{c}60k\end{tabular}}}}%
+    \put(0.41062378,0.03762403){\color[rgb]{0.19607843,0.19215686,0.24705882}\makebox(0,0)[t]{\lineheight{1.25}\smash{\begin{tabular}[t]{c}\end{tabular}}}}%
     \put(0.48429582,0.03762403){\color[rgb]{0.19607843,0.19215686,0.24705882}\makebox(0,0)[t]{\lineheight{1.25}\smash{\begin{tabular}[t]{c}80k\end{tabular}}}}%
-    \put(0.55796784,0.03762403){\color[rgb]{0.19607843,0.19215686,0.24705882}\makebox(0,0)[t]{\lineheight{1.25}\smash{\begin{tabular}[t]{c}100k\end{tabular}}}}%
+    \put(0.55796784,0.03762403){\color[rgb]{0.19607843,0.19215686,0.24705882}\makebox(0,0)[t]{\lineheight{1.25}\smash{\begin{tabular}[t]{c}\end{tabular}}}}%
     \put(0.63163988,0.03762403){\color[rgb]{0.19607843,0.19215686,0.24705882}\makebox(0,0)[t]{\lineheight{1.25}\smash{\begin{tabular}[t]{c}120k\end{tabular}}}}%
-    \put(0.70531188,0.03762403){\color[rgb]{0.19607843,0.19215686,0.24705882}\makebox(0,0)[t]{\lineheight{1.25}\smash{\begin{tabular}[t]{c}140k\end{tabular}}}}%
+    \put(0.70531188,0.03762403){\color[rgb]{0.19607843,0.19215686,0.24705882}\makebox(0,0)[t]{\lineheight{1.25}\smash{\begin{tabular}[t]{c}\end{tabular}}}}%
     \put(0.77898392,0.03762403){\color[rgb]{0.19607843,0.19215686,0.24705882}\makebox(0,0)[t]{\lineheight{1.25}\smash{\begin{tabular}[t]{c}160k\end{tabular}}}}%
-    \put(0.85265596,0.03762403){\color[rgb]{0.19607843,0.19215686,0.24705882}\makebox(0,0)[t]{\lineheight{1.25}\smash{\begin{tabular}[t]{c}180k\end{tabular}}}}%
+    \put(0.85265596,0.03762403){\color[rgb]{0.19607843,0.19215686,0.24705882}\makebox(0,0)[t]{\lineheight{1.25}\smash{\begin{tabular}[t]{c}\end{tabular}}}}%
     \put(0.92632796,0.03762403){\color[rgb]{0.19607843,0.19215686,0.24705882}\makebox(0,0)[t]{\lineheight{1.25}\smash{\begin{tabular}[t]{c}200k\end{tabular}}}}%
-    \put(1,0.03762403){\color[rgb]{0.19607843,0.19215686,0.24705882}\makebox(0,0)[t]{\lineheight{1.25}\smash{\begin{tabular}[t]{c}220k\end{tabular}}}}%
+    \put(1,0.03762403){\color[rgb]{0.19607843,0.19215686,0.24705882}\makebox(0,0)[t]{\lineheight{1.25}\smash{\begin{tabular}[t]{c}\end{tabular}}}}%
     \put(0,0){\includegraphics[width=\unitlength,page=3]{overfitting_kein_early_aug_loss.pdf}}%
   \end{picture}%
 \endgroup%

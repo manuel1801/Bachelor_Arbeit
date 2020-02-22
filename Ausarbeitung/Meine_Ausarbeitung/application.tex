@@ -14,49 +14,46 @@ Host Pc beschrieben.
 %-------------------------  SECTION 1: AUFBAU  ------------------------
 \section{Aufbau/Hardware}\label{sec:aufbau}
 
-Im folgenden werden die zur Realisierung der Anwendung verwendeten 
-Komponenten erläutert.
-
-\subsection*{Raspberry Pi}
-Der Anwendungs Code läuft auf dem Raspberry Pi. 
-Der Neural Compute Stick 2 wird über eine USB Schnittstelle verbunden.
 
 
-\begin{figure}[H]
-    \centering
-    \includegraphics[width=6cm]{./Bilder/raspberrypi_4.png}
-    \caption{Raspberry Pi 4}
-    \label{img:raspberrypi}
-\end{figure}
+Der Anwendungs Code läuft auf dem Raspberry Pi, an den 
+der Neural Compute Stick über eine Usb Schnittstelle 
+angeschlossen wird.
+Das ausführen der Inferenz uf dem MYRIAD Chip des NCS2 
+wird in der Implementierung der InferenceEngine festgelegt.
 
-
-
-\subsection*{Kamera}
-Verwendet wurde ein Raspberry Pi Kamera Modul mit 5MP OV5647 Sensor 
+Bei der verwendeten Kamera handelt es sich um ein Raspberry Pi 
+Kamera Modul mit 5MP OV5647 Sensor 
 und automatschem umschalten der Infrarot Funktion der Marke 
-Longrunner verwendet.
+Longrunner. (CSI-Schnittstelle (Camera Serial Interface) )
 %https://www.amazon.de/gp/product/B07R4JH2ZV/ref=ppx_yo_dt_b_asin_title_o01_s00?ie=UTF8&psc=1
 Dieses verfügt zusätzlich über zwei Infrarot LEDs, mit 850 nm wellenlänge.
-
-\begin{figure}[H]
-    \centering
-    \includegraphics[width=0.35\textwidth]{longrunner.jpg}
-    \caption{Longruner for Raspberry Pi 4 Camera Kamera Module}
-    \label{fig:rpicam}
-\end{figure}
-
 Für das Umschalten in den Infrarot Modus, wird der Infrarot Filder, welcher sich 
 für normale Aufnahmen vor der Linse befindet entfern, was über einen magnetschalter 
-der mit einem Helligkeitssensor getriggert wird erfolg.
+der über einem Helligkeitssensor getriggert wird erfolg.
 
- 
+\begin{minipage}{0.55\textwidth}
+    \centering
+    \includegraphics[width=0.8\textwidth]{./Bilder/raspberrypi_4.png}
+    \captionof{figure}{Raspberry Pi 4}
+    \label{img:raspberrypi}
+\end{minipage}
+\begin{minipage}{0.45\textwidth}
+    \centering
+    \includegraphics[width=0.8\textwidth]{longrunner.jpg}
+    \captionof{figure}{Longruner Kamera Modul}
+    \label{fig:rpicam}
+\end{minipage}
+\vspace{0.6cm}
 
-\subsection*{sonstiges}
-\begin{itemize}
-    \item Internet Stick%https://www.amazon.de/gp/product/B00HSZEY34/ref=ppx_yo_dt_b_asin_title_o00_s00?ie=UTF8&psc=1
-    \item Hülle
-    \item Powerbank
-\end{itemize}
+
+Desweiteren wurde für eine mobile Internetverbindung 
+der \textit{Huawei E3531 SurfStick} und zu Stromversorgnung
+eine Powerbank verwendet.
+
+
+% https://www.amazon.de/gp/product/B00HSZEY34/ref=ppx_yo_dt_b_asin_title_o00_s00?ie=UTF8&psc=1
+
 
 \section{Implementierung/Software}
 
@@ -174,6 +171,62 @@ folgendem Pseudocode dargestellt.
 
 %     \end{algorithmic}
 % \end{algorithm}
+
+\begin{center}
+    \rule{0.8\textwidth}{0.4pt}
+    \begin{lstlisting}[language=Python]
+        def infer_frames(Buffer, threshhold):
+            for idx, inferRequest in all inferRequests:
+                status = inferRequest.wait(0) # nicht blockierend
+                if status not ready:
+                    continue
+                
+                if idx in currentFrames:
+                    results = inferRequest.output
+                    frame = currentFrames[idx]
+
+                if Buffer not empty:
+                    currentFrames[idx] = Buffer.pop()
+                    infer_frame = preprocess(currentFrames[idx])
+                    inferRequest.async_infer(infer_frame)
+
+                if results or frame is None:
+                    continue
+
+                for obj in all results:
+                    Class, Roi, Proba <- obj
+                    if Proba < threshhold:
+                        continue
+                    
+                    coords <- Roi, frame.shape
+
+                    infered_frame = draw_rect(frame, coords)
+
+                    if proba > detectedObjects.proba
+                        replace detectedObjects
+
+                    if number of detections > x:
+                        send(frame)
+                    
+    \end{lstlisting}
+    \rule{0.8\textwidth}{0.4pt}        
+\end{center}
+
+
+% \centering\rule{0.6\textwidth}{0.4pt}
+% \begin\centering{lstlisting}[language=Python]
+%     def infer_frames():
+%         for all requests:
+%             do something \textbf{with} request
+
+%             status = request.wait(0)
+%             if status == done:
+%                 res = requests.output
+%                 frame = current[id]
+% \end{lstlisting}
+% \centering\rule{0.6\textwidth}{0.4pt}
+
+
 
 
 % inferenz

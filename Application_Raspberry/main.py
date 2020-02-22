@@ -229,11 +229,12 @@ while True:
     # reset send request and start to send all files in output dir
     send_request = False
     for image in os.listdir(local_output_dir):
-        image = image[:-4] + '_' + model + image[-4:]
         image_path = os.path.join(local_output_dir, image)
 
         # try to send and delete local file
-        if conn.send(server, port, remote_user, password, image_path, remote_output_dir):
+        if conn.send(server, port, remote_user, password,
+                     image_path[:-4] + '_' + model + image_path[-4:],
+                     remote_output_dir):
             os.remove(image_path)
             print('Successfully send image ', image)
 

@@ -62,39 +62,33 @@ if send_results:
 
 
 # Ausgabe zur Model auswahl
-models = []
-for i, m in enumerate(os.listdir(models_dir)):
-    models.append(m)
-    print(i, m)
-#model_dir = os.path.join(models_dir, models[int(input())])
-model_dir = os.path.join(models_dir, 'samples_faster_rcnn_inception')
-# model_dir = os.path.join(models_dir, 'samples_ssd_inception')
-# model_dir = os.path.join(models_dir, 'animals_faster_rcnn_inception')
-# model_dir = os.path.join(models_dir, 'animals_ssd_inception')
+# models = []
+# for i, m in enumerate(os.listdir(models_dir)):
+#     models.append(m)
+#     print(i, m)
+# model_dir = os.path.join(models_dir, models[int(input())])
+# print('selected model: ', model_dir)
+# assert os.path.isdir(model_dir)
 
-print('selected model: ', model_dir)
-assert os.path.isdir(model_dir)
+models = ['samples_faster_rcnn_inception', 'samples_ssd_inception']
+# models = ['animals_faster_rcnn_inception', 'animals_ssd_inception']
 
 
 # Load Model to Device
+# try first faster rcnn
+# if error try with ssd
 infer_model = detection.InferenceModel(device='MYRIAD')
-
-
-exec_model = infer_model.create_exec_infer_model(
-    model_dir, local_output_dir, num_requests)
-retry = 0
-while not exec_model:
-    print('could not create exec net. try again ', str(retry), '. time.')
-    sleep(1)
+for model in models:
     exec_model = infer_model.create_exec_infer_model(
-        model_dir, local_output_dir, num_requests)
-    retry += 1
-    if retry > 10:
-        exit()
-
-
+        os.path.join(models_dir, model), local_output_dir, num_requests)
+    if exec_model:
+        break
+    n_save = 300
+    threshhold = 0.5
+if not exec_model:
+    exit()
+print('load: ', model)
 del infer_model
-
 
 # init motion detector
 motion_detector = detection.MotionDetect()

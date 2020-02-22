@@ -232,9 +232,9 @@ while True:
         image_path = os.path.join(local_output_dir, image)
 
         # try to send and delete local file
-        if conn.send(server, port, remote_user, password,
-                     image_path[:-4] + '_' + model + image_path[-4:],
-                     remote_output_dir):
+        if conn.send(server, port, remote_user, password, image_path,
+                     os.path.join(remote_output_dir, image[:-4] + '_' + model + image[-4:])):
+
             os.remove(image_path)
             print('Successfully send image ', image)
 

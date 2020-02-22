@@ -88,6 +88,7 @@ while not exec_model:
     sleep(1)
     exec_model = infer_model.create_exec_infer_model(
         model_dir, local_output_dir, num_requests)
+    retry += 1
     if retry > 10:
         exit()
 

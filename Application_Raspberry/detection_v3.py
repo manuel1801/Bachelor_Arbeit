@@ -81,6 +81,7 @@ class InferenceModel:
                 exec_net = self.ie.load_network(
                     network=net, num_requests=num_requests, device_name=self.device)
                 exec_net.export(exported_model)
+
             except:
                 return False
         nchw = net.inputs[input_blob].shape
@@ -89,7 +90,6 @@ class InferenceModel:
 
         if img_info_input_blob:
             feed_dict[img_info_input_blob] = [nchw[2], nchw[3], 1]
-
         return ExecInferModel(exec_net, input_blob, out_blob, feed_dict, nchw, labels, output_dir)
 
 

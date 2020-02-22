@@ -229,6 +229,7 @@ while True:
     # reset send request and start to send all files in output dir
     send_request = False
     for image in os.listdir(local_output_dir):
+        image = image[:-4] + '_' + model + image[-4:]
         image_path = os.path.join(local_output_dir, image)
 
         # try to send and delete local file

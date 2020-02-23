@@ -1,0 +1,34 @@
+\tikzset{
+    desicion/.style={
+        diamond,
+        draw,
+        text width=4em,
+        text badly centered,
+        inner sep=0pt
+    },
+    block/.style={
+        rectangle,
+        draw,
+        text width=10em,
+        text centered,
+        rounded corners
+    },
+    arrow/.style={
+        draw,
+        >=latex,
+        ->
+    }
+}
+
+
+\begin{tikzpicture}
+    \node (A) [desicion] {entschei\\dung};
+    \node (B) [block, below of=A, node distance=3cm, text width=5em] {bock};
+    \node (C) [block, right of=A, node distance=0.5\textwidth] {noch ein\\bock};
+
+
+    \draw[arrow] (A) --  node [left, fill=white!30] {yes} (B);
+    \draw[arrow] (A) -- node [below, near end] {crap} (C); 
+    \draw[arrow] (B) -| node [near start, fill=white] {yes} (C);
+
+\end{tikzpicture}

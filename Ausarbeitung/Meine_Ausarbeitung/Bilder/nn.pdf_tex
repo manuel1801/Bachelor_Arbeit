@@ -38,7 +38,7 @@
   \newcommand*\fsize{\dimexpr\f@size pt\relax}%
   \newcommand*\lineheight[1]{\fontsize{\fsize}{#1\fsize}\selectfont}%
   \ifx\svgwidth\undefined%
-    \setlength{\unitlength}{1094.7161166bp}%
+    \setlength{\unitlength}{1075.02770233bp}%
     \ifx\svgscale\undefined%
       \relax%
     \else%
@@ -50,10 +50,13 @@
   \global\let\svgwidth\undefined%
   \global\let\svgscale\undefined%
   \makeatother%
-  \begin{picture}(1,0.34413849)%
+  \begin{picture}(1,0.35044115)%
     \lineheight{1}%
     \setlength\tabcolsep{0pt}%
-    \put(0.93149009,0.22616057){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\begin{minipage}{0.09760062\unitlength}\raggedright \end{minipage}}}%
+    \put(0.94854971,0.23030255){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\begin{minipage}{0.09938811\unitlength}\raggedright \end{minipage}}}%
     \put(0,0){\includegraphics[width=\unitlength,page=1]{nn.pdf}}%
+    \put(0.92376196,0.20930021){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}Katze\end{tabular}}}}%
+    \put(0.92376196,0.11235256){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}Hund\end{tabular}}}}%
+    \put(0.89468488,0.29615369){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\begin{minipage}{0.18568681\unitlength}\raggedright \end{minipage}}}%
   \end{picture}%
 \endgroup%

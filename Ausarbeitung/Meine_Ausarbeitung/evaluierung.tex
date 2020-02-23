@@ -52,15 +52,17 @@ gilt die Schätzung als \textit{True Positive}, andernfalls als
 \begin{minipage}{\textwidth}
     \begin{minipage}[b]{0.49\textwidth}
       \centering
-      \includegraphics[width=0.8\textwidth]{Bilder/IoU.png}
+      \def\svgwidth{0.8\textwidth}
+      \input{Bilder/IoU_formula.pdf_tex}
       \captionof{figure}{Intersection over Union}
-    \end{minipage}
+      \label{fig:iou}
+  \end{minipage}
     \hfill
     \begin{minipage}[b]{0.49\textwidth}
       \centering
       \begin{tabular}{c >{\bfseries}r @{\hspace{0.7em}}c @{\hspace{0.4em}}c @{\hspace{0.7em}}l}
-        \multirow{10}{*}{\rotatebox{90}{\parbox{2.5cm}{\bfseries\centering tatsächlicher Wert}}} & 
-          & \multicolumn{2}{c}{\bfseries geschätzter Wert} & \\
+        \multirow{10}{*}{\rotatebox{90}{\parbox{2.5cm}{\bfseries\centering Tatsächlicher Wert}}} & 
+          & \multicolumn{2}{c}{\bfseries Geschätzter Wert} & \\
         & & \bfseries p & \bfseries n & \bfseries\\
         & p$'$ & \MyBox{True}{Positive} & \MyBox{False}{Negative}\\[2.4em]
         & n$'$ & \MyBox{False}{Positive} & \MyBox{True}{Negative} \\
@@ -70,7 +72,7 @@ gilt die Schätzung als \textit{True Positive}, andernfalls als
 \end{minipage}
 
 
-\vspace{0.5cm}
+\vspace{1cm}
     
 Daraus lassen sich dann Precision und Recall berechnen. 
 
@@ -322,7 +324,7 @@ zwei Augment pro Bild (4000Samples)
 
 Mehr Augmentierung führt zu weniger loss, 
 jedoch auch schlechterem mAP.
-
+neu
 
 % colors
 % orange: FF7043

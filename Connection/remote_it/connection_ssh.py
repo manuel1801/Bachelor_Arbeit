@@ -3,22 +3,27 @@ import json
 import os
 import pexpect
 from time import sleep
+import smtplib
+from email.mime.text import MIMEText
 
 
 class SSHConnect:
-    def __init__(self, dev_key='NEU3RTVFNEMtNjRGRi00MzBFLUIyNTgtOUVFQjRGMjcxOTRB'):
+    def __init__(self, email='animals.detection@gmail.com', email_password='animalsdetection20', dev_key='NEU3RTVFNEMtNjRGRi00MzBFLUIyNTgtOUVFQjRGMjcxOTRB'):
         self.developer_key = dev_key
         self.token = None
         self.device_adress = None
+        self.conn_id = None
+        self.email = email
+        self.email_password = email_password
         # self.public_ip = requests.get('https://api.ipify.org').text
 
-    def login(self, remote_it_user='animals.detection@gmail.com', remote_it_pw='animalsdetection', device_name='ssh-Pc', retry=5):
+    def login(self, device_name='ssh-Pc', retry=5):
         headers = {
             "developerkey": self.developer_key
         }
         body = {
-            "password": remote_it_pw,
-            "username": remote_it_user
+            "password": self.password,
+            "username": self.email
         }
         url = "https://api.remot3.it/apv/v27/user/login"
 
@@ -70,7 +75,7 @@ class SSHConnect:
         if not self.token or not self.device_adress:
             print('token or device adress not found. login again')
             return False
-        # host_ip = requests.get('https://api.ipify.org').text
+        host_ip = requests.get('https://api.ipify.org').text
         # print('host ip is ', host_ip)
         headers = {
             "developerkey": self.developer_key,
@@ -80,8 +85,8 @@ class SSHConnect:
         body = {
             "deviceaddress": self.device_adress,
             "wait": "true",
-            # "hostip": host_ip
-            "hostip": None
+            "hostip": host_ip
+            # "hostip": None
         }
 
         url = "https://api.remot3.it/apv/v27/device/connect"
@@ -98,15 +103,12 @@ class SSHConnect:
             print('conn status false')
             return False
 
-        server, port = conn_resp['connection']['proxy'].split(
-            '//')[1].split(':')
+        self.conn_id = conn_resp['connectionid']
 
-        connectionid = conn_resp['connectionid']
+        return conn_resp['connection']['proxy'].split('//')[1].split(':')
 
-        return server, port, connectionid
-
-    def disconnect(self, conn_id):
-        if not self.device_adress:
+    def disconnect(self):
+        if not self.device_adress and not self.conn_id:
             print('no device to disconnect')
             return False
 
@@ -117,7 +119,7 @@ class SSHConnect:
         }
         body = {
             "deviceaddress": self.device_adress,
-            "connectionid": conn_id
+            "connectionid": self.conn_id
         }
 
         url = "https://api.remot3.it/apv/v27/device/connect/stop"
@@ -157,18 +159,72 @@ class SSHConnect:
     #     except Exception as e:
     #         print(e)
 
+    def send_email(self, email, text, file=None):
+
+        msg = MIMEText(text)
+        msg['Subject'] = 'Animal Detected'
+
+        with smtplib.SMTP('smtp.gmail.com', 587) as smtp:
+            smtp.ehlo()
+            smtp.starttls()
+            smtp.login(self.email, self.email_password)
+            smtp.sendmail(self.email, email, msg.as_string())
+
 
 def main():
 
     conn = SSHConnect()
-    conn.login(device_name='ssh-Pi')
-    ret = conn.connect()
-    if ret:
-        server, port, connectionid = ret
+    conn.send_email(email='', text='testmail')
+    exit()
 
-        conn.send(server, port, 'pi', 'hellorworld', '/home/manuel/Bachelor_Arbeit/Connection/remote_it/test.jpg',
-                  '/home/pi/Bachelor_Arbeit/Connection/remote_it/received')
-        conn.disconnect(connectionid)
+    password = 'helloworld'
+    raspi = True
+
+    if raspi:
+        user = 'pi'
+        remote_user = 'manuel'
+        remote_divice_name = 'ssh-Pc'
+    else:
+        user = 'manuel'
+        remote_user = 'pi'
+        remote_divice_name = 'ssh-Pi'
+
+    workspace_dir = os.path.join('/home', user, 'Bachelor_Arbeit')
+    local_output_dir = os.path.join(workspace_dir,
+                                    'Application_Raspberry/detected')
+    remote_output_dir = os.path.join(
+        '/home', remote_user, 'Bachelor_Arbeit', 'Application_Raspberry/detected')
+
+    test_images = os.path.join(workspace_dir, 'Dataset/handy_bilder/images')
+    assert os.path.isdir(test_images)
+    test_images = [os.path.join(test_images, test_image)
+                   for test_image in os.listdir(test_images)]
+
+    conn.login(device_name=remote_divice_name)
+
+    ret = False
+    while not ret:
+        print('try to connedt')
+        ret = conn.connect()
+        sleep(1)
+
+    server, port = ret
+
+    #print('server; ', server, 'port ', port)
+    # print('local file path', os.path.join(local_output_dir,
+    #                                      os.listdir(local_output_dir)[0]))
+    #print('remote output die', remote_output_dir)
+    #print('remote user', remote_user)
+    #print('pw ', password)
+    # exit()
+
+    for test_image in test_images:
+        if conn.send(server, port, remote_user, password, test_image, remote_output_dir):
+            print('send successfully')
+        else:
+            print('could not send')
+
+    conn.disconnect()
 
 
 if __name__ == "__main__":

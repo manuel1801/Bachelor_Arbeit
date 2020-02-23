@@ -28,14 +28,9 @@ assert os.path.isdir(kaggle_iWildCam)
 
 
 # Eigne Bilder
-handy_images = os.path.join(dataset_dir, 'handy_bilder')
+handy_images = os.path.join(dataset_dir, 'handy_bilder/images')
 assert os.path.isdir(handy_images)
 
-handy_videos = os.path.join(dataset_dir, 'handy_videos/frames')
-assert os.path.isdir(handy_videos)
-
-handy_videos = os.path.join(dataset_dir, 'handy_videos/frames')
-assert os.path.isdir(handy_videos)
 
 labels = ['Brown_bear',
           'Deer',
@@ -49,15 +44,15 @@ labels = ['Brown_bear',
 
 # select dataset by commenting out
 infer_images_list = [
-    # validation_images,
-    kaggle_iWildCam
-    # handy_images,
-    # handy_videos
+    validation_images,
+    kaggle_iWildCam,
+    handy_images
 ]
 
 # set maximum number for each dataset
 max_images = 500
-config_ind = 'faster_optimierungen'
+configs = ['ssd_vs_faster',
+           'faster_optimierungen_aug', 'faster_optimierungen_l2']
 
 # test configurationen:
 test_config = {
@@ -67,12 +62,17 @@ test_config = {
         'faster_rcnn_inception_v2_early_stopping',
         'faster_rcnn_inception_v2_early_stopping_ohne_aug'
     ],
-    'faster_optimierungen': [
+    'faster_optimierungen_aug': [
+        'faster_rcnn_inception_v2_early_stopping',
         'faster_rcnn_inception_v2_less_aug',
         'faster_rcnn_inception_v2_3000',
-        'faster_rcnn_inception_v2_l2',
-        'faster_rcnn_inception_v2_4000',
-        'faster_rcnn_inception_v2_early_stopping'
+        'faster_rcnn_inception_v2_4000'
+    ],
+    'faster_optimierungen_l2': [
+        'faster_rcnn_inception_v2_less_aug',
+        'faster_rcnn_inception_v2_less_aug_l2',
+        'faster_rcnn_inception_v2_3000',
+        'faster_rcnn_inception_v2_l2'
     ]
 }
 
@@ -105,71 +105,72 @@ for name, data in dataset_dict.items():
 
 infer_model = detection.InferenceModel()
 
+for config_ind in configs:
 
-for model in os.listdir(models_dir):
+    for model in os.listdir(models_dir):
 
-    model_dir = os.path.join(models_dir, model)
-    if not os.path.isdir(model_dir):
-        continue
+        model_dir = os.path.join(models_dir, model)
+        if not os.path.isdir(model_dir):
+            continue
 
-    if not model in test_config[config_ind]:
-        print('skipping ', model)
-        continue
+        if not model in test_config[config_ind]:
+            print('skipping ', model)
+            continue
 
-    print('starting Model:   ', model)
+        print('starting Model:   ', model)
 
-    exec_model = infer_model.create_exec_infer_model(
-        model_dir, labels, num_requests=3)
+        exec_model = infer_model.create_exec_infer_model(
+            model_dir, labels, num_requests=3)
 
-    for dataset_name, dataset_files in dataset_dict.items():
-            # for infer_images in infer_images_list:
+        for dataset_name, dataset_files in dataset_dict.items():
+                # for infer_images in infer_images_list:
 
-        if not os.path.isdir(eval_dir):
-            os.mkdir(eval_dir)
+            if not os.path.isdir(eval_dir):
+                os.mkdir(eval_dir)
 
-        infer_results = 'infer_results_' + dataset_name
+            infer_results = 'infer_results_' + dataset_name
 
-        output_dir = os.path.join(eval_dir, infer_results, model)
-        output_dir_all = os.path.join(
-            eval_dir, infer_results, config_ind)
+            output_dir = os.path.join(eval_dir, infer_results, model)
+            output_dir_all = os.path.join(
+                eval_dir, infer_results, config_ind)
 
-        print('starting Dataset: ', infer_results)
+            print('starting Dataset: ', infer_results)
 
-        if not os.path.isdir(os.path.join(eval_dir, infer_results)):
-            os.mkdir(os.path.join(eval_dir, infer_results))
+            if not os.path.isdir(os.path.join(eval_dir, infer_results)):
+                os.mkdir(os.path.join(eval_dir, infer_results))
 
-        if not os.path.isdir(output_dir):
-            os.mkdir(output_dir)
+            if not os.path.isdir(output_dir):
+                os.mkdir(output_dir)
 
-        if not os.path.isdir(output_dir_all):
-            os.mkdir(output_dir_all)
+            if not os.path.isdir(output_dir_all):
+                os.mkdir(output_dir_all)
 
-        for ind, test_image in enumerate(dataset_files):
+            for ind, test_image in enumerate(dataset_files):
 
-            # load image to infer
-            image = cv2.imread(test_image)
+                # load image to infer
+                image = cv2.imread(test_image)
 
-            # infer image
-            result = exec_model.infer_image(image, threshhold=0.7)
-            image_name = test_image.split(
-                '/')[-1][:-4] + '_' + model + '.jpg'
-            image_path = os.path.join(output_dir, image_name)
+                # infer image
+                result = exec_model.infer_image(image, threshhold=0.7)
+                image_name = test_image.split(
+                    '/')[-1][:-4] + '_' + model + '.jpg'
+                image_path = os.path.join(output_dir, image_name)
 
-            # write infered image to outputdir
-            cv2.imwrite(image_path, result)
+                # write infered image to outputdir
+                cv2.imwrite(image_path, result)
 
-            # delete existing links
-            if os.path.islink(os.path.join(
-                    output_dir_all, image_name)):
-                os.remove(os.path.join(
+                # delete existing links
+                if os.path.islink(os.path.join(
+                        output_dir_all, image_name)):
+                    os.remove(os.path.join(
+                        output_dir_all, image_name))
+
+                # create symbolik link to infered image in 'all/'
+                os.symlink(image_path, os.path.join(
                     output_dir_all, image_name))
 
-            # create symbolik link to infered image in 'all/'
-            os.symlink(image_path, os.path.join(
-                output_dir_all, image_name))
+                if max_images and ind > max_images:
+                    break
 
-            if max_images and ind > max_images:
-                break
-
-    del exec_model.exec_net
-    del exec_model
+        del exec_model.exec_net
+        del exec_model

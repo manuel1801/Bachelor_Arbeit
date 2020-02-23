@@ -3,23 +3,27 @@ import json
 import os
 import pexpect
 from time import sleep
+import smtplib
+from email.mime.text import MIMEText
 
 
 class SSHConnect:
-    def __init__(self, dev_key='NEU3RTVFNEMtNjRGRi00MzBFLUIyNTgtOUVFQjRGMjcxOTRB'):
+    def __init__(self, email='animals.detection@gmail.com', email_password='animalsdetection20', dev_key='NEU3RTVFNEMtNjRGRi00MzBFLUIyNTgtOUVFQjRGMjcxOTRB'):
         self.developer_key = dev_key
         self.token = None
         self.device_adress = None
         self.conn_id = None
+        self.email = email
+        self.email_password = email_password
         # self.public_ip = requests.get('https://api.ipify.org').text
 
-    def login(self, remote_it_user='animals.detection@gmail.com', remote_it_pw='animalsdetection', device_name='ssh-Pc', retry=5):
+    def login(self, device_name='ssh-Pc', retry=5):
         headers = {
             "developerkey": self.developer_key
         }
         body = {
-            "password": remote_it_pw,
-            "username": remote_it_user
+            "password": self.email_password,
+            "username": self.email
         }
         url = "https://api.remot3.it/apv/v27/user/login"
 
@@ -155,8 +159,23 @@ class SSHConnect:
     #     except Exception as e:
     #         print(e)
 
+    def send_email(self, email, text):
+
+        msg = MIMEText(text)
+        msg['Subject'] = 'Animal Detected'
+
+        with smtplib.SMTP('smtp.gmail.com', 587) as smtp:
+            smtp.ehlo()
+            smtp.starttls()
+            smtp.login(self.email, self.email_password)
+            smtp.sendmail(self.email, email, msg.as_string())
+
 
 def main():
+
+    conn = SSHConnect()
+    conn.send_email(email='', text='testmail')
+    exit()
 
     password = 'helloworld'
     raspi = True
@@ -181,7 +200,6 @@ def main():
     test_images = [os.path.join(test_images, test_image)
                    for test_image in os.listdir(test_images)]
 
-    conn = SSHConnect()
     conn.login(device_name=remote_divice_name)
 
     ret = False

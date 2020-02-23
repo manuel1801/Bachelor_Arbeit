@@ -22,7 +22,8 @@ buffer_size = 200    # zum zwischen speichern wenn infer langsamer stream
 threshhold = 0.7     # Für Detections
 num_requests = 3     # anzahl paralleler inferenz requests, recommended:3
 send_results = True  # falls nein wird local gespeichert)
-send_email = False   #
+# None: keine email sende, oder in send_mail zieladresse angeben.
+send_email = None
 send_all_every = 100  # wie oft alle detections senden (in sekunden, 0 für nie)
 
 # nach wie vielen detections einer klasse save and send
@@ -203,6 +204,13 @@ while True:
     # check send request status
     if not send_results or not send_request:
         continue
+
+    if send_email:
+        print('sending email')
+        msg_str = ''
+        for msg in os.listdir(local_output_dir):
+            msg_str += msg[:-4] + '\n'
+        conn.send_email(send_email, msg_str)
 
     # check login status
     if not logged_in:

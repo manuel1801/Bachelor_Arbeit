@@ -5,13 +5,13 @@
         text width=4em,
         %minimum width=4em,
         text badly centered,
-        inner sep=2pt,
+        inner sep=-1pt,
         node distance=8em
     },
     block/.style={
         rectangle,
         draw,
-        text width=7em,
+        text width=6em,
         minimum height=2.5em,
         text centered,
         rounded corners,
@@ -28,45 +28,44 @@
 \begin{tikzpicture}
 
     \node (main) {\underline{main.py}};
-    \node (detection) [right of=main, node distance=0.38\textwidth] {\underline{detection.py}};
-    \node (connection) [left of=main, node distance=0.38\textwidth] {\underline{connection.py}};
+    \node (detection) [right of=main, node distance=0.5\textwidth] {\underline{detection.py}};
+    \node (connection) [left of=main, node distance=0.25\textwidth] {\underline{connection.py}};
 
-    \node (motion) [decision, below of=main] {Motion\\Detection};
-    \node (frame) [block, left of=motion, text width=5em, node distance=0.2\textwidth] {Frame};
-    \node (buffer) [block, below of=motion] {Buffer};
-    \node (infer) [block, right of=buffer, node distance=0.38\textwidth] {Inferenz};
-    \node (threshhold) [decision, below of=infer,inner sep=1pt] {resp.p\\$>$det.p};
+    \node (frame) [block, below of=main, text width=5em] {Video\\Capture};
+    \node (motion) [decision, below of=frame] {has\\Motion};
+    \node (buffer) [block, right of=motion, node distance=0.25\textwidth] {Buffer};
+    \node (infer) [block, right of=buffer, node distance=0.25\textwidth] {Inferenz};
+    \node (threshhold) [decision, below of=infer] {resp.p\\$>$det.p};
     \node (detframes) [block, below of=threshhold] {cls, p, N, Roi};
-    \node (ndet) [decision, below of=detframes, inner sep=1pt] {N\\$>$10};
-    \node (save) [block, below of=ndet] {save frame};
-    \node (saved) [decision, left of=ndet, node distance=0.38\textwidth] {saved};
-    \node (connected) [decision, left of=saved, node distance=0.38\textwidth] {connected};
-    \node (connect) [block, above of=connected] {connect};
-    \node (send) [block, below of=connected] {send};
-    \node (false) [left of=connected, node distance=0.15\textwidth] {false};
+    \node (nodet) [decision, below of=buffer] {no det\\$>$ 20};
+    \node (ndet) [decision, below of=detframes] {N\\$>$10};
+    \node (save) [block, left of=ndet] {save frame};
+    \node (connected) [decision, left of=save, node distance=0.25\textwidth, inner sep=1pt] {connected};
+
+    \node (connect) [block, left of=connected, node distance=0.25\textwidth] {connect};
+
+    \node (send) [block, above of=connect] {send};
+
+
+    % \node (false) [left of=connected, node distance=0.15\textwidth] {false};
 
     
-    \draw[arrow] (frame) -- (motion);
-    \draw[arrow] (motion) -- (buffer);
+    \draw[arrow] (frame) -- node [fill=white] {Frame} (motion);
+    \draw[arrow] (motion) -- node [above] {true} (buffer);
     \draw[arrow] (buffer) -- (infer);
     \draw[arrow] (infer) -- (threshhold);
-    \draw[arrow] (threshhold) -- (detframes);
+    \draw[arrow] (threshhold) -- node [fill=white] {true} (detframes);
+    \draw[arrow] (threshhold) -- node [above] {false} (nodet);
+    \draw[arrow] (nodet) -| node [near start, above] {reset} (motion);
+    \draw[arrow] (save) -- node [above] {sendReq} (connected);
+    \draw[arrow] (connected) -- node [above] {false} (connect);
+    \draw[arrow] (connected) |- node [near start, fill=white] {true} (send);
+    \draw[arrow] (connect) -- (send);
+    \draw[arrow] (send)|- (frame);
+
     \draw[arrow] (detframes) -- (ndet);
     \draw[arrow] (ndet) -- (save);
-    \draw[arrow] (save) -| (saved);
-    \draw[arrow] (saved) -- (connected);
-    \draw[arrow] (connect) -- (connected);
-    \draw[>=latex] (connected) -- (false);
-    \draw[arrow] (false) |- (connect);
 
-    %\draw[arrow] (connected.west) -| node[x=-0.5\textwidth] {false} (connect.west);
-    \draw[arrow] (connected) -- (send);
-    
-    
-
-    
-    
-    
 
 
     %\node (connected) [decision, left of=saved, node distance=0.4\textwidth] {Connec\\ed};
@@ -79,3 +78,4 @@
     % \draw[arrow] (B) -| node [near start, fill=white] {yes} (C);
 
 \end{tikzpicture}
+

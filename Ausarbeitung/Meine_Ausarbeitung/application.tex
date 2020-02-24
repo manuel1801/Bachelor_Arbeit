@@ -109,10 +109,104 @@ Folgendes Diagramm zeigt schmematsch den groben Ablauf davon.
 
 \vspace{1cm}
 
-\centering
-\input{Bilder/flow_chart_appl.tex}
 
-\newpage
+\begin{center}
+\input{Bilder/flow_chart_appl.tex}
+\end{center}
+
+\subsection{Inferenz}
+
+\subsubsection{Motion}
+
+Die Bewegungserkennung wurde mithilfe der Library OpenCV implementiert, indem
+zu beginn ein Frame als Refernz abgespeichert wurde.
+Mit diesem konnten dann alle weiteren Input frames vergleichen werden 
+indem der Abstand der einzelnen Pixel werte berechnet und gemittelt wird.
+Beträgt dieser mehr als ein bestimmter threshhold wird das als Bewegung 
+gewertet.
+
+\subsubsection{Inferenz}
+
+Die in Abschnitt \ref{sec:infertime} beschriebene asynchrone 
+Inferenz wurde dahingehend abgeändert, dass nun theoretsch belibieg file 
+Requests verwendete werden können und für den wait Befehl der 
+Timeout auf 0ms gesetzt wurde und so der Ablauf nicht mehr Blockierend 
+ist. Dadurch kann die Inferenz unabhängig von der Frequenz der 
+von der Kamera erhaltenen Bilder ablaufen.
+Auf eine richtige zuordnung der Inferenz ergebnisse zu dem 
+jeweiligen verwendeten Frame war zu achten.
+
+
+\begin{algorithm}[H]
+    \caption{Asynchrone Inferenz, ohne Blockierung}
+    \begin{algorithmic}
+    \WHILE{\TRUE}
+    \STATE capture FRAMES
+        \FOR{ReqNr in all InferRequests}
+            \STATE status \textbf{wait} for ReqNr
+            \IF {status == 0}
+                \STATE res = ReqNr.output
+            \ENDIF
+            
+            \IF {Buffer != 0}
+                \STATE preprocess ReqNr
+                \STATE \textbf{statr} ReqNr
+            \ENDIF
+
+            \IF{res != NULL}
+                \STATE process result
+            \ENDIF
+        \ENDFOR
+    \ENDWHILE
+    \end{algorithmic}
+\end{algorithm}    
+
+
+
+\subsection{Conncection/Verbindung}
+
+
+Um eine Verbindung zwischen Raspberry Pi und Pc herzustellen, 
+die unabhängig davon ob sich die geräte im selben 
+Netzwerk befinden funktioniert, wurde eine Cloud Proxy Verbindung 
+implementerit.
+
+Dafür wurde der Dienst \textit{remot3.it} \cite{remoteit} verwendet, 
+mit dem es möglich ist ohne Konfiguration des Routers eine
+Netzwerkübergreifende Remote Verbindung zum Raspberry Pi herzustellen.
+
+Da die Daten vom Raspberry aus automatisch gesendet werden sollen, 
+wurde der Pc als Remote Gerät implementerit un auf dem Raspberry 
+eine SSH Verbindung zum Pc hergestellt.
+
+
+\begin{figure}[H]
+    \centering
+    \def\svgwidth{0.7\textwidth}
+    \input{Bilder/diagram-connect.pdf_tex}
+    \caption{}
+    \label{}
+\end{figure}
+
+
+Dafür bot remot3.it eine API die es ermöglicht über Get und Post Requests
+den Verbindung auf und Abbau zu automatisieren.
+
+Gesendet wurden die Daten dann per SCP Command (Secure Copy Protocol), 
+welches die aufgaebaute SSH Verbiindung verwendet.
+
+
+
+
+
+
+
+
+
+
+
+
+
 % \input{Bilder/class_diagramm/class_diagramm.latex}
 
 % \begin{minipage}{0.3\textwidth}
@@ -136,21 +230,6 @@ Folgendes Diagramm zeigt schmematsch den groben Ablauf davon.
 
 
 
-
-
-
-
-\subsection*{Inferenz}
-
-
-Um nicht durchgehend die Input Frames welche die Kamera liefert inferieren zu 
-müssen, wurde mithilfe der Library OpenCV ein bewegungserkennung 
-implementiert. Diese speichert bei start der Anwendung ein Frame 
-als Refernz ab, und kann damit alle weiteren Input frames vergleiche, 
-indem der Abstand der einzelnen Pixel werte berechnet und gemittelt wird.
-
-Der Ablauf der reinen Asynchronen Inferenz ist grob in 
-folgendem Pseudocode dargestellt. 
 
 
 %Asynchrone inferenz
@@ -225,45 +304,49 @@ folgendem Pseudocode dargestellt.
 %     \end{algorithmic}
 % \end{algorithm}
 
-\begin{center}
-    \rule{0.8\textwidth}{0.4pt}
-    \begin{lstlisting}[language=Python]
-        def infer_frames(Buffer, threshhold):
-            for idx, inferRequest in all inferRequests:
-                status = inferRequest.wait(0) # nicht blockierend
-                if status not ready:
-                    continue
+
+
+% \newpage
+
+% \begin{center}
+%     \rule{0.8\textwidth}{0.4pt}
+%     \begin{lstlisting}[language=Python]
+%         def infer_frames(Buffer, threshhold):
+%             for idx, inferRequest in all inferRequests:
+%                 status = inferRequest.wait(0) # nicht blockierend
+%                 if status not ready:
+%                     continue
                 
-                if idx in currentFrames:
-                    results = inferRequest.output
-                    frame = currentFrames[idx]
+%                 if idx in currentFrames:
+%                     results = inferRequest.output
+%                     frame = currentFrames[idx]
 
-                if Buffer not empty:
-                    currentFrames[idx] = Buffer.pop()
-                    infer_frame = preprocess(currentFrames[idx])
-                    inferRequest.async_infer(infer_frame)
+%                 if Buffer not empty:
+%                     currentFrames[idx] = Buffer.pop()
+%                     infer_frame = preprocess(currentFrames[idx])
+%                     inferRequest.async_infer(infer_frame)
 
-                if results or frame is None:
-                    continue
+%                 if results or frame is None:
+%                     continue
 
-                for obj in all results:
-                    Class, Roi, Proba <- obj
-                    if Proba < threshhold:
-                        continue
+%                 for obj in all results:
+%                     Class, Roi, Proba <- obj
+%                     if Proba < threshhold:
+%                         continue
                     
-                    coords <- Roi, frame.shape
+%                     coords <- Roi, frame.shape
 
-                    infered_frame = draw_rect(frame, coords)
+%                     infered_frame = draw_rect(frame, coords)
 
-                    if proba > detectedObjects.proba
-                        replace detectedObjects
+%                     if proba > detectedObjects.proba
+%                         replace detectedObjects
 
-                    if number of detections > x:
-                        send(frame)
+%                     if number of detections > x:
+%                         send(frame)
                     
-    \end{lstlisting}
-    \rule{0.8\textwidth}{0.4pt}        
-\end{center}
+%     \end{lstlisting}
+%     \rule{0.8\textwidth}{0.4pt}        
+% \end{center}
 
 
 % \centering\rule{0.6\textwidth}{0.4pt}
@@ -282,63 +365,37 @@ folgendem Pseudocode dargestellt.
 
 
 
-% inferenz
-\begin{algorithm}[H]
-    \caption{Asynchrone Inferenz}
-    \begin{algorithmic}
-    \WHILE{\TRUE}
-        \STATE capture Frame
-        \IF{Frame has Motion}
-            \STATE Buffer $\leftarrow$ Frame
-        \ENDIF
-        \FOR{$reqId$ = 0 to $reqMax$}
-            \IF {Model.reqests[$reqId$].wait(0)}
-                \STATE result = Model.reqests[$reqId$].output
-                \STATE inferedFrames $\leftarrow$ (result, currentFrames[$reqId$])
-                \IF {Buffer not empty}
-                    \STATE currentFrames[$reqId$] $\leftarrow$ Buffer 
-                    \STATE inFrame = preprocess: currentFrames[$reqId$]
-                    \STATE Model.inferAsync($reqId$, inFrame)
-                \ENDIF
-            \ENDIF
-        \ENDFOR
-        \RETURN inferedFrames
-    \ENDWHILE
-    \end{algorithmic}
-\end{algorithm}
+% % inferenz
+% \begin{algorithm}[H]
+%     \caption{Asynchrone Inferenz}
+%     \begin{algorithmic}
+%     \WHILE{\TRUE}
+%         \STATE capture Frame
+%         \IF{Frame has Motion}
+%             \STATE Buffer $\leftarrow$ Frame
+%         \ENDIF
+%         \FOR{$reqId$ = 0 to $reqMax$}
+%             \IF {Model.reqests[$reqId$].wait(0)}
+%                 \STATE result = Model.reqests[$reqId$].output
+%                 \STATE inferedFrames $\leftarrow$ (result, currentFrames[$reqId$])
+%                 \IF {Buffer not empty}
+%                     \STATE currentFrames[$reqId$] $\leftarrow$ Buffer 
+%                     \STATE inFrame = preprocess: currentFrames[$reqId$]
+%                     \STATE Model.inferAsync($reqId$, inFrame)
+%                 \ENDIF
+%             \ENDIF
+%         \ENDFOR
+%         \RETURN inferedFrames
+%     \ENDWHILE
+%     \end{algorithmic}
+% \end{algorithm}
 
-wobei die wait Funktion mit Timeout = 0 nicht blockierend ist.
+% wobei die wait Funktion mit Timeout = 0 nicht blockierend ist.
 
-Dadurch war es möglich trotz langsamerer inferenz zeit als 
-capture zeit, durch zwischenspeichern alle frames zu inferieren, 
-unter der Annahme, das nur zeitweise bewegung erkannt und damit 
-inferiert werden muss.
+% Dadurch war es möglich trotz langsamerer inferenz zeit als 
+% capture zeit, durch zwischenspeichern alle frames zu inferieren, 
+% unter der Annahme, das nur zeitweise bewegung erkannt und damit 
+% inferiert werden muss.
 
 
-
-\subsection*{Connection}
-
-\begin{itemize}
-    \item remote Proxy verbinung über SSH
-    \item mit SCP Protokol send
-\end{itemize}
-
-\newpage
-\subsection{all}
-
-\input{Bilder/flow_chart_appl.tex}
-
-\newpage
-
-%\input{Bilder/sy_asy_infer.tex}
-
-\begin{figure}[H]
-    \centering
-    \def\svgwidth{0.8\textwidth}
-    \input{Bilder/sy_asy_infer.pdf_tex}
-    \caption{}
-    \label{}
-\end{figure}
-
-\vspace{2cm}
 

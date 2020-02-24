@@ -201,24 +201,6 @@ davon bestehend aus einem Array mit den Indices:
     \item $y_{max}$ Box Koordinate
 \end{enumerate}
 
-
-\subsubsection{Asynchrone Inferenz}
-
-
-Um die Ausführungzeit der Inferenz zu verringern, können, 
-je nach Hardware Optimierungen wie Asynchtone Inferenz, 
-Inferenz requests auf mehreren Threads, oder Batching des 
-Inputs vorgenommen werden.
-
-\begin{figure}[htb]
-    \centering
-    \def\svgwidth{0.7\textwidth}
-    \input{Bilder/synch_asynch.pdf_tex}
-    \caption{Asynchron und mehrerere Inferenz Requests}
-    \label{fig:async}
-\end{figure}
-
-In Abbildung \ref{fig:async} dargestellt die Asynchrone ausführung 
-zwischen dem aufbereiten der Frames und der Inferenz, sowie 
-mehrere parallel ausgeführte Inferenz Requests.
+Die koordinaten können dann zur veranschaulichung wieder 
+in das Ausgangsbild gezeichnet werden.
 

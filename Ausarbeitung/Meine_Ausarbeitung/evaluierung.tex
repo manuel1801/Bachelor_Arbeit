@@ -20,7 +20,7 @@ verglichen, dieses mal hinsichtlich der Inferenzzeit.
 \subsection*{Mean Average Precision (mAP)}
 
 Zur Messung der Genauigkeit der Object Detection Modelle 
-wurde die \textit{Mean Average Precision (mAP)} herangezogen.
+wurde die \textit{Mean Average Precision (mAP)} verwendet.
 
 Diese bezieht sowohl Klassifizierungs- als auch Lokalisierungsgenauigkeit 
 mit ein und lässt sich den Folgenden Werten errechnen.
@@ -148,37 +148,26 @@ Annäherung der Bounding Boxes and die richtigen Koordinaten.\\
 
 Dieser Abschnitt beschreibt, wie die beiden für das Training 
 verwendeten Object Detection Architekturen Single Shot Detector (SSD)
-und Faster R-CNN mit verschiedenen 
-CNNs und Datensatz aufbereitungen miteinander verglichen und 
+und Faster R-CNN mit verschiedenen basis
+CNNs und Datensatzaufbereitungen miteinander verglichen und 
 ausgewertet wurden.
 
 
 \subsection{Evaluierung/Validierung}
 
-Folgen dargestellte Ergebnisse beziehen sich auf 
-das Validierungsset des für das Training verwendeten 
+Die im Folgenden dargestellte Ergebnisse beziehen sich auf 
+das Validierungsanteil des für das Training verwendeten 
 OpenImages Datensatzes.
 
 Die berechnung anhand der in \ref{sec:metricen} erläuterten 
 Metriken konnte dabei mithilfe Tensorflow durchgeführt 
-und schon während des Trainings mit in dem Evaluierungs-Tool 
+und während des Trainings mit in dem Evaluierungs-Tool 
 Tensorboard visualisiert werden werden.
 
-Bei den für das Training verwendeten Modellen handelt es sich zum einen 
-um das SSD, für welches einmal das MobilenetV2 und einmals das InceptionV2
-als Basis CNN verwendet wurden und zum anderen um das Faster R-CNN mit 
-InceptionV2 als Basis CNN.
-
-
-Diese wurden jeweils sowohl auf den augmentierten als auch auf 
-den origanalen Datensatz trainiert. Eine Gegenüberstellung der 
-Ergebnisse ist in Tabelle \ref{table:model_vgl} dargestellt.
-
-
-% Tabelle \ref{table:model_vgl} zeigt die Trainingsergebnisse 
-% der Loss und mAP Werte der Trainierten Modelle, welche aus SSD mit
-% einmal MobilenetV2 und einmal InceptionV2 als Basis CNN sowie 
-% Faster R-CNN nur mit InceptionV2 Ergebnisse 
+Der Single Shot Detector wurde mit den Basis CNNs MobilenetV2 und
+InceptionV2 trainiert, das Faster R-CNN nur mit dem InceptionV2.
+Dabei wurden jeweils einmal der augmentierte une einmal 
+der originale Datensatz verwendet.
 
 
 % SSD wurd mit Batchsize=12 75k durchläufe trainiert.\\
@@ -198,57 +187,59 @@ Ergebnisse ist in Tabelle \ref{table:model_vgl} dargestellt.
 \end{table}
 \vspace{0.5cm}
 
-All Modell weisen eine Verbesserung des Loss Wertes durch 
-Augmentierung der Daten auf.
-Bei den Konfigurationen mit SSD führte die Augmentierung jedoch auch 
-zu einer verringerung des mAPs, was auf die geringere Komplexität 
-und damit weniger Möglichkeiten sich an die Augmentierten Daten 
-Anzupassen zurückzuführen ist.
-Die höhere Komplexeität des Fster R-CNN bring auf der 
-anderen Seite auch eine höhere Wahrscheinlich keit zum 
-Ovefitting mit.
+Anhand der in Tabelle \ref{table:model_vgl} dargestellten 
+Ergebnisse ist zu erkennen, das sich mit der zweistufigen 
+Model Architekur des Faster R-CNN bessere Ergebnisse als mit 
+dem einstufigen SSD erzielen ließen. Dieser war besonders 
+deutich anhand der Loss Werte festzustellen.
 
- 
-Daher ist hier die Auswirkung der Augmentierung am 
-effekitvsten, was anhand der Trainingsverläufer 
-der mAP und Loss kurven dargestellt in Abb 
-\ref{plot:mAP} und \ref{plot:loss} zu 
-erkennen ist.
+Desweiteren werden unter den SSD Konfigurationen mit dem InceptionV2 
+als Basis CNN bessere Ergebnisse als mit dem weniger komplexen 
+MobilenetV2 erreicht.
 
-Die Loss Kurve nimmt bei den nicht augmentierten Datensatz ab 
-ca 100000 Schritten wieder zu, was ein hinweis dafür ist, 
-das Overfitting stattgefunden hat.
+Bei allen Modellen war durch die Augmentierung eine Verbesserung 
+des Loss Wertes festzustellen.
 
-Durch die Augmentierung der Daten konnte der Loss Wert 
-auf dem erreichten Niveau gehalten werden.
+Bei den Varianten mit der SSD Architektur führt die Augmentierung
+jedoch auch zu einer verringerung der mean Average Pricision (mAP), 
+was auf die weniger komplexe Model Strukur zurückzuführen sein. Kann.
 
-Als weitere Strategie zur vermeiden von Overfittung wurde 
-hier auch Early Stopping angewendet, dabei wird das Training
-bevor der Loss Wert anfängt wieder anzusteigen unterbrochen.
+Je mehr Parameter einem Model zu verfügung stehen, desto besser kann 
+es sich an die trainingsdaten anpassen, desto eher findet jedoch
+auch eine Überanpassung (Overfitting) statt, was hier bei dem 
+komplexeren Faster R-CNN Modell zu beobachten ist.
 
-Anhand der Losskurven kann man erkennen das sich dadurch 
-die gleichen Werte wie durch Augmentierung erreichen lassen.
+Der Plot in Abbildung \ref{plot:loss} zeigt den Trainingsverlauf 
+der Faster R-CNN Trainingskonfigurationen anhand der Losskurve.
 
-Jedoch zeigt sich auch anhand der mAP Kurve, dass 
-durch das frühzeitige Stoppen der mAP Wert nicht die 
-Chnace hat seinen Endwert zu erreichen und somit 
-unterhalb des mAP Werts bei Augmentierten Daten bleibt.
+Für das Training mit dem Original Datensatz nimmt diese ab ca.
+100k Iterationen wieder zu, wohingegen der Loss beim Training 
+mit augmentierten Datensatz den Wert relativ beibehalten 
+kann.
 
+Early Stopping war, beim Faster R-CNN Modell, ein weiter Ansatz 
+Overfitting zu vermeiden. Dabei wird, bevor der Loss Wert anfängt
+sich wieder zu verschlechtern, das Training abgebrochen.
+
+Anhand der Losskurve \ref{plot:loss} ist zu erkennen, dass sich
+dadurch die gleichen Werte wie durch Augmentierung erreichen ließ.
+Auf der anderen Seite kann der mAP Wert, wie in Abblidung \ref{plot:mAP}
+zu erkennen ist durch das frühzeitige Stoppen seinen Endwert nicht 
+erreichen.
 
 \vspace{0.5cm}
-
 \begin{figure}[H]
 \begin{minipage}{0.5\textwidth}
   \centering
   \label{plot:mAP}
-  \def\svgwidth{0.9\textwidth}
+  \def\svgwidth{0.95\textwidth}
   \input{Bilder/plots/overfitting_kein_early_aug_mAP.pdf_tex}
   \captionof{figure}{mAP}
 \end{minipage}
 \begin{minipage}{0.5\textwidth}
   \centering
   \label{plot:Loss}
-  \def\svgwidth{0.9\textwidth}
+  \def\svgwidth{0.95\textwidth}
   \input{Bilder/plots/overfitting_kein_early_aug_loss.pdf_tex}
   \captionof{figure}{Loss}
 \end{minipage}
@@ -267,123 +258,179 @@ unterhalb des mAP Werts bei Augmentierten Daten bleibt.
 % blue  : 0077BB
 % red   : CC3311
 
+Daraus lässt sich schließen, dass Augmentierung das 
+bessere Verfahren gegen Overfitting ist. Um herauszufinden 
+ob sich die Vermutung bestätigen lässt und wie sehr sich 
+die Unterschiedlichen Ergebnisse zwischen SSD und 
+Faster R-CNN in der Praktischen Anwendung bemerkbar 
+machen wurde die Inferenz der Trainierten Modelle auf 
+verschiedene Biler testweise ausgeführt.
+
+
+
 
 %----------------- SECTION: Test Inferenz ---------------------
 \subsection{Test Inferenz}\label{sec:test_inferenz}
 
-Um eine bessere Vorstellung davon zu bekommen wie sich die 
-unterschiedlichen Ergebnisse in mAP und Loss in der Anwendung 
-tatsächlich bemerkbar machen, wurde die Inferenz der drei modelle 
-für verschiedene Test Bilder durchgeführt.
+Um die Inferenz testweise für verschiedene Bilder ausführen zu 
+können wurden die trainierten Modelle wie in \ref{sec:inferenz}
+beschrieben zunächst mithilfe des Model Optimizers in die 
+\textit{Intermediat Representation (IR)} und anschlieoßen 
+mit der Inferenz Engine in einem Python Script zur 
+inferenz auf den NCS2 geladen.
 
-Dafür wurden die Modelle in die für OpenVino benötigte Intermediate
-Representation umgewandelt um dann mihilfe eines Python 
-Scripts in die InferenceEngine geladen zu werden.
+Mithilfe des Scripts wurde dann die Inferenz für die 
+verschiedenen Model- und Datensatzkonfigurationen
+zunächst auf den Testanteil des für das Trainng verwendeten 
+OpenImages Datensatzes ausgeführt.
+Da dieser sehr recht ähnlich zum Trainingsdatensatz ist 
+wurden, um die Robustheit der Modelle gegenüber anderen 
+Daten testen zu können, die Inferenz zum einen auf selbst
+aufgenommene Bilder und zum anderen auf einen neuen Datensatz,
+dem \textit{iWildCam 2019 Dataset} \cite{beery2019iwildcam}
+ausgeführt. Dabei wurden nur die auf augmentierte Daten trainierten 
+Modelle berücksichtigt. 
 
-Mithilfe dieses Scripts konnten nun die Inferenz für 
-folgende Testszenarien:
-
-\begin{itemize}
-  \item inferenz auf Test Set \textit{OpeImages}
-  \item inferenz auf \textit{The iWildCam 2019 Dataset}\cite{beery2019iwildcam}
-  \item inferenz auf eigene Bilder
-\end{itemize}
 
 
-\subsubsection{Test Set (OpenImages)}
-Sowohl SSD als auch Faster R-CNN erkennen das meiste, da gr 
-ähnlichkeit zu Trainingssatz.
 
-Wenn jedoch mehrere Tiere im Bild sind, diese weiter weg oder schlechtere
-Bildqualität, erkennt Faster R-CNN besser. Abb \ref{fig:faster_rcnn}
-\\[1cm]
+\subsubsection{OpenImages Test Set}
+
+Die Inferenzergebnisse des OpenImages Test Sets 
+ergaben, das in den meisten Fällen sowohl das SSD
+als auch das Faster R-CNN die Tiere in den Bildern 
+richtig erkannten.
+
+Waren die Tiere jedoch sehr weit weg, mehrere gleichzeitig im Bild 
+oder mit schlechter Qualität abgebildet,
+vielen die Ergebnisse beim Faster R-CNN besser aus, wie in 
+den Abbilungen \ref{fig:infer_res_ssd} und \ref{fig:infer_res_faster_rcnn}
+zu erkennen ist.
+Der Unterschied zwischen MobilenetV2 und InceptionV2 beim SSD 
+sowie zwischen Early Stopping und Augmentierung beim Faster R-CNN 
+war hier eher gering, weshalb diese hier nicht extra abgebildet 
+wurden.
+
+\vspace{1cm}
+
+
 \begin{minipage}{0.5\textwidth}
   \centering
   \includegraphics[width=0.9\textwidth]{model_compare_test__ssd_inception_v2.jpg}
   \captionof{figure}{SSD}
-  \label{fig:ssd}
+  \label{fig:infer_res_ssd}
 \end{minipage}
 \begin{minipage}{0.5\textwidth}
   \centering
   \includegraphics[width=0.9\textwidth]{model_compare_test__faster_rcnn_inception_v2_early_stopping.jpg}
   \captionof{figure}{Faster R-CNN}
-  \label{fig:faster_rcnn}
+  \label{fig:infer_res_faster_rcnn}
 \end{minipage}
 
 
 \subsubsection{Eigene Aufnahmen}
 
+Die eigenen aufgenommenen Bilder enthielten im 
+gegensatz zum OpenImages nur Reh Bilder, weshalb 
+hier nur die eine Klasse getestet werden konnte.
+
+Hier war ein deutlicher Unterschied der Modell festzustellen, 
+in aufsteigender Reihenfolge lieferten SSD + MobilenetV2,
+SSD + InceptionV2, Faster R-CNN mit 
+Early Stopping und Faster R-CNN mit Augmentierten Daten
+wie in den Abbildungen \ref{fig:infer_res_ssd_mobile}
+bis \ref{fig:infer_rest_rcnn_aug} festzustellen ist, 
+bessere Ergebnisse.
+
+
+\vspace{1cm}
 \begin{minipage}{0.5\textwidth}
   \centering
   \includegraphics[width=0.9\textwidth]{model_compare_handy_ssd_mobilenet_v2.jpg}
   \captionof{figure}{SSD Mobilnet}
-  \label{}
+  \label{fig:infer_res_ssd_mobile}
 \end{minipage}
 \begin{minipage}{0.5\textwidth}
   \centering
   \includegraphics[width=0.9\textwidth]{model_compare_handy_ssd_inception_v2.jpg}
   \captionof{figure}{SSD Inception}
-  \label{}
+  \label{fig:infer_res_ssd_inception}
 \end{minipage}
 \\[1cm]
 \begin{minipage}{0.5\textwidth}
   \centering
   \includegraphics[width=0.9\textwidth]{model_compare_handy_faster_rcnn_inception_v2_early_stopping_ohne_aug.jpg}
   \captionof{figure}{Faster R-CNN + Early Stopping}
-  \label{}
+  \label{fig:infer_res_rcnn_early_stopping}
 \end{minipage}
 \begin{minipage}{0.5\textwidth}
   \centering
   \includegraphics[width=0.9\textwidth]{model_compare_handy_faster_rcnn_inception_v2_early_stopping.jpg}
   \captionof{figure}{Faster R-CNN + Aug}
-  \label{}
+  \label{fig:infer_rest_rcnn_aug}
 \end{minipage}
+\vspace{1cm}
+
+Auch hier fällt auf das besonders bei Tieren auf 
+kleineren Skalen die Faster R-CNN Architekturen
+bessere Ergebnisse liefern konnten.
+
 
 
 \subsubsection{iWildCam}
 
-Aufnahmen von ... enthällt viele schlecht beleuchtete nacht Aufnahmen 
-mit Infrarot Kamera, also ähnlich dem gewünschten Anwendungsfall.
-Auch hier erkennt das Faster R-CNN am beste, jedoch 
-schneiden hier alle schlecht ab.
+Aus der von Kaggle veröffentlichten \textit{iWildCam 2019 Competition}
+wurden die Klassen, welche sich mit für das Training verwendeten  
+überschnitten, heruntergeladen und testweise inferiert.
 
-Daher wurde, wie im nächsten Abschnitt beschrieben, versuch
-das Faster R-CNN noch weiter zu optimieren.
+Die Bilder stellen dabei aufnahmen von Wildtier Kameras aus 
+dem Süd- und Nordwesten Amerikas dar, welche aus 
+der iNaturalist Datenbank und von Microsoft DatAirSim stammen.
+\cite{beery2019iwildcam}.
+
+Darunter enthalten waren viele Nachtaufnahmen, welche wenig 
+beleuchtet und mit Infraro Kameras aufgenommen und in Graustufen 
+dargestellt waren.
+
+
+Da die Ergebnisse bei allen vier Modellen deutlich schlechter
+als bei dem Openimages Datensatz und den eigenen Bildern waren, 
+wurde, versucht diese durch weitere Optimierungen zu verbessern.
+
 
 
 %----------------- SECTION: optimierung ---------------------
 \section{Optimierungen: Faster R-CNN}\label{sec:optimierung_faster_rcnn}
 
-
-Als Ausgangslage zur verbesserung der Ergebnisse diente 
-nun das Faster R-CNN mit augmentiertem Datensatz, welches 
+Als Ausgangslage zur Verbesserung der Ergebnisse, diente 
+nun das Faster R-CNN mit, augmentiertem Datensatz, welches 
 im vorherigen Abschnitt die besten Resultate erzielte.
 
-Auch hier werden zunächst die Ergebnisse zunächst wieder 
-anhand der Eval Metriken für den Validierungsdatensatz mithilfe Tensorboard 
-dargestellt und anschließend mit Testdatensatz sowie weitere testinferez 
-durchgeführt.
+Zunächst werden auch in diesem Abschnitt die Ergebnisse der 
+anhand der Evaluierungsmetriken und Trainingsverläufen 
+der Tensorboard Visualisierungen aufgeführt und anschließend
+anhand testweise ausgeführter Inferenzen weiter verglichen.
 
 
 
 
 \subsection{Verschiedene Augmentierungen}
 
-Der erste Anstz war es dieses mit variierendem Augmentierungsgrad 
-für insgesamt mehr Trainingsdurchläufe (500 statt 200) zu 
-trainieren.
+Der erste Ansatz war, das Faster R-CNN mit 
+variierendem Augmentierungsgrad der Daten für insgesamt
+mehr Iterationen (500k statt 200k) zu trainieren 
 
-Im vorherigen Abschnitt wurde für die Augmentierung der 
-Daten je Bild zufällig aus einer auswahl eine geometrische und eine 
-Pixelbezogene augmentierungstechnik angewendet, sodass für jede Klass 
-3000 Samples genriert wurden.
+Dabei wurde wieder das im Abschnitt \ref{subsec:augmentation} 
+erläuterte Augmentierungsverfahren angewendetet, mit den variationen
+\begin{enumerate}
+  \item nur eine (zufällige) Augmentierung pro Bild, anstatt zwei
+  \item 4000 Bilder pro Klasse anstatt 3000 generieren
+\end{enumerate}
 
-Als vairation wurde hier nun einmal die gleiche Augmentierungsstrategie 
-für 4000 samples und einmal nur einer Augmentierung pro Bild für 
-3000 Samples angewendet.
+Die Trainingsergebnisse für 500k Iterationen sind anhand der 
+Trainingsverläufe von Loss und mAP in den Plots
+\ref{plot:map_diff_aug} und \ref{plot:loss_diff_aug} dargestellt.
 
-Die Trainingskurven aus Tensorboard sind für mAP und Loss sind in den
-Plots \ref{plot:map_diff_aug} und \ref{plot:loss_diff_aug} dargestellt.
 \vspace{1cm}
 
 \begin{minipage}{0.5\textwidth}
@@ -402,6 +449,9 @@ Plots \ref{plot:map_diff_aug} und \ref{plot:loss_diff_aug} dargestellt.
 \end{minipage}
 
 % Legende
+% orange: FF7043
+% blue  : 0077BB
+% red   : CC3311
 \begin{table}[htb]
   \centering
   \begin{tabular}{m{0.1\textwidth}<{\centering}m{0.2\textwidth}<{\centering}m{0.2\textwidth}<{\centering}}
@@ -409,44 +459,86 @@ Plots \ref{plot:map_diff_aug} und \ref{plot:loss_diff_aug} dargestellt.
   \end{tabular}    
 \end{table}
 
-Es ist zu erkennen, das sich durch stärkere augmentierung der Trainingsdaten
-der Loss reduzieren lässt, dadurch jedoch auch der mAP abnimmt.
+Aufgrund des länger durchgeführten Trainings ist bei allen Konfigureationen
+im, gegensatz zu den Ergebnissen des vorherigen Abschnitts, Overfitting 
+zu erkennen.
 
-% colors
-% orange: FF7043
-% blue  : 0077BB
-% red   : CC3311
+Dieses fällt, wie man es auch erwarten würde, bei den weniger  
+augmentierten Datensätzen stärker aus. 
+Auf der anderen Seite kann dabei das einen besseren mAP erreichen.
+
+Was sich positiver auf des Inferenzergebnis auswirkt 
+soll auch hier wieder die Testinferenz, ausgeführt 
+auf den iWildCam Datensatz veranschaulicht zeigen.
+
+
+\vspace{1cm}
+\begin{minipage}{0.333\textwidth}
+  \centering
+  \label{fig:infer_res_3000}
+  \includegraphics[width=\textwidth]{infer_images/iWildCam/fox/cut/59df5ee1-23d2-11e8-a6a3-ec086b02610b_faster_rcnn_inception_v2_3000.jpg}
+  \captionof{figure}{3000 Samples}
+\end{minipage}
+\begin{minipage}{0.333\textwidth}
+  \centering
+  \label{fig:infer_res_4000}
+  \includegraphics[width=\textwidth]{iWildCam/fox/cut/59df5ee1-23d2-11e8-a6a3-ec086b02610b_faster_rcnn_inception_v2_4000.jpg}
+  \captionof{figure}{4000 Samples}
+\end{minipage}
+\begin{minipage}{0.333\textwidth}
+  \centering
+  \label{fig:infer_rest_05}
+  \includegraphics[width=\textwidth]{iWildCam/fox/cut/59df5ee1-23d2-11e8-a6a3-ec086b02610b_faster_rcnn_inception_v2_less_aug.jpg}
+  \captionof{figure}{50\% Augment}
+\end{minipage}
+\vspace{1cm}
+
+Abbildung \ref{fig:infer_res_3000} bis \ref{fig:infer_rest_05}
+zeigen beispielhaft die Inferenz ergebnisse.
+Weniger stark augmentierte Daten haben bei dem zum original 
+Datensetz recht verschiedenen iWildCam Datensatz den effekt, 
+das die Tiere schlechter bis gar nicht mehr erkannt wurden gehabt.
 
 
 
-\subsection{weitere Regularisierungen}
+\subsection{Verschiedene Regularisierungen}
 
 Um das trotz Augmentierung zu stande kommende Overfitting zu 
 vermeiden, wurden nun zusätzlich die L2 Regularisierung angewendet.
 Diese soll wie in den Grundlagen (\ref{subsec:validation}) beschrieben, 
 durch anfügen der aufsummierten Geweichte an die Loss Funktion, 
-die Überanpassugne eindämmen.
+die Überanpassugne reduzieren.
 
-In der Konfigurationsdatei des Fater R-CNN kann dies durch setzten des 
-bestimmten Parameters für sowohl die erste Stufe, das RPN (Region Proposal Network)
-als auch für die 2. Stufe, das Klassifizierungsnetz seperat gesetz werden.
+In der Konfigurationsdatei des Fater R-CNN kann dies durch setzten eines 
+bestimmten Parameters für sowohl die erste Stufe des Netzes, 
+dem RPN (Region Proposal Network), als auch für die zweite Stufe,
+dem Klassifizierungsnetz, seperat eingestellt werden.
 
 
-Ebenso lassen sich die beiden Losskurven, aus denen sich der gesammt 
-Loss zusammensetz, seperat anzeigen, wie in Plot \ref{plot:aug_l2_classifier_loss}
-und \ref{plot:aug_l2_rpn_loss} zu erkennen ist.
+Ebenso lassen sich die beiden Losskurven, aus denen sich 
+beim Faster R-CNN der gesammt Loss zusammensetz,
+seperat anzeigen was in den 
+Plots \ref{plot:aug_l2_classifier_loss}
+und \ref{plot:aug_l2_rpn_loss} dargestellt ist.
 
-Dadurch ließ sich feststellen, dass Overfitting nur beim Loss des RPNs 
-stattfindet, weshalb der L2 Parameter auch nur für die erste Stufe 
-das RPN engestellt wurde. Dabei wurde der Fa $\lambda = 0.001$ verwendet.
+Durch die getrennte beobachtung der Loss Kurven ließ sich 
+feststellen, dass Overfittin nur  beim Loss des RPNs 
+stattfindet, weshalb der Parameter für die L2 Regulierung 
+dann nur für die erste Stufe mit einem Faktor von
+$\lambda = 0.001$ gesetzt.
 
-Schaut man nun wieder die beiden Losskurven an, zeigt sich deutlich der 
-Effekt, den die L2 Regularisierung auf den RPN Loss hat, was sich dann 
-auch im Gesammtloss durch eine leichte verbesserung bemerkbar machte.
+Vergleicht man wieder die wieder die Losskurven, ist deutlich zu 
+erkennen das sich das Overfitting im Regoin Proposal Network 
+reduzieren ließ \ref{plot:aug_l2_rpn_loss}, wodurch sich 
+auch der gesammt Loss verbesserte \ref{plot:aug_l2_total_loss}.
+
+Auch hier ging die Verbesserung des Loss Wertes mit einer
+leichten Verschlechterung des mAP einher, wie in 
+\ref{plot:aug_l2_mAP} zu erkennen ist.
+
+
 
 \vspace{1cm}
-
-
 \begin{minipage}{0.5\textwidth}
   \centering
   \def\svgwidth{0.9\textwidth}
@@ -485,77 +577,66 @@ auch im Gesammtloss durch eine leichte verbesserung bemerkbar machte.
 
 \vspace{1cm}
 
-Dies wurde ebenso auf das Training mit weniger stark augmentiertem Datensatz
-angewendet. Weitere Einstellungen waren $\lambda = 0.002$ und das 
-ebenfalls in \ref{subsec:validation} beschriebene Dropout.
-Die ergebnisse sind nocheinmal zusammefassend in Tabelle ... dargestellt.
+Um die Auswirkung der in den Trainingsverläufen 
+zu erkennenden Effekten zu überprüfen, wurd hier 
+nun auch wieder die Inferenz auf die drei Testdatensetze 
+ausgeführt.
+Beispielhaft, sind Ergebnisse davon für eigene Bilder 
+in den Abbildungen \ref{fig:test_infer_normal_aug}
+und \ref{fig:test_infer_aug_plus_l2} dargestellt.
 
 
-\begin{table}[htb]
-  \centering
-  \label{table:reg}
-  \begin{tabular}{m{0.2\textwidth}|m{0.2\textwidth}<{\centering}m{0.2\textwidth}<{\centering}m{0.2\textwidth}<{\centering}}
-  \hline
-  \textgreater 400k & mAP  & Loss (Gesammt) & Loss (RPN) \\ \hline\hline
-  Augmentierung     & 0,7  & 0,74           &  0,12          \\
-  +Dropout          & 0,7  & 0,73           &            \\
-  +L2 Reg (0.01)    & 0,7  & 0,69           &            \\
-  +L2 Reg (0.02)    & 0,69 & 0,7            &            \\ \hline
-  \end{tabular}
-  \caption{Regularisierungen}
-\end{table}
-
-
-\subsection{Test Inferenz}
-
-Auch hier wurde nun wieder zur besseren Auswertung der Ergebnisse die 
-Inferez Testweise auf die drei Datensätze Test Set des trainierten Open Images
-Datensatzes, eigen Aufnahmen, sowie des \textit{iWildCam} Datensatzes durchgeführt.
-
-\begin{minipage}{0.333\textwidth}
-  \centering
-  \label{}
-  \includegraphics[width=\textwidth]{infer_images/iWildCam/fox/cut/59df5ee1-23d2-11e8-a6a3-ec086b02610b_faster_rcnn_inception_v2_3000.jpg}
-  \captionof{figure}{3000 Samples}
-\end{minipage}
-\begin{minipage}{0.333\textwidth}
-  \centering
-  \label{}
-  \includegraphics[width=\textwidth]{iWildCam/fox/cut/59df5ee1-23d2-11e8-a6a3-ec086b02610b_faster_rcnn_inception_v2_4000.jpg}
-  \captionof{figure}{4000 Samples}
-\end{minipage}
-\begin{minipage}{0.333\textwidth}
-  \centering
-  \label{}
-  \includegraphics[width=\textwidth]{iWildCam/fox/cut/59df5ee1-23d2-11e8-a6a3-ec086b02610b_faster_rcnn_inception_v2_less_aug.jpg}
-  \captionof{figure}{50\% Augment}
-\end{minipage}
-
-Bei der L2 Regulariesierung konnte für das iWildCam keine verbesserung festgestellt werden,
-teilweise wurden die Bilder besser erkannt, teilweise schlechter, so dass im 
-Mittel keine Verbesserung entstand.
-
-Für die eigenen Bilder waren die Ergebnisse sogar schlechter.
-
-
+\vspace{1cm}
 \begin{minipage}{0.5\textwidth}
   \centering
-  \label{}
+  \label{fig:test_infer_normal_aug}
   \includegraphics[width=0.95\textwidth]{eigene/20191229_145616_frame_20_faster_rcnn_inception_v2_3000.jpg}
   \captionof{figure}{}
 \end{minipage}
 \begin{minipage}{0.5\textwidth}
   \centering
-  \label{}
+  \label{fig:test_infer_aug_plus_l2}
   \includegraphics[width=0.95\textwidth]{eigene/20191229_145616_frame_20_faster_rcnn_inception_v2_l2.jpg}
   \captionof{figure}{}
 \end{minipage}
+\vspace{1cm}
+
+Daraus ergab sich, das eine L2 Regulierung der Modelle 
+in den meisten Fällen keinen Einfluss auf die Ergebnisse hatte,
+falls doch fürte sie tendenziell eher zu einer Verschlechterung.
 
 
+Weitere angewendete Regularisierungen, die jedoch 
+auch zu keiner nennenswerten Veränderung des Trainingsergebnisses 
+führten ware Dropout und L2 mit $\lambda = 0,02$ und sind in 
+Tabelle \ref{table:reg} zusammen mit den anderen Ergebnissen dargestellt.
 
-Daraus lässt sich schließen das die Art/Qualität/Varianz der Daten 
-den größeren einfluss auf das ergebniss haben und mit den Hyperparametern 
-wenn überhaup
+\vspace{1cm}
+\begin{table}[htb]
+  \centering
+  \label{table:reg}
+  \begin{tabular}{m{0.35\textwidth}|m{0.25\textwidth}<{\centering}m{0.25\textwidth}<{\centering}}
+  \hline
+                    & mAP  & Loss  \\ \hline\hline
+  Augmentierung (50\%) &  0,72    &    0,76   \\
+   + L2 Reg ($\lambda = 0,001$)            &   0,71     & 0,75       \\\hline
+  Augmentierung (normal)     & 0,7  & 0,74            \\
+  + Dropout          & 0,7  & 0,73            \\
+  + L2 Reg. ($\lambda = 0,001$)    & 0,7  & 0,69            \\
+  + L2 Reg ($\lambda = 0,002$)    & 0,69 & 0,7             \\ \hline
+  Augmentierung (4000 Samples) &0,7&0,71\\\hline
+  \end{tabular}
+  \caption{Regularisierungen}
+\end{table}
+\vspace{1cm}
+
+
+Aus den Ergebnissen lässt sich schließen, dass die Art
+der Aufbereitung der Daten den größeren Einfluss auf das Ergebniss haben
+und durch Einstellung der Hyperparameter wenn überhaupt 
+noch Finetuning betrieben werden kann.
+
+
 
 
 
@@ -565,28 +646,7 @@ training in graustufen bilder zu besseren erg führt, ... nicht so.
 
 
 
-% \subsection{weitere tabellen}\label{subsec:regularisierung}
-
-% \begin{table}[htb]
-%     \centering
-%     \label{tab:regularization}
-%     \begin{tabular}{| l || c | c | c | c |} 
-%         \hline
-%         Regularisierung & $mAP_{orig}$ & $mAP_{handy}$ & $Loss_{orig}$ &  $Loss_{handy}$\\
-%         \hline
-%         Early Stopping (100k steps) & 0.6715 & 0.4265 & 0.6742 & 0.267\\
-%         \hline
-%         Augmentierung (200k steps) & 0.6914 & 0.4537 & 0.6738 & 0.2503\\ % hier noch verschiedene kombinationen von augmentierungen
-%         \hline
-%     \end{tabular}        
-%     \caption{Regularization}
-% \end{table}
-
-
-
-
 % \subsection{Graustufen/Infrarot Bilder}\label{subsec:eval_gray}
-
 
 % \begin{table}[htb]
 %     \centering
@@ -614,34 +674,58 @@ training in graustufen bilder zu besseren erg führt, ... nicht so.
 
 \section{Inferenz zeit}\label{sec:infertime}
 
-Neben der Genauigkeit ist die Ausführungszeit welche ein Model für die 
-Inferenz benötigt, ein weiteres kriterium für die auswahl des Modells gewesen.
-Je nach Anwendungsart muss diese in Echtzeit erfolgen oder nicht.
+Neben der Genauigkeit war die Ausführungszeit welche ein Model für die 
+Inferenz benötigt, ein weiteres Kriterium für die Auswahl des zu 
+verwendenen Modells.
+Einer der Faktoren, der die Inferenzzeit beeinflusst, ist die 
+verwendete Hardware sowie Library.
+Die Hardware war mit dem Neural Compute Stick 2 festgelegt, als 
+Library kamen dabei OpenCV oder OpenVino in Frage, wobei
+mit OpenVino die möglichkeit 
+zur asynchronen Inferenzausführung sowie mehreren Inferenz Requests besteht,
+wodurch sich die Inferenzzeit optimieren ließ.
 
-Ein Faktor von dem die Inferenzzeit abhängt ist die verwendeten Hardware
-sowie Library. Für den Neural Compute Stick können dafür OpenCV oder 
-OpenVino verwendetet werden, wobei mit OpenVino die möglichkeit 
-zur asynchrone Inferenzausführung sowie mehreren Inferenz Requests wodurch 
-sich die Inferenz zeit optimieren lässt.
+Ein weiter Faktor ist die Komplexität der CNNs und die zur 
+Objekterkennung verwendeten Architektur.
 
+Üblicherweise sind Komplexere Modelle wie Faster R-CNN zwar genauer, 
+jedoch auch langsamer.
 
-Der zwiete Faktor wird durch die Komplexität des CNNs und der
-zur Objekterkennung verwendeten Architektur bestimmt.
+Um den Effekt, den die drei unterschiedlichen 
+für das Training verwendeten Varianten SSD + MobilenetV2, 
+SSD + InceptionV2 und Faster R-CNN + InceptionV2 auf die Inferenzzeit
+haben zu Untersuchen, wurden diese durch Messugen der FPS 
+verglichen.
 
-Üblicherweise sind Komplexere Modelle wie Faster R-CNN genauer jedoch 
-auch langsamer.
+Dabei wurde die Asynchrone Inferenz mit unterschiedlicher Anzahl 
+an Inferenz Requests verwendet, weshalb in diesem Abschnitt 
+zunächst auf die Funktionsweise der Asynchronen Inferenzausfürung 
+mit OpenVino eingegangen wird.
 
-Im folgenden soll daher zunächst die Asynchrone Inferenz näher 
-erläutert werden und anschließen ein verfahren zur Untersuchung 
-des Einfluss der Art der trainierten Modelle auf die Inferenz Zeit.
 
 \subsection{Asychrone Inferenz}
 
-Bei einem Synchronen inferenzablauf kann immer nur entweder inferiert oder 
-die Daten vor- und nachverarbeitet werden. Da die inferenz jedoch auf dem 
-Chip des NCS2 und nicht auf dem Pc oder Raspberry läuft, kann diese auch 
-ungehindert parallel dazu ablaufen, was in OpenVino mit der Asychronen Api 
-erreicht werden kann.
+Wird die Inferenz im Synchronen Modus ausgeführt, kann immer
+nur entweder inferiert oder 
+die Bilddaten vor- bzw. nachverarbeitet werden.
+
+Vorverarbeitung der Bilder beeinhaltet dabei 
+z.B. die Umwandlung des von der Kamera gelieferten 
+Bildformats in das für das jeweilige Model richtige 
+Input Format.
+Die Nachbereitung bezieht sich auf das verarbeiten 
+der Inferenz Ergebnisse in der Anwendung.
+
+
+Die implementierung in OpenVino 
+erfolgt dementsprechend Sequentiell, wie 
+im Allgorithmus \ref{code:sync} dargestellt ist.
+
+
+Anhand des zeitlichen Ablaufs, welcher in Abbildung \ref{fig:sync}
+zur veranschaulichung abgebildet ist, sind die Abschnitte, 
+in denen keine Inferez stattfindet gut zu erkennen.
+
 
 \vspace{1cm}
 \begin{minipage}{0.1\textwidth}
@@ -650,6 +734,7 @@ erreicht werden kann.
 \begin{minipage}{0.5\textwidth}
   \begin{algorithm}[H]
     \caption{Synchrone Inferenz}
+    \label{code:sync}
     \begin{algorithmic}
     \WHILE{\TRUE}
         \STATE capture FRAME
@@ -671,18 +756,30 @@ erreicht werden kann.
 \vspace{1cm}
 \begin{figure}[H]
   \centering
-  \def\svgwidth{0.8\textwidth}
+  \def\svgwidth{0.9\textwidth}
   %\input{Bilder/sy_asy_infer.pdf_tex}
   \input{Bilder/sync_infer.pdf_tex}
   \caption{}
-  \label{}
+  \label{fig:sync}
 \end{figure}
 
-djfoiadshilfh
-\\
-asdfpiuhasdog\\
-söodfhas\\
-aidfh
+
+Da die inferenz auf dem Myriad Chip des Neural Compute Sticks
+und nicht auf dem ausführenden Pc oder Raspberry läuft,
+kann diese auch ungehindert parallel dazu ablaufen.
+
+In OpenVino wird das mithilfe der Asynchronen Api erreicht, welche 
+über einen bestimmten Funktionsaufruf in einem seperaten 
+Thread gestatet wird.
+
+
+
+Indem man vor Erhalt und Verarbeitung eines aktuellen 
+Inferenz Ergebnisses den Request für den nächsten Durchlauf aufgibt, 
+wie in Allgorithmus \ref{code:async} als Pseudocode dargestellt, 
+kann der in Abbildung \ref{fig:async} dargestellte Zeitliche 
+Ablauf erreicht werden.
+
 
 
 \vspace{1cm}
@@ -692,6 +789,7 @@ aidfh
 \begin{minipage}{0.5\textwidth}
   \begin{algorithm}[H]
     \caption{Asynchrone Inferenz}
+    \label{code:async}
     \begin{algorithmic}
     \WHILE{\TRUE}
         \STATE capture FRAME
@@ -715,44 +813,38 @@ aidfh
 
 \begin{figure}[H]
   \centering
-  \def\svgwidth{0.8\textwidth}
+  \def\svgwidth{0.9\textwidth}
   \input{Bilder/async_infer.pdf_tex}
   %\input{Bilder/sy_asy_infer.pdf_tex}
   \caption{}
-  \label{}
+  \label{fig:}
 \end{figure}
 
-Indem man die Inferenz Requests \textit{Current} und \textit{Next}
-
-
-
+Die hier mit \textit{Current} und \textit{Next} bezeichneten 
+Inferenz Requests entsprechen den indices der jeweiligen Requests
+und können (theoretisch belieb) erweitert werden. Dadurch
+wird erreicht, dass die Inferenz zusätzlich zum  sowohl asynchron zum 
+restlichen Programmcode abläuft, als auch auf mehreren Threads 
+parallel.
 
 % https://docs.openvinotoolkit.org/2018_R5/_samples_object_detection_demo_ssd_async_README.html
-
-
-% \begin{figure}[htb]
-%     \centering
-%     \def\svgwidth{0.7\textwidth}
-%     \input{Bilder/synch_asynch.pdf_tex}
-%     \caption{Asynchron und mehrerere Inferenz Requests}
-%     \label{fig:async}
-% \end{figure}
 
 
 
 
 \subsection{Vergleich der Modelle}
 
-Mithilfe eines Python Scripts wurde nun die Inferenz für 100 Bilder 
-ausgeführt und daraus die durchschnittliche Anzahl an Frames pro 
-Sekunde berechnet (FPS).
+Mithilfe eines Python Scripts in welchem die Asynchrone Inferenz 
+für eine vaiabel einstellbare Anzahl an inferenz Requests
+implementiert wurde, konnte für die drei Modelle die 
+durchschnittliche Anzahl an Frames die pro Sekunge inferiert werden 
+könenn ermittelt werden.
 
-Tabelle \ref{table:infertime} zeigt die ergebnisse für die 
-Ausführung auf einem Raspberry Pi für die trainierten Modelle mit 
-variierenden Inferenz Requests von einem bis vier.
+Diese wurde auf dem Raspberry Pi und dem Neural Compute Stick 
+ausgeführt und liefert die in Tabelle \ref{table:infertime}
+dargestellten Ergebnisse.
 
 \vspace{1cm}
-
 \begin{table}[htb]
   \centering
   \label{table:infertime}
@@ -766,13 +858,19 @@ variierenden Inferenz Requests von einem bis vier.
   \end{tabular}
   \caption{Vergleich Inferenz Zeiten Modelle}
 \end{table}
-
 \vspace{1cm}
 
-Insbesondere zwischen den Objeckt Detection Frameworks Faster R-CNN 
-und SSD besteht ein froße Unterschied.
-Möchte man die Inferenz für eine Echtzeitanwendung kommen nur SSD in Frage.
-Desweiteren ist festzustellen, das eine erhöhung der Inferenz Requests 
-nur bis 3 sinnvoll ist.
+Die asynchrone inferenz ausführung führte bei alle Modellen 
+für bis zu 3 inferenz Requests zu besseren Ergebnissen.
+Ab dann war eine Erhöhung nicht merh sinnvoll.
 
+Ein Unterschied in der benötigten Zeit macht sich besonders 
+stark zwischen SSD Faster R-CNN Architekuren bemerkbar.
+
+Für Real-Time Anwendungen kommen daher nur die mit SSD Trainierten 
+Modelle in Frage. 
+
+Ob und wie das Fater R-CNN trotz der recht langsamen Inferenzzeit 
+für die Anwendung verwendet werden können, wird im nächstem Kapitel 
+erläutert werden.
 

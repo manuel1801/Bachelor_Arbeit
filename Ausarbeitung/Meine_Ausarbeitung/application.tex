@@ -4,12 +4,13 @@
 
 
 Dieses Kapitel beschreibt die Entwicklung der Anwendung,
-welche als autonomes System dass auf einem Raspberry Pi 4 läuft.
+die autonom auf einem Raspberry Pi 4 läuft. 
 
-Dazu gehören die Einrichtung einer infrarotfähigen 
-Kamera, die Implementierung der Inferenz mit OpeVino
-und die Verbindung zu einem Pc zur übertragung
-der Daten mit geeignetem Protokolls.
+Dazu gehören neben der implementierung der Inferenz 
+für eines der in trainierten Modelle auch die Auswahl und 
+Einrichtung einer geeigneten, infrarotfähigem Kamera, sowie 
+eine Verbindung zu einem Pc, zur Übertragen der Daten 
+über ein geeignetes Kommunikationsprotokoll.
 
 
 
@@ -17,9 +18,9 @@ der Daten mit geeignetem Protokolls.
 \section{Aufbau/Hardware}\label{sec:aufbau}
 
 
-Der Aufbau besteht aus einem Raspberry Pi, auf welche 
-der Anwendungscode läufr, dem NCS2 für die Inferenz, 
-welcher per USB mit dem Raspberry verbunden wird.
+Der Aufbau der Anwendung besteht aus einem Raspberry Pi 4, welcher
+den Programmcode ausführt sowie dem Neural Compute Stick 2
+für die Inferenz, welcher per USB mit dem Raspberry verbunden wird.
 
 Desweiteren wurde ein Raspberry Pi Kamera Modul mit 
 5MP OV5647 Sensor der Marke Longrunner verwendet.
@@ -33,14 +34,12 @@ vor der linse, wodurch auch die etwas längeren (850nm)
 Elektromagnetischen Wellen als die des Sichtbaren Lichts aufgenommen 
 werden können.
 
-Durch zwei Infrarot LEDs des gleichen Spektrums, können so 
-auch in der Dunkelheit Bilder aufgenommen werden, ohne 
+Durch zwei Infrarot LEDs, die Licht im 850nm Wellenlängenbereich, 
+abgeben, können so auch in der Dunkelheit Bilder aufgenommen werden, ohne 
 Sichtbare beläuchtung, was Tiere verscheuchen würde.
-
 
 Das kamera Modul wird über die CSI (Camera Serial Interface) 
 Schnittstelle mit dem Raspberry Pi verbunden.
-
 
 %https://www.amazon.de/gp/product/B07R4JH2ZV/ref=ppx_yo_dt_b_asin_title_o01_s00?ie=UTF8&psc=1
 

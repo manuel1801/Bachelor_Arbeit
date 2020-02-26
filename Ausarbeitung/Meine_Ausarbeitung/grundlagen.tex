@@ -513,6 +513,10 @@ Neural Compute Stick ausführen zu können, wird das Toolkit
 Dieses ist eine Plattform zur Otimierung und Inferenz von 
 CNN basierten Modellen auf unterschiedlicher Intel Hardware.
 
+
+
+
+
 Dabei wird ein eigenes Dateiformat verwendet, die \textit{Intermediate 
 Representation} (IR), welche die Struktur/Architektur des Modells 
 in einer .xml Datei und die trainierten Parameter/Gewichte in 
@@ -530,6 +534,17 @@ Diese bietet eine Api mit der aus der Anwendung heraus in den
 Programmiersprachen C++ oder Python auf die Funktionen der 
 InferenceEngeine zugegriffen werden können.
 
+
+
+\begin{figure}[H]
+    \centering
+    \def\svgwidth{0.8\textwidth}
+    \input{Bilder/open_vino_workflow_neu.pdf_tex}
+    \caption{OpenVino Workflow}
+    \label{fig:openvinoflow}
+\end{figure}
+
+
 % \begin{figure}[H]
 %     \centering
 %     \includegraphics[width=0.8\textwidth]{./Bilder/open_vino_workflow_steps.png}
@@ -537,10 +552,3 @@ InferenceEngeine zugegriffen werden können.
 %     \label{img:openvinoworkflow}
 % \end{figure}
 
-\begin{figure}[H]
-    \centering
-    \def\svgwidth{0.9\textwidth}
-    \input{Bilder/open_vino_workflow.pdf_tex}
-    \caption{OpenVino Workflow}
-    \label{fig:openvinoflow}
-\end{figure}

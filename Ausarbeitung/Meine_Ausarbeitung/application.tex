@@ -2,44 +2,51 @@
 
 \chapter{Entwicklung der Anwendung}\label{kap:application}
 
+Dieses Kapitel beschreibt die Realisierung der Anwendung 
+als autonomes Kamera System zur, 
+Wildtiererkennung, welches auf einem Raspberry Pi 4 läuft.
 
-Dieses Kapitel beschreibt die Entwicklung der Anwendung,
-die autonom auf einem Raspberry Pi 4 läuft. 
-
-Dazu gehören neben der implementierung der Inferenz 
-für eines der in trainierten Modelle auch die Auswahl und 
-Einrichtung einer geeigneten, infrarotfähigem Kamera, sowie 
-eine Verbindung zu einem Pc, zur Übertragen der Daten 
-über ein geeignetes Kommunikationsprotokoll.
+Dabei wird es neben der Implementierung der Inferenz für eines der 
+traininierten Modelle, auch um die Auswahl einer 
+nachtsichtgeeigneten Kamera und der implementierung 
+einer Kommunikationsmöglichkeit zur übermittlung 
+der Daten gehen.
 
 
 
 %-------------------------  SECTION 1: AUFBAU  ------------------------
-\section{Aufbau/Hardware}\label{sec:aufbau}
+\section{Hardware}\label{sec:aufbau}
 
 
-Der Aufbau der Anwendung besteht aus einem Raspberry Pi 4, welcher
-den Programmcode ausführt sowie dem Neural Compute Stick 2
-für die Inferenz, welcher per USB mit dem Raspberry verbunden wird.
+Der Aufbau der Anwendung besteht aus einem Raspberry Pi 4, auf dem 
+der Programmcode läuft, sowie dem Neural Compute Stick 2
+für die Inferenz, welcher über eine USB Schnittstelle
+mit dem Raspberry Pi verbunden wird.
 
-Desweiteren wurde ein Raspberry Pi Kamera Modul mit 
+Zur aufnahme der Bilder wurde ein Raspberry Pi Kamera Modul mit 
 5MP OV5647 Sensor der Marke Longrunner verwendet.
-
-Dieses ermöglicht durch zu und abschalten eines Infrarot 
+Dieses ermöglicht durch mechanisches zu und abschalten eines Infrarot 
 Filters vor die Linse zwischen Tag und Nachtsicht zu wechseln.
+Der dafür verwendete Magnetschalter wird dabei über einen 
+Helligkeitsensor getriggert.
+Im Infrarotmodus befindet sich der Filter nicht 
+vor der Linse, wodurch neben den elektromagnetischen 
+Wellen des Sichtbaren Lichts auch die etwas langwelligeren 
+(850nm) des Infrarot Spektrums auf die Linse treffen und 
+verarbeitet werden können.
 
-Das Schalten wird dabei über einen Helligkeitssensor automatisch 
-geregelt. Im Infrarotmodus bfindet sich der Infrarot Filter nicht 
-vor der linse, wodurch auch die etwas längeren (850nm)
-Elektromagnetischen Wellen als die des Sichtbaren Lichts aufgenommen 
-werden können.
+Zudem verfügt die Kamera über zwei Infrarot LEDs, 
+sodass auch Aufnahmen bis zu 3m Entfernung
+in völliger Dunkelheit gemacht werden können. Diese haben 
+den vorteil gegenüber normalen Scheinwerfern, 
+das die Tiere von keiner Sichtbaren Lichtquelle 
+gestört oder verscheucht werden.
+verbunden wird das Kamera Modul über die CSI 
+(Camera Serial Interface) 
+Schnittstelle des Raspberry Pi's.
+\vspace{1cm}
 
-Durch zwei Infrarot LEDs, die Licht im 850nm Wellenlängenbereich, 
-abgeben, können so auch in der Dunkelheit Bilder aufgenommen werden, ohne 
-Sichtbare beläuchtung, was Tiere verscheuchen würde.
 
-Das kamera Modul wird über die CSI (Camera Serial Interface) 
-Schnittstelle mit dem Raspberry Pi verbunden.
 
 %https://www.amazon.de/gp/product/B07R4JH2ZV/ref=ppx_yo_dt_b_asin_title_o01_s00?ie=UTF8&psc=1
 
@@ -56,7 +63,7 @@ Schnittstelle mit dem Raspberry Pi verbunden.
     \captionof{figure}{Longruner Kamera Modul}
     \label{fig:rpicam}
 \end{minipage}
-\vspace{0.6cm}
+\vspace{1cm}
 
 
 Desweiteren wurde für eine mobile Internetverbindung 
@@ -64,68 +71,97 @@ der \textit{Huawei E3531 SurfStick} und zu Stromversorgnung
 eine Powerbank verwendet.
 
 
+
 % https://www.amazon.de/gp/product/B00HSZEY34/ref=ppx_yo_dt_b_asin_title_o00_s00?ie=UTF8&psc=1
 
 
-\section{Implementierung/Software}
+\section{Software}
 
-Die Implementierung der Anwendung wurde in Python vorgenommen und 
-besteht aus den drei Scripten \texttt{main.py}, \texttt{detection.py}
-und \texttt{connection.py}. Welche Folgend dargestellte Klassen 
-implementieren.
+
+Die Implementierung der Anwendung für den Raspberry Pi wurde in Python.
+vorgenommen. Diese ist aufgeteilt in ein \textit{detection.py} 
+Script, in welchem die Inferenz implementiert ist und 
+einem \textit{connection.py} Script, welches 
+für das senden der Daten zuständig ist.
+Der Kamera Input Stream ist in einm \textit{main.py} Script implementerit, 
+von wo auch die Klassen der detection und connection Scripte, 
+dargestellt im Klassendiagramm in Abbildung \ref{fig:class_diagram} 
+verwendet werden.
+
 
 \vspace{1cm}
-\input{Bilder/class_diagram.tex}
+\begin{figure}[H]
+    \centering
+    \input{Bilder/class_diagram.tex}    
+    \caption{Klassendiagramm}
+    \label{fig:class_diagram}
+\end{figure}
 \vspace{1cm}
 
-Dabei führt die Main Anwendung eine Dauerschleife aus, in der 
-die Frames der Kamera erhalten werden. 
-
-Die inferenz wird über das detection Script, welches die 
-InferenceEngine implementier ausgeführt.
-Das senden erkannter Ergebnisse erfolgt dann mithilfe 
-des Detection Scripts.
+\begin{itemize}
+    \item hier beschreibung der klassen
+\end{itemize}
 
 
-Um trotz der langsamen Inferenz Zeit das Faster R-CNN 
-verwenden zu können, galt es die Anwendung und die 
-Zeitliche ausführungen der Inferenz so zu gestallten, 
-das möglichst alle Frames, in welchen Tiere zu beobachten 
-sein können, auch inferiert werden.
+Durch geeigneten Implementierung des Applikationsaablaufs, 
+sollte eine Möglichkeit gefunden werden, trotz langsamer infere 
+zeit, mit dem Faster R-CNN alle Frames in welchen Tiere enthalten 
+sind zu inferieren.
 
 Dafür wurde die Annahme gemacht, dass zur Laufzeit der 
-Anwendung häufig Zeiten sind in denen nichts zu inferieren 
-ist, was durch eine Bewegungserkennung herausgefunden werden 
-konnte.
+Anwendun nicht durchgehen inferiert werden, muss, es also 
+Phasenweise sich keine Tiere und 
+damit auch keine Bewegung vor der Kamera befinden,
 
-Desweiteren wurde die Inferenz so implementiert, dass sie 
-im gegensatz zur üblichen verwendung an keiner stelle Blockiert, 
-wodurch durch zwischen Speichern von Bildern in denen 
-Bewegung erkannt wurde trotz langsamerer Inferenzzeit alle 
-Frames inferiert werden können.
+Mithilfe eines Bewegungsmelder, welcher in OpenCV implementerit
+wurde und vor der inferenz 
+angewendet wurde, ist es möglich nur Frames in denen
+Bewegung enthalten ist inferieren zu müssen. 
 
-Folgendes Diagramm zeigt schmematsch den groben Ablauf davon.
+
+Input Frames, welche die kamera 
+mit einer höheren Fps liefert als 
+das Faster R-CNN inferieren kann werden in einer lister/buffer 
+zwischengespeichert und nachträglich, wenn keine Bewegung 
+mher im Bild detectiert wird inferiert.
+
+Dafür musste der asynchrone Inferenzablauf, wie er typischer 
+weise ausgeführt wird \ref{code:async} so abgeändert werden, 
+dass er nicht mehr blockierend und damit komplett asynchron 
+zu den Input Frames abläuft.
+
+Das Flussdiagramm in Abbildung \ref{fig:flowchart_appl}
+zeigt den Gesammtablauf schematisch.
 
 \vspace{1cm}
+\begin{figure}[H]
+    \centering
+    \input{Bilder/flow_chart_appl.tex}    
+    \caption{Main Applikation}
+    \label{fig:flowchart_appl}
+\end{figure}
+\vspace{1cm}
+
+\begin{itemize}
+    \item hier flussdiagramm erklären
+    \item 
+\end{itemize}
+
+bei mehreren inferierten frames ohne bewegung wird 
+bewegungsmwlder zurückgesetzt.
+erkannet werden nach klassen sortiert gespeichert, 
+wobei erkennungen mit höherer genauigkeit ersetzen.
+
+nach N erkennungen wird local gespeicher und ein 
+sendrequest an die main gegebe. 
+Diese sendet daraufhin alle local 
+gespeicherten date an ein verbundenes gerät.
+
+im folgenden werden die einzelnen komponenten
+im deteil erklärt.
 
 
-\begin{center}
-\input{Bilder/flow_chart_appl.tex}
-\end{center}
-
-\subsection{Inferenz}
-
-\subsubsection{Motion}
-
-Die Bewegungserkennung wurde mithilfe der Library OpenCV implementiert, indem
-zu beginn ein Frame als Refernz abgespeichert wurde.
-Mit diesem konnten dann alle weiteren Input frames vergleichen werden 
-indem der Abstand der einzelnen Pixel werte berechnet und gemittelt wird.
-Beträgt dieser mehr als ein bestimmter threshhold wird das als Bewegung 
-gewertet.
-
-\subsubsection{Inferenz}
-
+\subsection*{Inferenz}
 Die in Abschnitt \ref{sec:infertime} beschriebene asynchrone 
 Inferenz wurde dahingehend abgeändert, dass nun theoretsch belibieg file 
 Requests verwendete werden können und für den wait Befehl der 
@@ -162,8 +198,18 @@ jeweiligen verwendeten Frame war zu achten.
 
 
 
-\subsection{Conncection/Verbindung}
 
+\subsection*{Motion}
+
+Die Bewegungserkennung wurde mithilfe der Library OpenCV implementiert, indem
+zu beginn ein Frame als Refernz abgespeichert wurde.
+Mit diesem konnten dann alle weiteren Input frames vergleichen werden 
+indem der Abstand der einzelnen Pixel werte berechnet und gemittelt wird.
+Beträgt dieser mehr als ein bestimmter threshhold wird das als Bewegung 
+gewertet.
+
+
+\subsection*{Connection}
 
 Um eine Verbindung zwischen Raspberry Pi und Pc herzustellen, 
 die unabhängig davon ob sich die geräte im selben 

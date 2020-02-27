@@ -1,41 +1,47 @@
-\begin{tikzpicture} 
+\newcommand\restoreuscatcode{\catcode`\_=8 }
+\tikzset{every picture/.prefix style={execute at begin picture=\restoreuscatcode}}
 
+
+\begin{tikzpicture}   
     
-    
-            \umlclass{Motion}{ 
-              statickBackground : np.array
+            \umlclass[x=-0.5, y=0.2]{Motion}{ 
+              statick\text{\_}background : np.array
               }{ 
-              + detectMotion() : bool \\
-              + resetBackground() : void
+              + detect\text{\_}motion(frame) : bool: \\
+              + reset\text{\_}background() : void
             }
         
-            \umlclass[y=-4]{InferenceModel}{ 
-                string : plugin
-                strin : device
+            \umlclass[y=-4.2]{InferenceModel}{ 
+                plugin : ie\text{\_}api.IEPlugin\\
+                string : device
                 }{ 
-                + createExecInferModel() : ExecInferModel
+                + init(device)\\  
+                + create\text{\_}exec\text{\_}infer\text{\_}model(.xml, .bin, NReq)\\: ExecInferModel
               }
         
-            \umlclass[y=-2, x=6]{ExecInferModel}{ 
-                shape : ioBlob\\
-                detected : array
+            \umlclass[y=-1, x=5.6]{ExecInferModel}{ 
+                exec\text{\_}net : ie\text{\_}api.ExecutableNetwork\\
+                labels : list\\
+                input\text{\_}blob : \textit{input\text{\_}shape}\\
+                output\text{\_}blob : \textit{output\text{\_}shape}\\
+                current\text{\_}frame : dict()\\
+                detected\text{\_}objects : dict()
+
                 }{ 
-                + inferFrames() : status \\
-                \# status[0] num infered\\
-                \# status[1] num detected\\
-                \# status[2] num saved\\
-                - save() : void
+                + init(exec\text{\_}net, labels, input\text{\_}blob)\\
+                + infer\text{\_}frames() : \textit{status} \\
+                - save(class\text{\_}id) : void
                 }
         
     
-        \umlclass[x=11, y=-2]{Connection}{ 
-            string logindata
+        \umlclass[x=11.5, y=-2]{Connection}{ 
+            loin\text{\_}data : string
             }{ 
-            + login() : bool \\
-            + connect() : server, port\\
-            + send() : bool\\
+            + login(device\text\_name) : bool \\
+            + connect() : (server, port)\\
+            + send(server, port, file) : bool\\
             + disconnect() : bool\\
-            + sendEmail(email, text) : boiol
+            + send\text{\_}email(addr, msg) : bool
           }
 
     

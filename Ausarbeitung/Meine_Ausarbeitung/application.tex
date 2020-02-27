@@ -79,17 +79,27 @@ eine Powerbank verwendet.
 
 
 Die Implementierung der Anwendung für den Raspberry Pi wurde in Python.
-vorgenommen. Diese ist aufgeteilt in ein \textit{detection.py} 
-Script, in welchem die Inferenz implementiert ist und 
-einem \textit{connection.py} Script, welches 
-für das senden der Daten zuständig ist.
-Der Kamera Input Stream ist in einm \textit{main.py} Script implementerit, 
-von wo auch die Klassen der detection und connection Scripte, 
-dargestellt im Klassendiagramm in Abbildung \ref{fig:class_diagram} 
-verwendet werden.
+vorgenommen. 
+Dabei sind die Funktionalitäten zur Objekerkennung in einem Script 
+\textit{detection.py} 
+und die für die Verbindung und Senden der Daten in einem 
+\textit{connection.py} Script aufgeteilt.
+
+Der Kamera Inputstream ist in einem \textit{main.py} Script implementiert, 
+von dem aus auch die in Abbildung \ref{fig:class_diagram} 
+dargestellten Klassen, welche in \textit{detection.py}
+und \textit{connection.py} definiert sind verwendet werden.
 
 
 \vspace{1cm}
+\begin{minipage}{0.75\textwidth}
+    \centering
+    \underline{detection.py}
+\end{minipage}
+\begin{minipage}{0.25\textwidth}
+    \centering
+    \underline{connection.py}
+\end{minipage}
 \begin{figure}[H]
     \centering
     \input{Bilder/class_diagram.tex}    
@@ -98,40 +108,48 @@ verwendet werden.
 \end{figure}
 \vspace{1cm}
 
-\begin{itemize}
-    \item hier beschreibung der klassen
-\end{itemize}
 
+\textit{Motion} ist eine Klasse zur Erkennung von Bewegung im Kamera 
+Input Stream, \textit{InferenceModel} und \textit{ExecInferModel} 
+dienen der Inferenz und \textit{Connection} dem Aufbau einer
+Verbindung zu einem Pc sowie dem Senden der Daten über diese Verbindung.
 
-Durch geeigneten Implementierung des Applikationsaablaufs, 
-sollte eine Möglichkeit gefunden werden, trotz langsamer infere 
-zeit, mit dem Faster R-CNN alle Frames in welchen Tiere enthalten 
-sind zu inferieren.
-
+Durch geeigneten Implementierung des Applikationsablaufes,
+sollte eine Möglichkeit gefunden werden, trotz langsamer Inferenzzeiz,
+mit dem Faster R-CNN alle relevanten Frames, 
+also die in denen Tiere zu vermuten sind, inferieren zu können.
 Dafür wurde die Annahme gemacht, dass zur Laufzeit der 
-Anwendun nicht durchgehen inferiert werden, muss, es also 
-Phasenweise sich keine Tiere und 
-damit auch keine Bewegung vor der Kamera befinden,
+Anwendung nicht durchgehend inferiert werden muss,
+sich also Zeitweise keine Tiere und damit auch keine 
+Bewegung vor der Kamera befinden.
 
-Mithilfe eines Bewegungsmelder, welcher in OpenCV implementerit
-wurde und vor der inferenz 
-angewendet wurde, ist es möglich nur Frames in denen
-Bewegung enthalten ist inferieren zu müssen. 
+Um Bewegungen feststellen zu können, 
+wurde, mithilfe der Library OpenCV ein Bewegungsmelder 
+implementiert.
+Dieser speichert zu begin des Kamera Streams ein Referenz
+Frame ab, mit dem alle weiteren Frames verglichen werden.
+Beträgt der Abstand einzelnen Pixelwerte im 
+Graustufenbereich mehr als ein bestimmter 
+Threshhold, wurde eine Bewegung erkannt.
+Indem nun die Frames, welche der Kamera Stream permanent 
+liefert, zunächst auf Bewegung überprüft wurden, 
+ließ sich unnötiges inferieren, was Zeit und 
+und Leistung kostet, vermeiden.
+Frames die bewegung enthalten und aufgrund der langsameren 
+inferenzzeit des Faster R-CNN nicht sofort inferiert 
+werden können, werden in einem Buffer zwischen 
+gespeichert und in Phasen zu denen keine Bewegung stattfindet 
+inferiert.
+
+Dafür musste der im Abschnitt \ref{sec:infertime} beschriebene
+Asynchrone Inferenz Ablauf dahingehend angepasst werdem, dass 
+keine Blockieren mehr stattfindet, diese also komplett 
+zeitasynchron zu den Input Frames ablaufen kann.
+Der Gesamtablauf der Applikation ist in Abbildung 
+\ref{fig:flowchart_appl} 
+schematisch als Flussdiagram dargestellt.
 
 
-Input Frames, welche die kamera 
-mit einer höheren Fps liefert als 
-das Faster R-CNN inferieren kann werden in einer lister/buffer 
-zwischengespeichert und nachträglich, wenn keine Bewegung 
-mher im Bild detectiert wird inferiert.
-
-Dafür musste der asynchrone Inferenzablauf, wie er typischer 
-weise ausgeführt wird \ref{code:async} so abgeändert werden, 
-dass er nicht mehr blockierend und damit komplett asynchron 
-zu den Input Frames abläuft.
-
-Das Flussdiagramm in Abbildung \ref{fig:flowchart_appl}
-zeigt den Gesammtablauf schematisch.
 
 \vspace{1cm}
 \begin{figure}[H]
@@ -142,54 +160,64 @@ zeigt den Gesammtablauf schematisch.
 \end{figure}
 \vspace{1cm}
 
-\begin{itemize}
-    \item hier flussdiagramm erklären
-    \item 
-\end{itemize}
+Wird in inferierten Frames mehrfach nichts 
+erkannt, wird das referenz Frame des 
+Bewegungsmelders neu gesetzt, 
+da vermutlich sich das Hintergrundbild 
+geändert hat.
 
-bei mehreren inferierten frames ohne bewegung wird 
-bewegungsmwlder zurückgesetzt.
-erkannet werden nach klassen sortiert gespeichert, 
-wobei erkennungen mit höherer genauigkeit ersetzen.
+Erkannte Objekt werden in einem Dictionary zusammen 
+mit Klassenname (cls), Wahrscheinlichkeit(p)
+Anzahl an Erkennungen (N) sowie die Bounding 
+Box Koordinaten (Roi, Region of Interest) 
+abgespeichert.
 
-nach N erkennungen wird local gespeicher und ein 
-sendrequest an die main gegebe. 
-Diese sendet daraufhin alle local 
-gespeicherten date an ein verbundenes gerät.
+Nach 10 Erkennungen des selben Objekts, wird dieses 
+als lokale Bilddatei abgespeichert und ein 
+Send-Requst an die Main zurückgegeben.
 
-im folgenden werden die einzelnen komponenten
-im deteil erklärt.
+Diese prüft ob eine Verbindung zu einem 
+anderen Gerät besteht, stellt diese gegebenenfalls her 
+und sendet die Bilder.
+
+Um nicht permanent die Verbindung zu einem Pc aufrecht erhalten 
+zu müssen, was das Datenvolumen des mobilen Internets, des 
+Raspberry schneller aufbrauchen würde, wird diese nach einer 
+bestimmte zeit ohne Bewegung getrennt.
 
 
 \subsection*{Inferenz}
-Die in Abschnitt \ref{sec:infertime} beschriebene asynchrone 
-Inferenz wurde dahingehend abgeändert, dass nun theoretsch belibieg file 
-Requests verwendete werden können und für den wait Befehl der 
-Timeout auf 0ms gesetzt wurde und so der Ablauf nicht mehr Blockierend 
-ist. Dadurch kann die Inferenz unabhängig von der Frequenz der 
-von der Kamera erhaltenen Bilder ablaufen.
-Auf eine richtige zuordnung der Inferenz ergebnisse zu dem 
-jeweiligen verwendeten Frame war zu achten.
 
+Der in Abschnitt \ref{sec:infertime} beschriebene asynchronen
+Inferenzablauf wurde dahingehend angepasst, dass eine beliebige Anzahl 
+an Inferenz Requests verwendet werden können 
+und dass das Warten auf ein Inferenz Ergebnis
+nicht mehr blockierend ist.
+Dafür wurde der Timeot in der Wait Funktion auf 
+$0ms$ gesetzt.
+Durch vorheriges abspeichern der jeweiligen zu 
+inferierenden Frames, kann eine richtige zuordnung 
+der Inferenz Ergebnisse zu den Frames erfolgen.
+Der Pseudocode in Algorithmus \ref{code:infer_async_neu} stellt
+grob den Inferenzablauf dar.
 
 \begin{algorithm}[H]
     \caption{Asynchrone Inferenz, ohne Blockierung}
+    \label{code:infer_async_neu}
     \begin{algorithmic}
     \WHILE{\TRUE}
     \STATE capture FRAMES
-        \FOR{ReqNr in all InferRequests}
-            \STATE status \textbf{wait} for ReqNr
-            \IF {status == 0}
-                \STATE res = ReqNr.output
+        \FOR{all InferRequests}
+            %\STATE Status $\leftarrow$ \textbf{wait} for InferRequest
+            \IF {\textbf{wait} for InferRequest == 0}
+                \STATE Result $\leftarrow$ InferRequest.output
             \ENDIF
-            
-            \IF {Buffer != 0}
-                \STATE preprocess ReqNr
-                \STATE \textbf{statr} ReqNr
+            \IF {Buffer \textbf{not} empty}
+                \STATE preprocess InferRequest
+                \STATE \textbf{start} InferRequest
             \ENDIF
-
-            \IF{res != NULL}
-                \STATE process result
+            \IF{Result not NULL}
+                \STATE process Result
             \ENDIF
         \ENDFOR
     \ENDWHILE
@@ -199,50 +227,53 @@ jeweiligen verwendeten Frame war zu achten.
 
 
 
-\subsection*{Motion}
-
-Die Bewegungserkennung wurde mithilfe der Library OpenCV implementiert, indem
-zu beginn ein Frame als Refernz abgespeichert wurde.
-Mit diesem konnten dann alle weiteren Input frames vergleichen werden 
-indem der Abstand der einzelnen Pixel werte berechnet und gemittelt wird.
-Beträgt dieser mehr als ein bestimmter threshhold wird das als Bewegung 
-gewertet.
-
 
 \subsection*{Connection}
 
-Um eine Verbindung zwischen Raspberry Pi und Pc herzustellen, 
-die unabhängig davon ob sich die geräte im selben 
-Netzwerk befinden funktioniert, wurde eine Cloud Proxy Verbindung 
-implementerit.
+Um die Bilder mit erkannten Tieren an ein anderes Gerät 
+z.B. einen Pc senden zu können, musste eine Verbindung
+hergestellt werden, die auch über verschiedene Netzwerke 
+hinweg funktioniert.
 
-Dafür wurde der Dienst \textit{remot3.it} \cite{remoteit} verwendet, 
-mit dem es möglich ist ohne Konfiguration des Routers eine
-Netzwerkübergreifende Remote Verbindung zum Raspberry Pi herzustellen.
-
-Da die Daten vom Raspberry aus automatisch gesendet werden sollen, 
-wurde der Pc als Remote Gerät implementerit un auf dem Raspberry 
-eine SSH Verbindung zum Pc hergestellt.
+Um unabhängig von Router Konfigurationen des Heimnetzes zu sein, 
+wurde mithilfe des Dienstes \textit{remot3.it} \cite{remoteit}
+eine Cloudbasierte Remote Verbindung hergestellt.
+Mit dieser war es möglich eine Proxy SSH Verbindung, 
+über das Internet herzustellen, ohne von einer Firewall 
+blockiert zu werden.
 
 
 \begin{figure}[H]
     \centering
     \def\svgwidth{0.7\textwidth}
     \input{Bilder/diagram-connect.pdf_tex}
-    \caption{}
-    \label{}
+    \caption{Prinzip Proxy Verbindung}
+    \label{fig:remoteit}
 \end{figure}
 
+Da die Daten vom Raspberry Pi aus automatisiert gesendet 
+werden sollten, wurde der Pc als Remote Gerät implementiert.
+Gesendet wurden die Daten über das Secure Copy Protocol welches 
+das hergestellte Secure Shell Protocol (SSH) verwendet.
+Dieses lässt sich über folgendes Kommando,
+welches im \textit{connectin.py}
+Script ausgeführt wird verwenden:
+\begin{itemize}
+    \item[\texttt{\$}] \texttt{scp -P port file.jpg user@proxyserver /zielpfad/file.jpg}
+\end{itemize}
 
-Dafür bot remot3.it eine API die es ermöglicht über Get und Post Requests
-den Verbindung auf und Abbau zu automatisieren.
+Server und Port werden dabei von remoteit generiert, \textit{file.jpg}
+ist das zu sendende Bilde und \textit{user} der Nutzername des Geräts,
+an welches gesendet wird.
+Um das Einloggen sowie den Verbindungsauf- und Abbau 
+über remote.it zu einem Gerät zu automatisieren
+bietet remote.it eine API mit der über Post- und Get-Requests
+die Befehle dafür programmatisch aufgerufen werden können.
 
-Gesendet wurden die Daten dann per SCP Command (Secure Copy Protocol), 
-welches die aufgaebaute SSH Verbiindung verwendet.
 
 
 
-
+ 
 
 
 

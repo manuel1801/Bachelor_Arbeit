@@ -13,3 +13,35 @@ Neural Compute Stick 2 von Intel ausgeführt.
 
 Des weiteren wurde eine Infrarotfähige Kamera verwendet, damit das System auch
 in der Nacht einsetzbar ist.
+
+
+\textbf{aus ziel der Arbeit}
+
+
+
+Wie in der Einleitung \ref{kap:einleitung} beschrieben, soll 
+ein CNN Basiertes System zur Wildtiererkennung entwickelt 
+werden, das für dir Inferenz den Neural Compute Stick 2 verwendet.
+Dabei sollte neben der reinen Erkennung auch eine Lokalisierung 
+der erkannten Tiere im Bild stattfinden. Gängige Techniken dafür 
+werden im nächsten Abschnitt erläutert.
+\\
+Dabei soll das Deep Learing Modell im Rahmen der gegebenen 
+möglichkeiten und Limitierungen der Hardware möglichst 
+genau und Robust sein, sodass es auch für die graustufen 
+Bilder der Infrarot Kamera zuverlässig funktioniert.
+Da eine erhöht Genauigkeit auch immer mit einer größeren
+Latenz für der Inferenzzeit einhergeht war dies ein mit 
+zu berücksichtigender Punkt.
+\\
+Neben training und evaluierung eines geeigneten Deep Learning Modells,
+war die Implementierung der Anwendung, welche die Inferenz 
+des Modells ausführt ein weiterer Bestandteil der Arbeit.
+\\
+Diese soll voll autonom auf dem Raspberry Pi laufen,
+über eine mobile Netzwerk Verbindung verfügen und 
+mittels eines geeigneten Kommunikations Protokolls die 
+die erkannten und abgespeicherten Bilder an einen
+Heim Pc senden.
+Des weiteren sollte eine geeignete Kamera verwendet werden, die 
+sowohl normale, als auch Infrarot Aufnahmen machen kann.

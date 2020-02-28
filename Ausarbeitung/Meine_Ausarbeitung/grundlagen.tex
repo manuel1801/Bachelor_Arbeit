@@ -316,17 +316,36 @@ Minimum erreicht hat, markierte stelle in
 \ref{fig:overfitting}.
 
 
+%------------------- SUBSECTION: ML Frameworks ---------------
+\subsection{Machine Learning Frameworks}
 
-\section{Computer Vision}
+Machine Larning Algorithmen beeinhalten eine vielzahl an komplexen
+Berechnungsschritten und Parametern. Um diese diese nicht jedesmal 
+von Grund auf neu implementieren zu müssen bieten 
+Frameworks eine vereinfachte Möglichkeit die Modelle zu konstruieren.
 
+Einige der bekannten Open Source Frmaworks sind Tensorflow,
+Caffe, Torch, Kaldi oder Scikit-Learn.
+
+TensorFlow, welches in der Thesis verwendet wurde, stammt von 
+Google und ist ein aufgrund seiner hohen Flexibilität besonders 
+in der Forschung oft verwendetes Framework.
+
+
+
+
+
+%---------------- SUBSECTION: Convolutional ----------------
+\section{Convolutional Neural Networks}\label{subsec:cnn}
+
+\textit{
 Computer Vision bezeichnet die Erkennung und 
 Verarbeitung des Inhalts einer Bild- Oder Video 
 Datei. Es kommen dabei Techniken der Bilverarbeitung
 zusammen mit Deep Learnig Algorithmen zum Einsatz.
+}
 
 
-%---------------- SUBSECTION: Convolutional ----------------
-\subsection{Convolutional Neural Networks}\label{subsec:cnn}
 
 Convolutional Neural Networks sind eine Erweiterung 
 der in \ref{sec:nn} beschriebenen Neuronalen Netze 
@@ -378,7 +397,7 @@ eine Technik, bei der vortrainierte Filter verwendet und durch Fine
 Tuning an den eigenen Datensatz angepasst werden.
 
 
-\subsubsection{Architkturen}\label{subsubsec:architecture}
+\subsection{Architkturen}\label{subsubsec:architecture}
 
 Seit der Einführung des ersten CNN 1998 von Yann LeCun
 \cite{lecunGradientBasedLearningApplied1998}, welches in 
@@ -404,6 +423,100 @@ sind, wie in \cite{StanfordCS231nConvolutional} aufgelistet ist:
 
 
 
+
+\subsubsection{GoogleLeNet (Inception)}
+
+Eine Möglichkeit die Genauigkeit eines Deep Learning Modell 
+zu verbessern, ist es mehr Schichte und/oder eine 
+größere Anzahl an Neuronen pro Schicht zu verwenden.
+
+Der Nachteil dabei ist der größere Rechenaufwand, sowie 
+die höhere Chance des Overfittings.
+
+Das in \cite{szegedyGoingDeeperConvolutions2014} vorgestellte GoogleLeNet hat mit den Inception 
+Modulen einen neuen, effizienteren Asatz gefunden die 
+Komplexität und damit die Genauigkeit zu erhöhen.
+
+Die Module bestehen aus parallel ausgeführten 
+Convolutional Layern unterschiedlicer Kernel 
+Größe ($1\times1, 3\times3, 5\times5$)
+
+Diesen werden zu Dimensionsreduktion häufig 
+$1\time1$ Kernel vorgeschaltet.
+
+Um die effizienz weiter zu Steigern wurden in 
+der zweiten variante des GoogleLeNet
+\cite{szegedyRethinkingInceptionArchitecture2015}
+ neben anderen verbesserungen, die 
+$ 5\times5$ filter durch 2  $3\times3$ Filter 
+ersetzt.
+
+Am ende eines Ineption Moduls werden diese 
+in einem \textit{DepthConcat} Layer wieder zusammengeführt.
+
+Dadurch können Features auf unterschiedlicher skalen 
+besser zusammengesetuzt und erkannt ewreden.
+
+
+
+\begin{minipage}{0.5\textwidth}
+    \centering
+    \input{Bilder/inception_module.tex}
+    \captionof{figure}{Inception Module V1}
+    \label{fig:incept_modul}
+\end{minipage}
+\begin{minipage}{0.5\textwidth}
+    \centering
+    \input{Bilder/inception_module_v2.tex}
+    \captionof{figure}{Inception ModuleV2}
+    \label{fig:incept_modul}
+\end{minipage}
+
+
+
+
+\subsubsection{Mobilenet}
+
+\cite{howardMobileNetsEfficientConvolutional2017a}
+
+Geringere Komplexität für Mobile oder embedded geräte, indem 
+die normale Faltungsoperation mit der \textit{Depthwise Seperable 
+Convolutions} ersetzt wird. 
+Diese besteht aus einer \textit{Depthwise  
+Convolutions}, welche die Faltunge auf 
+die drei Farbchannel seperat anwendet udn einer 1times1
+\textit{pointwise convolution}, welche die input channel combiniert. 
+
+% \begin{figure}[H]
+%     \centering
+%     \includegraphics[width=0.5\textwidth]{DepthwiseSeperable.png}
+%     \caption{DepthwiseSeperable}
+%     \label{fig:mobilenet}
+% \end{figure}
+% %https://www.researchgate.net/publication/326727106/figure/fig1/AS:654646985113600@1533091412204/The-architecture-a-Standard-convolution-filters-b-Depthwise-convolutional-filters-c-1.png
+
+
+
+
+In der zweiten version \cite{sandlerMobileNetV2InvertedResiduals2019} enthalten die 
+Hauptbestandteile eine 1times1 conv mit relu, die 
+3time3 depthwise gefolgt von einer weitere 1time1 ohne aktivierungsfunktion.
+
+eine \textit{residual connection} unterstütz den gradientenfluss.
+
+%https://towardsdatascience.com/mobilenetv2-inverted-residuals-and-linear-bottlenecks-8a4362f4ffd5
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.5\textwidth]{mobilenet_v2.png}
+    \caption{MobilenetV2}
+    \label{fig:mobilenetv2}
+\end{figure}
+
+
+
+
+
+
 %---------------- SUBSECTION: Obj Detection ----------------
 \subsection{Objekt erkennung}\label{subsec:objdet_det}
 
@@ -425,22 +538,6 @@ genauer beschrieben werden.
     \caption{Unterschied: Classification - Detection}
 \end{figure}
 
-
-%------------------- SUBSECTION: ML Frameworks ---------------
-\subsection{Machine Learning Frameworks}
-
-Deep Larning Algorithmen beeinhalten eine vielzahl an komplexen
-Berechnungsschritten und Parametern. Um diese diese nicht jedesmal 
-von Grund auf neu implementieren zu müssen bieten Deep Learning 
-Frameworks eine vereinfachte Möglichkeit die Modelle zu konstruieren.
-
-Einige der bekannten Open Source Frmaworks sind Tensorflow,
-Caffe, Torch, Kaldi oder Scikit-Learn.
-
-
-TensorFlow, welches in der Thesis verwendet wurde, stammt von 
-Google und ist ein aufgrund seiner hohen Flexibilität besonders 
-in der Forschung oft verwendetes Framework.
 
 
 

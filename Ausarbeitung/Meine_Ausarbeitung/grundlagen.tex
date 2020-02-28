@@ -338,35 +338,89 @@ in der Forschung oft verwendetes Framework.
 %---------------- SUBSECTION: Convolutional ----------------
 \section{Convolutional Neural Networks}\label{subsec:cnn}
 
-\textit{
-Computer Vision bezeichnet die Erkennung und 
-Verarbeitung des Inhalts einer Bild- Oder Video 
-Datei. Es kommen dabei Techniken der Bilverarbeitung
-zusammen mit Deep Learnig Algorithmen zum Einsatz.
-}
+CNNs erweitern die in \ref{subsec:nn} beschriebenen
+Neuronalen Netze um Convolutional Layer, welche vor den 
+Fully Connected Layern ausgeführt werden.
+Diese erhalten den Input als zwiedimensionale Matrix, 
+und führen mathematische Faltungsoperationen darauf aus, 
+wodurch bestimmte merkmale des Inputs herausextrahiert werden 
+können.
+
+Hauptanwendungsgebiet der CNNs ist die Bilderkennung,
+in anderen bereichen wie ... kommen sie aber auch 
+zum Einsatz.
+
+Anstatt das alle Neuronen zweier benachbarter Schichten 
+durch Gewichte/Parameter miteinander verbunden sind, 
+stellen kleinere sog. Filter Matrizen, die 
+Parameter dar.
+
+Diese werden zeilenweise über das Input Bild 
+geschoben und an jeder Stelle die 
+mathematische Faltung angewendet.
 
 
 
-Convolutional Neural Networks sind eine Erweiterung 
-der in \ref{sec:nn} beschriebenen Neuronalen Netze 
-und besonders geeignet für die Bilderkennung.
-Befor die Klassifizierung mittels Fully Connected Network 
-stattfindet, sollen für die Klasse spezifische Merkmale 
-aus dem Input Bild heraus extrahiert werden.
-Dafür werden über das Bild zeilenweise Filtermatrizen mit kleinerer Dimension
-(3x3, 5x5) geschoben und eine math Faltung angewendet.
-Die daraus entstehenden Feature Maps sind Matrizen, in denen 
-korellationen zwischen fileter ung input in form von 
-Mustern abgebildet werden.
-Die Werte der Filter Matrizen entsprechen den zu lernenden Gewichten 
-und werden mithilfe der Backpropagation angepasst.
+\vspace{1cm}
+\begin{minipage}{0.5\textwidth}
+    \centering
+    \includegraphics[width=0.9\textwidth]{convolution.png}
+    \captionof{figure}{Faltung, \cite{researcherSimpleIntroductionConvolutional2019}}
+\end{minipage}
+\begin{minipage}{0.5\textwidth}
+    \centering
+    \includegraphics[width=0.9\textwidth]{convolution-layer-a.png}
+\end{minipage}
+\vspace{1cm}
 
+
+
+Jedes Faltungsergebnis ergibt einen Wert der nächsten 
+Schicht, die eine korellation zwischen input bild 
+und filter darstellt.
+
+Enthalten diese ähnlice muster, wie in ... dargestellt 
+bsp horizonotale linien, wird diese merkmal
+verstärkt in der Feature Map abgebildet.
+
+\vspace{1cm}
+\begin{equation}
+    \begin{pmatrix}
+        10 & 10 & 10 & 0 & 0 & 0\\
+        10 & 10 & 10 & 0 & 0 & 0\\
+        10 & 10 & 10 & 0 & 0 & 0\\
+        10 & 10 & 10 & 0 & 0 & 0\\
+        10 & 10 & 10 & 0 & 0 & 0\\
+        10 & 10 & 10 & 0 & 0 & 0
+    \end{pmatrix}
+    \times
+    \begin{pmatrix}
+        1 & 0 & -1\\
+        1 & 0 & -1\\
+        1 & 0 & -1
+    \end{pmatrix}
+    = 
+    \begin{pmatrix}
+        0 & 30 & 30 & 0\\
+        0 & 30 & 30 & 0\\
+        0 & 30 & 30 & 0\\
+        0 & 30 & 30 & 0
+    \end{pmatrix}
+\end{equation}
+\vspace{0.5cm}
 \begin{figure}[H]
     \centering
-    \label{fig:conv}
-    \includegraphics[width=0.4\columnwidth]{convolution.png}
-    \caption{Faltung, \cite{researcherSimpleIntroductionConvolutional2019}}
+    \def\svgwidth{0.6\textwidth}
+    \input{Bilder/convolution_graphical_all.pdf_tex}
+    \caption{}
+    \label{}
 \end{figure}
+
+
+durch die Faltung entsteht eine räumliche invarianz 
+fpr das zu erkennende Objekt im input bild.
+ein weitere forteil ist der geringere rechenaufwand
+durch die gemeinsame nutzung der parameter.
 
 
 Durch die hintereinanderschaltung mehrerer Convolutional Layern 
@@ -375,52 +429,72 @@ Feature Maps heraus extrahieren.
 Durch Subsampling Methoden wie Max Pool Layer zwischen den Convolutional
 Layern verkleinert sich die Dimension der Ferture Maps in jeder Schicht.
 
+Die Feature maps werden dann zur klassifizierung 
+einem fully connected layer übergeben.
 
+\vspace{1cm}
 \begin{figure}[H]
     \centering
     \label{fig:lenet}
     \includegraphics[width=0.8\columnwidth]{lenet.png}
     \caption{Faltung, \cite{lecunGradientBasedLearningApplied1998}}
 \end{figure}
+\vspace{1cm}
+die werte der filter matrizen werden über die 
+Backpropagation für die jeweiligen klassen 
+eingelernt.
+
+Da diese, insbesondere in den vorderen Convolutional 
+Layern für alle klassen sehr ähnlich sind, können vortrainierte
+Filter verwendet werde, welche dann an den eigenen 
+Datensatz angepasst werden, \textit{Transfer Learning}.
 
 
-Vorteile der CNNs, verglichen mit den in Abschnitt \ref{subsec:nn} beschiebenen 
-\textit{Feed Forward Networks} sind der geringere Rechenaufwand
-durch die gemeinsame Nutzung der Paramer durch die Filter Matrizen und die durch die 
-Faltung zustande kommende räumliche invarianz für das zu erkennende 
-Objekt auf dem Bild.
 
-Um die Features, welche insbesondere in den vordersten Convolutional 
-Layern für alle klassen sehr ähnlich sind, nicht bei jedem Modell
-neu lernen zu müssen, wird häufig \textit{Transfer Learing} angewendet, 
-eine Technik, bei der vortrainierte Filter verwendet und durch Fine 
-Tuning an den eigenen Datensatz angepasst werden.
 
 
 \subsection{Architkturen}\label{subsubsec:architecture}
 
-Seit der Einführung des ersten CNN 1998 von Yann LeCun
-\cite{lecunGradientBasedLearningApplied1998}, welches in 
-Abbildung \ref{fig:lenet} dargestellt ist, wurde eine 
-vielzahl an neuen Architekturen für genauere und effizientere
-Ergebnisse entwickelt.
 
-Zur bewertung dieser anhand einheitlicher Kriterien,
-wurde die \textit{Large Scale Visual Recognition Challenge (ILSVRC)}
-\cite{ImageNetLargeScale} von ImageNet gegründet.
+Nachdem 1998 das erste CNN (Abbildung \ref{fig:lenet})
+ von Yann LeCun in 
+\cite{lecunGradientBasedLearningApplied1998} 
+vorgestellt wurde, gab es eine vielzahl 
+an Weiterentwicklungen, welche genauere und 
+effizientere Netzwerke hervorbracheten.
+Gemessen und verglichen werden die Ergebnisse häufig an 
+der \textit{Large Scale Visual Recognition Challenge (ILSVRC)}
+ \cite{ImageNetLargeScale}.
 
-Bekannte Modelle, welche die Challenge gewonnen haben 
-sind, wie in \cite{StanfordCS231nConvolutional} aufgelistet ist:
+
+Bekannte Modelle, welche die Challenge in den letzten 
+Jahren gewinnen konnten sind wie in \cite{stanfordConvNetList}
+dargestellt.
 
 
 \begin{itemize}
-    \item Alexnet (2012), mehrere conv layer hintereinander
-    \item ZF Net (2013)
-    \item GoogleLeNet (2014), Inception Module
-    \item VGGNet 2014
-    \item ResNet (2015)
-\end{itemize}
+    \item \textbf{AlexNet}, von Alex Krizhevsky (2012) mit einer 
+        ähnlichen Strukture wie das LeNet, jedoch Tiefer und 
+        mit mehrerern Convolutional Layer übereinander.
 
+    \item \textbf{ZF Net}, von Matthew Zeiler and Rob Fergus (2013),
+        welches das AlexNet durch vergrößerung der 
+        mitlere Convolutional Layer und verkleinerung 
+        von Filter und Stride in den erstel Layern optimierte.
+
+    \item \textbf{VGGNet} von Karen Simonyan and Andrew Zisserman (2014),
+        zeigte das ein Tieferes Netz (16 bis 19 Conv Layer) reduzierter 
+        Filter größe ($3\times3$) bessere Ergebnisse erzielt.    
+
+    \item \textbf{GoogleLeNet}, auch bekannt als Inception, 
+        von Szegedy et al (2014), konnte mit den Inception Modulen,
+        welche im volgenden genauer erläutert werden, die Zahl der 
+        Parameter deutlich veringern.
+
+    \item \textbf{ResNet} von Kaiming He et al (2015), enthalten 
+        \textit{Residual Blocks}, in denen auf das Ergebnis zusätlich
+         der Input Wert addiert wird.
+\end{itemize}
 
 
 
@@ -458,7 +532,7 @@ Dadurch können Features auf unterschiedlicher skalen
 besser zusammengesetuzt und erkannt ewreden.
 
 
-
+\vspace{1cm}
 \begin{minipage}{0.5\textwidth}
     \centering
     \input{Bilder/inception_module.tex}

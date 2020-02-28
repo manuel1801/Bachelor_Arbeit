@@ -121,6 +121,59 @@ zufällig augmentierten Bilder für die Klasse Fuchs dargestellt.
 \end{figure}
 
 
+\section{Object Detection Modelle}
+
+
+Wie in \ref{subsec:objdet_det} erwähnt, werden für die 
+Object Detection neben einem CNN zur Feature extaction 
+weiteere strukturen/framework benötigt zur lokalisierung 
+des Objekts im Bild
+
+Die entwicklung immer genauerer und effizienterer 
+Frameworks ist Gegenstand aktueller Forschung und lassen 
+sich wie in dem übersichtspaper \cite{ouaknineReviewDeepLearning}
+beschrieben in die zwei grundarten \textit{Region proposal based} 
+und den \textit{Regression/Classification Based} einteilen.
+
+
+
+\subsection*{Faster R-CNN}
+Region Proposial Based Ansatz, \dots \cite{renFasterRCNNRealTime2016a}
+bei dem das RPN ein Bild als unput erhällt und
+daraus mögliche regionen für objekte im Bild findet.
+
+hier in einem Fully Convolutional realisiert, über dessen 
+Feature Maps im Sliding winow verfahren vordefinierte Anker
+ Boxen konvoliert werden. Der Resultieruende Vektor wird 
+ dann in einen binären FC Layer (cls) zur klassifizierung und 
+einen box-regressor layer (reg) für die Koordinaten gegeben.
+
+
+\begin{figure}[H]
+    \centering
+    \label{fig:faster_rcnn}
+    \includegraphics[width=0.8\textwidth]{faster-RCNN_architecture.png}
+    \caption{Faster R-CNN, quelle: \cite{ObjectDetectionDummies2017b}}
+\end{figure}
+
+
+
+\subsection*{SSD: Single Shot MultiBox Detector}
+Ist ein Regression/Classification Based Ansatz ... \cite{liuSSDSingleShot2016}
+
+Dabei werden dem Backbone CNN wetere feature Layer verschiedener größe 
+angehänget, welche zusammen mit default anker boxen und einem score 
+für die anwesenheit des objakts in der box in einen non max supression 
+layer gegeben, welcher die finalen predictions bestimmt.
+
+
+\begin{figure}[H]
+    \centering
+    \label{fig:faster_rcnn}
+    \includegraphics[width=0.8\textwidth]{ssd_architecture.png}
+    \caption{SSD, quelle: \cite{SSDSingleShot}}
+\end{figure}
+
 
 
 
@@ -207,15 +260,14 @@ einstellungen der Hyperparameter.
 %     \label{fig:train_workflow}
 % \end{figure}
 
-% \vspace{1cm}
-
+\vspace{1cm}
 \begin{figure}[H]
     \centering
     \input{Bilder/train_workflow_gesammt.tex}
     \caption{Trainingsworkflow}
     \label{fig:train_workflow}
 \end{figure}
-
+\vspace{1cm}
 Die Ergebnisse der jeweiligen Ansätze werden im nächsten Kapitel diskutiert.
 
 
@@ -269,7 +321,7 @@ die Inferenz eines Videos oder Kamera Streams,
 werden die Schritte preprocess, Inferenz und 
 process Output in einer Schleife wiederholt.
 
-
+\vspace{1cm}
 \begin{minipage}{0.30\textwidth}
     \centering
     \input{Bilder/inferece_engine_diagram}
@@ -308,6 +360,8 @@ process Output in einer Schleife wiederholt.
 %\end{python}
 \vspace{1.5cm}
 \end{minipage}
+\vspace{1cm}
+
 
 % transform:
 % # capture dims zu input blob dims transformieren

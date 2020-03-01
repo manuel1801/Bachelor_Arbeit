@@ -110,13 +110,13 @@ welcher die verwendeten Augmentierungstechniken zeigt.
 \end{lstlisting}
 
 In Abbildung \ref{fig:augmentierung} sind beispielhaft 9 dieser 
-zufällig augmentierten Bilder für die Klasse Fuchs dargestellt.
+zufällig augmentierten Bilder der Klasse Fuchs dargestellt.
 
 
 \begin{figure}[H]
-    \centering
     \label{fig:augmentierung}
-    \includegraphics[width=0.9\columnwidth]{Bilder/augmentierung.png}
+    \centering
+    \includegraphics[width=0.95\columnwidth]{Bilder/augmentierung.png}
     \caption{Anwendung von Augmentierungstechniken}
 \end{figure}
 
@@ -124,53 +124,95 @@ zufällig augmentierten Bilder für die Klasse Fuchs dargestellt.
 \section{Object Detection Modelle}
 
 
-Wie in \ref{subsec:objdet_det} erwähnt, werden für die 
-Object Detection neben einem CNN zur Feature extaction 
-weiteere strukturen/framework benötigt zur lokalisierung 
-des Objekts im Bild
+Object Detectione Modelle lassen sich, wie in 
+\cite{wuRecentAdvancesDeep2019} beschrieben wird,
+in Einstufige- und Zweistufige Detektoren einteilen.
 
-Die entwicklung immer genauerer und effizienterer 
-Frameworks ist Gegenstand aktueller Forschung und lassen 
-sich wie in dem übersichtspaper \cite{ouaknineReviewDeepLearning}
-beschrieben in die zwei grundarten \textit{Region proposal based} 
-und den \textit{Regression/Classification Based} einteilen.
+Zweistufige Detektoren generieren in der 
+ersten Stufe, 
+eine Auswahl an räumlichen Vorschlägen, in welchen 
+Objekte enthalten sein können. In der zweiten Stufe, 
+werden die Vorschläge zur Feature Extraction 
+einem CNN übergeben, welchem ein Netz zur Klassifizierung 
+(zb SVM) und eines zur annäherung der Bounding Box 
+Koordinaten (Regressor) folgen.
+
+Einstufige Verfahren verwenden kein seperates 
+Netz zur Vorschlagsgenerierung. Stattdessen 
+wird das gesamte Bild, gitterartig unterteilt,
+als potentielle Regionen für Objekte betrachtet 
+und hisichtlich vorhandensein einer Klasse je 
+Region klassifiziert.
+Dadurch sind diese zwar wesentlich schneller, 
+aber auch ungenauer.
+
+
+Für die Thesis wurden beide Ansätze verwendet und 
+für die Umsetzbarkeit als Wildtierdetektor 
+mit dem NCS2 hinsichtlich Genauigkeit und 
+Inferenzzeit verglichen.
+
+Die dafür verwendeten Modelle werden im folgenden 
+näher erläutert.
 
 
 
 \subsection*{Faster R-CNN}
-Region Proposial Based Ansatz, \dots \cite{renFasterRCNNRealTime2016a}
-bei dem das RPN ein Bild als unput erhällt und
-daraus mögliche regionen für objekte im Bild findet.
 
-hier in einem Fully Convolutional realisiert, über dessen 
-Feature Maps im Sliding winow verfahren vordefinierte Anker
- Boxen konvoliert werden. Der Resultieruende Vektor wird 
- dann in einen binären FC Layer (cls) zur klassifizierung und 
-einen box-regressor layer (reg) für die Koordinaten gegeben.
+Das Faster R-CNN \cite{renFasterRCNNRealTime2016a}, 
+dargestellt in Abbildung \ref{fig:faster_rcnn}, 
+verwendet ein zweistufiges Verfahren zu 
+Objekterkennung.
 
+Die Vorschlagsgenerierung erfolgt mithilfe eines 
+Region Proposial Networks (RPN), welches auf 
+einem \textit{fully convolutional network} 
+basiert.
+Über die daraus generierten Feature Maps werden im 
+Sliding-Window Verfahren vordefinierte Anker Boxen 
+konvoliert.
+Der daraus resultieruende Feature Vektor wird 
+einem binären klassifikator (\textit{cls layer}), 
+welcher angibt ob sich ein Objekt in dem Vorschlag befindet, 
+sowie einem Bounding Regresor (\textit{reg layer}) übergeben.
 
+\vspace{1cm}
 \begin{figure}[H]
     \centering
     \label{fig:faster_rcnn}
-    \includegraphics[width=0.8\textwidth]{faster-RCNN_architecture.png}
-    \caption{Faster R-CNN, quelle: \cite{ObjectDetectionDummies2017b}}
+    \includegraphics[width=0.95\textwidth]
+    {faster-RCNN_architecture.png}
+    \caption{Faster R-CNN Architektur, Quelle:
+     \cite{ObjectDetectionDummies2017b}}
 \end{figure}
 
 
 
-\subsection*{SSD: Single Shot MultiBox Detector}
-Ist ein Regression/Classification Based Ansatz ... \cite{liuSSDSingleShot2016}
 
-Dabei werden dem Backbone CNN wetere feature Layer verschiedener größe 
-angehänget, welche zusammen mit default anker boxen und einem score 
-für die anwesenheit des objakts in der box in einen non max supression 
-layer gegeben, welcher die finalen predictions bestimmt.
+\subsection*{SSD: Single Shot MultiBox Detector}
+
+Der Single Shot MultiBox Detector (SSD) \cite{liuSSDSingleShot2016} 
+ist ein einstufiges Verfahren zur Objekterkennung, 
+welches das Input Bild gitterartig unterteilt. In jeder Zelle des 
+Gitters werden default Anker Boxen unterschiedlicher 
+skalierungen definiert.
+
+Indem an das Backbone CNN weitere \textit{Extra Feature Layer}
+verschiedener größe angehängt werden, kann dieses 
+für jede default Box eine klassifizierungen, in form 
+eines \textit{confidence scores} sowie eine Lokalisierung, 
+in Form eines Offsets zur default Box vornehmen.
+
+Diese werden zur finalen Detektion einem \textit{non-maximum suppression}
+Layer \cite{Hosang2017cvpr} übergeben,
+welcher alle zu einer klasse gehörenden boxen zusammenführt.
+
 
 
 \begin{figure}[H]
     \centering
     \label{fig:faster_rcnn}
-    \includegraphics[width=0.8\textwidth]{ssd_architecture.png}
+    \includegraphics[width=0.95\textwidth]{ssd_architecture.png}
     \caption{SSD, quelle: \cite{SSDSingleShot}}
 \end{figure}
 

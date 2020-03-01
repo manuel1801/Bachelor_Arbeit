@@ -11,7 +11,6 @@
     },
     arrow/.style={
         draw,
-        %thick,
         >=latex,
         ->
     }
@@ -23,10 +22,11 @@
 
     \node (concat) [block] {Filter Concat};
 
-    \node (211) [block, below of=concat] {$1\times1$};
+    \node (211) [block, below of=concat, node distance=7em] {$1\times1$};
     \node (233) [block, left of=211] {$3\times3$};
-    \node (255) [block, left of=233] {$5\times5$};
+    \node (255) [block, left of=233] {$3\times3$};
 
+    \node (333) [block, above of=255, node distance=3em] {$3\times3$};
 
     \node (pool) [block, below of=211, node distance=3em] {Pool};
 
@@ -47,7 +47,8 @@
     \draw[arrow] (1112) -- (255);
     \draw[arrow] (1113) -- (concat);
 
-    \draw[arrow] (255) -- (concat);
+    \draw[arrow] (255) -- (333);
+    \draw[arrow] (333) -- (concat);
     \draw[arrow] (233) -- (concat);
     \draw[arrow] (211) -- (concat);
 

@@ -253,13 +253,16 @@ Entsteht eine Abweichung der beiden Fehlerfunktion wie in
 \ref{fig:overfitting} dargestellt, findet eine Überanpassung 
 (\textit{Overfitting}) des Modells an die Trainingsdaten statt.
 
+\vspace{2cm}
 \begin{figure}[H]
     \centering
     \def\svgwidth{0.5\textwidth}
-    \input{Bilder/Overfitting_svg.pdf_tex}
-    \caption{Overfitting, Lossfunktoin, Quelle: \cite{overfittingPlot}}
+    \input{Bilder/overfitting.pdf_tex}
+    \caption{Overfitting, anhand der Losskurven}
     \label{fig:overfitting}
 \end{figure}
+% vorlage: https://de.m.wikipedia.org/wiki/Datei:Overfitting_svg.svg
+% \cite{overfittingPlot}
 
 Gründe dafür sind zu wenig Trainingsdaten oder ein zu komplexes Model, 
 welches sich aufgrund der vielen Parameter wie bei eine Funktionen hohen
@@ -267,13 +270,15 @@ grades, die Möglichkeit hat sich an jeden Datenpunk
 anzupassen und damit nicht mehr generalisierbare Aussagen 
 für neue Datenpunkte treffen kann.
 
-
+\vspace{1cm}
 \begin{figure}[H]
     \centering
-    \includegraphics[width=0.9\textwidth]{over_under_fit.png}
-    \caption{Quelle: \cite{deshpGuideImprovingDeep2017a}}
+    \def\svgwidth{0.95\textwidth}
+    \input{Bilder/over_under_fit.pdf_tex}
+    \caption{}
     \label{fig:over_under_fit}
 \end{figure}
+\vspace{1cm}
 
 
 Stehen nicht mehr Trainingsdaten zur verfügung, kann Overfitting
@@ -338,53 +343,60 @@ in der Forschung oft verwendetes Framework.
 %---------------- SUBSECTION: Convolutional ----------------
 \section{Convolutional Neural Networks}\label{subsec:cnn}
 
-CNNs erweitern die in \ref{subsec:nn} beschriebenen
-Neuronalen Netze um Convolutional Layer, welche vor den 
-Fully Connected Layern ausgeführt werden.
-Diese erhalten den Input als zwiedimensionale Matrix, 
-und führen mathematische Faltungsoperationen darauf aus, 
-wodurch bestimmte merkmale des Inputs herausextrahiert werden 
-können.
+Convolutional Neural Networks (CNNs) erweitern 
+die in Abschnitt \ref{subsec:nn} beschriebenen
+\textit{Feed Forward Netze} um zusätzliche Schichten,
+die vor der eigentliche klassifizierung ausgeführt werdem
+und Merkmale aus den Input Daten herausextrahieren.
 
-Hauptanwendungsgebiet der CNNs ist die Bilderkennung,
-in anderen bereichen wie ... kommen sie aber auch 
-zum Einsatz.
+Diese Schichten enthalten den Input als zwei 
+dimensionale Matrix und führen darauf eine 
+mathematische Faltungsoperation aus.
+
+CNNs kommen größtenteils in der Bilderkennung zum 
+Einsatz, weitere Anwendungsgebiete sind 
+die Spracherkennung.
 
 Anstatt das alle Neuronen zweier benachbarter Schichten 
-durch Gewichte/Parameter miteinander verbunden sind, 
-stellen kleinere sog. Filter Matrizen, die 
+durch gewichtete Parameter miteinander verbunden sind, 
+stellen kleinere, sogenannte Filter Matrizen, die 
 Parameter dar.
 
 Diese werden zeilenweise über das Input Bild 
-geschoben und an jeder Stelle die 
-mathematische Faltung angewendet.
-
+geschoben, wobei an jeder Stelle eine mathematische 
+Faltung mit dem überlappten Bereich des Input 
+Bildes durchgeführt wird. Abbildung \ref{fig:faltung1}
+und \ref{fig:faltung2} veranschaulichen diesen Vorgang.
 
 
 \vspace{1cm}
 \begin{minipage}{0.5\textwidth}
+    \label{fig:faltung1}
     \centering
     \includegraphics[width=0.9\textwidth]{convolution.png}
     \captionof{figure}{Faltung, \cite{researcherSimpleIntroductionConvolutional2019}}
 \end{minipage}
 \begin{minipage}{0.5\textwidth}
+    \label{fig:faltung2}
     \centering
     \includegraphics[width=0.9\textwidth]{convolution-layer-a.png}
 \end{minipage}
 \vspace{1cm}
 
+Jedes Ergebniss einer Faltung ergibt einen Wert für 
+die nächste Schicht, die dadurch 
+ein Korellationsverhälltniss von zwischen
+Filter Matrix und Input Bild erhält.
 
+So werden in den Filtern definierte Muster, wie 
+beispielsweise vertikale Linien, 
+aus dem Inputbild herausextrahiert und in 
+den Folgeschichten, als Feature Maps abgebildet.
 
-Jedes Faltungsergebnis ergibt einen Wert der nächsten 
-Schicht, die eine korellation zwischen input bild 
-und filter darstellt.
-
-Enthalten diese ähnlice muster, wie in ... dargestellt 
-bsp horizonotale linien, wird diese merkmal
-verstärkt in der Feature Map abgebildet.
 
 \vspace{1cm}
 \begin{equation}
+    \label{eq:faltung}
     \begin{pmatrix}
         10 & 10 & 10 & 0 & 0 & 0\\
         10 & 10 & 10 & 0 & 0 & 0\\
@@ -413,47 +425,70 @@ verstärkt in der Feature Map abgebildet.
     \def\svgwidth{0.6\textwidth}
     \input{Bilder/convolution_graphical_all.pdf_tex}
     \caption{}
-    \label{}
+    \label{fig:faltung3}
 \end{figure}
 
+In Gleichung \ref{eq:faltung} ist die Faltung 
+eines Input Bildes mit einem Filter zur Etrahierung 
+vertikaler Linien dargestellt. Da pro Zeile 
+vier Faltungen angewendet werden, entsteht 
+eine $4\times4$ Matrix. Soll die Ausgangsgröße 
+beibehalten werde, kann \textit{zero padding}
+verwendet werden.
 
-durch die Faltung entsteht eine räumliche invarianz 
-fpr das zu erkennende Objekt im input bild.
-ein weitere forteil ist der geringere rechenaufwand
-durch die gemeinsame nutzung der parameter.
+Durch die Faltung entsteht so eine räumliche 
+Invarianz für das zu erkennende Objekt im 
+Input Bild.
+
+Den Convolutional Layern folgen meist Pooling Layer, 
+zur reduktione der Dimension und eine ReLU aktivierungsfunktion.
+
+Beim Pooling wird eine bestimme anzahl an werten 
+zusammengefasst, indem entweder das Maximum oder der 
+Mittelewert verwendet werden.
+
+Durch hintereinanderschaltung mehrerer Convolutional Blöcke
+können immer komplexere Muster aus dem 
+Input Bild herausextrahiert werden.
+
+Die Fetures des Letzten Convolutional Layers werden dann einem 
+\textit{Fully Connected Layer}  zur Klassifikation 
+übergeben.
 
 
-Durch die hintereinanderschaltung mehrerer Convolutional Layern 
-lassen sich so immer komplexere Merkmale des Input Bildes in den 
-Feature Maps heraus extrahieren.
-Durch Subsampling Methoden wie Max Pool Layer zwischen den Convolutional
-Layern verkleinert sich die Dimension der Ferture Maps in jeder Schicht.
-
-Die Feature maps werden dann zur klassifizierung 
-einem fully connected layer übergeben.
 
 \vspace{1cm}
 \begin{figure}[H]
     \centering
     \label{fig:lenet}
-    \includegraphics[width=0.8\columnwidth]{lenet.png}
+    \includegraphics[width=0.95\columnwidth]{lenet.png}
     \caption{Faltung, \cite{lecunGradientBasedLearningApplied1998}}
 \end{figure}
 \vspace{1cm}
-die werte der filter matrizen werden über die 
-Backpropagation für die jeweiligen klassen 
-eingelernt.
+
+
+Ein wesentlicher Vorteil gegenüber einem reinen 
+\textit{Feed Forward Network}
+ist der, dass durch die gemeinsame Nutzung
+der Parameter in den Filtern ein 
+geringerer Rechenaufwand entsteht.
+
+Die Werte der Filter Matrizen, welche die zu 
+findenen Muster bilden, 
+werden über die Backpropagation eingelernt.
 
 Da diese, insbesondere in den vorderen Convolutional 
-Layern für alle klassen sehr ähnlich sind, können vortrainierte
-Filter verwendet werde, welche dann an den eigenen 
-Datensatz angepasst werden, \textit{Transfer Learning}.
+Layern für die meisten Klassen sehr ähnlich sind,
+können vortrainierte Filter verwendet werde.
+
+Durch das sogenannte \textit{Transfer Learning}
+müssen die Geweichte dann nur noch leicht 
+für den eigenen Datensatz angepasst werden.
 
 
 
 
-
-\subsection{Architkturen}\label{subsubsec:architecture}
+\subsection{Architkturen}\label{subsubsec:architectures}
 
 
 Nachdem 1998 das erste CNN (Abbildung \ref{fig:lenet})
@@ -592,19 +627,39 @@ eine \textit{residual connection} unterstütz den gradientenfluss.
 
 
 %---------------- SUBSECTION: Obj Detection ----------------
-\subsection{Objekt erkennung}\label{subsec:objdet_det}
+\subsection{Objekterkennung}\label{subsec:objdet_det}
 
 Neben der Information, was sich auf einem Bild befindet geht 
 es bei der Objekt Erkennung auch darum herausfinden wo sich das 
 Objekt auf dem Bild befindet.
+Dafür wird die CNN Architektur so erweitert, dass dem 
+Modell neben den Klassenlabels auch die Koordinaten 
+der Bounding Boxen für das training mit übergeben werden.
+Bounding Boxen umrahmen wie in Abbildung 
+\ref{fig:class_vs_det} das Objekt auf dem Bild und 
+werden meist über Regressionsverfahren 
+angenähert.
 
-Dafür wird die CNN Architektur so erweitert, das das Modell 
-Neben den Input Bildern auch die Koordinaten für das 
-Training erhällt, und dadurch diese mitlernt.
+Das gesammt Framework zur Objekterkennung 
+verwendet dabei ein Basis CNN z.B. eines der in 
+\ref{subsubsec:architectures} dargestellen. 
 
-Dafür gibt es verschiedene Ansätze, welche im Abschnitt \ref{sec:related_work}
-genauer beschrieben werden.
+Das finden von Regionen, welche Objekte enthalten, 
+kann dabei in einem seperaten, Netzwerk, welches 
+Selective Search oder Vorschlagsgenerierer 
+verwendet, stattfinden.
 
+
+
+\vspace{1cm}
+\begin{minipage}{0.5\textwidth}
+    \centering
+    Classification
+\end{minipage}
+\begin{minipage}{0.5\textwidth}
+    \centering
+    Detection
+\end{minipage}
 \begin{figure}[H]
     \centering
     \label{fig:class_vs_det}
@@ -617,10 +672,9 @@ genauer beschrieben werden.
 
 %------------------- SECTION: Hardware ----------------------
 \section{Neural Compute Stick 2}\label{ncs2}
-%noch eine section zu Hardware allg (cpu, gpu, tpu), Neural Compute Stick und AI on the egde
 
 Da das Training und die Inferenz von Deep Learning Algorithmen
- sehr rechenintensiv ist, werden entsprechen leistungsfähige 
+sehr rechenintensiv ist, werden entsprechen leistungsfähige 
 Prozessoren benötigt. Dabei ist die Ausführung auf einer GPU 
 (Graphical Processor Unit) meist effizienter als auf einer 
 CPU (Central Processor Unit).

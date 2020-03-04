@@ -15,7 +15,7 @@
         %minimum widhth=6em,
         minimum height=3.5em,
         text centered,
-        node distance=19em
+        node distance=20em
     },
     arrow/.style={
         draw,
@@ -36,12 +36,12 @@
     \node (system) [block] {Klassisches\\Programm};
     \node (system2) [block, right of=system] {ML\\Programm};
 
-    \node [textfeld, left=of system.167] (inputs) {Inputs};
+    \node [textfeld, left=of system.167] (inputs) {Daten};
     \node [textfeld, left=of system.193] (regeln) {Regeln};
-    \node [textfeld, right=of system] (output) {Output};
+    \node [textfeld, right=of system] (output) {Ausgaben};
 
-    \node [textfeld, left=of system2.167] (inputs2) {Inputs};
-    \node [textfeld, left=of system2.193] (output2) {Output};
+    \node [textfeld, left=of system2.167] (inputs2) {Daten};
+    \node [textfeld, left=of system2.193] (output2) {Ausgaben};
     \node [textfeld, right=of system2] (regeln2) {Regeln};
     
     \draw[arrow] (inputs) -- (system.167);
@@ -52,6 +52,5 @@
     \draw[arrow] (output2) -- (system2.193);
     \draw[arrow] (system2) -- (regeln2);
     
-
 
 \end{tikzpicture}

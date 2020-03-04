@@ -1,48 +1,59 @@
 \chapter{Einleitung}\label{kap:einleitung}
 
-Wildkameras werden für die Jagt oder zu biologischen 
-Forschungszwecken eingesetzt.
-Das Aufnehmen der Bilder erfolgt dabei meist über einen 
-Bewegungsmelder automatsich.
-Dadurch kann unter Umständen eine große menge 
-an unwichtigen Daten entstehen, welche
-speicherplatz, und, bei automatischem 
-Senden, Datenvolumen benötigen, sowie ein großen 
-Auswertungsaufwand mit sich bringen.
+Wildkameras kommen in der Jagt oder zu biologischen 
+Forschungszwecken zum Einsatz.
+Da das Aufnehmen der Bilder automatisch über einen 
+Bewegungsmelder erfolgt, kann es unter Umständen zu 
+einer großen Menge an unwichtigen Daten kommen.
+Diese benötigen Speicherplatz auf dem Gerät, 
+oder, bei automatischem Senden, Datenvolumen eines 
+Mobilfunkanbieters und bringen ausserdem einen 
+großen Auswertungsaufwand mit sich.
 
-Ein System welches genau erkennt um welche Tiere es sich handelt,
-kann gezielter für verschiedene Anwendungen 
-wie beispielsweise das Aufspüren von Wolf und Bär im Wald,
-den Fuchs im eigenen Garten oder um den Tierbestand seltener 
-aussterbender Tierarten zu erfassen.
+Ein System, welches genau erkennt, um welche Tiere es
+sich bei den gemachten Aufnahmen handelt, kann wesentlich 
+effizienter und gezielter für eine bestimmte Anwendung 
+eingesetzt werden.
+Beispielsweise zur Überwachung des eigenen Gartens vor 
+Füchsen, oder zum Aufspüren von Wölfen und Bären 
+in bestimmten Waldgebieten.
+Auch der Artbestand seltener oder aussterbender 
+Tierarten könnte so leichter erfasst werden.
 
-Die Umsetzung eine solchen Kamerasystems mit
- Erkennungsfunktion erfolgt meistens mithilfe  
- Deep Learning, ein Teilgebiet der Künslichen Intelligenz.
+Für die Umsetzung einer solchen Bilderkennungsaufgabe 
+werden Deep Learning Algorithmen verwendet, welche 
+Teilgebiet der künstlichen Intelligenz darstellen.
+Bei de verwendeten Modellen handelt es sich in der Bilderkennung
+meist um sogenannte Convolutional Neural Networks (CNNs).
 
-Die Fortschritte, die in den letzten Jahren in diesem 
-Bereich gemacht wurden, sowie die verfügbare Hardware, ermöglichen 
-die Entwicklung eines solchen Systems auch ohne Großrechner 
-für den Privatgebrauch.
 
-Ziel der vorliegenden Arbeit war es ein autonomes Kamerasystem 
+Durch die Fortschritte die in diesem Bereich in
+den letzten jahren gemacht wurden, sowie durch 
+die Verfügbarkeit leistungsfähiger und zugleich
+kostengünstiger Hardware, ist die realisierung
+einer solchen Anwendung auch für den Privatgebrauch
+und ohne Verwendung eines Großrechners möglich geworden.
+
+
+Ziel der vorliegenden Arbeit war es, ein autonomes Kamerasystem 
 zu entwickeln, welches mithilfe von Deep Learning Algorithmen, 
 verschiedene Wildtierarten erkennen und klassifizieren kann.
- 
-Die Inferenz soll dabei auf dem KI Beschleuniger Neural Compute  
-Stick 2 von Intel ausgeführt werden. Durch Verwendung einer  
-infrarotfähigen Kamera soll es auch möglich sein 
-bei Dunkelheit Tiere zu erkennen.
+Dieses soll auf einem Raspberry Pi 4 laufen und 
+Bilder von erkannten Tieren automatisch an den Nutzer 
+senden.
+Die Inferenz der Neuronalen Netze wird dabei
+auf dem KI Beschleuniger Neural Compute Stick 2
+von Intel ausgeführt werden. Durch verwendung einer 
+infrarotfähigen Kamera soll die Erkennung des 
+Systems auch bei Nacht stattfinden können.
 
-Die Anwendung wird über einen Raspberry Pi 4 laufen 
-und selbständig Bilder erkannter Tieren an den Nutzer senden.
+Damit gliedert sich die Arbeit zunächst in ein
+Grundlagen Kapitel, welches die funktionsweise 
+von künstlichen Neuronalen Netzen für die
+Bilderkennung behandelt.
+Anschließend wrd es um die Umsetzung und Auswertung des 
+Trainings geeigneter Deep Learning Modelle gehen.
 
-Damit gliedert sich die Arbeit zunächst in ein Grundlagen Kapitel 
-welches sich mit Künslichen Neuronalen Netzen für die Bilderkennung 
-sowie der verwendeten Harweare auseinander setzt.
-
-Anschiließend wird es um das Training und die 
-Auswertung geeigneter Modelle zur Objekterkennung gehen.
-
-Das letzte Kapitel beschreibt die Entwicklung der Anwendung 
-in welcher die Inferenz implementiert.
+Der letzte Teil beschreibt de Entwicklung der Anwendung, 
+in welcher die Inferenz eines fertig trainiertes Modell, 
+für den Neural Compute Stick, implementiert wird.

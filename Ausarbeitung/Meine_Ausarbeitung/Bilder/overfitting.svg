@@ -132,9 +132,9 @@
      borderopacity="1.0"
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
-     inkscape:zoom="2.6140854"
-     inkscape:cx="161.00884"
-     inkscape:cy="83.211639"
+     inkscape:zoom="2.1239444"
+     inkscape:cx="154.62529"
+     inkscape:cy="153.44291"
      inkscape:document-units="mm"
      inkscape:current-layer="layer1"
      showgrid="true"
@@ -162,7 +162,7 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title></dc:title>
+        <dc:title />
       </cc:Work>
     </rdf:RDF>
   </metadata>
@@ -197,25 +197,25 @@
     <text
        xml:space="preserve"
        style="font-style:normal;font-weight:normal;font-size:5.6803484px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.14200871"
-       x="90.968697"
+       x="95.731201"
        y="105.83612"
        id="text1907"><tspan
          sodipodi:role="line"
          id="tspan1905"
-         x="90.968697"
+         x="95.731201"
          y="105.83612"
          style="stroke-width:0.14200871">Loss</tspan></text>
     <text
        xml:space="preserve"
        style="font-style:normal;font-weight:normal;font-size:3.88989902px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.09724747"
-       x="154.53438"
-       y="147.59404"
+       x="154.00522"
+       y="148.1232"
        id="text1911"><tspan
          sodipodi:role="line"
          id="tspan1909"
-         x="154.53438"
-         y="147.59404"
-         style="stroke-width:0.09724747">Epochen</tspan></text>
+         x="154.00522"
+         y="148.1232"
+         style="stroke-width:0.09724747">Iterationen</tspan></text>
     <path
        style="fill:none;stroke:#000000;stroke-width:0.15863924px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;marker-start:url(#marker1947)"
        d="m 133.86507,126.43951 v -6.79408"

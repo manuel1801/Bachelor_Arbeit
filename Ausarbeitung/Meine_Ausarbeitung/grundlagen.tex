@@ -2,12 +2,13 @@
 
 %####################  CHAPTER 1: Grundlagen  #################
 
-Dieses Kapitel beschreibt in den ersten Abschnitten die Grundlagen 
-des Machine Learnings, und die Funktionsweise Künstlicher Neuronaler Netze,
-insbesondere für Computer Vision Anwendungen.
-Der letzte Abschnitt behandelt die für die Arbeit verwendete KI taugliche 
-Hardware, den Neural Compute Stick 2.
-
+In diesem Kapitel werden zunächst die Grundlagen 
+des Machine Learnings mit künstlichen Neuronalen Netzen 
+beschrieben. Im zweiten Abschnit werden die sogenannten 
+\textit{Convolutional Neural Networks} für die 
+Bilderkennung genauer betrachtet.
+Der letzte Abschnitt wird die verwendete Hardware,
+den \textit{Neural Compute Stick 2} behandeln.
 
 
 %------------------- SECTION: Machine Learning ------------------
@@ -15,21 +16,25 @@ Hardware, den Neural Compute Stick 2.
 \section{Machine Learning}\label{sec:ml}
 
 Beim Machine Lerining, welches ein Teilgebiet der Computerwissenschafen
-ist, geht es um die Erstellung von Algorithmen, die Zusammenhänge in großen
-Datenmengen erkennen, ohne explizit darauf programmiert worden zu sein.
+ist, geht es um die Erstellung von Algorithmen, die Zusammenhänge in 
+großen Datenmengen erkennen können, ohne explizit darauf programmiert
+worden zu sein.
 Eine Form davon ist das \textit{Supervised Learning}, bei dem das Programm 
-neben den Input Daten auch die Zugehörigen Ausgaben erhält um daraus 
-Regeln für Zusammenhänge zwischen Ein- und Ausgabe Daten abzuleiten.
+neben den Input Daten auch die Zugehörigen Ausgaben, in vorm von 
+Labels, erhält um daraus 
+Regeln für die Zusammenhänge zwischen Ein- und Ausgabe Daten abzuleiten.
+Dadurch unterscheidet sich das Vorgehen, wie in Abbildung 
+\ref{fig:ml_classic_programm} veranschaulicht, wesentlich zur klassischen 
+Programmierung, bei bei der die Regeln vorab definiert werden müssen.
 
-Dadurch unterscheidet sich das Vorgehen wesentlich zur klassischen Programmierung,
-bei bei der die Regeln vorab definiert werden müssen.
-
-\vspace{0.4cm}
-\begin{center}
-    \input{Bilder/ml_classic_system.tex}    
-\end{center}
-\vspace{0.4cm}
-
+\vspace{1cm}
+\begin{figure}[H]
+    \centering
+    \input{Bilder/ml_classic_system.tex}
+    \caption{}
+    \label{fig:ml_classic_programm}
+\end{figure}
+\vspace{1cm}
 
 
 Das ableiten der Regeln erfolgt beim Machine Learning in einem 
@@ -39,19 +44,21 @@ als mathematische Funktion betrachtet, welche numerisch
 angenähert wird.
 
 Bei einem linearen Zusammenhang, handelt es sich
-um eine Regression und bei einem kategorischen um 
-eine Klassifizierung.
+um ein Regressions- und bei einem kategorischen um 
+eine Klassifikationsproblem.
 
 Weitere Formen neben dem \textit{Supervised Learning} sind das 
-\textit{Unsupervised Learning}, bei der das Programm keine Labels 
-erhällt, sondern diese selber finden 
+\textit{Unsupervised Learning}, bei dem das Programm keine Labels 
+erhält, sondern diese selber finden 
 soll, oder das \textit{Reinfocement Learning}, bei dem das Programm 
-durch interaktion mit der Umwelt bestimmte aufgaben lernt.
+durch interaktion mit der Umwelt bestimmte Aufgaben lernt.
 Diese techniken wurden in der Bachelor Arbeit nicht verwendet 
 und werden daher nicht näher erläutert.
 
+
 %------------------- SECTION: Neuronale Netze -------------------
 
+\newpage
 \subsection{Künstliche Neuronale Netze} \label{subsec:nn}
 
 Für komplexe Input Daten, wie beispielsweise Bilder, bei denen 
@@ -63,90 +70,117 @@ starke Gewichtungen der einzelnen Verbindungen, auch Gewichte genannt,
 können für unterschiedliche Input Daten die entsprechenden Outputs 
 gefunden werden.
 
+\vspace{1cm}
 \begin{figure}[H]
     \centering
     \label{fig:nn}
-    \def\svgwidth{0.65\columnwidth}
+    \def\svgwidth{0.85\columnwidth}
     \footnotesize
     \input{Bilder/nn.pdf_tex}
 \end{figure}
+\vspace{1cm}
 
-Die richtige gewichtung der Parameter erfolgt dabei in einem iterativen Trainingsprozess, 
-welcher aus den drei schritten:
+Die richtige Gewichtung der Parameter erfolgt dabei in dem iterativen
+Trainingsprozess, welcher aus den drei schritten:
 
 
 \begin{itemize}
     \item \textit{Forward Pass} anhand aktueller Gewichte vorhersage aus den Inputs treffen
     \item \textit{Fehlerbestimmung} Abweichung zum tatsächlichen werten berechnen
-    \item \textit{Backpropagation} minimierung der Fehlerfunktion durch Anpassung der Gewichte
+    \item \textit{Backpropagation} Minimierung des Fehlers durch Anpassung der Gewichte
 \end{itemize}
 
 besthet und in Abbildung \ref{fig:train} schematisch dargestellt ist.
 
 
-
+\vspace{1cm}
 \begin{figure}[H]
     \centering
-    \label{fig:train}
     \input{Bilder/train_workflow.tex}
-    \caption{Trainingsablauf NN}
+    \caption{Trainingsablauf eines Neuronalen Netzes}
+    \label{fig:train}
 \end{figure}
+\vspace{1cm}
 
 
 
 
-Durch merhfaches durchlaufen der Schritte wird die Fehlerfunktion soweit minimiert, 
-sodass das Modell auch für neue Input Daten die richtigen Aussagen treffen kann.
-Die mathematischen berechnungen der einzelnen Schritte werden im folgeden erläutert.
+Durch merhfaches durchlaufen dieser Schritte, 
+kann die Fehlerfunktion soweit minimiert werden, dass 
+das Modell auch für neue, ungesehene Input Daten 
+die richtigen Ausgaben vorhersagen kann.
+Die Funktionsweisen der einzelnen Schritte 
+werden im folgenden näher erläutert.
 
 
 \subsubsection{Forward Pass}
-Im \textit{Forward Pass} werden die Inputs durch alle Schichten hindurch 
-gereicht, um in der letzten Schicht den gewünschten Output zu liefern.
-Dabei erhält jedes Neuron die mit $w_{i}$ gewichteten Ausgabewerte aller
-Neuronen der vorherigen Schicht und summiert diese zusammen mit einem konstanten 
-Bias Wert $b$ auf. 
-Mithilfe einer Aktivierungsfunktion wird der Wert auf einen bestimmenten Bereich 
-skalliert \ref{fig:neuron}
+Im \textit{Forward Pass} werden die Inputs, welche an der 
+ersten Schicht aus Neuronen anliegen, durch alle Schichten hindurch 
+gereicht, um in der Ausgabeschicht Schicht
+das gesuchte Ergebnis zu liefern.
+Dabei erhält jedes Neuron die mit dem Parameter $w_{i}$ gewichteten
+Ausgabewerte aller Neuronen der vorherigen Schicht und summiert diese
+zusammen mit einem konstanten Bias Wert $b$ auf.
 
+Mithilfe einer Aktivierungsfunktion wird der Wert auf
+einen bestimmten Bereich skaliert.
 
+Abbildung \ref{fig:neuron} zeigt den Vorgang an einem einzenen 
+Neuron.
+
+\vspace{1cm}
 \begin{figure}[H]
     \centering
-    \label{fig:neuron}
     \input{Bilder/neuron}
-    \caption{Einzelnes Perzeptron}
+    \caption{Berechnungen an einem einzelnen Neuron}
+    \label{fig:neuron}
 \end{figure}
+\vspace{1cm}
 
-
-Um den Forward Pass für eine gesammte Schicht, bestehend aus 
+Um den \textit{Forward Pass} für eine gesammte Schicht, bestehend aus 
 einer Vielzahl an Neuronen, zu berechnen, werden die Schichten 
 als Vektoren und die Gewichte als Matrizen dargestellt.
 
 Die Matrixmultiplikation aus dem Vektor der vorherigen 
 Schicht $x$ mit der Gecwichtsmatrix $W$ ergibt die Werte
-des Vektors $z$ der aktuellen Schicht,
+des Vektors $z$ der aktuellen Schicht, wie Gleichung 
+\ref{eq:forward} zeigt.
 
 \begin{equation}
     \label{eq:forward}
     z = W^{T}x+b
 \end{equation}
 
-Dieser wird dann elementweise einer nichtlinearen Aktivierungsfunktion
-$g(z)$ übergeben wird.
 
-Für mittlere Schichten (Hidden Layer) wird dabei oft die in \ref{plot:relu} dargestellte
-\textit{ReLU Funktion} verwendet welche positive Werte beibehällt und negative 
+Dieser Vektor wird dann elementweise einer nichtlinearen
+Aktivierungsfunktion $g(z)$ übergeben.
+
+Für mittlere Schichten (\textit{Hidden Layer}) wird dabei
+oft die im Plot \ref{plot:relu} dargestellte \textit{ReLU Funktion}
+verwendet, welche positive Werte beibehält und negative 
 Werte zu 0 setzt.
 
-Das hat den Vorteil, \dots
+In der letzten Schicht, welche die möglichen 
+Ausgaben enthällt, wird eine Aktivierungsfunktion
+verwendet, die den Wert zwischen 0 und 1 
+skalliert und damit die Wahrscheinlichkeit angibt.
 
-Um für die Outputs einen Wahrscheinlichkeits Wert zwischen 0 und 1 
-zu erhalten, wird in der letzten Schicht für eine binäre Klassifikation 
-die Sigmoid Funktion (\ref{plot:sidmoid}) verwendet,
-welche S-Förmig zwischen 0 und 1 verläuft.
+Bei einer binären Klassifikation wird dafür
+die im Plot \ref{plot:sigmoid} dargestellte Sigmoid Funktion 
+verwendet.
 
-\vspace{1cm}
+Für kategorische Klassifikatoren, mit mehr als zwei 
+Ausgaben, wird die in Gleichung \ref{eq:softmax}
+dargestellte Softmax Funktion verwendet, 
+welche eine Wahrscheinlichkeitsverteilung
+über alle Ausgebe Neuronen generiert.
 
+\begin{equation}
+    \label{eq:softmax}
+    g(z) = \frac{e^{z}}{\sum e^{x}}
+\end{equation}
+\newpage
+%\vspace{1cm}
 \begin{minipage}{0.5\textwidth}
     \centering
     \begin{equation*}
@@ -154,6 +188,7 @@ welche S-Förmig zwischen 0 und 1 verläuft.
         g(z) = max\{0,z\}
     \end{equation*}
 \end{minipage}
+\vspace{1cm}
 \begin{minipage}{0.5\textwidth}
     \centering
     \begin{equation*}
@@ -161,79 +196,73 @@ welche S-Förmig zwischen 0 und 1 verläuft.
         g(z) = \frac{1}{1 + e^{-x}}
     \end{equation*}    
 \end{minipage}
-
-\vspace{1cm}
-
 \begin{minipage}{0.5\textwidth}
     \centering
-    \label{plot:relu}
     \input{Bilder/relu.tex}
     \captionof{figure}{ReLU Funktion} 
+    \label{plot:relu}
 \end{minipage}
 \begin{minipage}{0.5\textwidth}
     \centering
-    \label{plot:sigmoid}
     \input{Bilder/sigmoid.tex}
     \captionof{figure}{Sigmoid Funktion} 
+    \label{plot:sigmoid}
 \end{minipage}
-
 \vspace{1cm}
 
 
-Für eine Kategorische Ausgabe mit mehr als zwei Werten wird 
-die Softmax (\ref{eq:softmax}) Funktion verwendet, welche eine Wahrscheinlichkeits 
-Verteilung über alle Ausgebe Neuronen generiert.
 
-\begin{equation}
-    \label{eq:softmax}
-    g(z) = \frac{e^{z}}{\sum e^{x}}
-\end{equation}
 
 
 \subsubsection{Fehlerbestimmung}
-Die Abweichung des geschätzten Werts, welche an den Neuronen der letzen Schicht 
-vorliegen, zum tatsächlichen Werten, dem Label, wird mithilfe einer geeigneten
-Fehlerfunktion bestimmt. Für eine Lineare Regression wird dabei z.B. 
+Die Abweichung des geschätzten Werts, welcher an den Neuronen
+der letzen Schicht anliegt, zum tatsächlichen Werten,
+wird mithilfe einer geeigneten Fehlerfunktion bestimmt.
+Für eine Lineare Regression wird dabei z.B.
 der absolute oder quadratischen Abstand verwendet.
 
-Für Klassifikationsmodelle wird meistens eine logarithmische Fehlerberechnung, wie 
-die \textit{Cross Enropy Funktion} \ref{eq:crossentropy} verwendet.
+Für Klassifikationsmodelle wird meistens eine logarithmische
+Fehlerberechnung, wie die \textit{Cross enropy} Funktion verwendet.
+
+Diese ist für eine binäre Klassifikation in Gleichung
+\ref{eq:crossentropy} dargestellt.
 
 \begin{equation}
     \label{eq:crossentropy}
     L = \hat{y}log(y) + (1 - \hat{y})log(1 - y)
 \end{equation}
 
-Durch den Logarithmus wird der Loss um so größer, je weiter die Schätzung $y$ vom 
+Durch den Logarithmus wird der Loss um so größer,
+je weiter die Schätzung $y$ vom 
 tatsächlichen Wert $\hat{y}$ abweicht.
-%hier plot
+
+% In Plot ... für den Fall $\hat{y}=1$ dargestellt.
+% \input{Bilder/logloss.tex}
 
 
 \subsubsection{Backpropagation}
 
 Durch Berechnung des Gradienten der Fehlerfunktion kann ermittelt 
 werden in welche Richtung die Gewichte angepasst werden müssen,
-sodass diese sich im nächsten Durchgang minimiert.
+sodass diese sich im nächsten Durchgang minimieren.
 
 Dafür wird die die Fehlerfunktion $L$ für jede Schicht partiell nach den 
-Gewichten $w$ abgeleitet, was wie in gl. \ref{eq:backprop} dargestellt mithilfe der 
-Kettenregel über die Aktivierungsfunktion $z$ geschieht.
+Gewichten $w$ abgeleitet, was wie in Gleichung \ref{eq:backprop}
+dargestellt mithilfe der Kettenregel geschieht.
+Mit dem ermittelten Gradienten werden
+dann die Gewichte nach Gleichung \ref{eq:update_wieghts}
+mit einer Schrittweite $\eta$ angepasst.
 
 
 \begin{equation}
     \label{eq:backprop}
     \frac{\partial L}{\partial w} = \frac{\partial L}{\partial z}\frac{\partial z}{\partial w}
 \end{equation}
-Mit dem ermittelten Gradienten werden dann die Gewichte nach Gleichung \ref{eq:update_wieghts} angepasst.
 \begin{equation}
     \label{eq:update_wieghts}
     w  \leftarrow w - \eta \frac{\partial L}{\partial w}
 \end{equation}
-
-wobei die \textit{Lernrate} $\eta$ die Schrittweite ist, mit der die
-Anpassungen vorgenommen werden.
-
-
+\vspace{1cm}
 
 
 
@@ -241,7 +270,7 @@ Anpassungen vorgenommen werden.
 \subsection{Validierung und Overfitting}\label{subsec:validation}
 
 Um überprüfen zu können, ob und wie gut ein Modell die Zusammenhänge
-in den Trainingsdaten generalisiert hat, dh auch für neue Daten
+in den Trainingsdaten generalisiert hat, also auch für neue Daten
 anwendbar ist,
 wird der Datensatz in einen Trainings- und einen Testdatensatz aufgeteilt.
 
@@ -250,10 +279,10 @@ die korrektur der Gewichte mittels Backpropagation erfolgt
 jedoch nur anhand der Trainingsdaten.
 
 Entsteht eine Abweichung der beiden Fehlerfunktion wie in 
-\ref{fig:overfitting} dargestellt, findet eine Überanpassung 
-(\textit{Overfitting}) des Modells an die Trainingsdaten statt.
+\ref{fig:overfitting} dargestellt, findet eine Überanpassung, 
+\textit{Overfitting}, des Modells an die Trainingsdaten statt.
 
-\vspace{2cm}
+\vspace{1cm}
 \begin{figure}[H]
     \centering
     \def\svgwidth{0.5\textwidth}
@@ -261,14 +290,25 @@ Entsteht eine Abweichung der beiden Fehlerfunktion wie in
     \caption{Overfitting, anhand der Losskurven}
     \label{fig:overfitting}
 \end{figure}
-% vorlage: https://de.m.wikipedia.org/wiki/Datei:Overfitting_svg.svg
-% \cite{overfittingPlot}
+\vspace{1cm}
 
-Gründe dafür sind zu wenig Trainingsdaten oder ein zu komplexes Model, 
-welches sich aufgrund der vielen Parameter wie bei eine Funktionen hohen
-grades, die Möglichkeit hat sich an jeden Datenpunk 
-anzupassen und damit nicht mehr generalisierbare Aussagen 
-für neue Datenpunkte treffen kann.
+Gründe dafür können zu wenig 
+Trainingsdaten oder ein für den Anwendungsfall 
+zu komplexes Modell sein.
+ 
+Ein zu komplexes Modell hat durch die überparametrisierung
+die Möglichkeit sich an jeden Trainingsdatenpunk 
+anzupassen, sodass keine generalisierbare 
+Aussage für neue Datenpunkte mehr getroffen werden können.
+
+Der andere extremfall ist das \textit{Underfitting}, 
+bei dem das Modell, aufgrund zu weniger Parameter, nicht die 
+Möglichkeit hat, sich an die Trainingsdaten anzunähern.
+
+Die Plots in Abbildung \ref{fig:over_under_fit} veranschaulichen 
+die drei Fälle anhand einer polynomialen Funktionen,
+die sich an gegebene Datenpunkte, mit unterschiedlech hohem 
+Grad annähern soll.
 
 \vspace{1cm}
 \begin{figure}[H]
@@ -281,21 +321,30 @@ für neue Datenpunkte treffen kann.
 \vspace{1cm}
 
 
-Stehen nicht mehr Trainingsdaten zur verfügung, kann Overfitting
-mit einer der folgeden Techniken verhindert werden.
-
+Um Overfitting zu verhindern können entweder mehr Trainingsdaten 
+verwendet werden oder eine der folgenden Techniken angewendet werden.
 
 \subsubsection{Augmentierung}
-Bei Augmentierung werden aus den vorhandenen Daten künstlich mehr 
-Daten generiert, in dem an den Bildern geometrische transformationen 
-oder manipulationen der pixelwerte vorgenommen werden.
+Bei der Augmentierung werden aus den vorhandenen Trainingsdaten
+künstlich mehr Daten generiert, 
+indem diese leicht verändert werden, ohne 
+diese jedoch von der Inhaltlichen bedeutung zu verfälschen.
 
-\subsubsection{Regularisierung der Parameter (L1/L2)}
-Bei Regularisierung wird der Lossfuction als weiterer Term
-eine aufsummierung aller Gewichte hinzugefügt,
-wodurch diese bei der Minimierung des Lossfunktion 
-klein gehalten werden und damit einhergend weniger potential 
-zum Overfitting besteht.
+
+\subsubsection{Regularisierung der Parameter}
+
+Bei der Regularisierung wird der Lossfuktion als weiterer Term
+eine aufsummierung aller Gewichte hinzugefügt.
+
+Dadurch werden die Parameter mit der minimierung der
+Lossfunktion klein gehalten, wodurch das Modell weniger
+potential für eine Überanpassung hat.
+
+Dabei wird zwischen der L1 Regulierung, mit einer
+absoluten, und der in Gleichung \ref{eq:regularization}
+dargestellten L2 Regularisierung, mit einer 
+quadratischen Aufsummierung der 
+Parameter unterschieden.
 
 \begin{equation}
     \label{eq:regularization}
@@ -305,7 +354,7 @@ zum Overfitting besteht.
 \subsubsection{Dropout}
 Beim Dropout werden in mit einer bestimmten Wahrscheinlichkeit 
 einige Neuronen Neuronen (Bsp 50\%) zu 0 gesetzt, um 
-alternative Gewichtsanpassungen zu erzwingen.
+dadurch alternative Gewichtsanpassungen zu erzwingen.
 
 \begin{figure}[H]
     \centering
@@ -314,18 +363,20 @@ alternative Gewichtsanpassungen zu erzwingen.
     \label{fig:dropout}
 \end{figure}
 
+
 \subsubsection{Early Stopping}
-Beim erly Stopping wird das Traing an der 
-Stelle unterbroche, an der die Lossfunktion ihr 
-Minimum erreicht hat, markierte stelle in 
-\ref{fig:overfitting}.
+Beim Early Stopping wird das Training an der 
+Stelle abgebrochen, an der die Lossfunktion ihr 
+Minimum erreicht hat, wie in Abbildung \ref{fig:overfitting}
+dargestellt.
+
 
 
 %------------------- SUBSECTION: ML Frameworks ---------------
 \subsection{Machine Learning Frameworks}
 
 Machine Larning Algorithmen beeinhalten eine vielzahl an komplexen
-Berechnungsschritten und Parametern. Um diese diese nicht jedesmal 
+Berechnungsschritten und Parametern. Um diese nicht jedesmal 
 von Grund auf neu implementieren zu müssen bieten 
 Frameworks eine vereinfachte Möglichkeit die Modelle zu konstruieren.
 
@@ -338,24 +389,22 @@ in der Forschung oft verwendetes Framework.
 
 
 
-
-
 %---------------- SUBSECTION: Convolutional ----------------
 \section{Convolutional Neural Networks}\label{subsec:cnn}
 
 Convolutional Neural Networks (CNNs) erweitern 
 die in Abschnitt \ref{subsec:nn} beschriebenen
-\textit{Feed Forward Netze} um zusätzliche Schichten,
-die vor der eigentliche klassifizierung ausgeführt werdem
+\textit{Feedforward neural Networks} um zusätzliche Schichten,
+die vor der eigentliche klassifikation ausgeführt werden
 und Merkmale aus den Input Daten herausextrahieren.
 
-Diese Schichten enthalten den Input als zwei 
+Diese Schichten erhalten die Input Daten als zwei 
 dimensionale Matrix und führen darauf eine 
 mathematische Faltungsoperation aus.
 
 CNNs kommen größtenteils in der Bilderkennung zum 
 Einsatz, weitere Anwendungsgebiete sind 
-die Spracherkennung.
+z.B. die Spracherkennung.
 
 Anstatt das alle Neuronen zweier benachbarter Schichten 
 durch gewichtete Parameter miteinander verbunden sind, 
@@ -364,34 +413,34 @@ Parameter dar.
 
 Diese werden zeilenweise über das Input Bild 
 geschoben, wobei an jeder Stelle eine mathematische 
-Faltung mit dem überlappten Bereich des Input 
-Bildes durchgeführt wird. Abbildung \ref{fig:faltung1}
+Faltung mit dem überlappten Bereich des Inputs 
+durchgeführt wird. Abbildung \ref{fig:faltung1}
 und \ref{fig:faltung2} veranschaulichen diesen Vorgang.
-
 
 \vspace{1cm}
 \begin{minipage}{0.5\textwidth}
-    \label{fig:faltung1}
     \centering
     \includegraphics[width=0.9\textwidth]{convolution.png}
     \captionof{figure}{Faltung, \cite{researcherSimpleIntroductionConvolutional2019}}
+    \label{fig:faltung1}
 \end{minipage}
 \begin{minipage}{0.5\textwidth}
-    \label{fig:faltung2}
     \centering
     \includegraphics[width=0.9\textwidth]{convolution-layer-a.png}
+    \captionof{figure}{}
+    \label{fig:faltung2}
 \end{minipage}
 \vspace{1cm}
 
 Jedes Ergebniss einer Faltung ergibt einen Wert für 
 die nächste Schicht, die dadurch 
-ein Korellationsverhälltniss von zwischen
+ein Korellationsverhälltniss zwischen
 Filter Matrix und Input Bild erhält.
 
 So werden in den Filtern definierte Muster, wie 
 beispielsweise vertikale Linien, 
 aus dem Inputbild herausextrahiert und in 
-den Folgeschichten, als Feature Maps abgebildet.
+den Folgeschichten, als sogenannte Feature Maps abgebildet.
 
 
 \vspace{1cm}
@@ -429,26 +478,26 @@ den Folgeschichten, als Feature Maps abgebildet.
 \end{figure}
 
 In Gleichung \ref{eq:faltung} ist die Faltung 
-eines Input Bildes mit einem Filter zur Etrahierung 
+eines Input Bildes mit einem Filter zur Erkennung 
 vertikaler Linien dargestellt. Da pro Zeile 
 vier Faltungen angewendet werden, entsteht 
 eine $4\times4$ Matrix. Soll die Ausgangsgröße 
 beibehalten werde, kann \textit{zero padding}
 verwendet werden.
 
-Durch die Faltung entsteht so eine räumliche 
+Durch die Faltung entsteht eine räumliche 
 Invarianz für das zu erkennende Objekt im 
 Input Bild.
 
-Den Convolutional Layern folgen meist Pooling Layer, 
-zur reduktione der Dimension und eine ReLU aktivierungsfunktion.
+Den \textit{Convolutional Layern} folgen meist \textit{Pooling Layer}, 
+zum Downsampling und eine ReLU-Aktivierungsfunktion.
 
-Beim Pooling wird eine bestimme anzahl an werten 
+Beim Pooling wird eine bestimme Anzahl an Werten 
 zusammengefasst, indem entweder das Maximum oder der 
-Mittelewert verwendet werden.
+Mittelewert dieser Werte verwendet werden.
 
-Durch hintereinanderschaltung mehrerer Convolutional Blöcke
-können immer komplexere Muster aus dem 
+Durch hintereinanderschaltung mehrerer solcher Convolutional Blöcke,
+können in jeder Schicht immer komplexere Muster aus dem 
 Input Bild herausextrahiert werden.
 
 Die Fetures des Letzten Convolutional Layers werden dann einem 
@@ -456,115 +505,130 @@ Die Fetures des Letzten Convolutional Layers werden dann einem
 übergeben.
 
 
-
 \vspace{1cm}
 \begin{figure}[H]
     \centering
-    \label{fig:lenet}
     \includegraphics[width=0.95\columnwidth]{lenet.png}
     \caption{Faltung, \cite{lecunGradientBasedLearningApplied1998}}
+    \label{fig:lenet}
 \end{figure}
 \vspace{1cm}
 
 
 Ein wesentlicher Vorteil gegenüber einem reinen 
-\textit{Feed Forward Network}
-ist der, dass durch die gemeinsame Nutzung
-der Parameter in den Filtern ein 
+Feedforward Network ist, dass 
+durch die gemeinsame Parameternutzung über die Filter ein 
 geringerer Rechenaufwand entsteht.
 
 Die Werte der Filter Matrizen, welche die zu 
-findenen Muster bilden, 
+extrahierenden Muster darstellen, 
 werden über die Backpropagation eingelernt.
 
-Da diese, insbesondere in den vorderen Convolutional 
+Da die Muster, insbesondere in den vorderen Convolutional 
 Layern für die meisten Klassen sehr ähnlich sind,
-können vortrainierte Filter verwendet werde.
+werden häufig Netze mit vortrainierten Filtern 
+verwendet.
 
 Durch das sogenannte \textit{Transfer Learning}
-müssen die Geweichte dann nur noch leicht 
-für den eigenen Datensatz angepasst werden.
-
+müssen die Gewichte dann nur noch leicht, 
+für den eigenen Datensatz, angepasst werden.
 
 
 
 \subsection{Architkturen}\label{subsubsec:architectures}
-
 
 Nachdem 1998 das erste CNN (Abbildung \ref{fig:lenet})
  von Yann LeCun in 
 \cite{lecunGradientBasedLearningApplied1998} 
 vorgestellt wurde, gab es eine vielzahl 
 an Weiterentwicklungen, welche genauere und 
-effizientere Netzwerke hervorbracheten.
+effizientere Modelle hervorbracheten.
 Gemessen und verglichen werden die Ergebnisse häufig an 
 der \textit{Large Scale Visual Recognition Challenge (ILSVRC)}
  \cite{ImageNetLargeScale}.
+ 
 
-
-Bekannte Modelle, welche die Challenge in den letzten 
-Jahren gewinnen konnten sind wie in \cite{stanfordConvNetList}
-dargestellt.
+Namhafte Modelle, welche die Challenge in den letzten 
+Jahren gewinnen konnten sind unter \cite{stanfordConvNetList}
+zu finden und im folgenden aufgelistet.
 
 
 \begin{itemize}
-    \item \textbf{AlexNet}, von Alex Krizhevsky (2012) mit einer 
-        ähnlichen Strukture wie das LeNet, jedoch Tiefer und 
-        mit mehrerern Convolutional Layer übereinander.
+    \item \textbf{AlexNet}, (2012), von Alex Krizhevsky 
+        \cite{krizhevskyImageNetClassificationDeep2017b} welches eine 
+        ähnliche Struktur wie LeCuns LeNet besitzt, jedoch Tiefer ist und 
+        mit mehrere Convolutional Layer am Stück hintereinander besitzt.
 
-    \item \textbf{ZF Net}, von Matthew Zeiler and Rob Fergus (2013),
+    \item \textbf{ZF Net}, (2013), von Matthew Zeiler and Rob Fergus,
+        \cite{zeilerVisualizingUnderstandingConvolutional2013}
         welches das AlexNet durch vergrößerung der 
         mitlere Convolutional Layer und verkleinerung 
         von Filter und Stride in den erstel Layern optimierte.
 
-    \item \textbf{VGGNet} von Karen Simonyan and Andrew Zisserman (2014),
-        zeigte das ein Tieferes Netz (16 bis 19 Conv Layer) reduzierter 
-        Filter größe ($3\times3$) bessere Ergebnisse erzielt.    
+    \item \textbf{VGGNet}, (2014), von Karen Simonyan and Andrew Zisserman.
+        \cite{simonyanVeryDeepConvolutional2015}
+        Dieses Modell zeigte, dass ein tieferes Netz (16 bis 19 ConvLayer)
+        mit reduzierter Filter größe ($3\times3$) bessere Ergebnisse erzielt.    
 
-    \item \textbf{GoogleLeNet}, auch bekannt als Inception, 
-        von Szegedy et al (2014), konnte mit den Inception Modulen,
-        welche im volgenden genauer erläutert werden, die Zahl der 
-        Parameter deutlich veringern.
+    \item \textbf{GoogleLeNet}, auch bekannt als Inception, (2014),
+        von Szegedy et al \cite{szegedyGoingDeeperConvolutions2014},
+        konnte mit den Inception Modulen,
+        welche im folgenden genauer erläutert werden, die Zahl der 
+        Parameter, und dadurch den Rechenaufwand, deutlich veringern.
 
-    \item \textbf{ResNet} von Kaiming He et al (2015), enthalten 
-        \textit{Residual Blocks}, in denen auf das Ergebnis zusätlich
-         der Input Wert addiert wird.
+    \item \textbf{ResNet}, (2015) von Kaiming He et al 
+        \cite{heDeepResidualLearning2015}, enthällt 
+        als Erweiterung die sog. \textit{Residual Blocks}, in denen auf
+        das Ergebnis eines Bocks zusätzlich der unveränderte
+        Input Werd addiert wird.
+
 \end{itemize}
 
 
 
 \subsubsection{GoogleLeNet (Inception)}
 
-Eine Möglichkeit die Genauigkeit eines Deep Learning Modell 
-zu verbessern, ist es mehr Schichte und/oder eine 
-größere Anzahl an Neuronen pro Schicht zu verwenden.
 
-Der Nachteil dabei ist der größere Rechenaufwand, sowie 
-die höhere Chance des Overfittings.
+Die Entwicklung der CNN Architekturen hat gezeigt, das 
+sich durch hinzufügen weiterer Schichten sowie
+die verwenden von meher Neuronen je Schicht die
+Genauigkeit verbessern lässt.
+Das bringt jedoch auch die Nachteile eines 
+größeren Rechenaufwands sowie der erhöten 
+Gefahr des Overfittings mit sich.
 
-Das in \cite{szegedyGoingDeeperConvolutions2014} vorgestellte GoogleLeNet hat mit den Inception 
-Modulen einen neuen, effizienteren Asatz gefunden die 
-Komplexität und damit die Genauigkeit zu erhöhen.
+Das in \cite{szegedyGoingDeeperConvolutions2014} 
+vorgestellte GoogleLeNet, hat mit den in 
+Abbildung \ref{fig:incept_modul} dargestellten
+\textit{Inception Modulen}, einen neuen, 
+effizienteren Asatz gefunden, die 
+Komplexität und damit die Genauigkeit eines 
+CNNs zu erhöhen.
 
 Die Module bestehen aus parallel ausgeführten 
-Convolutional Layern unterschiedlicer Kernel 
-Größe ($1\times1, 3\times3, 5\times5$)
+Convolutional Layern der unterschiedlichen Filter 
+Größen $1\times1$, $3\times3$ und $5\times5$ welche 
+am ende des Moduls über eine \textit{Filter 
+concatenation} wieder zusammengeführt werden.
+Zur Dimensionsreduktion werden, wie in 
+Abbildung \ref{fig:incept_modul} dargestellt,
+diesen Filtern noch $1\times1$ Filter vorgeschaltet.
+Durch die Inception Module kommt das Modell 
+für gleiche Ergebnisse mit deutlich weniger 
+Parametern aus als ein Modell ohne die Module.
+Ein weiterer Vorteil ist, das durch die 
+unterschiedliche Filtergröße, Merkmale 
+unterschiedlicher skalierungen besser gefunden 
+werden können.
 
-Diesen werden zu Dimensionsreduktion häufig 
-$1\time1$ Kernel vorgeschaltet.
+Um die Effizienz weiter zu Steigern wurden in 
+der zweiten Version des GoogleLeNet, beschrieben in
+\cite{szegedyRethinkingInceptionArchitecture2015},
+neben anderen Verbesserungen, die 
+$ 5\times5$ Filter jeweils durch zwei $3\times3$ Filter 
+ersetzt, was in Abbildung \ref{fig:incept_modul2}
+dargestellt ist.
 
-Um die effizienz weiter zu Steigern wurden in 
-der zweiten variante des GoogleLeNet
-\cite{szegedyRethinkingInceptionArchitecture2015}
- neben anderen verbesserungen, die 
-$ 5\times5$ filter durch 2  $3\times3$ Filter 
-ersetzt.
-
-Am ende eines Ineption Moduls werden diese 
-in einem \textit{DepthConcat} Layer wieder zusammengeführt.
-
-Dadurch können Features auf unterschiedlicher skalen 
-besser zusammengesetuzt und erkannt ewreden.
 
 
 \vspace{1cm}
@@ -578,7 +642,7 @@ besser zusammengesetuzt und erkannt ewreden.
     \centering
     \input{Bilder/inception_module_v2.tex}
     \captionof{figure}{Inception ModuleV2}
-    \label{fig:incept_modul}
+    \label{fig:incept_modul2}
 \end{minipage}
 
 
@@ -586,44 +650,46 @@ besser zusammengesetuzt und erkannt ewreden.
 
 \subsubsection{Mobilenet}
 
-\cite{howardMobileNetsEfficientConvolutional2017a}
 
-Geringere Komplexität für Mobile oder embedded geräte, indem 
-die normale Faltungsoperation mit der \textit{Depthwise Seperable 
-Convolutions} ersetzt wird. 
-Diese besteht aus einer \textit{Depthwise  
-Convolutions}, welche die Faltunge auf 
-die drei Farbchannel seperat anwendet udn einer 1times1
-\textit{pointwise convolution}, welche die input channel combiniert. 
+Das MobileNet \cite{howardMobileNetsEfficientConvolutional2017a}
+wurde mit dem Ziel egschaffen, durch geringere 
+komplexität, für Mobile Endgeräte oder Embedded Anwendungen 
+geeignet zu sein.
 
-% \begin{figure}[H]
-%     \centering
-%     \includegraphics[width=0.5\textwidth]{DepthwiseSeperable.png}
-%     \caption{DepthwiseSeperable}
-%     \label{fig:mobilenet}
-% \end{figure}
-% %https://www.researchgate.net/publication/326727106/figure/fig1/AS:654646985113600@1533091412204/The-architecture-a-Standard-convolution-filters-b-Depthwise-convolutional-filters-c-1.png
+Dafür wurden die üblichen \textit{full convolutional Layer}
+mit sogenannten \textit{Depthwise Seperable 
+Convolutions} ersetzt, welche die Faltung in zwei seperaten 
+Layern ausführt. Zuerst wird eine \textit{Depthwise  
+Convolutions} auf die drei Farbchannel getrennt ausgeführt.
+Anschleißend führt eine \textit{pointwise convolution}
+mit $1\times1$ Filter dise wieder zusammen.
 
 
 
+In der zweiten version des MobileNet
+\cite{sandlerMobileNetV2InvertedResiduals2019},
+wurden, die \textit{Depth-wise Separable Convolutions}
+wie folgt abgeändert:
 
-In der zweiten version \cite{sandlerMobileNetV2InvertedResiduals2019} enthalten die 
-Hauptbestandteile eine 1times1 conv mit relu, die 
-3time3 depthwise gefolgt von einer weitere 1time1 ohne aktivierungsfunktion.
+Zuerst wird eine $1\times1$ Convolution mit ReLU
+Aktivierungsfunktion ausgefühtr, anschließend die 
+\textit{Depthwise Convolutions}, gefolgt 
+von einer weiteren $1\times1$ mit linearer 
+Aktivierungsfunktion.
 
-eine \textit{residual connection} unterstütz den gradientenfluss.
 
-%https://towardsdatascience.com/mobilenetv2-inverted-residuals-and-linear-bottlenecks-8a4362f4ffd5
+Desweiteren soll wie beim \textit{ResNet} eine 
+\textit{residual connection}, welche Ein- mit Ausgabe 
+eines Blocks verbindet, 
+den Gradientenfluss unterstützen, wie in Abbildung 
+\ref{fig:mobilenetv2} dargestellt ist.
+%bild: https://towardsdatascience.com/mobilenetv2-inverted-residuals-and-linear-bottlenecks-8a4362f4ffd5
 \begin{figure}[H]
     \centering
     \includegraphics[width=0.5\textwidth]{mobilenet_v2.png}
     \caption{MobilenetV2}
     \label{fig:mobilenetv2}
 \end{figure}
-
-
-
-
 
 
 %---------------- SUBSECTION: Obj Detection ----------------
@@ -662,9 +728,9 @@ verwendet, stattfinden.
 \end{minipage}
 \begin{figure}[H]
     \centering
-    \label{fig:class_vs_det}
     \includegraphics[width=0.8\textwidth]{classification_detection.jpeg}
     \caption{Unterschied: Classification - Detection}
+    \label{fig:class_vs_det}
 \end{figure}
 
 
@@ -679,84 +745,86 @@ Prozessoren benötigt. Dabei ist die Ausführung auf einer GPU
 (Graphical Processor Unit) meist effizienter als auf einer 
 CPU (Central Processor Unit).
 
-Anwendungen die auf eingebetteten Systemen laufe, wie etwa 
+Anwendungen die auf eingebetteten Systemen laufen, wie etwa 
 auf einem Raspberry Pi, kommen dabei schnell an ihre 
 Grenzen.
 
-Häufig werden daher die Bilddaten über eine Cloud zur 
-verrechnung/inferenz an einen Leistungsstärkeren 
-Rechner gesendet.
+Eine möglichkeit ist es die Bilddaten für die 
+Verrechnung an eine Cloud zu senden, wo sie 
+von einem leistungsstärkeren Rechner inferiert und 
+dann wieder zurückgesendet werden.
 
-Sollen die Daten, wie dies beim Edge Computing der Fall ist, 
-auf dem gerät direkt verarbeitet werden, gibt es speziell 
-für die Inferenz von Deep Learing Algorithmen Ausgelegt 
-Hardware, welche NN spezifische Berechnung besonders 
-effizient durchführen kann.
+Sollen die Daten, wie es beim Edge Computing der Fall ist, 
+auf dem Anwendungsgerät direkt verarbeitet werden,
+gibt es speziell für die Inferenz von Deep Learing Algorithmen
+geeignete Hardware.
+Durch Fokus auf paralletlität anstatt Taktrate können 
+für Neuronale Netze spezifische Rechenoperationen 
+wie z.B. die Matrixmultiplikation besonders effizient 
+durchgeführt werden.
 
-Diese können entweder als eigenständiges \textit{System on Chip}
-(SoC) System wie zb der \textit{Nvidia Jetson TX2} agieren oder 
-zusammen mit einem Host, wie das bei dem in der Arbeit verwendeten 
-Neural Compute Stick 2 der fall ist.
+Die Inferenzbeschleunigende Hardware kann dabei entweder
+als eigenständiges \textit{System on Chip (SoC)}
+System wie z.B. der \textit{Nvidia Jetson TX2} agieren, oder
+in verbindung mit einem Host Pc, wie der, in der Arbeit 
+verwendeten, Neural Compute Stick 2 (NCS2).
 
-Dieser verwendet den Movidius Myriad X Vision Processing Unit (VPU)
-welcher neben der Neural Compute Engine zur beschleunigten berechnung 
-Neuronalen Netzen, einen Bildbeschleuniger, 16 SHAVE Prozessoren, 
-Bildsignalprozessoren udn RISC CPU Core besitzt.
+Der in \ref{fig:ncs2} abgebildete NCS2 verwendet 
+für die Inferenz eine Movidius Myriad X Vision Processing Unit (VPU),
+welche in Abbildung \ref{fig:myriad} dargestellt ist.
+
+Diese besteht wie in der Masterarbeit
 \cite{haussermannFunktionUndEffizienz}
-\\[1cm]
+nachzulesen ist, aus der Neural Compute Engine 
+zur beschleunigten berechnung Neuronaler Netze, einem
+Bildbeschleuniger, 16 SHAVE Prozessoren, einem 
+Bildsignalprozessor sowie einem RISC CPU Core.
+
+\vspace{1cm}
 \begin{minipage}{0.4\textwidth}
     \centering
-    \label{fig:ncs2}
     \includegraphics[width=\textwidth]{ncs2_top.jpg}
-    \captionof{figure}{ncsc2}
+    \captionof{figure}{NCS2}
+    \label{fig:ncs2}
 \end{minipage}
 \begin{minipage}{0.6\textwidth}
     \centering
-    \label{fig:myriad}
     \includegraphics[width=\textwidth]{myriad.png}
-    \captionof{figure}{myriad}
+    \captionof{figure}{Myriad Chip}
+    \label{fig:myriad}
 \end{minipage}
 
 
 \subsection{OpenVino Toolkit}
 
-% doku:
-% https://docs.openvinotoolkit.org/latest/_docs_IE_DG_Introduction.html
-% diagramme:
-% https://github.com/intel-iot-devkit/inference-tutorials-generic/tree/openvino_toolkit_2019_r1_0/car_detection_tutorial#tutorial-step-3-add-the-second-model-vehicle-attributes-detection
-% https://github.com/intel-iot-devkit/inference-tutorials-generic/blob/openvino_toolkit_2019_r1_0/face_detection_tutorial/Readme.md
-
-
 Um die Inferenz eines trainierten Deep Learing Modells auf dem
-Neural Compute Stick ausführen zu können, wird das Toolkit 
+Neural Compute Stick auszuführen, wird das Toolkit 
 \textit{OpenVino} verwendet.
-
 Dieses ist eine Plattform zur Otimierung und Inferenz von 
-CNN basierten Modellen auf unterschiedlicher Intel Hardware.
-
-
-
-
+CNN basierten Modellen auf verschiedener Intel Hardware.
 
 Dabei wird ein eigenes Dateiformat verwendet, die \textit{Intermediate 
-Representation} (IR), welche die Struktur/Architektur des Modells 
-in einer .xml Datei und die trainierten Parameter/Gewichte in 
-einer Binary (.bin) datei abbildet.
-
-Mit dem \textit{Model Optimizer} können Modelle der Frameworks 
-TensorFlow, Caffe, ONNX, Kaldi, oder MXNET in das IR Format 
-konvertiert werden.
+Representation} (IR), welche die Struktur des Modells 
+in einer Xml-Datei (.xml) und die trainierten Gewichte in 
+einer Binary Datei (.bin) abbildet.
+Mit dem \textit{Model Optimizer} können Modelle welche in den 
+den Frameworks TensorFlow, Caffe, ONNX, Kaldi, oder MXNET 
+trainiert wurden, in das IR Format konvertiert werden.
 
 Um diese dann auf die entsprechende Hardware zu laden und anwendbar 
 zu machen, wird die auch in OpenVino enthaltene
-\textit{InferenceEngeine} verwendet.
-
+\textit{InferenceEngine} verwendet.
 Diese bietet eine Api mit der aus der Anwendung heraus in den 
 Programmiersprachen C++ oder Python auf die Funktionen der 
-InferenceEngeine zugegriffen werden können.
+InferenceEngine zugegriffen werden können.
+
+In Abbildung \ref{fig:openvinoflow} ist der Workflow mit 
+Openvino, welcher das Training eines Deep Learning Modells 
+mit der Implementierung einer Nutzer Anwendung verbindet, 
+dargestellt.
 
 
-
+\vspace{1cm}
 \begin{figure}[H]
     \centering
     \def\svgwidth{0.8\textwidth}
@@ -764,12 +832,3 @@ InferenceEngeine zugegriffen werden können.
     \caption{OpenVino Workflow}
     \label{fig:openvinoflow}
 \end{figure}
-
-
-% \begin{figure}[H]
-%     \centering
-%     \includegraphics[width=0.8\textwidth]{./Bilder/open_vino_workflow_steps.png}
-%     \caption{Workflow: OpenVino Toolkit}
-%     \label{img:openvinoworkflow}
-% \end{figure}
-

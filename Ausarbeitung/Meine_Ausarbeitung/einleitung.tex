@@ -1,47 +1,48 @@
 \chapter{Einleitung}\label{kap:einleitung}
 
-Im Rahmen der Bachelor Arbeit wurde ein Überwachungssystem zur Wildtiererkennung,
-entwickelt, welches auf einem Raspberry Pi läuft und den Nutzer bei Erkennung
-bestimmter Tiere automatisch benachrichtigt, sowie das Bild and einen Server sendet.
+Wildkameras werden für die Jagt oder zu biologischen 
+Forschungszwecken eingesetzt.
+Das Aufnehmen der Bilder erfolgt dabei meist über einen 
+Bewegungsmelder automatsich.
+Dadurch kann unter Umständen eine große menge 
+an unwichtigen Daten entstehen, welche
+speicherplatz, und, bei automatischem 
+Senden, Datenvolumen benötigen, sowie ein großen 
+Auswertungsaufwand mit sich bringen.
 
-Die Erkennung der Tiere erfolgte mithilfe Neuronaler Netze, wodurch es möglich ist 
-die Überwachung gezielt nur auf bestimmte, relevante Tiere anzuwenden und so den
-Datenverkehr gering zu halten. 
+Ein System welches genau erkennt um welche Tiere es sich handelt,
+kann gezielter für verschiedene Anwendungen 
+wie beispielsweise das Aufspüren von Wolf und Bär im Wald,
+den Fuchs im eigenen Garten oder um den Tierbestand seltener 
+aussterbender Tierarten zu erfassen.
 
-Die Inferenz der Neuronalen Netze wurde dabei auf einer separaten Hardware, dem 
-Neural Compute Stick 2 von Intel ausgeführt.
+Die Umsetzung eine solchen Kamerasystems mit
+ Erkennungsfunktion erfolgt meistens mithilfe  
+ Deep Learning, ein Teilgebiet der Künslichen Intelligenz.
 
-Des weiteren wurde eine Infrarotfähige Kamera verwendet, damit das System auch
-in der Nacht einsetzbar ist.
+Die Fortschritte, die in den letzten Jahren in diesem 
+Bereich gemacht wurden, sowie die verfügbare Hardware, ermöglichen 
+die Entwicklung eines solchen Systems auch ohne Großrechner 
+für den Privatgebrauch.
 
+Ziel der vorliegenden Arbeit war es ein autonomes Kamerasystem 
+zu entwickeln, welches mithilfe von Deep Learning Algorithmen, 
+verschiedene Wildtierarten erkennen und klassifizieren kann.
+ 
+Die Inferenz soll dabei auf dem KI Beschleuniger Neural Compute  
+Stick 2 von Intel ausgeführt werden. Durch Verwendung einer  
+infrarotfähigen Kamera soll es auch möglich sein 
+bei Dunkelheit Tiere zu erkennen.
 
-\textbf{aus ziel der Arbeit}
+Die Anwendung wird über einen Raspberry Pi 4 laufen 
+und selbständig Bilder erkannter Tieren an den Nutzer senden.
 
+Damit gliedert sich die Arbeit zunächst in ein Grundlagen Kapitel 
+welches sich mit Künslichen Neuronalen Netzen für die Bilderkennung 
+sowie der verwendeten Harweare auseinander setzt.
 
+Anschiließend wird es um das Training und die 
+Auswertung geeigneter Modelle zur Objekterkennung gehen.
 
-Wie in der Einleitung \ref{kap:einleitung} beschrieben, soll 
-ein CNN Basiertes System zur Wildtiererkennung entwickelt 
-werden, das für dir Inferenz den Neural Compute Stick 2 verwendet.
-Dabei sollte neben der reinen Erkennung auch eine Lokalisierung 
-der erkannten Tiere im Bild stattfinden. Gängige Techniken dafür 
-werden im nächsten Abschnitt erläutert.
-\\
-Dabei soll das Deep Learing Modell im Rahmen der gegebenen 
-möglichkeiten und Limitierungen der Hardware möglichst 
-genau und Robust sein, sodass es auch für die graustufen 
-Bilder der Infrarot Kamera zuverlässig funktioniert.
-Da eine erhöht Genauigkeit auch immer mit einer größeren
-Latenz für der Inferenzzeit einhergeht war dies ein mit 
-zu berücksichtigender Punkt.
-\\
-Neben training und evaluierung eines geeigneten Deep Learning Modells,
-war die Implementierung der Anwendung, welche die Inferenz 
-des Modells ausführt ein weiterer Bestandteil der Arbeit.
-\\
-Diese soll voll autonom auf dem Raspberry Pi laufen,
-über eine mobile Netzwerk Verbindung verfügen und 
-mittels eines geeigneten Kommunikations Protokolls die 
-die erkannten und abgespeicherten Bilder an einen
-Heim Pc senden.
-Des weiteren sollte eine geeignete Kamera verwendet werden, die 
-sowohl normale, als auch Infrarot Aufnahmen machen kann.
+Das letzte Kapitel beschreibt die Entwicklung der Anwendung 
+in welcher die Inferenz implementiert.

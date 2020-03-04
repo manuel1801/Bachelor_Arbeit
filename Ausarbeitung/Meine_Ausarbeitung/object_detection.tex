@@ -1,13 +1,12 @@
-\chapter{Realisierung Objekt Erkennung}\label{kap:object_det}
+\chapter{Realisierung Objekterkennung}\label{kap:object_det}
 
 \section{Datensatz}\label{sec:dataset}
 
 Um ein Deep Learning Modell richtig trainieren zu können, 
 wird eine große Menge an gelabelten Trainingsdaten benötigt.
-Handelt es sich dabei um ein, wie in Abschnitt
-\ref{sec:related_work} beschriebenen  Modell zur Objekterkennung
+Handelt es sich dabei um ein Modell zur Objekterkennung
 müssen die Labels neben der Klasse, auch die Koordinaten, 
-die angeben wo sich das Objekt im Bild befindet. 
+die angeben wo sich das Objekt im Bild befindet enthalten. 
 Indem die, sogenannten Bouning Boxes, mit traininert werden, 
 kann das Modell auch die Lokalisierung der Objekte vorhersagen.
 Die Trainingsdaten können entweder selber erstellt, oder 
@@ -109,15 +108,15 @@ welcher die verwendeten Augmentierungstechniken zeigt.
     
 \end{lstlisting}
 
-In Abbildung \ref{fig:augmentierung} sind beispielhaft 9 dieser 
+In Abbildung \ref{fig:augmentierung} sind beispielhaft 9 
 zufällig augmentierten Bilder der Klasse Fuchs dargestellt.
 
 
 \begin{figure}[H]
-    \label{fig:augmentierung}
     \centering
     \includegraphics[width=0.95\columnwidth]{Bilder/augmentierung.png}
     \caption{Anwendung von Augmentierungstechniken}
+    \label{fig:augmentierung}
 \end{figure}
 
 
@@ -179,11 +178,11 @@ sowie einem Bounding Regresor (\textit{reg layer}) übergeben.
 \vspace{1cm}
 \begin{figure}[H]
     \centering
-    \label{fig:faster_rcnn}
     \includegraphics[width=0.95\textwidth]
     {faster-RCNN_architecture.png}
     \caption{Faster R-CNN Architektur, Quelle:
      \cite{ObjectDetectionDummies2017b}}
+     \label{fig:faster_rcnn}
 \end{figure}
 
 
@@ -205,15 +204,15 @@ in Form eines Offsets zur default Box vornehmen.
 
 Diese werden zur finalen Detektion einem \textit{non-maximum suppression}
 Layer \cite{Hosang2017cvpr} übergeben,
-welcher alle zu einer klasse gehörenden boxen zusammenführt.
+welcher alle zu einer klasse gehörenden boxen zu einer zusammenführt.
 
 
 
 \begin{figure}[H]
     \centering
-    \label{fig:faster_rcnn}
     \includegraphics[width=0.95\textwidth]{ssd_architecture.png}
     \caption{SSD, quelle: \cite{SSDSingleShot}}
+    \label{fig:faster_rcnn}
 \end{figure}
 
 
@@ -236,62 +235,49 @@ Deep Learning geeignete GPU zur verfügung stellt.
 
 \subsection{Tensorflow Object Detection Api}
 
-
-
 Die Tensorflow Object Detection Api ist unter den Research Modellen
 \cite{tfobjdet} des offiziellen Tensorflow Repository auf GitHub zu
 finden und enthällt implementierungen einiger gängiger Object Detectin
 Modelle mit vortrainierten gewichten zur Feature Extraction.
-Für die Arbeit wurde die im Abschnitt \ref{sec:related_work} 
-erläuterten Architekturen \textit{Single Shot Detector (SSD)}
+Für die Arbeit wurden die Architekturen \textit{Single Shot Detector (SSD)}
 und \textit{Faster R-CNN} verwendet.
 Beim SSD wurde das \textit{MobilenetV2} sowie das \textit{InceptionV2} 
 als Basis CNN verwendet.
 Bei Faster R-CNN nur \textit{InceptionV2}, da hierfür das MobilenetV2 
 nicht verfügbar war.
-Weitere Basis CNN sind unter Anderem das Resudial Network, welche jedoch 
-sehr Rechenaufwendig und nicht für den Neural Compute Stick 
-kompatibel ist.
 
-Die Festlegung der Parameter für die Modelle kann dabei 
-in einer Konfigurationsdatei vorgenommen werde.
+Die Einstellungen der Parameter für die Modelle können dabei 
+in einer Konfigurationsdatei vorgenommen werden.
 
 
 Um die Modelle trainieren zu können, mussten zunächst die 
-Trainingsdaten in das binary Dateiformate TFRecords umgewandelt 
-werden, welches die Api verwendet. Dieses ist eine Serialisierte 
+Trainingsdaten in das binary Dateiformat TFRecords umgewandelt 
+werden, welches die Tensorflow Api verwendet. Dieses ist eine Serialisierte 
 darstellung der Bilder und Labels als Protocol Buffer welche einen 
 schnelleren Zugriff auf die Daten ermöglicht.
 
 Nach herunterladen des Modellund festlegen einiger Parameter was in 
 einem Jupyter Notebook der Colab VM erfolgte, konnte das Training 
-gestatret werden. 
+gestartet werden. 
 
-Das erfolgte über einen Command dem die TfRecord Files als Argument 
+Das erfolgte über einen Kommando dem die TfRecord Files als Argument 
 übergebun wurden. 
 Die Trainierten Gewichte wurden während des Trainings regelmäßig abgespeichert.
 
 Mithilfe das Evaluierungstools Tensorboard konnte der Trainingsfortschrit 
 mitverfolgt und ausgewertet werden.
 
+So konnte schon während des Trainings fehlerhafte oder 
+Schlechte einstellungen der Datensatz oder Model Konfiguration 
+festgestellt und durch z.B. ändern der Augmentierung, auswahl 
+eines anderen Modells, oder versetllen der Hyperparameter 
+korrigiert werden.
 
-\subsection{Trainingsworkflow}
+Dadurch kam der in Abbildung \ref{fig:train_workflow},
+schematisch dargestellte Workflow zustande. 
 
-Durch die in Tensorboard visualisierte beobachtung der 
-Trainingsverläufe, konnten so schon während des traings fehlerhafte 
-Einstellung der Trainingskonfigurarion festgestellt und korrigiert 
-werden.
-
-So ergibt sich der in ... dargestellte Workflow, in dem 
-durch unterschiedliche Konfigurationen der für das Training 
-benötigten Schritte, das Optimalste Endergebniss erzielt 
-werden kann.
-
-
-Anpasungen die für die trainierten Modelle SSD und Faster 
-R-CNN vorgenommen wurden bezogen sich auf unterschiedliche 
-Augmentierung der Trainingsdaten, sowie verschiedene 
-einstellungen der Hyperparameter.
+Die Ergebnisse der Trainierten Modelle 
+werden im nächsten Kapitel diskutiert.
 
 
 % \begin{figure}[H]
@@ -310,26 +296,23 @@ einstellungen der Hyperparameter.
     \label{fig:train_workflow}
 \end{figure}
 \vspace{1cm}
-Die Ergebnisse der jeweiligen Ansätze werden im nächsten Kapitel diskutiert.
 
 
 \section{Inferenz}\label{sec:inferenz}
 
 Die Anwendung eines fertig trainierten Modells für 
 neue Inputdaten, wird als Inferenz bezeichnet.
-Zur Ausführung dieser auf dem NCS2, wird wie in 
-den Grundlagen beschriebene das Toolkit \textit{OpenVino}
+Zur Ausführung dieser auf dem NCS2, wird das Toolkit \textit{OpenVino}
 von Intel verwendet.
 
 Dafür musste zunächst der trainierte Tensorflow Graph 
 exportiert, d.h. die aktuellen Werte der Gewichte 
-konstant gesetzt werden.
+eingefroren werden.
 
 Mit dem ModelOptimizer, der ebnfalls im OpenVino 
-Toolkit enthalten war konnte das Tensorflow Modell 
+Toolkit enthalten ist, konnte das Tensorflow Modell 
 in die Intermediate Representation (IR), bestehend 
 aus einer xml und einer bin Datei konvertiert werden.
-
 
 Diese können nun von der InferecneEgine zur Inferenz weiter 
 verwendet werden.
@@ -343,7 +326,7 @@ auf dem NCS2 notwendigen Schritte, welche die
  InferecneEgine ausführt, sind in Abbildugn
 \ref{fig:inger_engine_workflow} schematisch dargestellt.
 
-Daneben ist jeweils (teils vereinfacht) die entsprechende 
+Daneben ist jeweils vereinfacht die entsprechende 
 Codezeile in Python abgebildet.
 
 Zunächst muss das Zielgerät spezifiziert (\textit{HW Plugin laden})
@@ -395,7 +378,7 @@ process Output in einer Schleife wiederholt.
         res = exec_net.infer({input_blob : image})
         
 
-        res = res[output_blob] #
+        res = res[output_blob]
         
         
 \end{lstlisting}

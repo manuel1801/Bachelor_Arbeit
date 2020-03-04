@@ -3,7 +3,7 @@
 \chapter{Entwicklung der Anwendung}\label{kap:application}
 
 Dieses Kapitel beschreibt die Realisierung der Anwendung 
-als autonomes Kamera System zur, 
+als autonomes Kamera System zur
 Wildtiererkennung, welches auf einem Raspberry Pi 4 läuft.
 
 Dabei wird es neben der Implementierung der Inferenz für eines der 
@@ -188,12 +188,12 @@ bestimmte zeit ohne Bewegung getrennt.
 
 \subsection*{Inferenz}
 
-Der in Abschnitt \ref{sec:infertime} beschriebene asynchronen
+Der im Abschnitt \ref{sec:infertime} beschriebene asynchronen
 Inferenzablauf wurde dahingehend angepasst, dass eine beliebige Anzahl 
-an Inferenz Requests verwendet werden können 
+an Inferenz Requests verwendet werden kann 
 und dass das Warten auf ein Inferenz Ergebnis
 nicht mehr blockierend ist.
-Dafür wurde der Timeot in der Wait Funktion auf 
+Dafür wurde der Timeout in der Wait-Funktion auf 
 $0ms$ gesetzt.
 Durch vorheriges abspeichern der jeweiligen zu 
 inferierenden Frames, kann eine richtige zuordnung 
@@ -256,7 +256,7 @@ werden sollten, wurde der Pc als Remote Gerät implementiert.
 Gesendet wurden die Daten über das Secure Copy Protocol welches 
 das hergestellte Secure Shell Protocol (SSH) verwendet.
 Dieses lässt sich über folgendes Kommando,
-welches im \textit{connectin.py}
+welches im \textit{connection.py}
 Script ausgeführt wird verwenden:
 \begin{itemize}
     \item[\texttt{\$}] \texttt{scp -P port file.jpg user@proxyserver /zielpfad/file.jpg}
@@ -269,209 +269,3 @@ Um das Einloggen sowie den Verbindungsauf- und Abbau
 über remote.it zu einem Gerät zu automatisieren
 bietet remote.it eine API mit der über Post- und Get-Requests
 die Befehle dafür programmatisch aufgerufen werden können.
-
-
-
-
- 
-
-
-
-
-
-
-
-
-
-% \input{Bilder/class_diagramm/class_diagramm.latex}
-
-% \begin{minipage}{0.3\textwidth}
-%     \centering
-%     \input{Bilder/diagramme/class_detection.tex}    
-% \end{minipage}
-% \begin{minipage}{0.3\textwidth}
-%     \centering
-%     \input{Bilder/diagramme/class_connection.tex}
-% \end{minipage}
-% \begin{minipage}{0.3\textwidth}
-%     \centering
-%     \input{Bilder/diagramme/class_motion.tex}
-% \end{minipage}
-
-% oder
-
-%\input{Bilder/diagramme/detection_package.tex}
-
-% oder 
-
-
-
-
-
-%Asynchrone inferenz
-%https://docs.openvinotoolkit.org/latest/_demos_python_demos_object_detection_demo_ssd_async_README.html
-
-% main
-% \begin{algorithm}[H]
-%     \caption{Main Program}
-%     \begin{algorithmic}
-
-%     %\STATE INIT EXEC_NET, CAM
-
-%     \WHILE{\TRUE}
-%         \STATE capture frame
-        
-%         \IF{frame has motion}
-%             \STATE $buffer \leftarrow frmae$
-%         \ENDIF
-
-%         \IF{buffer is empty}
-%             \STATE disconnect
-%         \ENDIF
-
-%         \STATE result = inferFrames (buffer)
-
-%         \FOR{all results}
-%             \STATE process results
-%             \IF {saved}
-%                 \STATE sendRequest = \TRUE
-%             \ENDIF
-        
-
-%             \IF {no detectoin for 20 times}
-%                 \STATE reset motion background
-%                 \STATE delete buffer
-%                 \IF {connected}
-%                     \STATE disconnect
-%                 \ENDIF
-%             \ENDIF
-
-%         \ENDFOR
-
-%         \IF {send all every minute}
-%             \STATE save current detections
-%             \STATE sendRequest = \TRUE
-%         \ENDIF
-
-%         \IF{sendRequest == \TRUE}
-%             \IF{not logged in}
-%                 \STATE log in
-%             \ENDIF
-
-%             \IF{not connected}
-%                 \STATE connect
-%             \ENDIF
-
-%             \STATE server, port $\leftarrow$ connection
-
-%             \STATE sendRequest = \FALSE
-%             \FOR{all saved images}
-%                 \IF{send image $\rightarrow$ server, port}
-%                     \STATE delete image
-%                 \ELSE
-%                     \STATE sendRequest = \TRUE
-%                 \ENDIF
-%             \ENDFOR
-
-%         \ENDIF
-%     \ENDWHILE
-
-
-%     \end{algorithmic}
-% \end{algorithm}
-
-
-
-% \newpage
-
-% \begin{center}
-%     \rule{0.8\textwidth}{0.4pt}
-%     \begin{lstlisting}[language=Python]
-%         def infer_frames(Buffer, threshhold):
-%             for idx, inferRequest in all inferRequests:
-%                 status = inferRequest.wait(0) # nicht blockierend
-%                 if status not ready:
-%                     continue
-                
-%                 if idx in currentFrames:
-%                     results = inferRequest.output
-%                     frame = currentFrames[idx]
-
-%                 if Buffer not empty:
-%                     currentFrames[idx] = Buffer.pop()
-%                     infer_frame = preprocess(currentFrames[idx])
-%                     inferRequest.async_infer(infer_frame)
-
-%                 if results or frame is None:
-%                     continue
-
-%                 for obj in all results:
-%                     Class, Roi, Proba <- obj
-%                     if Proba < threshhold:
-%                         continue
-                    
-%                     coords <- Roi, frame.shape
-
-%                     infered_frame = draw_rect(frame, coords)
-
-%                     if proba > detectedObjects.proba
-%                         replace detectedObjects
-
-%                     if number of detections > x:
-%                         send(frame)
-                    
-%     \end{lstlisting}
-%     \rule{0.8\textwidth}{0.4pt}        
-% \end{center}
-
-
-% \centering\rule{0.6\textwidth}{0.4pt}
-% \begin\centering{lstlisting}[language=Python]
-%     def infer_frames():
-%         for all requests:
-%             do something \textbf{with} request
-
-%             status = request.wait(0)
-%             if status == done:
-%                 res = requests.output
-%                 frame = current[id]
-% \end{lstlisting}
-% \centering\rule{0.6\textwidth}{0.4pt}
-
-
-
-
-% % inferenz
-% \begin{algorithm}[H]
-%     \caption{Asynchrone Inferenz}
-%     \begin{algorithmic}
-%     \WHILE{\TRUE}
-%         \STATE capture Frame
-%         \IF{Frame has Motion}
-%             \STATE Buffer $\leftarrow$ Frame
-%         \ENDIF
-%         \FOR{$reqId$ = 0 to $reqMax$}
-%             \IF {Model.reqests[$reqId$].wait(0)}
-%                 \STATE result = Model.reqests[$reqId$].output
-%                 \STATE inferedFrames $\leftarrow$ (result, currentFrames[$reqId$])
-%                 \IF {Buffer not empty}
-%                     \STATE currentFrames[$reqId$] $\leftarrow$ Buffer 
-%                     \STATE inFrame = preprocess: currentFrames[$reqId$]
-%                     \STATE Model.inferAsync($reqId$, inFrame)
-%                 \ENDIF
-%             \ENDIF
-%         \ENDFOR
-%         \RETURN inferedFrames
-%     \ENDWHILE
-%     \end{algorithmic}
-% \end{algorithm}
-
-% wobei die wait Funktion mit Timeout = 0 nicht blockierend ist.
-
-% Dadurch war es möglich trotz langsamerer inferenz zeit als 
-% capture zeit, durch zwischenspeichern alle frames zu inferieren, 
-% unter der Annahme, das nur zeitweise bewegung erkannt und damit 
-% inferiert werden muss.
-
-
-

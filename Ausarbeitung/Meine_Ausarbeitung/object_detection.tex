@@ -1,36 +1,41 @@
 \chapter{Realisierung Objekterkennung}\label{kap:object_det}
 
+In diesem Kapitel werden zunächst die Beschaffung und Aufbereitung 
+der Trainingsdaten beschrieben. Anschließend wird es um das 
+Training geeigneter Deep Learning Modelle in Tensorflow sowie 
+um die Inferenz dieser in OpenVino gehen.
+
 \section{Datensatz}\label{sec:dataset}
 
-Um ein Deep Learning Modell richtig trainieren zu können, 
-wird eine große Menge an gelabelten Trainingsdaten benötigt.
-Handelt es sich dabei um ein Modell zur Objekterkennung
+Für das Training eines Deep Learning Modells, werden 
+eine Große Menge an Trainingsdaten benötigt.
+Handelt es sich um ein Modell zur Objekterkennung,
 müssen die Labels neben der Klasse, auch die Koordinaten, 
-die angeben wo sich das Objekt im Bild befindet enthalten. 
-Indem die, sogenannten Bouning Boxes, mit traininert werden, 
-kann das Modell auch die Lokalisierung der Objekte vorhersagen.
+der Bounding Boxes enthalten.
+
 Die Trainingsdaten können entweder selber erstellt, oder 
 aus frei zugänglichen Datensätzen wie z.B. \textit{ImageNet}, 
 \textit{COCO}, oder \textit{OpenImages}
 aus dem Internet heruntergeladen werden.
 
-Für die Arbeit wurden aus dem Open Source Dataset
+Für die Bachelor Arbeit wurden aus dem Open Source Datensatz
 \textit{OpenImages} von Google
 \cite{kuznetsovaOpenImagesDataset2018}, 
 welches 600 gelabelte Klassen enthällt, 
 die 9 Klassen \textit{Brown bear, Deer, Fox, Goat, 
 Hedgehog, Owl, Rabbit, Raccoon} und \textit{Squirrel}
 heruntergeladen und für das Training verwendet.
+
 Für die Evaluierung des Trainings wurde der 
-Datensatz in ein Trainings, einen Validierung und einen 
-Testset aufgeteilt, mit dem Verhälltnis 80\%, 10\%, 10\%.
+Datensatz, mit dem Verhältnis von 80\%, 10\%, 10\%, in ein
+Trainings-, ein Validierungs- und ein 
+Testset aufgeteilt.
+
 Je Klasse variierte die Anzahl an Bildern zwischen 200 und 
-2000, wudurch die in Abbildung \ref{fig:histo_ohne_aug}
-dargestellte unausgeglichenheit der Klassen zustande kam.
-Um diese auszugleichen, wurden die Date, wie im nächsten Abschnitt 
-genauer erklärt wird, so augmentiert, das je Klasse 3000 Bilder 
-vorhanden waren, was zu einer in Abbildung \ref{fig:histo_mit_aug}
-dargestellten verteilung der Klassen führte.
+2000 Stück, wodurch eine Verteilung der Klassen, 
+wie in  Abbildung \ref{fig:histo_ohne_aug} dargestelltem Histogramm,
+zustande Kam.
+
 
 \vspace{1cm}
 \begin{minipage}{0.5\textwidth}
@@ -47,13 +52,16 @@ dargestellten verteilung der Klassen führte.
 \end{minipage}
 \vspace{1cm}
 
-Der Grund dafür, dass in den Histogrammen mehr Klassen,
-als es tatsächlich Bilder 
-waren angezeigt werden, kommt daher, dass 
-sich häufig mehrere Tiere der selben Klasse in einem Bild 
-befinden.
-Ein weiterer Grund für die Augmentierung der Daten war 
-die vorsogliche Maßnahme gegen Overfitting.
+Um diese auszugleichen, wurden die Daten, wie im nächsten
+Abschnitt genauer beschrieben wird, so augmentiert, 
+dass jede Klasse 3000 Bilder vorhanden waren, was zu einer in 
+in Abbildung \ref{fig:histo_mit_aug} 
+dargestellten Verteilung führte.
+
+Da sich häufig mehrere Tiere der der selben Klasse 
+auf einem Bild befinden, weicht, wie in den Histogrammen 
+zu erkennen ist, die Anzahl der Bilddateien (3000) von 
+der Anzahl der Klassen ab.
 
 
 
@@ -61,29 +69,27 @@ die vorsogliche Maßnahme gegen Overfitting.
 \subsection{Augmentierung}\label{subsec:augmentation}
 
 
-Das augmentieren von Bilddaten für Deep Learning, 
-ist eine effektive Technik, durch künstliches generieren
-neuer Daten aus den vorhandenen, um Overfitting zu
-verhindern und Inbalancen der Klassen untereinander auszugleichen.
-Die vermehrung der Daten erfolg dabei in dem die Bilder 
-geometrischen Transformationen oder manipulationen der Pixelwerte 
-unterzogen werden.
+Das Augmentieren von Bilddaten für Deep Learning Modelle,
+ist, neben dem ausgleichen der Klasseninbalance, eine sehr
+effektive Technik, Overfitting zu verhindern.
+Indem geometrische Transformationen oder Manipulationen 
+an den Pixelwerten auf die Bilder angewendet werden, 
+können diese künstlich vermehrt werden.
 
 Die Augmentierung des OpenImages Datensatzes wurde mithilfe 
-eines Pyhton Scripts, welches die Library \textit{imgaug} \cite{imgaug}
-verwendet, durchgeführt.
-Dabei wurde je zu augmentierendem Bild eine geometrische und 
-eine Pixel Transformation angewendet.
-Diese wurden zufällig aus einer Auswahl an Augmentern, 
-angewendetet.
+eines Pyhton Scripts, in welchem die Library 
+\textit{imgaug} \cite{imgaug} verwendet wurde, durchgeführt.
+Dabei wurde je, zu augmentierendem Bild, eine geometrische- und 
+eine pixelbezogene Transformation, die zufällig 
+aus einer Auswahl an Augmentern ausgewählt wurde, angewendet.
 
-Folgend ist ein Codeausschschnitt des Python Scripts dargestellt, 
-welcher die verwendeten Augmentierungstechniken zeigt.
+In folgendem Codeausschschnitt, des Python Scripts, sind die 
+verwendeten Augmentierungstechniken dargestellt.
 
 
 \begin{lstlisting}[language=Python]
     import imgaug.augmenters as iaa
-
+    
     color_augmenters = [
         iaa.Dropout(p=(0, 0.1)),
         iaa.CoarseDropout((0.01, 0.05), size_percent=0.1),
@@ -108,8 +114,9 @@ welcher die verwendeten Augmentierungstechniken zeigt.
     
 \end{lstlisting}
 
-In Abbildung \ref{fig:augmentierung} sind beispielhaft 9 
-zufällig augmentierten Bilder der Klasse Fuchs dargestellt.
+Das Ergebnis, von einigen zufällig angewendeten Augmentierungen 
+auf ein Bild der Klasse Fuchs ist in 
+Abbildung \ref{fig:augmentierung} dargestellt.
 
 
 \begin{figure}[H]
@@ -120,60 +127,63 @@ zufällig augmentierten Bilder der Klasse Fuchs dargestellt.
 \end{figure}
 
 
-\section{Object Detection Modelle}
+\section{Object detection Modelle}
 
-
-Object Detectione Modelle lassen sich, wie in 
+Object detection Modelle lassen sich, wie in 
 \cite{wuRecentAdvancesDeep2019} beschrieben wird,
 in Einstufige- und Zweistufige Detektoren einteilen.
 
 Zweistufige Detektoren generieren in der 
-ersten Stufe, 
-eine Auswahl an räumlichen Vorschlägen, in welchen 
-Objekte enthalten sein können. In der zweiten Stufe, 
-werden die Vorschläge zur Feature Extraction 
-einem CNN übergeben, welchem ein Netz zur Klassifizierung 
-(zb SVM) und eines zur annäherung der Bounding Box 
-Koordinaten (Regressor) folgen.
+ersten Stufe eine Auswahl an räumlichen Vorschlägen
+für das Input Bild, in welchen Objekte enthalten sein 
+können. 
+In der zweiten Stufe, werden die Vorschläge zur Feature 
+Extraction einem CNN übergeben, welches neben 
+einer Klassifikation auch einen Regressor für 
+die Bounding Box Koordinaten besitzt.
 
-Einstufige Verfahren verwenden kein seperates 
+Einstufige Verfahren verwenden kein separates 
 Netz zur Vorschlagsgenerierung. Stattdessen 
 wird das gesamte Bild, gitterartig unterteilt,
 als potentielle Regionen für Objekte betrachtet 
-und hisichtlich vorhandensein einer Klasse je 
+und hinsichtlich Vorhandensein einer Klasse je 
 Region klassifiziert.
 Dadurch sind diese zwar wesentlich schneller, 
 aber auch ungenauer.
 
+Für die Bachelor Arbeit wurden 
+Modelle beider Ansätze verwendet und 
+hinsichtlich Genauigkeit und 
+Inferenzzeit miteinander verglichen.
 
-Für die Thesis wurden beide Ansätze verwendet und 
-für die Umsetzbarkeit als Wildtierdetektor 
-mit dem NCS2 hinsichtlich Genauigkeit und 
-Inferenzzeit verglichen.
-
-Die dafür verwendeten Modelle werden im folgenden 
-näher erläutert.
+Im Folgenden werden die beiden 
+verwendete Modelle näher erläutert.
 
 
 
 \subsection*{Faster R-CNN}
 
-Das Faster R-CNN \cite{renFasterRCNNRealTime2016a}, 
+Das \textit{Faster R-CNN} \cite{renFasterRCNNRealTime2016a}, 
 dargestellt in Abbildung \ref{fig:faster_rcnn}, 
-verwendet ein zweistufiges Verfahren zu 
-Objekterkennung.
+ist ein Modell zur Objekterkennung, welches
+ein zweistufiges Verfahren verwendet.
 
-Die Vorschlagsgenerierung erfolgt mithilfe eines 
-Region Proposial Networks (RPN), welches auf 
+Die Vorschlagsgenerierung erfolgt in einem 
+\textit{Region Proposial Networks} (RPN), welches auf 
 einem \textit{fully convolutional network} 
-basiert.
-Über die daraus generierten Feature Maps werden im 
-Sliding-Window Verfahren vordefinierte Anker Boxen 
-konvoliert.
-Der daraus resultieruende Feature Vektor wird 
+basiert, welches Featuer Maps generiert.
+
+Über die Feature Maps werden im 
+\textit{Sliding-Window} Verfahren vordefinierte
+\textit{Anker Boxen} konvoliert.
+Der daraus resultierende Feature Vektor wird 
 einem binären klassifikator (\textit{cls layer}), 
-welcher angibt ob sich ein Objekt in dem Vorschlag befindet, 
-sowie einem Bounding Regresor (\textit{reg layer}) übergeben.
+welcher angibt ob sich ein Objekt
+in dem Vorschlag befindet, 
+sowie einem Bounding Regresor
+(\textit{reg layer}), zur Lokalisierung,
+übergeben.
+
 
 \vspace{1cm}
 \begin{figure}[H]
@@ -185,108 +195,106 @@ sowie einem Bounding Regresor (\textit{reg layer}) übergeben.
      \label{fig:faster_rcnn}
 \end{figure}
 
-
-
-
 \subsection*{SSD: Single Shot MultiBox Detector}
 
-Der Single Shot MultiBox Detector (SSD) \cite{liuSSDSingleShot2016} 
-ist ein einstufiges Verfahren zur Objekterkennung, 
-welches das Input Bild gitterartig unterteilt. In jeder Zelle des 
-Gitters werden default Anker Boxen unterschiedlicher 
-skalierungen definiert.
+Der \textit{Single Shot MultiBox Detector} (SSD)
+ \cite{liuSSDSingleShot2016}, 
+verwendet ein einstufiges Verfahren zur Objekterkennung,
+bei dem das Input Bild gitterartig unterteilt wird.
+In jeder Zelle des Gitters werden \textit{default Anker
+Boxen} unterschiedlicher skalierungen definiert.
 
-Indem an das Backbone CNN weitere \textit{Extra Feature Layer}
-verschiedener größe angehängt werden, kann dieses 
-für jede default Box eine klassifizierungen, in form 
-eines \textit{confidence scores} sowie eine Lokalisierung, 
-in Form eines Offsets zur default Box vornehmen.
+Indem an das Basis CNN weitere \textit{Extra Feature Layer}
+verschiedener Größen angehängt werden, kann dieses 
+für jede default Box eine Klassifikation, in Form 
+eines \textit{confidence scores}, sowie eine Lokalisierung, 
+in Form eines Offsets zur default Box, vornehmen.
 
-Diese werden zur finalen Detektion einem \textit{non-maximum suppression}
+Diese werden zur finalen Detektion 
+einem \textit{non-maximum suppression}
 Layer \cite{Hosang2017cvpr} übergeben,
-welcher alle zu einer klasse gehörenden boxen zu einer zusammenführt.
-
+welcher alle, zu einer Klasse gehörenden Boxen,
+zu einer Box zusammenführt.
 
 
 \begin{figure}[H]
     \centering
-    \includegraphics[width=0.95\textwidth]{ssd_architecture.png}
+    \includegraphics[width=0.95\textwidth]
+    {ssd_architecture.png}
     \caption{SSD, quelle: \cite{SSDSingleShot}}
     \label{fig:faster_rcnn}
 \end{figure}
 
 
 
-
 \section{Training}
 
-Das Training der Deep Learning Modelle erfolgte mithilfe 
-des Frameworks Tensorflow, welches auch von 
-Open Vino für den Neural Compute Stick uterstütz wird.
-Dabei wurde eine speziell für Object Detection 
+Das Training der Deep Learning Modelle erfolgte in dem 
+Framework Tensorflow, welches auch von 
+OpenVino, für den Neural Compute Stick, uterstütz wird.
+Dabei wurde eine speziell für die Object detection 
 entwickelte Api von Tensorflow verwendet.
 
-Um unabhängig von der leistungsfähigkeit der GPU des eigenen 
-Rechners zu sein, wurde das Training in der Cloudbasierten Virtual 
-Machine \textit{Google Colab} \cite{colab} durchgeführt, welche kostenlos eine für 
-Deep Learning geeignete GPU zur verfügung stellt.
+Um unabhängig von der Leistungsfähigkeit der GPU des 
+Rechners zu sein, wurde das Training in der Cloudbasierten
+Virtual Machine \textit{Google Colab} \cite{colab} durchgeführt,
+welche kostenlos eine, für Deep Learning geeignete, GPU
+zur verfügung stellt.
 
 
 
 \subsection{Tensorflow Object Detection Api}
 
-Die Tensorflow Object Detection Api ist unter den Research Modellen
-\cite{tfobjdet} des offiziellen Tensorflow Repository auf GitHub zu
-finden und enthällt implementierungen einiger gängiger Object Detectin
-Modelle mit vortrainierten gewichten zur Feature Extraction.
-Für die Arbeit wurden die Architekturen \textit{Single Shot Detector (SSD)}
-und \textit{Faster R-CNN} verwendet.
-Beim SSD wurde das \textit{MobilenetV2} sowie das \textit{InceptionV2} 
-als Basis CNN verwendet.
-Bei Faster R-CNN nur \textit{InceptionV2}, da hierfür das MobilenetV2 
-nicht verfügbar war.
+Die \textit{Tensorflow Object Detection Api} ist unter den
+Research Modellen des offiziellen Tensorflow
+Repositorys auf GitHub zu finden \cite{tfobjdet},
+und enthällt Implementierungen
+einiger gängiger Object detection Modelle, mit verschiedenen 
+vortrainerten Basis CNNs.
 
-Die Einstellungen der Parameter für die Modelle können dabei 
-in einer Konfigurationsdatei vorgenommen werden.
-
+Der, für die Bachelor Arbeit Verwendete, \textit{Single 
+Shot Detector} (SSD), wurde zum Einen mit dem 
+\textit{MobilenetV2} und zum Anderen mit dem 
+\textit{InceptionV2}, als Basis CNN trainiert.
+Für das \textit{Faster R-CNN} wurde, aufgrund 
+der Verfügbarkeit, nur mit dem \textit{InceptionV2}
+trainiert.
 
 Um die Modelle trainieren zu können, mussten zunächst die 
-Trainingsdaten in das binary Dateiformat TFRecords umgewandelt 
-werden, welches die Tensorflow Api verwendet. Dieses ist eine Serialisierte 
-darstellung der Bilder und Labels als Protocol Buffer welche einen 
-schnelleren Zugriff auf die Daten ermöglicht.
+Trainingsdaten in das binäre Dateiformat \textit{TFRecords} 
+umgewandelt werden, welches die Tensorflow Api verwendet.
+Dieses ist eine serialisierte 
+Darstellung der Bilder und Labelfiles als Protocol Buffer,
+welche einen schnelleren Zugriff auf die Daten ermöglichen.
 
-Nach herunterladen des Modellund festlegen einiger Parameter was in 
-einem Jupyter Notebook der Colab VM erfolgte, konnte das Training 
-gestartet werden. 
+Parameter für das Modell konnten vor dem Training 
+in einer Konfigurationsdatei festgelegt werden.
 
-Das erfolgte über einen Kommando dem die TfRecord Files als Argument 
-übergebun wurden. 
-Die Trainierten Gewichte wurden während des Trainings regelmäßig abgespeichert.
+Diese wurde dann, zusammen mit den TFRecord Files, 
+dem Konsolen-Kommando, mit dem das Training 
+gestartet wurde, übergeben.
 
-Mithilfe das Evaluierungstools Tensorboard konnte der Trainingsfortschrit 
-mitverfolgt und ausgewertet werden.
+Während des Trainings wurden, in regelmäßigen 
+Abständen, die trainierten Gewichte abgespeichert.
 
-So konnte schon während des Trainings fehlerhafte oder 
-Schlechte einstellungen der Datensatz oder Model Konfiguration 
-festgestellt und durch z.B. ändern der Augmentierung, auswahl 
-eines anderen Modells, oder versetllen der Hyperparameter 
-korrigiert werden.
+Mithilfe das Evaluierungstools \textit{Tensorboard}
+konnte der Trainingsfortschrit anhand bestimmter
+Metriken angezeigt und ausgewertet werden.
 
-Dadurch kam der in Abbildung \ref{fig:train_workflow},
-schematisch dargestellte Workflow zustande. 
+So konnten schon während des Trainings fehlerhafte
+Einstellungen der Datensatz- und 
+Modelkonfiguration festgestellt 
+und korrigiert werde, indem z.B. andere
+Augmentierungstechniken verwendet,
+oder Hyperparameter des Models umgestellt wurden.
+
+In Abbildung \ref{fig:train_workflow}
+ist der Trainingsworkflow dargestellt 
+welcher dabei zustande kam.
 
 Die Ergebnisse der Trainierten Modelle 
 werden im nächsten Kapitel diskutiert.
 
-
-% \begin{figure}[H]
-%     \centering
-%     \def\svgwidth{0.7\textwidth}
-%     \input{Bilder/train_workflow_gesammt.pdf_tex}
-%     \caption{Trainingsworkflow}
-%     \label{fig:train_workflow}
-% \end{figure}
 
 \vspace{1cm}
 \begin{figure}[H]
@@ -300,51 +308,59 @@ werden im nächsten Kapitel diskutiert.
 
 \section{Inferenz}\label{sec:inferenz}
 
-Die Anwendung eines fertig trainierten Modells für 
-neue Inputdaten, wird als Inferenz bezeichnet.
-Zur Ausführung dieser auf dem NCS2, wird das Toolkit \textit{OpenVino}
-von Intel verwendet.
-
+Die Anwendung, eines fertig trainierten Modells, für 
+neue Inputdaten, wird als \textit{Inferenz} bezeichnet.
+Zur Ausführung dieser, auf dem Neural Compute Stick 2, 
+wird das Toolkit \textit{OpenVino} von Intel verwendet.
 Dafür musste zunächst der trainierte Tensorflow Graph 
 exportiert, d.h. die aktuellen Werte der Gewichte 
 eingefroren werden.
 
-Mit dem ModelOptimizer, der ebnfalls im OpenVino 
-Toolkit enthalten ist, konnte das Tensorflow Modell 
-in die Intermediate Representation (IR), bestehend 
-aus einer xml und einer bin Datei konvertiert werden.
-
-Diese können nun von der InferecneEgine zur Inferenz weiter 
-verwendet werden.
+Anschließend konnte mit dem \textit{Model Optimizer}
+das Modell in die Intermediate Representation (IR)
+konvertiert werden.
+Diese besteht aus einer xml und einer bin Datei und 
+und kann von der \textit{Inferecne Egine} 
+zur Inferenz gelesen werden.
 
 
 \subsection*{InferecneEgine}
 
+Um die Inferenz eines Modells im IR-Format 
+auf dem NCS2 ausführen zu können, werden, 
+in der Inference Engine, die in Abbildung 
+\ref{fig:inger_engine_workflow} schematisch
+dargestellten Schritte, durchgeführt.
+Daneben ist jeweils die entsprechende 
+Codezeile in Python dargestellt.
 
-Die für die Inferenz eines Modells im IR Formal 
-auf dem NCS2 notwendigen Schritte, welche die
- InferecneEgine ausführt, sind in Abbildugn
-\ref{fig:inger_engine_workflow} schematisch dargestellt.
+Zunächst wird das Zielgerät, auf dem 
+die Inferenz ausgeführt werden soll,
+spezifiziert (\textit{HW Plugin laden}).
 
-Daneben ist jeweils vereinfacht die entsprechende 
-Codezeile in Python abgebildet.
+Anschließend wird das Modell anhand der 
+IR Dateien definiert (\textit{Model IR einlesen})
+woraus sich die In- und Outputblobs generieren 
+lassen, (\textit{In-und Outputblob}), 
+welche die Diemensionen der Ein- und Ausgabe 
+Schicht des Modells darstellen.
 
-Zunächst muss das Zielgerät spezifiziert (\textit{HW Plugin laden})
-und das Model anhand der IR Dateien definiert werden
-(\textit{Model IR einlesen}), um daraus 
-das Ausführbare Model erzugen zu können (\textit{executable Model}).
+Das zu inferierende Bild,
+welches als Matrix aus Pixelwerten 
+vorliegt, muss dann in das \textit{Input Blob}
+Format gebracht werden (\textit{process Input}).
 
-\textit{In-und Outputblob} sind die diemensionen welche
-das Model in den In-und Output Schichten hat
-und an die das Array des zu inferierenden 
-Bilds angepasst werden müssen, was im Schritt 
-\textit{preprocess Input} geschieht.
+Nachdem das Bild inferiert wurde (\textit{Inferenz}),
+kann es, zusammen mit den Inferenzergebnissen, 
+weiterverarbeitet werden (\textit{process
+output}).
 
-Nachdem die Inferenz abschossen ist, können die 
-ergebnisse weter verarbeitet werden, handelt es sich 
-die Inferenz eines Videos oder Kamera Streams, 
-werden die Schritte preprocess, Inferenz und 
-process Output in einer Schleife wiederholt.
+Handelt es sich bei den Inputs 
+um einen fortlaufenden Video- oder 
+Kamera Stream, werden die Schritte 
+\textit{preprocess}, \textit{Inferenz} und 
+\textit{process Output} in einer Schleife wiederholt.
+
 
 \vspace{1cm}
 \begin{minipage}{0.30\textwidth}
@@ -387,23 +403,26 @@ process Output in einer Schleife wiederholt.
 \end{minipage}
 \vspace{1cm}
 
-
 % transform:
 % # capture dims zu input blob dims transformieren
 % # img_h, img_w, img_c -> blob_n, blob_c, blob_h, blob_w
 
-Die Form des Inferenz Ergebnisses hängt von der 
-Art des verwendeten Deep Learning Modells ab, welche 
-z.B. Image Classification, ObjectDetection, oder Instance
-Segmentation sein können.
+Die Form des Inferenzergebnisses hängt von der 
+Art des verwendeten Deep Learning Modells ab, welches 
+z.B. \textit{Image Classification}, \textit{Object detection},
+oder \textit{Instance
+Segmentation} sein können.
 
-Für Object Detection Modelle enthällt das Ergebnis Datenstrukturen, 
-welche den Index der Klassen, zugehörige Wahrscheinlichkeit, 
-sowie Boxkoordinate der geschätzen Objekte im Bild enthalten.
+Für Object detection Modelle enthällt das Ergebnis
+ Datenstrukturen, welche den Index, 
+ zugehörige Wahrscheinlichkeit, sowie Bounding 
+ Box Koordinaten geschätzen Objekte im Bild enthalten.
 
-Indem man für alle Schätzungen die in einem Bild gemacht werden 
-einen Threshhold für die Wahrscheinlichkeit festlegt (zb. 0,7),
+Indem man für alle Schätzungen, die in einem Bild gemacht wurden, 
+einen Threshhold für die Wahrscheinlichkeit festlegt (zb. 70\%),
 könenn die sinnvollen Ergebnisse herausgefiltert werdsen.
 
 Zur veranschaulichung können die Koordinaten dann 
-als Bounding Box in das Inferierte Bild gezeichnet werden.
+als Bounding Box in das inferierte Bild gezeichnet werden.
+
+

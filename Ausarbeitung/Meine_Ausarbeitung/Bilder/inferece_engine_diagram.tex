@@ -8,7 +8,7 @@
     \node (io)      [process, below of=ir]      {In-Output Blobs};
     \node (execNet) [process, below of=io]      {executable Model};
     \node (prepIn)  [process, below of=execNet] {preprocess Input};
-    \node (infer)   [process, below of=prepIn]  {infer};
+    \node (infer)   [process, below of=prepIn]  {Inferenz};
     \node (procOut) [process, below of=infer]   {process Output};
 
     \draw [arrow] (hw) -- (ir);

@@ -181,7 +181,7 @@ eine Wahrscheinlichkeitsverteilung
 
 \begin{equation}
     \label{eq:softmax}
-    g(z) = \frac{e^{z}}{\sum e^{x}}
+    g(z_{i}) = \frac{e^{z_{i}}}{\sum_{j} e^{z_{j}}}
 \end{equation}
 \newpage
 %\vspace{1cm}
@@ -197,7 +197,7 @@ eine Wahrscheinlichkeitsverteilung
     \centering
     \begin{equation*}
         \label{eq:sidmoid}
-        g(z) = \frac{1}{1 + e^{-x}}
+        g(z) = \frac{1}{1 + e^{-z}}
     \end{equation*}    
 \end{minipage}
 \begin{minipage}{0.5\textwidth}

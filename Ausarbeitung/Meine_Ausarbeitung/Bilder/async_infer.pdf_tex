@@ -79,5 +79,7 @@
     \put(0.65950287,0.13784823){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}F5\end{tabular}}}}%
     \put(0.87217184,0.09322242){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}Time\end{tabular}}}}%
     \put(0.87349315,0.00074826){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}Time\end{tabular}}}}%
+    \put(0,0){\includegraphics[width=\unitlength,page=13]{async_infer.pdf}}%
+    \put(0.06370522,0.13805889){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}F2\end{tabular}}}}%
   \end{picture}%
 \endgroup%

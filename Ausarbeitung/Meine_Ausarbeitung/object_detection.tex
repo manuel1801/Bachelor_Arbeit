@@ -7,11 +7,11 @@ um die Inferenz dieser in OpenVino gehen.
 
 \section{Datensatz}\label{sec:dataset}
 
-Für das Training eines Deep Learning Modells, werden 
+Für das Training eines Deep Learning Modells werden 
 eine Große Menge an Trainingsdaten benötigt.
 Handelt es sich um ein Modell zur Objekterkennung,
 müssen die Labels neben der Klasse, auch die Koordinaten, 
-der Bounding Boxes enthalten.
+der Bounding Boxen enthalten.
 
 Die Trainingsdaten können entweder selber erstellt, oder 
 aus frei zugänglichen Datensätzen wie z.B. \textit{ImageNet}, 
@@ -27,7 +27,7 @@ Hedgehog, Owl, Rabbit, Raccoon} und \textit{Squirrel}
 heruntergeladen und für das Training verwendet.
 
 Für die Evaluierung des Trainings wurde der 
-Datensatz, mit dem Verhältnis von 80\%, 10\%, 10\%, in ein
+Datensatz, mit einem Verhältnis von 80\%, 10\%, 10\%, in ein
 Trainings-, ein Validierungs- und ein 
 Testset aufgeteilt.
 
@@ -35,7 +35,6 @@ Je Klasse variierte die Anzahl an Bildern zwischen 200 und
 2000 Stück, wodurch eine Verteilung der Klassen, 
 wie in  Abbildung \ref{fig:histo_ohne_aug} dargestelltem Histogramm,
 zustande Kam.
-
 
 \vspace{1cm}
 \begin{minipage}{0.5\textwidth}
@@ -54,22 +53,20 @@ zustande Kam.
 
 Um diese auszugleichen, wurden die Daten, wie im nächsten
 Abschnitt genauer beschrieben wird, so augmentiert, 
-dass jede Klasse 3000 Bilder vorhanden waren, was zu einer in 
+dass für jede Klasse 3000 Bilder vorhanden waren, was zu einer in 
 in Abbildung \ref{fig:histo_mit_aug} 
 dargestellten Verteilung führte.
 
-Da sich häufig mehrere Tiere der der selben Klasse 
+Da sich häufig mehrere Tiere der selben Klasse 
 auf einem Bild befinden, weicht, wie in den Histogrammen 
 zu erkennen ist, die Anzahl der Bilddateien (3000) von 
 der Anzahl der Klassen ab.
 
 
 
-
 \subsection{Augmentierung}\label{subsec:augmentation}
 
-
-Das Augmentieren von Bilddaten für Deep Learning Modelle,
+Das Augmentieren von Bilddaten für Deep Learning Modelle
 ist, neben dem ausgleichen der Klasseninbalance, eine sehr
 effektive Technik, Overfitting zu verhindern.
 Indem geometrische Transformationen oder Manipulationen 
@@ -79,13 +76,12 @@ können diese künstlich vermehrt werden.
 Die Augmentierung des OpenImages Datensatzes wurde mithilfe 
 eines Pyhton Scripts, in welchem die Library 
 \textit{imgaug} \cite{imgaug} verwendet wurde, durchgeführt.
-Dabei wurde je, zu augmentierendem Bild, eine geometrische- und 
-eine pixelbezogene Transformation, die zufällig 
-aus einer Auswahl an Augmentern ausgewählt wurde, angewendet.
+Dabei wurde, je zu augmentierendem Bild, eine geometrische- und 
+eine pixelbezogene Transformation angewendet, die dabei 
+zufällig aus einer Auswahl an Augmentern ausgewählt wurde.
 
 In folgendem Codeausschschnitt, des Python Scripts, sind die 
 verwendeten Augmentierungstechniken dargestellt.
-
 
 \begin{lstlisting}[language=Python]
     import imgaug.augmenters as iaa
@@ -114,10 +110,9 @@ verwendeten Augmentierungstechniken dargestellt.
     
 \end{lstlisting}
 
-Das Ergebnis, von einigen zufällig angewendeten Augmentierungen 
-auf ein Bild der Klasse Fuchs ist in 
-Abbildung \ref{fig:augmentierung} dargestellt.
-
+Das Ergebnis von einigen zufällig angewendeten Augmentierungen 
+auf ein Bild der Klasse Fuchs, ist
+in Abbildung \ref{fig:augmentierung} dargestellt.
 
 \begin{figure}[H]
     \centering
@@ -144,12 +139,12 @@ die Bounding Box Koordinaten besitzt.
 
 Einstufige Verfahren verwenden kein separates 
 Netz zur Vorschlagsgenerierung. Stattdessen 
-wird das gesamte Bild, gitterartig unterteilt,
-als potentielle Regionen für Objekte betrachtet 
-und hinsichtlich Vorhandensein einer Klasse je 
-Region klassifiziert.
-Dadurch sind diese zwar wesentlich schneller, 
-aber auch ungenauer.
+wird das gesamte Bild als potentielle
+Regionen für Objekte betrachtet, indem 
+dieses Gitterartig unterteilt wird.
+Jeder Teil, der eine mögliche Region darstellt, 
+wird dann hisichtlich vorhandensein 
+eines Objekt, klassifiziert.
 
 Für die Bachelor Arbeit wurden 
 Modelle beider Ansätze verwendet und 
@@ -181,9 +176,8 @@ einem binären klassifikator (\textit{cls layer}),
 welcher angibt ob sich ein Objekt
 in dem Vorschlag befindet, 
 sowie einem Bounding Regresor
-(\textit{reg layer}), zur Lokalisierung,
+(\textit{reg layer}) zur Lokalisierung,
 übergeben.
-
 
 \vspace{1cm}
 \begin{figure}[H]
@@ -205,8 +199,8 @@ In jeder Zelle des Gitters werden \textit{default Anker
 Boxen} unterschiedlicher skalierungen definiert.
 
 Indem an das Basis CNN weitere \textit{Extra Feature Layer}
-verschiedener Größen angehängt werden, kann dieses 
-für jede default Box eine Klassifikation, in Form 
+verschiedener Größen angehängt werden, kann dieses, 
+für jede default Box, eine Klassifikation, in Form 
 eines \textit{confidence scores}, sowie eine Lokalisierung, 
 in Form eines Offsets zur default Box, vornehmen.
 
@@ -214,7 +208,7 @@ Diese werden zur finalen Detektion
 einem \textit{non-maximum suppression}
 Layer \cite{Hosang2017cvpr} übergeben,
 welcher alle, zu einer Klasse gehörenden Boxen,
-zu einer Box zusammenführt.
+in einer Box zusammenführt.
 
 
 \begin{figure}[H]
@@ -253,9 +247,9 @@ einiger gängiger Object detection Modelle, mit verschiedenen
 vortrainerten Basis CNNs.
 
 Der, für die Bachelor Arbeit Verwendete, \textit{Single 
-Shot Detector} (SSD), wurde zum Einen mit dem 
-\textit{MobilenetV2} und zum Anderen mit dem 
-\textit{InceptionV2}, als Basis CNN trainiert.
+Shot Detector} (SSD), wurde zum einen mit dem 
+\textit{MobilenetV2} und zum anderen mit dem 
+\textit{InceptionV2} als Basis CNN trainiert.
 Für das \textit{Faster R-CNN} wurde, aufgrund 
 der Verfügbarkeit, nur mit dem \textit{InceptionV2}
 trainiert.
@@ -278,8 +272,8 @@ Während des Trainings wurden, in regelmäßigen
 Abständen, die trainierten Gewichte abgespeichert.
 
 Mithilfe das Evaluierungstools \textit{Tensorboard}
-konnte der Trainingsfortschrit anhand bestimmter
-Metriken angezeigt und ausgewertet werden.
+konnte der Trainingsfortschritt, anhand bestimmter
+Metriken, angezeigt und ausgewertet werden.
 
 So konnten schon während des Trainings fehlerhafte
 Einstellungen der Datensatz- und 
@@ -327,7 +321,7 @@ zur Inferenz gelesen werden.
 \subsection*{InferecneEgine}
 
 Um die Inferenz eines Modells im IR-Format 
-auf dem NCS2 ausführen zu können, werden, 
+auf dem NCS2 ausführen zu können, werden 
 in der Inference Engine, die in Abbildung 
 \ref{fig:inger_engine_workflow} schematisch
 dargestellten Schritte, durchgeführt.
@@ -366,7 +360,7 @@ Kamera Stream, werden die Schritte
 \begin{minipage}{0.30\textwidth}
     \centering
     \input{Bilder/inferece_engine_diagram}
-    \captionof{figure}{}
+    \captionof{figure}{Ablauf der InferenceEngine}
     \label{fig:inger_engine_workflow}
 \end{minipage}
 \begin{minipage}{0.70\textwidth}
@@ -408,7 +402,7 @@ Kamera Stream, werden die Schritte
 % # img_h, img_w, img_c -> blob_n, blob_c, blob_h, blob_w
 
 Die Form des Inferenzergebnisses hängt von der 
-Art des verwendeten Deep Learning Modells ab, welches 
+Art des verwendeten Deep Learning Modells ab, welche 
 z.B. \textit{Image Classification}, \textit{Object detection},
 oder \textit{Instance
 Segmentation} sein können.
@@ -416,13 +410,11 @@ Segmentation} sein können.
 Für Object detection Modelle enthällt das Ergebnis
  Datenstrukturen, welche den Index, 
  zugehörige Wahrscheinlichkeit, sowie Bounding 
- Box Koordinaten geschätzen Objekte im Bild enthalten.
+ Box Koordinaten der geschätzen Objekte im Bild enthalten.
 
 Indem man für alle Schätzungen, die in einem Bild gemacht wurden, 
 einen Threshhold für die Wahrscheinlichkeit festlegt (zb. 70\%),
-könenn die sinnvollen Ergebnisse herausgefiltert werdsen.
+könenn die sinnvollen Ergebnisse herausgefiltert werden.
 
 Zur veranschaulichung können die Koordinaten dann 
 als Bounding Box in das inferierte Bild gezeichnet werden.
-
-

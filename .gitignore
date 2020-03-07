@@ -28,11 +28,11 @@ Connection/socket/*
 !Connection/socket/server.py
 !Connection/socket/client.py
 
-!Connection/remoteit/
-Connection/remoteit/*
-!Connection/remoteit/connection.py
-!Connection/remoteit/connection_test.py
-!Connection/remoteit/test.jpg
+!Connection/remote_it/
+Connection/remote_it/*
+!Connection/remote_it/connection.py
+!Connection/remote_it/connection_test.py
+!Connection/remote_it/test.jpg
 
 
 !Dataset/

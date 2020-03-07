@@ -7,27 +7,33 @@ Einstellungen in den Scripten:
 **dataset_dir** Pfad zu Ordnern, die zu inferierende Bilder enthalten  
 
 entweder in unterordnern:
-* OI_Animals/validation
-    * Deer/
-        * img1.jpg
-        * img2.jpg
-        * ...
-    * Fox/
-        * ...
+
+```bash
+└── OI_Animals/validation
+    ├── Deer/
+    │   ├── img1.jpg
+    │   ├── img2.jpg
+    │   └── ...
+    └── Fox/
+        └── ...
+```
 
 oder direkt:
-* handy_bilder/
-    * img1.jpg
-    * img2.jpg
-
+```
+└── handy_bilder/
+    ├── img1.jpg
+    └── img2.jpg
+```
 
 **models_dir** Pfad zu Ordnern die OpenVino Models enthalten wie:
 
 Bsp:
-* ssd_inception/
-    * frozen_inference_graph.xml
-    * frozen_inference_graph.bin
-    * exported_model (optional)
+```
+└── ssd_inception/
+    ├── frozen_inference_graph.xml
+    ├── frozen_inference_graph.bin
+    └── exported_model (optional)
+```
 
 **eval_dir** Ausgabe Ordner für inferierte Bilder
 

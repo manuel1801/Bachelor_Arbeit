@@ -55,7 +55,7 @@ starten über
 ```bash
 python3 benchmark_auto.py
 ```
-werden dann jeweils für 1 bis 4 inferenz reqquests inferiert.
+werden dann jeweils für 1 bis 4 inferenz-requests automatisch inferiert.
 
 
 ### infer_async.py

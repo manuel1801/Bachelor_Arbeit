@@ -31,51 +31,56 @@ Connection/remote_it/*
 !Connection/remote_it/connection.py
 !Connection/remote_it/connection_test.py
 !Connection/remote_it/test.jpg
-
+!Connection/remote_it/readme.*
 
 !Dataset/
 Dataset/*
 !Dataset/handy_bilder/
 !Dataset/classes.txt
+!Dataset/readme.*
 
 
 !Inference_Engine_Tools/
 Inference_Engine_Tools/*
+!Inference_Engine_Tools/readme.*
 
 !Inference_Engine_Tools/infer_test_images/
 Inference_Engine_Tools/infer_test_images/*
 !Inference_Engine_Tools/infer_test_images/detect_images.py
 !Inference_Engine_Tools/infer_test_images/infer_test_images.py
 !Inference_Engine_Tools/infer_test_images/infer_test_images_auto.py
-!Inference_Engine_Tools/infer_test_images/readme.md
-!Inference_Engine_Tools/infer_test_images/readme.pdf
+!Inference_Engine_Tools/infer_test_images/readme.*
 
 !Inference_Engine_Tools/benchmark_tool/
 Inference_Engine_Tools/benchmark_tool/*
 !Inference_Engine_Tools/benchmark_tool/benchmark.py
 !Inference_Engine_Tools/benchmark_tool/benchmark_auto.py
-!Inference_Engine_Tools/benchmark_tool/readme.md
-!Inference_Engine_Tools/benchmark_tool/readme.pdf
+!Inference_Engine_Tools/benchmark_tool/readme.*
 
 !Inference_Engine_Tools/samples/
 Inference_Engine_Tools/samples/*
 !Inference_Engine_Tools/samples/detection_images.py
 !Inference_Engine_Tools/samples/motion_detection.py
-
+!Inference_Engine_Tools/samples/readme.*
 
 !openvino_models/
 
-
 !Preprocessing/
 Preprocessing/*
+!Preprocessing/readme.*
+
 !Preprocessing/augmentation/
+!Preprocessing/augmentation/readme.*
+
 !Preprocessing/tf_records/
+!Preprocessing/tf_records/readme.*
 
 
 !TensorFlow/
 TensorFlow/*
 !TensorFlow/openvino_convert_tf_object_detection.ipynb
 !TensorFlow/train_object_detection_in_colab.ipynb
+!TensorFlow/readme.*
 
 
 !Vortrag

@@ -81,7 +81,7 @@ class InferenceModel:
             try:
                 exec_net = self.ie.load_network(
                     network=net, num_requests=num_requests, device_name=self.device)
-                exec_net.export(exported_model)
+                # exec_net.export(exported_model)
 
             except:
                 return False

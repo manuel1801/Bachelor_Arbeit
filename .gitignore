@@ -197,3 +197,5 @@ kaggle_iWildCam
 
 /Inference_Engine_Tools/benchmark_tool/open_vino/cpp/
 /Inference_Engine_Tools/benchmark_tool/results*.txt
+
+/Inference_Engine_Tools/infer_test_images/results

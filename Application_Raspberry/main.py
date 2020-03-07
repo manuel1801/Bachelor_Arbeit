@@ -72,8 +72,7 @@ if send_results:
 # assert os.path.isdir(model_dir)
 
 # models = ['samples_ssd_inception', 'samples_ssd_inception']
-#models = ['animals_faster_rcnn_inception', 'animals_ssd_inception']
-models = ['animals_ssd_inception', 'animals_ssd_inception']
+models = ['animals_faster_rcnn_inception', 'animals_ssd_inception']
 
 
 # Load Model to Device

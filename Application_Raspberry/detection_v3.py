@@ -68,8 +68,7 @@ class InferenceModel:
             net.outputs) == 1, "Demo supports only single output topologies"
         out_blob = next(iter(net.outputs))
 
-        # if os.path.isfile(exported_model):
-        if False:
+        if os.path.isfile(exported_model):
             print('found model to import')
             try:
                 exec_net = self.ie.import_network(
@@ -81,7 +80,7 @@ class InferenceModel:
             try:
                 exec_net = self.ie.load_network(
                     network=net, num_requests=num_requests, device_name=self.device)
-                # exec_net.export(exported_model)
+                exec_net.export(exported_model)
 
             except:
                 return False

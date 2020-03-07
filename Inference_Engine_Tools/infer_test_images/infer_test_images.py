@@ -4,38 +4,37 @@ import cv2
 import subprocess
 from random import shuffle
 
-# Directory of the Datasets
+# pfad zu den Datensätzen
 dataset_dir = os.path.join(os.environ['HOME'], 'Bachelor_Arbeit/Dataset')
 
-# Path to converted openvino Models
+# Pfad zu den konvertierten OpenVino Modellen
 # .../Animals/<model_name>/frozen_inference_graph.xml (and .bin)
 models_dir = os.path.join(
     os.environ['HOME'], 'Bachelor_Arbeit/openvino_models/Animals/')
 
-# Directory to write results into
+# Ausgabe Ordner für Inferierte Bilder
+# eval_dir = os.path.join(
+#     os.environ['HOME'], 'Bachelor_Arbeit/Inference_Engine_Tools/infer_test_images/results')
+
 eval_dir = os.path.join(
-    os.environ['HOME'], 'Bachelor_Arbeit/Inference_Engine_Tools/infer_test_images/results')
+    os.environ['HOME'], 'Bachelor_Arbeit/test_out_res2')
 
 
-# Validation Datensatz
+# Validation Datensatz (OpenImages)
 validation_images = os.path.join(dataset_dir, 'OI_Animals/validation')
 assert os.path.isdir(validation_images)
 
 
-# iWild Datensatz von Kaggle
-kaggle_iWildCam = os.path.join(dataset_dir, 'kaggle_iWildCam')
+# iWildCam Datensatz, (Kaggle)
+kaggle_iWildCam = os.path.join(
+    dataset_dir, 'kaggle_iWildCam')
 assert os.path.isdir(kaggle_iWildCam)
 
 
 # Eigne Bilder
-handy_images = os.path.join(dataset_dir, 'handy_bilder')
+handy_images = os.path.join(dataset_dir, 'handy_bilder/images')
 assert os.path.isdir(handy_images)
 
-handy_videos = os.path.join(dataset_dir, 'handy_videos/frames')
-assert os.path.isdir(handy_videos)
-
-handy_videos = os.path.join(dataset_dir, 'handy_videos/frames')
-assert os.path.isdir(handy_videos)
 
 labels = ['Brown_bear',
           'Deer',
@@ -49,10 +48,9 @@ labels = ['Brown_bear',
 
 # select dataset by commenting out
 infer_images_list = [
-    # validation_images,
+    validation_images,
     kaggle_iWildCam,
-    handy_images,
-    handy_videos
+    handy_images
 ]
 
 
@@ -136,7 +134,7 @@ if not os.path.isdir(output_dir_all):
 
 for ind, test_image in enumerate(dataset_files):
 
-            # load image to infer
+    # load image to infer
     image = cv2.imread(test_image)
 
     # infer image

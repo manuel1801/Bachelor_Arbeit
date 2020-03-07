@@ -71,13 +71,14 @@ if send_results:
 # print('selected model: ', model_dir)
 # assert os.path.isdir(model_dir)
 
-models = ['samples_faster_rcnn_inception', 'samples_ssd_inception']
+models = ['samples_ssd_inception', 'samples_ssd_inception']
 # models = ['animals_faster_rcnn_inception', 'animals_ssd_inception']
 
 
 # Load Model to Device
 # try first faster rcnn
 # if error try with ssd
+exec_model = None
 infer_model = detection.InferenceModel(device='MYRIAD')
 for model in models:
     exec_model = infer_model.create_exec_infer_model(
@@ -86,7 +87,8 @@ for model in models:
         break
     n_save = 300
     threshhold = 0.5
-if not exec_model:
+if exec_model is None:
+    print('error loading model')
     exit()
 print('load: ', model)
 del infer_model

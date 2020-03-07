@@ -2,7 +2,7 @@
 
 Zum inferieren von Testbildern und Vergleichen der Ergebnisse  
 
-Einstellungen:  
+Einstellungen in den Scripten:  
 
 **dataset_dir** Pfad zu Ordnern, die zu inferierende Bilder enthalten  
 

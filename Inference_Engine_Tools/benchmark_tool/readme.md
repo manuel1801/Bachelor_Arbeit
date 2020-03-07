@@ -1,7 +1,7 @@
 # Benchmark
 
-berechnung der inferenz-fps für 
-unterschiedl. anzahl an infer requests
+Berechnung der Inferenz-Fps für 
+unterschiedliche Anzahl an Infer-Requests
 
 
 

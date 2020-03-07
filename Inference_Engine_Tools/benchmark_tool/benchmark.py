@@ -5,37 +5,32 @@ import cv2
 import infer_async
 
 models_dir = os.path.join(
-    os.environ['HOME'], 'Bachelor_Arbeit', 'openvino_models')
+    os.environ['HOME'], 'Bachelor_Arbeit', 'openvino_models/Animals')
 
 test_image = cv2.imread(os.path.join(
-    os.environ['HOME'], 'Bachelor_Arbeit', 'Inference_Engine_Tools/benchmark_tool/car.png'))
+    os.environ['HOME'], 'Bachelor_Arbeit',
+    'Inference_Engine_Tools/benchmark_tool/car.png'))
 
 
 iterations = 100
 
+
 print('select model')
-selected_model = {}
+model_selection = {}
 i = 1
-for dataset in os.listdir(models_dir):
-    dataset_dir = os.path.join(models_dir, dataset)
-    if os.path.isdir(dataset_dir):
-        for model in os.listdir(dataset_dir):
-            model_dir = os.path.join(dataset_dir, model)
-            if os.path.isdir(model_dir):
-                selected_model[i] = dataset, model
-                print(i, dataset, model)
-                i += 1
+for model in os.listdir(models_dir):
+    model_dir = os.path.join(models_dir, model)
+    if os.path.isdir(model_dir):
+        model_selection[i] = model_dir
+        print(i, model)
+        i += 1
 
+selected_model = model_selection[int(input())]
 
-model_ind = int(input())
-print(selected_model[model_ind], ' selected')
+model_xml = os.path.join(selected_model, 'frozen_inference_graph.xml')
+model_bin = os.path.join(selected_model, 'frozen_inference_graph.bin')
+exported_model = os.path.join(selected_model, 'exported_model')
 
-model_xml = os.path.join(
-    models_dir, selected_model[model_ind][0], selected_model[model_ind][1], 'frozen_inference_graph.xml')
-model_bin = os.path.join(
-    models_dir, selected_model[model_ind][0], selected_model[model_ind][1], 'frozen_inference_graph.bin')
-exported_model = os.path.join(
-    models_dir, selected_model[model_ind][0], selected_model[model_ind][1], 'exported_model')
 
 print('select infer requests (0 für synchron)')
 infer_req = int(input())

@@ -5,16 +5,16 @@ import cv2
 import infer_async
 
 models_dir = os.path.join(
-    os.environ['HOME'], 'Bachelor_Arbeit', 'openvino_models')
+    os.environ['HOME'], 'Bachelor_Arbeit', 'openvino_models/Animals')
 
 test_image = cv2.imread(os.path.join(
     os.environ['HOME'], 'Bachelor_Arbeit', 'Inference_Engine_Tools/benchmark_tool/car.png'))
 
 iterations = 50
 
-models = ['Animals/ssd_mobilenet_v2',
-          'Animals/ssd_inception_v2',
-          'Animals/faster_rcnn_inception_v2']
+models = ['ssd_mobilenet_v2',
+          'ssd_inception_v2',
+          'faster_rcnn_inception_v2']
 
 for model in models:
 

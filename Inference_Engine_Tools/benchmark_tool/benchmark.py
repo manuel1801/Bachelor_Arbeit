@@ -4,13 +4,14 @@ import os
 import cv2
 import infer_async
 
-workspace_dir = os.path.join(os.environ['HOME'], 'Bachelor_Arbeit')
+models_dir = os.path.join(
+    os.environ['HOME'], 'Bachelor_Arbeit', 'openvino_models')
+
 test_image = cv2.imread(os.path.join(
-    workspace_dir, 'Inference_Engine_Tools/benchmark_tool/car.png'))
-models_dir = os.path.join(workspace_dir, 'openvino_models')
+    os.environ['HOME'], 'Bachelor_Arbeit', 'Inference_Engine_Tools/benchmark_tool/car.png'))
 
-iterations = 1000
 
+iterations = 100
 
 print('select model')
 selected_model = {}
@@ -33,10 +34,8 @@ model_xml = os.path.join(
     models_dir, selected_model[model_ind][0], selected_model[model_ind][1], 'frozen_inference_graph.xml')
 model_bin = os.path.join(
     models_dir, selected_model[model_ind][0], selected_model[model_ind][1], 'frozen_inference_graph.bin')
-
-assert os.path.isfile(model_bin)
-assert os.path.isfile(model_xml)
-
+exported_model = os.path.join(
+    models_dir, selected_model[model_ind][0], selected_model[model_ind][1], 'exported_model')
 
 print('select infer requests (0 für synchron)')
 infer_req = int(input())
@@ -44,18 +43,20 @@ infer_req = int(input())
 ie = IECore()
 net = IENetwork(model=model_xml, weights=model_bin)
 
-fps_all = {}
 
 if infer_req == 0:
 
-    print('starting sync with 1 requests')
-
-    t0 = time.time()
-    exec_net = ie.load_network(
-        network=net, num_requests=2, device_name='MYRIAD')
-    t1 = time.time()
-
-    print(selected_model[model_ind], str(round((t1 - t0), 4)), 'sec')
+    # Synchron
+    if os.path.isfile(exported_model):  # found exported mode
+        print('found model to import')
+        exec_net = ie.import_network(
+            model_file=exported_model, device_name='MYRIAD',
+            num_requests=1)
+    else:
+        print('creating exec model')
+        exec_net = ie.load_network(
+            network=net, num_requests=1, device_name='MYRIAD')
+        exec_net.export(exported_model)
 
     input_blob = None
     feed_dict = {}
@@ -76,26 +77,18 @@ if infer_req == 0:
         feed_dict[input_blob] = image
         exec_net.start_async(request_id=0, inputs=feed_dict)
 
-        if (i+1) % 100 == 0:
-            fps_all[i+1] = fps_current
-
         if exec_net.requests[0].wait(-1) == 0:
             res = exec_net.requests[0].outputs[output_blop]
             infered_images += 1
-            fps_current = str(infered_images / (time.time() - t_start))
-            print('FPS: ', fps_current,
+            fps = str(infered_images / (time.time() - t_start))
+            print('FPS: ', fps,
                   end='\r', flush=True)
-
-    for it, fps in fps_all.items():
-        print('At iter: ', it, ' FPS: ', fps)
-
+    print(fps)
 
 else:
 
-    print('starting async with ', str(infer_req), ' requests')
-
     exec_model = infer_async.InferenceModel().create_exec_infer_model(
-        ie, net, model_xml, model_bin, infer_req)
+        ie, net, model_xml, model_bin, exported_model, infer_req)
 
     test_images = [test_image] * iterations
 
@@ -105,11 +98,9 @@ else:
         results = exec_model.infer_frames(test_images)
         for res in results:
             infered_images += 1
-            fps_current = str(infered_images / (time.time() - t_start))
-            print('FPS: ', fps_current, end='\r', flush=True)
-        if (infered_images + 1) % 100 == 0:
-            fps_all[infered_images + 1] = fps_current
+            fps = str(infered_images / (time.time() - t_start))
+            print('FPS: ', fps, end='\r', flush=True)
+
         if infered_images == iterations:
             break
-    for it, fps in fps_all.items():
-        print('At iter: ', it, ' FPS: ', fps)
+    print(fps)

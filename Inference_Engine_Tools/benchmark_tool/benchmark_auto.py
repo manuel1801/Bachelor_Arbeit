@@ -4,23 +4,25 @@ import os
 import cv2
 import infer_async
 
-workspace_dir = os.path.join(os.environ['HOME'], 'Bachelor_Arbeit')
-models_dir = os.path.join(workspace_dir, 'openvino_models')
+models_dir = os.path.join(
+    os.environ['HOME'], 'Bachelor_Arbeit', 'openvino_models')
+
 test_image = cv2.imread(os.path.join(
-    workspace_dir, 'Inference_Engine_Tools/benchmark_tool/car.png'))
+    os.environ['HOME'], 'Bachelor_Arbeit', 'Inference_Engine_Tools/benchmark_tool/car.png'))
 
 iterations = 50
 
-# for model in ['Animals/ssd_mobilenet_v2', 'Animals/ssd_inception_v2', 'Animals/faster_rcnn_inception_v2']:
-for model in ['Animals/faster_rcnn_inception_v2']:
+models = ['Animals/ssd_mobilenet_v2',
+          'Animals/ssd_inception_v2',
+          'Animals/faster_rcnn_inception_v2']
+
+for model in models:
 
     model_xml = os.path.join(
         models_dir, model, 'frozen_inference_graph.xml')
     model_bin = os.path.join(
         models_dir, model, 'frozen_inference_graph.bin')
-
-    assert os.path.isfile(model_bin)
-    assert os.path.isfile(model_xml)
+    exported_model = os.path.join(models_dir, model, 'exported_model')
 
     ie = IECore()
     net = IENetwork(model=model_xml, weights=model_bin)
@@ -31,10 +33,17 @@ for model in ['Animals/faster_rcnn_inception_v2']:
 
         if infer_req == 0:
 
-            # Syncron
-
-            exec_net = ie.load_network(
-                network=net, num_requests=1, device_name='MYRIAD')
+            # Synchron
+            if os.path.isfile(exported_model):  # found exported mode
+                print('found model to import')
+                exec_net = ie.import_network(
+                    model_file=exported_model, device_name='MYRIAD',
+                    num_requests=1)
+            else:
+                print('creating exec model')
+                exec_net = ie.load_network(
+                    network=net, num_requests=1, device_name='MYRIAD')
+                exec_net.export(exported_model)
 
             input_blob = None
             feed_dict = {}
@@ -67,7 +76,7 @@ for model in ['Animals/faster_rcnn_inception_v2']:
             # Asynron
 
             exec_model = infer_async.InferenceModel().create_exec_infer_model(
-                ie, net, model_xml, model_bin, infer_req)
+                ie, net, model_xml, model_bin, exported_model, infer_req)
 
             test_images = [test_image] * iterations
 

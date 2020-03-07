@@ -10,7 +10,7 @@ class InferenceModel:
     def __init__(self, device='MYRIAD'):
         self.device = device
 
-    def create_exec_infer_model(self, ie, net, model_xml, model_bin, num_requests):
+    def create_exec_infer_model(self, ie, net, model_xml, model_bin, exported_model, num_requests):
 
         # return ExecInferModel()
         img_info_input_blob = None
@@ -24,11 +24,19 @@ class InferenceModel:
                 raise RuntimeError("Unsupported {}D input layer '{}'. Only 2D and 4D input layers are supported"
                                    .format(len(net.inputs[blob_name].shape), blob_name))
 
-        # assert len(
-        #     net.outputs) == 1, "Demo supports only single output topologies"
         out_blob = next(iter(net.outputs))
-        exec_net = ie.load_network(
-            network=net, num_requests=num_requests, device_name=self.device)
+
+        if os.path.isfile(exported_model):  # found exported mode
+            print('found model to import')
+            exec_net = ie.import_network(
+                model_file=exported_model, device_name='MYRIAD',
+                num_requests=num_requests)
+        else:
+            print('creating exec model')
+            exec_net = ie.load_network(
+                network=net, num_requests=num_requests, device_name=self.device)
+            exec_net.export(exported_model)
+
         n, c, h, w = net.inputs[input_blob].shape
         if img_info_input_blob:
             feed_dict[img_info_input_blob] = [h, w, 1]

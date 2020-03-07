@@ -1,201 +1,88 @@
-# Byte-compiled / optimized / DLL files
-__pycache__/
-*.py[cod]
-*$py.class
+/*
 
-# C extensions
-*.so
+!.gitignore
 
-# Distribution / packaging
-.Python
-build/
-develop-eggs/
-dist/
-downloads/
-eggs/
-.eggs/
-lib/
-lib64/
-parts/
-sdist/
-var/
-wheels/
-pip-wheel-metadata/
-share/python-wheels/
-*.egg-info/
-.installed.cfg
-*.egg
-MANIFEST
+!readme.md
+!readme.pdf
 
-# PyInstaller
-#  Usually these files are written by a python script from a template
-#  before PyInstaller builds the exe, so as to inject date/other infos into it.
-*.manifest
-*.spec
-
-# Installer logs
-pip-log.txt
-pip-delete-this-directory.txt
-
-# Unit test / coverage reports
-htmlcov/
-.tox/
-.nox/
-.coverage
-.coverage.*
-.cache
-nosetests.xml
-coverage.xml
-*.cover
-*.py,cover
-.hypothesis/
-.pytest_cache/
-
-# Translations
-*.mo
-*.pot
-
-# Django stuff:
-*.log
-local_settings.py
-db.sqlite3
-db.sqlite3-journal
-
-# Flask stuff:
-instance/
-.webassets-cache
-
-# Scrapy stuff:
-.scrapy
-
-# Sphinx documentation
-docs/_build/
-
-# PyBuilder
-target/
-
-# Jupyter Notebook
-.ipynb_checkpoints
-
-# IPython
-profile_default/
-ipython_config.py
-
-# pyenv
-.python-version
-
-# pipenv
-#   According to pypa/pipenv#598, it is recommended to include Pipfile.lock in version control.
-#   However, in case of collaboration, if having platform-specific dependencies or dependencies
-#   having no cross-platform support, pipenv may install dependencies that don't work, or not
-#   install all needed dependencies.
-#Pipfile.lock
-
-# PEP 582; used by e.g. github.com/David-OConnor/pyflow
-__pypackages__/
-
-# Celery stuff
-celerybeat-schedule
-celerybeat.pid
-
-# SageMath parsed files
-*.sage.py
-
-# Environments
-.env
-.venv
-env/
-venv/
-ENV/
-env.bak/
-venv.bak/
-
-# Spyder project settings
-.spyderproject
-.spyproject
-
-# Rope project settings
-.ropeproject
-
-# mkdocs documentation
-/site
-
-# mypy
-.mypy_cache/
-.dmypy.json
-dmypy.json
-
-# Pyre type checker
-.pyre/
-
-# Eigene
-
-.vscode
-tempCodeRunnerFile.py
-
-/Ausarbeitung/Ausarbeitung_Vorlage/
-/Ausarbeitung/zusammenfassung-vortrag
-
-*.bbl
-*.aux
-*.blg
-*.out
-*.log
-*.toc
-*.synctex(busy)
-*.gz
-*.fls
-*.fdb_latexmk
-*.webp
-*.pptx
-*.snm
-*.nav
-*_log
-__latexindent_temp.tex
-
-links.*
-*_log.*
-
-/Connection/proxy/
-/Connection/vpn/
+!Application_Raspberry/
+Application_Raspberry/*
+!Application_Raspberry/main.py
+!Application_Raspberry/detection.py
+!Application_Raspberry/connection.py
+!Application_Raspberry/launcher.sh
+!Application_Raspberry/models/
 
 
+!Ausarbeitung/
+Ausarbeitung/*
+!Ausarbeitung/*.tex
+!Ausarbeitung/Bilder/
+!Ausarbeitung/*.pdf/
 
-/documents/ma_ba
-/documents/books
-/documents/anmeldeformular_thesis_master_-_2014-08-12_01_Update.pdf
-/documents/hardware/
+!Connection/
+Connection/*
+!Connection/socket/
+Connection/socket/*
+!Connection/socket/connection.py
+!Connection/socket/server.py
+!Connection/socket/client.py
 
-/Application_Raspberry/detected/*
-/Application_Raspberry/remote_client_test.py
+!Connection/remoteit/
+Connection/remoteit/*
+!Connection/remoteit/connection.py
+!Connection/remoteit/connection_test.py
+!Connection/remoteit/test.jpg
 
-/Preprocessing/sample_set/
 
-/TensorFlow/models
+!Dataset/
+Dataset/*
+!Dataset/handy_bilder/
+!Dataset/classes.txt
 
-rechnungen
 
-Dataset/kaggle.json
-Dataset/handy_videos
-Dataset/iWildCam_2019_FGVC6
-Dataset/PetImages
-Dataset/FlickrAnimals
-Dataset/OI_Animals
-Dataset/OI_Samples
+!Inference_Engine_Tools/
+Inference_Engine_Tools/*
 
-/openvino
-/openvino_models/caffe/vgg16/
-/TensorFlow/workspace
+!Inference_Engine_Tools/infer_test_images/
+Inference_Engine_Tools/infer_test_images/*
+!Inference_Engine_Tools/infer_test_images/detect_images.py
+!Inference_Engine_Tools/infer_test_images/infer_test_images.py
+!Inference_Engine_Tools/infer_test_images/infer_test_images_auto.py
+!Inference_Engine_Tools/infer_test_images/readme.md
+!Inference_Engine_Tools/infer_test_images/readme.pdf
 
-/TensorFlow/detection_keras/
-/TensorFlow/eval.sh
-/TensorFlow/image_classification/*.txt
+!Inference_Engine_Tools/benchmark_tool/
+Inference_Engine_Tools/benchmark_tool/*
+!Inference_Engine_Tools/benchmark_tool/benchmark.py
+!Inference_Engine_Tools/benchmark_tool/benchmark_auto.py
+!Inference_Engine_Tools/benchmark_tool/readme.md
+!Inference_Engine_Tools/benchmark_tool/readme.pdf
 
-/Connection/remote_it/received
+!Inference_Engine_Tools/samples/
+Inference_Engine_Tools/samples/*
+!Inference_Engine_Tools/samples/detection_images.py
+!Inference_Engine_Tools/samples/motion_detection.py
 
-kaggle_iWildCam
 
-/Inference_Engine_Tools/benchmark_tool/open_vino/cpp/
-/Inference_Engine_Tools/benchmark_tool/results*.txt
+!openvino_models/
 
-/Inference_Engine_Tools/infer_test_images/results
+
+!Preprocessing/
+Preprocessing/*
+!Preprocessing/augmentation/
+!Preprocessing/tf_records/
+
+
+!TensorFlow/
+TensorFlow/*
+!TensorFlow/openvino_convert_tf_object_detection.ipynb
+!TensorFlow/train_object_detection_in_colab.ipynb
+
+
+!Vortrag
+Vortrag/*
+!Vortrag/*.tex
+!Vortrag/*.pdf
+!Vortrag/Bilder/
+

@@ -32,7 +32,7 @@ assert os.path.isdir(kaggle_iWildCam)
 
 
 # Eigne Bilder
-handy_images = os.path.join(dataset_dir, 'handy_bilder/images')
+handy_images = os.path.join(dataset_dir, 'handy_bilder')
 assert os.path.isdir(handy_images)
 
 

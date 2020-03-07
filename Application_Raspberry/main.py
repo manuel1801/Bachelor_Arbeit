@@ -19,7 +19,7 @@ password = 'animalsdetection'
 raspi = True
 
 buffer_size = 200    # zum zwischen speichern wenn infer langsamer stream
-threshhold = 0.7     # Für Detections
+threshhold = 0.5     # Für Detections
 num_requests = 3     # anzahl paralleler inferenz requests, recommended:3
 send_results = True  # falls nein wird local gespeichert)
 # None: keine email sende, oder in send_mail zieladresse angeben.

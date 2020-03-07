@@ -2,12 +2,6 @@
 
 !.gitignore
 
-!readme.md
-!readme.pdf
-!/*/*/readme.md
-/*/readme.md
-
-
 !Application_Raspberry/
 Application_Raspberry/*
 !Application_Raspberry/main.py
@@ -15,7 +9,7 @@ Application_Raspberry/*
 !Application_Raspberry/connection.py
 !Application_Raspberry/launcher.sh
 !Application_Raspberry/models/
-
+!Application_Raspberry/readme.*
 
 !Ausarbeitung/
 Ausarbeitung/*
@@ -30,6 +24,7 @@ Connection/socket/*
 !Connection/socket/connection.py
 !Connection/socket/server.py
 !Connection/socket/client.py
+!Connection/socket/readme.*
 
 !Connection/remote_it/
 Connection/remote_it/*

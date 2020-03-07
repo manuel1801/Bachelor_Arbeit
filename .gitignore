@@ -4,6 +4,9 @@
 
 !readme.md
 !readme.pdf
+!/*/*/readme.md
+/*/readme.md
+
 
 !Application_Raspberry/
 Application_Raspberry/*

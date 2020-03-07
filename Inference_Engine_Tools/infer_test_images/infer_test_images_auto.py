@@ -4,26 +4,29 @@ import cv2
 import subprocess
 from random import shuffle
 
-# Directory of the Datasets
+# pfad zu den Datensätzen
 dataset_dir = os.path.join(os.environ['HOME'], 'Bachelor_Arbeit/Dataset')
 
-# Path to converted openvino Models
-# .../Animals/<model_name>/frozen_inference_graph.xml (and .bin)
+# Pfad zu den konvertierten OpenVino Modellen
+# .../Animals/<model_name>/frozen_inference_graph.xml (und .bin)
 models_dir = os.path.join(
     os.environ['HOME'], 'Bachelor_Arbeit/openvino_models/Animals/')
 
-# Directory to write results into
+# Ausgabe Ordner für Inferierte Bilder
+# eval_dir = os.path.join(
+#     os.environ['HOME'], 'Bachelor_Arbeit/Inference_Engine_Tools/infer_test_images/results')
+
 eval_dir = os.path.join(
-    os.environ['HOME'], 'Bachelor_Arbeit/Inference_Engine_Tools/infer_test_images/results')
+    os.environ['HOME'], 'Bachelor_Arbeit/test_out_res')
 
-
-# Validation Datensatz
+# Validation Datensatz (OpenImages)
 validation_images = os.path.join(dataset_dir, 'OI_Animals/validation')
 assert os.path.isdir(validation_images)
 
 
-# iWild Datensatz von Kaggle
-kaggle_iWildCam = os.path.join(dataset_dir, 'kaggle_iWildCam')
+# iWildCam Datensatz, (Kaggle)
+kaggle_iWildCam = os.path.join(
+    dataset_dir, 'kaggle_iWildCam')
 assert os.path.isdir(kaggle_iWildCam)
 
 
@@ -31,7 +34,7 @@ assert os.path.isdir(kaggle_iWildCam)
 handy_images = os.path.join(dataset_dir, 'handy_bilder/images')
 assert os.path.isdir(handy_images)
 
-
+# Labes für 'Animal' Datensatz
 labels = ['Brown_bear',
           'Deer',
           'Fox',
@@ -42,19 +45,17 @@ labels = ['Brown_bear',
           'Raccoon',
           'Squirrel']
 
-# select dataset by commenting out
+# Zu inferierende Datensätze
 infer_images_list = [
     validation_images,
     kaggle_iWildCam,
     handy_images
 ]
 
-# set maximum number for each dataset
-max_images = 500
-configs = ['ssd_vs_faster',
-           'faster_optimierungen_aug', 'faster_optimierungen_l2']
+# Maximale Anzahl an zu inferierenden Bildern festlegen (0 für alle)
+max_images = 20
 
-# test configurationen:
+# Vergleichskonfigurationen
 test_config = {
     'ssd_vs_faster': [
         'ssd_inception_v2',
@@ -67,13 +68,13 @@ test_config = {
         'faster_rcnn_inception_v2_less_aug',
         'faster_rcnn_inception_v2_3000',
         'faster_rcnn_inception_v2_4000'
-    ],
-    'faster_optimierungen_l2': [
-        'faster_rcnn_inception_v2_less_aug',
-        'faster_rcnn_inception_v2_less_aug_l2',
-        'faster_rcnn_inception_v2_3000',
-        'faster_rcnn_inception_v2_l2'
     ]
+    # 'faster_optimierungen_l2': [
+    #     'faster_rcnn_inception_v2_less_aug',
+    #     'faster_rcnn_inception_v2_less_aug_l2',
+    #     'faster_rcnn_inception_v2_3000',
+    #     'faster_rcnn_inception_v2_l2'
+    # ]
 }
 
 
@@ -105,7 +106,7 @@ for name, data in dataset_dict.items():
 
 infer_model = detection.InferenceModel()
 
-for config_ind in configs:
+for config, configs in test_config.items():
 
     for model in os.listdir(models_dir):
 
@@ -113,26 +114,25 @@ for config_ind in configs:
         if not os.path.isdir(model_dir):
             continue
 
-        if not model in test_config[config_ind]:
-            print('skipping ', model)
+        if not model in configs:
             continue
 
-        print('starting Model:   ', model)
+        print('Starte Model:   ', model)
 
         exec_model = infer_model.create_exec_infer_model(
             model_dir, labels, num_requests=3)
 
         for dataset_name, dataset_files in dataset_dict.items():
-                # for infer_images in infer_images_list:
 
             if not os.path.isdir(eval_dir):
                 os.mkdir(eval_dir)
 
             infer_results = 'infer_results_' + dataset_name
 
-            output_dir = os.path.join(eval_dir, infer_results, model)
+            output_dir = os.path.join(
+                eval_dir, infer_results, 'files__' + model)
             output_dir_all = os.path.join(
-                eval_dir, infer_results, config_ind)
+                eval_dir, infer_results, 'links__' + config)
 
             print('starting Dataset: ', infer_results)
 

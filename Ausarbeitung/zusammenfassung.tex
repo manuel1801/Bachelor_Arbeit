@@ -1,23 +1,79 @@
 \chapter{Zusammenfassung und Ausblick}\label{kap:zusammenfassungausblick}
-%
-Die Zusammenfassung bildet mit der Einleitung den
-Rahmen der Arbeit. Sie greift zu Beginn die Aufgabenstellung auf
-und beschreibt dann die wesentlichen Punkte des
- Lösungsweges und die erzielten Ergebnisse kurz
-  und knapp, so dass diese in kürzester Zeit
-   erfasst werden können.
 
-Anschließend werden noch kurz offene Punkte,
- Verbesserungen oder Weiterentwicklungen diskutiert.
 
-Insgesamt sollten Zusammenfassung und
- Ausblick anderthalb Seiten nicht überschreiten.
-  In der Regel ist eine Seite ausreichend.
+Ziel der Arbeit war, es ein autonomes
+Kamerasystem zur Wildtierkennung,
+mithilfe Neuronaler Netze, zu entwickeln.
+Dafür wurden vortrainierte, CNN basierte, 
+Deep Learning Modelle zur Objekterkennung
+auf einen geeigneten Datensatz trainiert.
+Dadurch sollte es Möglich sein, nicht 
+nur die Anwesenheit eines Tieres 
+zu Erkennen, sondern auch eine 
+Klassifizierung der Tierart 
+vorzunehmen, wodurch das System
+gezielter für eine bestimmte
+Anwendung eingesetzt werden kann.
+Zur Realisierung, wurde neben einem Raspberry
+Pi, sowie einer nachtsichtgeeigneten 
+Kamera, für die Inferenz der 
+\textit{Neural Compute Stick 2}
+von \textit{Intel} verwendet, um die 
+Verarbeitung der Daten auf dem 
+Gerät ausführen zu können.
+\vspace{0.5cm}
 
-\begin{itemize}
-    \item Aufgreifen der Aufgabenstellung
-    \item Kurzbeschreibung der Lösungsschritte
-    \item Hinweis auf die eigene Leistung
-    \item Kurzbeschreibung der erzielten Ergebnisse
-    \item Offene Punkte und weiterführende Aufgabenstellungen
-\end{itemize}
+Für das Training wurde ein Datensatz, 
+bestehend aus 9 Wildtierklassen verwendet,
+welcher aus \textit{OpenImages} herunter 
+geladen werden konnte.
+Anschließend wurden die Daten 
+für das Training aufbereitet und
+zur Evaluierung, in verschiedene 
+Sets aufgeteilt.
+Das Training wurde dann mithilfe des 
+Frameworks \textit{Tensorflow} durchgeführt,
+wobei die Modelle \textit{SSD} und
+\textit{Faster R-CNN} mit verschiedenen
+Basis CNN und Parameter-Einstellungen
+verwendet wurden.
+Durch anschließende Evaluierung, konnte 
+festgestellt werden, welches modell sich,
+bezogen auf Genauigkeit und Geschwindigkeit,
+am besten für die Anwendung eignet.
+Der letzte Schritt war es die Inferenz, zusammen 
+mit dem Anwendungscode für den Raspberry Pi 
+zu implementieren, wofür mit OpenVino gearbeitet 
+wurde.
+\vspace{0.5cm}
+
+Die Evaluierung der Modelle zeigte, dass 
+eine erhöhte Genauigkeit, mit einer 
+langsameren Inferenzzeit einhergeht.
+Verbessert werden konnte die Genauigkeit 
+zum einen durch eine Augmentierung der Daten 
+was eine größere Robustheit gegenüber anderer 
+Datensätze mitsich brachte, und zum 
+anderen durch verwenden des Faster 
+R-CNN, mit welchem auch Tiere weiter 
+weg erkannt werden konnten.
+Die Performance der Inferenz konnte durch 
+asynchrone Inferenzausführung und 
+verwenden eines bewegungsmelders sowie 
+zwischenspeichern der frames verbessert werden.
+\vspace{0.5cm}
+
+
+Auffällig war der hohe Energieverbrauch, 
+der durch den Neural Compute Stick, die Kamera mit 
+Infrarot LEDs sowie dem Internetstick für den 
+Raspberry Pi zustande kam.
+Daher war kein langzeit testen der Anwendung möglich 
+und ist bei fortführung der arbeit zu berücksichtigen.
+ebenso wie eine geeignete hülle.
+Verbesserunge der genauigkeit könnten durch
+ training eines anderen datensatzes erreicht 
+ werden, für effizientere inferenz könnte 
+ ein anderes framework wie bsp caffe, welches 
+ andere modelle enthällt zu verbesserungen führen.
+ 

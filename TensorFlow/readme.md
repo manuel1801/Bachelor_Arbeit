@@ -135,6 +135,8 @@ Google Drive hochladen und ausführen.
 
 # TensorFlow Graph für OpenVino in IR Format konvertieren
 
+## entweder Lokal...
+
 mit ModelOptimizer aus OpenVino Toolkit
 
 ```bash
@@ -162,5 +164,8 @@ Bsp ssd:
 erzugt *frozen_inference_graph.bin* und *frozen_inference_graph.xml*, welche für die Inferenz mit OpenVino's InferenceEngine 
 verwendet werden können.
 
+## ... oder mit JupyterNotebook
 
-
+[*openvino_convert_tf_object_detection.ipynb*](openvino_convert_tf_object_detection.ipynb)
+öffnen und 
+zellen schrittweise ausführen

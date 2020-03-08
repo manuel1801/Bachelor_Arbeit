@@ -16,7 +16,7 @@ Application_Raspberry/*
 Ausarbeitung/*
 !Ausarbeitung/*.tex
 !Ausarbeitung/Bilder/
-!Ausarbeitung/*.pdf/
+!Ausarbeitung/*.pdf
 
 !Connection/
 Connection/*

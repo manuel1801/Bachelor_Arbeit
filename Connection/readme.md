@@ -69,10 +69,14 @@ python3 ssh_connection.py
 ```
 
 
+# Email Connection
 
-
-
-
+mit
+```python
+conn.send_mail('ziel@addresse.com', 'textmessage')
+```
+von der in *SSHConnect(email, password)* verwendeten
+email aus an *zieladresse* die *textmessage* senden.
 
 
 
@@ -117,4 +121,3 @@ python3 ssh_connection.py
 * socket.shutdown
 * socket.close
 
-# Email Connection

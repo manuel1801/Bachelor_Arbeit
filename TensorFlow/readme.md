@@ -46,14 +46,13 @@ cd models/research
 protoc object_detection/protos/*.proto –python_out=.
 ```
 * Environment Variablen im .bashrc (in letzter Zeile) hinzufügen:
-```
+```bash
 export PYTHONPATH=$PYTHONPATH:/path/to/TensorFlow/models/research:/path/to/TensorFlow/models/research/slim:/path/to/TensorFlow/models/research/object_detection
 ```
 
 
-# Training
+# Training (lokal)
 
-(nur für lokales training)
 
 ## 1. vortrainierten Model herunterladen
  
@@ -94,7 +93,7 @@ Dann in *data* ordner verschieben.
 
 ## 3. Training starten
 
-```python
+```bash
 python3 paht/to/models/research/object_detection/model_main.py \
 --pipeline_config_path=data/MODEL_CONFIG_FILE.config \
 --model_dir=OUTPUT_DIR \
@@ -110,16 +109,16 @@ tensorboard --logdir OUTPUT_DIR
 
 ## 5. Trainierten Tensorflow Graph Exportieren
 
-```python
+```bash
 python3 path/to/models/research/object_detectionexport_inference_graph.py \
     --input_type image_tensor \
     --pipeline_config_path data/MODEL_CONFIG_FILE.config \
     --trained_checkpoint_prefix OUTPUT_DIR/model.ckpt-NR \ 
-    --output_directory DATASET_DIR/frozen_graph/
+    --output_directory DATASET_DIR/exported/
 ```
 
-erzeugt einen Ordner *frozen_graph* der *frozen_inference_graph.pb* enthält.  
-Kann jetzt mit **OpenVino Model Optimizer** für **InferenceEngine** konvertiert werden
+erzeugt einen Ordner *exported* der *frozen_inference_graph.pb* enthält.  
+Kann jetzt mit *OpenVino Model Optimizer* für *InferenceEngine* konvertiert werden
 
 
 # Mit Google Colab trainiieren
@@ -132,13 +131,13 @@ Google Drive hochladen und ausführen.
   * in remote git repository (z.B. GitLab) hochladen
 
 * die zellen des notebooks schrittweise ausführen.
-  
+
 
 # TensorFlow Graph für OpenVino in IR Format konvertieren
 
 mit ModelOptimizer aus OpenVino Toolkit
 
-```python
+```bash
 python3 /opt/intel/openvino/deployment_tools/model_optimizer/mo_tf.py \
 --input_model path/to/frozen_inference_graph.pb \
 --output_dir path/to/export/model \
@@ -153,12 +152,12 @@ python3 /opt/intel/openvino/deployment_tools/model_optimizer/mo_tf.py \
 
 * Je nach model das entsprechende model_support.json file aus */opt/intel/openvino/deployment_tools/model_optimizer/extensions/front/tf/* verwenden.  
 Bsp ssd:
-  * Für Modelle die in Tensorflow v1.14 trainiert wurden **ssd_support_api_v1.14.json**
-  * nor konvertieren (ohne training) ssd_support.json verwenden
+  * Für Modelle die in Tensorflow v1.14 trainiert wurden *ssd_support_api_v1.14.json*
+  * nor konvertieren (ohne training) *ssd_support.json* verwenden
 
-* input_shape aus config file übernehmen.  
+* *input_shape* aus config file übernehmen.  
 
-* data_type für NCS2 immer FP16
+* *data_type* für NCS2 immer FP16
 
 erzugt *frozen_inference_graph.bin* und *frozen_inference_graph.xml*, welche für die Inferenz mit OpenVino's InferenceEngine 
 verwendet werden können.

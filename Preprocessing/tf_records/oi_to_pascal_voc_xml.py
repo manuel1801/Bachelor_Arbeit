@@ -1,10 +1,5 @@
 '''Python Code to Convert OpenImage Dataset into VOC XML format. 
-
-Author: https://github.com/AtriSaxena
-
-changes: 1. nur ein Argument:Dataset_Path wird dann automatisch für train und test ausgeführt
-            dest path wird davon abgeleitet
-         2. wenn geht mir leerzeichen in Klassen Name (mit is number function) -> fügt dann underscore ein
+original: https://github.com/AtriSaxena
 '''
 
 from xml.etree.ElementTree import Element, SubElement, Comment

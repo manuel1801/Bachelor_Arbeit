@@ -23,7 +23,7 @@ from collections import namedtuple, OrderedDict
 
 flags = tf.app.flags
 flags.DEFINE_string('csv_input', '', 'Path to the CSV input')
-flags.DEFINE_string('image_dir', '', 'Path to images')
+#flags.DEFINE_string('image_dir', '', 'Path to images')
 flags.DEFINE_string('classes', '', 'Path to classes.txt file')
 FLAGS = flags.FLAGS
 
@@ -90,7 +90,8 @@ def create_tf_example(group, path):
 def main(_):
     out_path = str(FLAGS.csv_input).replace('csv', 'record')
     writer = tf.python_io.TFRecordWriter(out_path)
-    path = os.path.join(FLAGS.image_dir)
+    #path = os.path.join(FLAGS.image_dir)
+    path = os.path.join(FLAGS.csv_input).replace('.csv', '')
     examples = pd.read_csv(FLAGS.csv_input)
     grouped = split(examples, 'filename')
     for group in grouped:

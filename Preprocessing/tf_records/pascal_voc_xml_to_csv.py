@@ -54,8 +54,8 @@ def main():
     assert(os.path.isdir(args.inputDir))
 
     for split in ['train', 'test']:
-        xml_df = xml_to_csv(args.inputDir + split)
-        xml_df.to_csv(args.inputDir + split + '.csv', index=None)
+        xml_df = xml_to_csv(os.path.join(args.inputDir, split))
+        xml_df.to_csv(os.path.join(args.inputDir, split + '.csv'), index=None)
         print('Successfully converted xml to csv.')
 
 

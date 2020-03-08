@@ -1,0 +1,52 @@
+\begin{tikzpicture} 
+
+\begin{umlpackage}{Main}
+    \begin{umlpackage}{Detection}
+
+        \umlclass{Motion}{ 
+          statickBackground : np.array
+          }{ 
+          + detectMotion() : bool \\
+          + resetBackground() : void\\
+          + send() : bool\\
+          + disconnect() : bool
+        }
+    
+        \umlclass[y=-5]{InferenceModel}{ 
+            string : plugin
+            strin : device
+            }{ 
+            + createExecInferModel() : ExecInferModel
+          }
+    
+        \umlclass[y=-2, x=6]{ExecInferModel}{ 
+            shape : ioBlob\\
+            detected : array
+            }{ 
+            + inferFrames() : status \\
+            \# status[0] num infered\\
+            \# status[1] num detected\\
+            \# status[2] num saved\\
+            - save() : void
+            }
+    
+          
+    \end{umlpackage}   
+    
+
+    \umlclass[x=11, y=-2]{Connection}{ 
+        string logindata
+        }{ 
+        + login() : bool \\
+        + connect() : server, port\\
+        + send() : bool\\
+        + disconnect() : bool
+      }
+
+
+\end{umlpackage}
+
+
+
+\end{tikzpicture}
+    

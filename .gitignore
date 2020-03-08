@@ -10,7 +10,7 @@ Application_Raspberry/*
 !Application_Raspberry/launcher.sh
 !Application_Raspberry/models/
 !Application_Raspberry/readme.*
-!Application_Raspberry/capture_image.py
+#!Application_Raspberry/capture_image.py
 
 !Ausarbeitung/
 Ausarbeitung/*

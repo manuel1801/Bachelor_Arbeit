@@ -1,0 +1,49 @@
+\newcommand\restoreuscatcode{\catcode`\_=8 }
+\tikzset{every picture/.prefix style={execute at begin picture=\restoreuscatcode}}
+
+
+\begin{tikzpicture}   
+    
+            \umlclass[x=-0.5, y=0.2]{Motion}{ 
+              statick\text{\_}background : numpy.array
+              }{ 
+              + detect\text{\_}motion(frame) : bool: \\
+              + reset\text{\_}background() : void
+            }
+        
+            \umlclass[y=-4.2]{InferenceModel}{ 
+                plugin : ie\text{\_}api.IEPlugin\\
+                string : device\text{\_}name
+                }{ 
+                + init(device\text{\_}name)\\  
+                + create\text{\_}exec\text{\_}infer\text{\_}model(.xml, .bin, NReq)\\: ExecInferModel
+              }
+        
+            \umlclass[y=-1, x=5.6]{ExecInferModel}{ 
+                exec\text{\_}net : ie\text{\_}api.ExecutableNetwork\\
+                labels : list()\\
+                input\text{\_}blob : \textit{input\text{\_}shape}\\
+                output\text{\_}blob : \textit{output\text{\_}shape}\\
+                current\text{\_}frame : dict()\\
+                detected\text{\_}objects : dict()
+
+                }{ 
+                + init(exec\text{\_}net, labels, in,output\text{\_}blob)\\
+                + infer\text{\_}frames() : \textit{status} \\
+                - save(class\text{\_}id) : void
+                }
+        
+    
+        \umlclass[x=11.5, y=-2]{Connection}{ 
+            login\text{\_}data : string
+            }{ 
+            + login(device\text\_name) : bool \\
+            + connect() : (server, port)\\
+            + send(server, port, file) : bool\\
+            + disconnect() : bool\\
+            + send\text{\_}email(addr, msg) : bool
+          }
+
+    
+    \end{tikzpicture}
+        

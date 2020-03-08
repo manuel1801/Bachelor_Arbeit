@@ -1,0 +1,300 @@
+%##########################  CHAPER 6: APPLICATION  #######################
+
+\chapter{Entwicklung der Anwendung}\label{kap:application}
+
+
+Dieses Kapitel beschreibt die Realisierung der
+Anwendung, als autonomes Kamerasystem zur
+Wildtiererkennung.
+
+Zunächst werden dabei die verwendeten Hardwarekomponenten 
+erläutert.
+
+Im zweiten Abschnitt wird die Implementierung der 
+Inferenz, für eines der trainierten Modelle, 
+sowie einer geeigneten Kommunikationsmöglichkeit 
+zur Übertragung der Daten beschrieben.
+
+
+%-------------------------  SECTION 1: AUFBAU  ------------------------
+\section{Hardware}\label{sec:aufbau}
+
+
+Der Aufbau der Anwendung besteht aus einem, in Abbildung 
+\ref{fig:raspberrypi} dargestellten Raspberry Pi 4,
+auf dem der Programmcode ausgeführt wird,
+sowie dem Neural Compute Stick 2 für die Inferenz,
+welcher über eine USB Schnittstelle
+mit dem Raspberry Pi verbunden wird.
+
+Zur Aufnahme der Bilder wurde das in 
+Abbildung \ref{fig:rpicam} dargestellte 
+Raspberry Pi Kamera Modul,
+mit einem 5MP OV5647 Sensor der Marke Longrunner
+verwendet.
+Dieses ermöglicht, durch mechanisches zu und abschalten
+eines Infrarot Filters vor die Linse, zwischen Tag- und
+Nachtsicht zu wechseln.
+Der dafür verwendete Magnetschalter wird automatisch 
+über einen Helligkeitsensor getriggert.
+Im Infrarotmodus befindet sich der Filter nicht 
+vor der Linse, sodass neben den elektromagnetischen 
+Wellen des Sichtbaren Lichts, auch die des 
+langwelligeren des Infrarot Spektrums (850nm) 
+auf die Linse treffen und verarbeitet werden können.
+
+Zudem verfügt die Kamera über zwei Infrarot LEDs, 
+sodass auch Aufnahmen, in bis zu 3m Entfernung,
+in völliger Dunkelheit gemacht werden können.
+Diese haben den Vorteil gegenüber normalen LEDs, 
+dass die Tiere von keiner Sichtbaren Lichtquelle 
+gestört oder verscheucht werden.
+
+Verbunden wird das Kamera Modul über die CSI 
+(Camera Serial Interface) 
+Schnittstelle des Raspberry Pi's.
+
+\vspace{1cm}
+%https://www.amazon.de/gp/product/B07R4JH2ZV/ref=ppx_yo_dt_b_asin_title_o01_s00?ie=UTF8&psc=1
+\begin{minipage}{0.55\textwidth}
+    \centering
+    \includegraphics[width=0.8\textwidth]
+    {./Bilder/raspberrypi_4.png}
+    \captionof{figure}{Raspberry Pi 4}
+    \label{fig:raspberrypi}
+\end{minipage}
+\begin{minipage}{0.45\textwidth}
+    \centering
+    \includegraphics[width=0.8\textwidth]
+    {longrunner.jpg}
+    \captionof{figure}{Longruner Kamera Modul}
+    \label{fig:rpicam}
+\end{minipage}
+\vspace{1cm}
+
+
+Desweiteren wurde für eine mobile Internetverbindung 
+der \textit{Huawei E3531 SurfStick} und zu Stromversorgnung
+eine Powerbank verwendet.
+
+
+
+% https://www.amazon.de/gp/product/B00HSZEY34/ref=ppx_yo_dt_b_asin_title_o00_s00?ie=UTF8&psc=1
+
+
+\section{Software}
+
+Die Implementierung der Applikation für den Raspberry Pi
+wurde in Python vorgenommen. 
+Dabei sind die Funktionalitäten zur Objekterkennung in
+dem Script \textit{detection.py} 
+und die, zur Herstellung einer Verbindung
+und Senden der Daten, in dem 
+\textit{connection.py} Script definiert.
+
+
+Der Kamera Inputstream ist in einem \textit{main.py} Script 
+implementiert, von dem aus auch die in Abbildung 
+\ref{fig:class_diagram} 
+dargestellten Klassen, welche in \textit{detection.py}
+und \textit{connection.py} enthalten sind,
+verwendet werden.
+
+
+\vspace{1cm}
+\begin{minipage}{0.75\textwidth}
+    \centering
+    \underline{detection.py}
+\end{minipage}
+\begin{minipage}{0.25\textwidth}
+    \centering
+    \underline{connection.py}
+\end{minipage}
+\begin{figure}[H]
+    \centering
+    \input{Bilder/class_diagram.tex}    
+    \caption{Klassendiagramm der Anwendung}
+    \label{fig:class_diagram}
+\end{figure}
+\vspace{1cm}
+
+
+Die Klasse \textit{Motion} dient zur Erkennung von Bewegungen 
+im Kamera Input Stream, \textit{InferenceModel} und
+\textit{ExecInferModel} realisieren die Inferenz 
+eines trainierten Modells und die Klasse 
+\textit{Connection} dient dem Aufbau einer
+Verbindung zu einem anderen Gerät, sowie dem Senden
+der erkannten Bilder darüber.
+
+
+Durch geeigneten Implementierung des Applikationsablaufes,
+sollte eine Möglichkeit gefunden werden, trotz 
+der langsamen Inferenzzeit, mit dem Faster R-CNN
+alle relevanten Frames, also die, in denen Tiere zu vermuten
+sind, inferieren zu können.
+Dafür wurde die Annahme gemacht, dass zur Laufzeit der 
+Anwendung, nicht durchgehend inferiert werden muss,
+sich also Zeitweise keine Tiere und damit auch keine 
+Bewegung vor der Kamera befinden.
+
+Um Bewegungen feststellen zu können, 
+wurde, mithilfe der Library \textit{OpenCV}
+ein Bewegungsmelder implementiert.
+Dieser speichert zu Begin des Kamera Streams ein Referenz
+Frame ab, mit dem alle weiteren Frames verglichen werden.
+Beträgt der Abstand, der einzelnen Pixelwerte im 
+Graustufenbereich mehr, als ein bestimmter 
+Threshhold, wird dies als Bewegung gewertet.
+Indem nun die Frames, welche der Kamera Stream permanent 
+liefert, zunächst auf Bewegung überprüft werden, 
+lässt sich unnötiges inferieren vermeiden,
+was Zeit und und Energie kostet.
+Frames, die Bewegung enthalten, und aufgrund der langsamen 
+Inferenzzeit des Faster R-CNN nicht sofort inferiert 
+werden können, werden in einem Buffer zwischen 
+gespeichert und in Phasen, zu denen keine Bewegung stattfindet, 
+inferiert.
+
+Dafür musste der in Abschnitt \ref{sec:infertime} beschriebene
+asynchrone Inferenzablauf dahingehend angepasst werden,
+dass kein blockierendes warten auf 
+ein Inferenzergebnis stattfindet,
+wodurch die Inferenz komplet zeitasynchron zu 
+den Inputframes abläuft.
+Der Gesamtablauf der Applikation ist in Abbildung 
+\ref{fig:flowchart_appl} 
+schematisch als Flussdiagram dargestellt.
+
+\vspace{1cm}
+\begin{figure}[H]
+    \centering
+    \input{Bilder/flow_chart_appl.tex}    
+    \caption{Schematischer Ablauf des Applikationscode}
+    \label{fig:flowchart_appl}
+\end{figure}
+\vspace{1cm}
+
+
+Wird in inferierten Frames mehrfach nichts 
+erkannt, wird das Referenz Frame des 
+Bewegungsmelders durch ein aktuelles Frame ersetzt.
+
+Erkannte Objekt werden in einer
+Datenstruktur (Pytho Dictionary) zusammen 
+mit Klassenname (cls), Wahrscheinlichkeit(p)
+Anzahl an Erkennungen (N) sowie die Bounding 
+Box Koordinaten (Roi, (Region of Interest)) 
+abgespeichert.
+
+Nach einer bestimmte Anzahl 
+an Erkennungen des selben Objekts, wird dieses 
+als lokale Bilddatei abgespeichert und ein 
+Send-Requst an das Main Script zurückgegeben.
+
+Dieses prüft dann ob eine Verbindung zu einem 
+anderen Gerät besteht, stellt diese gegebenenfalls her,
+und sendet die lokal abgespeicherten Bilder.
+
+Um nicht permanent die Verbindung zu einem Pc aufrecht erhalten 
+zu müssen, was das Datenvolumen des mobilen Internets
+schneller aufbrauchen würde, wird diese nach einer 
+bestimmte zeit ohne Bewegung getrennt.
+
+Im folgenden werden die Funktionsweise der 
+Inferenz sowie der Verbindungsaufbau 
+genauer erklärt.
+
+
+\subsection*{Inferenz}
+
+Der im Abschnitt \ref{sec:infertime} beschriebene asynchronen
+Inferenzablauf wurde dahingehend angepasst, dass eine beliebige
+Anzahl an Inferenz Requests verwendet werden kann 
+und dass das Warten auf ein Inferenz Ergebnis
+nicht mehr blockierend ist.
+Dafür wurde der Timeout in der Wait-Funktion auf 
+$0ms$ gesetzt.
+In Algorithmus \ref{code:infer_async_neu} ist 
+der Inferenzablauf als Pseudocode dargestellt.
+
+\begin{algorithm}[H]
+    \caption{Asynchrone Inferenz, ohne Blockierung}
+    \label{code:infer_async_neu}
+    \begin{algorithmic}
+    \WHILE{\TRUE}
+    \STATE capture FRAMES
+        \FOR{all InferRequests}
+            %\STATE Status $\leftarrow$ \textbf{wait} for 
+            % InferRequest
+            \IF {\textbf{wait} for InferRequest \textbf{is} 0}
+                \STATE Result $\leftarrow$ InferRequest.output
+            \ENDIF
+            \IF {Buffer \textbf{not} empty}
+                \STATE preprocess InferRequest
+                \STATE \textbf{start} InferRequest
+            \ENDIF
+            \IF{Result not NULL}
+                \STATE process Result
+            \ENDIF
+        \ENDFOR
+    \ENDWHILE
+    \end{algorithmic}
+\end{algorithm}    
+
+
+
+
+
+\subsection*{Connection}
+
+Um die Bilder mit erkannten Tieren an ein anderes Gerät 
+z.B. einen Pc senden zu können, musste eine Verbindung
+hergestellt werden, die auch über verschiedene Netzwerke 
+hinweg funktioniert.
+
+Um unabhängig von Router Konfigurationen und Firewall 
+Einstellungen zu sein, wurde mithilfe des
+Dienstes \textit{remot3.it} \cite{remoteit}
+eine Cloudbasierte Remote Verbindung hergestellt.
+
+Mit dieser war es möglich eine Remote Proxy SSH Verbindung, 
+über das Internet zu einem anderen Gerät herzustellen.
+
+\begin{figure}[H]
+    \centering
+    \def\svgwidth{0.7\textwidth}
+    \input{Bilder/diagram-connect.pdf_tex}
+    \caption{Prinzip Proxy Verbindung}
+    \label{fig:remoteit}
+\end{figure}
+
+Da die Daten vom Raspberry Pi aus automatisiert gesendet 
+werden sollen, wurde der Pc, an den 
+sie Daten gesendet werden, als Remote Gerät implementiert.
+
+Gesendet wurden die Daten über das \textit{Secure Copy Protocol},
+welches das hergestellte \textit{Secure Shell Protocol (SSH)}
+verwendet.
+Dieses lässt sich über folgendes Kommando,
+welches im \textit{connection.py}
+Script ausgeführt wird, bedienen:
+\begin{itemize}
+    \item[\texttt{\$}] \texttt{scp -P port file.jpg 
+    user@proxyadresse /zielpfad/file.jpg}
+\end{itemize}
+
+Server und Port werden dabei von remote.it
+generiert, \textit{file.jpg} ist das zu sendende Bild und
+\textit{user} der Nutzername des Geräts,
+an welches gesendet wird.
+Um das Einloggen sowie den Verbindungs Auf- und Abbau 
+über remote.it zu einem Gerät automatisieren zu können,
+bietet remote.it eine API mit der über Post- und Get Requests
+die Befehle dafür programmatisch aufgerufen werden können.
+
+Um den Nutzer bei einer Erkennung automatisch 
+per Email zu benachrichtigen, wurde 
+eine Funktion implementiert, welche das 
+\textit{Smart Mail Transfer Protpkol (SMTP)} 
+verwendet.

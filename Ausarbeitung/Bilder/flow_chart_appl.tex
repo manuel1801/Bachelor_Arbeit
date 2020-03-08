@@ -1,0 +1,80 @@
+\tikzset{
+    decision/.style={
+        diamond,
+        draw,
+        text width=4em,
+        text badly centered,
+        inner sep=-1pt,
+        node distance=8em
+    },
+    block/.style={
+        rectangle,
+        draw,
+        text width=6em,
+        minimum height=2.5em,
+        text centered,
+        rounded corners,
+        node distance=8em
+    },
+    arrow/.style={
+        draw,
+        >=latex,
+        ->
+    }
+}
+
+
+\begin{tikzpicture}
+
+    \node (main) {\underline{main.py}};
+    \node (detection) [right of=main, node distance=0.4\textwidth] {\underline{detection.py}};
+    \node (connection) [left of=main, node distance=0.35\textwidth] {\underline{connection.py}};
+
+    \node (frame) [block, below of=main, text width=5em, node distance=5em] {Video\\Capture};
+    \node (motion) [decision, below of=frame] {has\\Motion};
+    \node (buffer) [block, right of=motion, node distance=0.2\textwidth] {Buffer};
+    \node (infer) [block, right of=buffer, node distance=0.25\textwidth] {Inferenz};
+    \node (threshhold) [decision, below of=infer] {probab.\\$>$\\thressh.};
+    \node (detframes) [block, below of=threshhold] {cls, p, N, Roi};
+    \node (nodet) [decision, below of=buffer] {no detect\\$>$ 20};
+
+    \node (empty) [fill=white, left of=nodet, node distance=0.4\textwidth] {};
+    \node (disconnect) [block, below of=empty, node distance=3.5em] {disconnect};
+    \node (nomotion) [decision, above of=empty, node distance=3em, inner sep=-4pt, y=2em] {no\\Motion\\$> 60$};
+
+    \node (ndet) [decision, below of=detframes, inner sep=-6pt] {N\\$>$\\10};
+    \node (save) [block, left of=ndet] {save Frame};
+    \node (connected) [decision, left of=save, node distance=0.3\textwidth, inner sep=1pt] {is\\connected};
+
+    \node (connect) [block, left of=connected, node distance=0.35\textwidth] {connect};
+    \node (send) [block, above of=connect] {send};
+
+    \node (merge) [fill=white, left of=nomotion, node distance=8.4em] {};
+    \node (merge2) [fill=white, left of=disconnect, node distance=8.4em] {};
+
+
+    \draw[arrow] (frame) -- node [fill=white] {Frame} (motion);
+    \draw[arrow] (motion) -- node [above] {true} (buffer);
+    \draw[arrow] (buffer) -- node [above] {start} (infer);
+    \draw[arrow] (infer) -- (threshhold);
+    \draw[arrow] (threshhold) -- node [fill=white] {true} (detframes);
+    \draw[arrow] (threshhold) -- node [above] {false} (nodet);
+    \draw[arrow] (nodet) -| node [near end, fill=white] {reset} node [near start, above] {true} (motion);
+
+    \draw[arrow] (motion) -| node [above] {false} (nomotion);
+    \draw[arrow] (nomotion) -- node [right] {true} (disconnect);
+    \draw[arrow] (nomotion) -- node [above] {false} (merge);
+    \draw[arrow] (disconnect) -- (merge2);
+    
+    \draw[arrow] (save) -- node [above] {sendReq} (connected);
+    \draw[arrow] (connected) -- node [above] {false} (connect);
+    \draw[arrow] (connected) |- node [near start, fill=white] {true} (send);
+    \draw[arrow] (connect) -- (send);
+    \draw[arrow] (send)|- (frame);
+
+    \draw[arrow] (detframes) -- (ndet);
+    \draw[arrow] (ndet) -- (save);
+
+
+
+\end{tikzpicture}

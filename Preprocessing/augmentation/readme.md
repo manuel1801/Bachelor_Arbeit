@@ -72,5 +72,6 @@ die box zugeordnet und eingezeichnet.
 
 Jupyter Notebook zum testen verschiedener Augmentern aus
 [imgaug](https://imgaug.readthedocs.io/en/latest/source/api.html)
+auf bilder in [*images*](images/) ordner.
 
 * [test_augmenters.ipynb](test_augmenters.ipynb)

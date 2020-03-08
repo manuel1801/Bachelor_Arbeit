@@ -1,5 +1,81 @@
 # SSH Connection
 
+Verwendet [remote.it](https://remote.it/) zum senden von 
+Daten mit scp über proxy ssh Verbindung.
+
+
+## 1. Remote.it installieren
+
+Auf dem Remote Gerät (an dass Daten gesendet werden sollen)
+
+installieren
+
+```bash
+curl -LkO https://raw.githubusercontent.com/remoteit/installer/master/scripts/auto-install.sh
+chmod +x ./auto-install.sh
+sudo ./auto-install.sh
+```
+und auführen
+
+```bash
+sudo connectd_installer
+```
+
+Mit remote.it Konto anmelden, 
+oder neuen [account](https://remote.it/) erstellen.  
+Dann neues Gerät (z.B. *remote-Pc*) mit SSH Service (z.B. *ssh-Pc*) anlegen
+
+
+## 2. Verwendung
+
+In [*ssh_connection.py*](ssh_connection.py)
+
+* in init(): [Developer API Key](https://app.remote.it/#account) anpassen
+* in main():
+    * *email* von remote.it
+    * *password* von remote.it und remote gerät
+    * *raspi* (true/false) (bezieht sich auf gerät das sendet!)
+    * *remote_user* username des remote geräts 
+    * *remote_divice_name* mit dem gerät über *connectd* angemeldet wurde
+    * *file_path* datei die gesendet werden soll
+    * *remote_output_dir* directory auf zielgerät
+
+
+einloggen und verbinden:
+```python
+conn = SSHConnect(email, password)
+logged_in = conn.login(remote_divice_name)
+if logged_in:
+    ret = conn.connect()
+```
+wenn erfolgreich, enthällt ret *server* und *port*, sonst false
+
+senden
+```python
+server, port = ret
+conn.send(server, port, remote_user, password,
+        file_path, remote_output_dir)
+```
+
+verbindung trennen
+```python
+conn.disconnect()
+```
+
+
+script ausführen
+```bash
+python3 ssh_connection.py
+```
+
+
+
+
+
+
+
+
+
 
 # Socket Connection
 

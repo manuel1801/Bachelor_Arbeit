@@ -14,7 +14,7 @@ import picamera.array
 import picamera
 
 
-password = 'animalsdetection'
+password = 'animalsdetection20'
 
 raspi = True
 

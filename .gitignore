@@ -26,8 +26,6 @@ Connection/*
 
 !Connection/ssh_connection.py
 
-!Connection/email_connection.py
-
 !Connection/test.jpg
 !Connection/readme.*
 

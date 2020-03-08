@@ -1,6 +1,7 @@
 import requests
 import json
 import os
+import sys
 import pexpect
 from time import sleep
 import smtplib
@@ -8,16 +9,16 @@ from email.mime.text import MIMEText
 
 
 class SSHConnect:
-    def __init__(self, email='animals.detection@gmail.com', email_password='animalsdetection20', dev_key='NEU3RTVFNEMtNjRGRi00MzBFLUIyNTgtOUVFQjRGMjcxOTRB'):
-        self.developer_key = dev_key
+    def __init__(self, email, password):
+        self.developer_key = 'NEU3RTVFNEMtNjRGRi00MzBFLUIyNTgtOUVFQjRGMjcxOTRB'
         self.token = None
         self.device_adress = None
         self.conn_id = None
         self.email = email
-        self.email_password = email_password
+        self.password = password
         # self.public_ip = requests.get('https://api.ipify.org').text
 
-    def login(self, device_name='ssh-Pc', retry=5):
+    def login(self, device_name, retry=5):
         headers = {
             "developerkey": self.developer_key
         }
@@ -159,7 +160,7 @@ class SSHConnect:
     #     except Exception as e:
     #         print(e)
 
-    def send_email(self, email, text, file=None):
+    def send_email(self, email, text):
 
         msg = MIMEText(text)
         msg['Subject'] = 'Animal Detected'
@@ -167,18 +168,20 @@ class SSHConnect:
         with smtplib.SMTP('smtp.gmail.com', 587) as smtp:
             smtp.ehlo()
             smtp.starttls()
-            smtp.login(self.email, self.email_password)
+            smtp.login(self.email, self.password)
             smtp.sendmail(self.email, email, msg.as_string())
 
 
 def main():
 
-    conn = SSHConnect()
-    conn.send_email(email='', text='testmail')
-    exit()
+    email = 'animals.detection@gmail.com'
+    password = 'animalsdetection20'
+    conn = SSHConnect(email, password)
 
-    password = 'helloworld'
-    raspi = True
+    # Für SSH
+    raspi = False
+    file_path = os.path.join(os.path.dirname(sys.argv[0]), 'test.jpg')
+    assert os.path.isfile(file_path)
 
     if raspi:
         user = 'pi'
@@ -189,42 +192,28 @@ def main():
         remote_user = 'pi'
         remote_divice_name = 'ssh-Pi'
 
-    workspace_dir = os.path.join('/home', user, 'Bachelor_Arbeit')
-    local_output_dir = os.path.join(workspace_dir,
-                                    'Application_Raspberry/detected')
     remote_output_dir = os.path.join(
-        '/home', remote_user, 'Bachelor_Arbeit', 'Application_Raspberry/detected')
+        '/home', remote_user, 'Bachelor_Arbeit', 'Connection/received.jpg')
 
-    test_images = os.path.join(workspace_dir, 'Dataset/handy_bilder/images')
-    assert os.path.isdir(test_images)
-    test_images = [os.path.join(test_images, test_image)
-                   for test_image in os.listdir(test_images)]
-
-    conn.login(device_name=remote_divice_name)
-
-    ret = False
-    while not ret:
-        print('try to connedt')
+    logged_in = conn.login(remote_divice_name)
+    if logged_in:
+        print('Success: logging in!')
         ret = conn.connect()
-        sleep(1)
+    else:
+        print('Error: logging in!')
+        exit()
 
     server, port = ret
-
-    #print('server; ', server, 'port ', port)
-    # print('local file path', os.path.join(local_output_dir,
-    #                                      os.listdir(local_output_dir)[0]))
-    #print('remote output die', remote_output_dir)
-    #print('remote user', remote_user)
-    #print('pw ', password)
-    # exit()
-
-    for test_image in test_images:
-        if conn.send(server, port, remote_user, password, test_image, remote_output_dir):
-            print('send successfully')
-        else:
-            print('could not send')
+    if conn.send(server, port, remote_user, password,
+                 file_path, remote_output_dir):
+        print('Success: sending!')
+    else:
+        print('Error: sending!')
 
     conn.disconnect()
+
+    # Für Email:
+    conn.send_email('ziel@addresse.com', 'hello world!')
 
 
 if __name__ == "__main__":

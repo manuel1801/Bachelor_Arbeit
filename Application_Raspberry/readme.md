@@ -58,54 +58,6 @@ sudo systemctl disable  myscript
 sudo systemctl status my_init.service
 ```
 
-## Connection
-
-### a) SCP über remote SSH
-
-#### Auf Gerät an das Daten gesendet werden sollen (hier Linux):
-
-1. **remoteit** installieren
-```bash
-curl -LkO https://raw.githubusercontent.com/remoteit/installer/master/scripts/auto-install.sh
-chmod +x ./auto-install.sh
-sudo ./auto-install.sh
-```
-und auführen
-
-```bash
-sudo connectd_installer
-```
-mit anmeldedaten:
-* email: animals.detection@gmail.com
-* pw: animalsdetection
-
-einloggen oder neuen [account](https://remote.it/) anlegen.
-(dann *api key* in main.py anpassen: [Developer API Key](https://app.remote.it/#account))
-
-2. Gerät *remote-Pc* hinzufügen
-3. SSH service *ssh-Pc* anlegen
-4. exit
-
-(bei anderen namen muss in main.py angepasst werden)
-
-#### Verbindung testen (auf Raspberry)
-
-in /home/pi/Bachelor_Arbeit/Connection/remote_it/connection_ssh_test.py 
-
-```python
-user = ''
-password = ''
-```
-von angemeldeten gerät angeben und Script ausführen.
-
-
-
-### b) Sockt über Tcp
-
-Varient aus ~/Bachelor_Arbeit/Application_Raspberry/mit_sockets/
-kann verwendet werden, wenn beide im Gleichen Netzwerk sind.
-
-
 
 
 ## Mobiles Internet

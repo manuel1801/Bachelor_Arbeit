@@ -8,7 +8,7 @@ from email.mime.text import MIMEText
 
 
 class SSHConnect:
-    def __init__(self, email='animals.detection@gmail.com', password='animalsdetection', dev_key='NEU3RTVFNEMtNjRGRi00MzBFLUIyNTgtOUVFQjRGMjcxOTRB'):
+    def __init__(self, email='animals.detection@gmail.com', password='animalsdetection20', dev_key='NEU3RTVFNEMtNjRGRi00MzBFLUIyNTgtOUVFQjRGMjcxOTRB'):
         self.developer_key = dev_key
         self.token = None
         self.device_adress = None

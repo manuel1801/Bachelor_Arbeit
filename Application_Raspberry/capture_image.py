@@ -24,9 +24,9 @@ image = np.empty((res[1], res[0], 3), dtype=np.uint8)
 
 camera.capture(image, 'bgr', use_video_port=True)
 if night:
-    image_name = 'image_night_' + datetime.now().strftime("%d-%b-%Y_%H-%M-%S") + 'jpg'
+    image_name = 'image_night_' + datetime.now().strftime("%d-%b-%Y_%H-%M-%S") + '.jpg'
 else:
-    image_name = 'image_' + datetime.now().strftime("%d-%b-%Y_%H-%M-%S") + 'jpg'
+    image_name = 'image_' + datetime.now().strftime("%d-%b-%Y_%H-%M-%S") + '.jpg'
 
 cv2.imwrite(os.path.join('/home/pi/Pictures', image_name), image)
 

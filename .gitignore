@@ -63,10 +63,9 @@ Inference_Engine_Tools/samples/*
 
 !openvino_models/
 
+
 !Preprocessing/
 Preprocessing/*
-!Preprocessing/readme.*
-!Preprocessing/class_distribution.ipynb
 
 !Preprocessing/augmentation/
 !Preprocessing/augmentation/readme.*

@@ -1,6 +1,6 @@
 
-import detection_v3 as detection
-import connection_ssh as connection
+import detection
+import connection
 import os
 import cv2
 import numpy as np

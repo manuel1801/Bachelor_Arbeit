@@ -22,7 +22,7 @@ time.sleep(1)
 
 image = np.empty((res[1], res[0], 3), dtype=np.uint8)
 
-camera.cam(image, 'bgr', use_video_port=True)
+camera.capture(image, 'bgr', use_video_port=True)
 if night:
     image_name = 'image_night_' + datetime.now().strftime("%d-%b-%Y_%H-%M-%S") + 'jpg'
 else:

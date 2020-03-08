@@ -6,6 +6,11 @@ import os
 from datetime import datetime
 import sys
 
+'''
+1. arg anzahl bilder
+2. arg für night (grayscale)
+'''
+
 res = (640, 480)
 
 camera = picamera.PiCamera()
@@ -38,6 +43,6 @@ for i in range(n):
     camera.capture(image, 'bgr', use_video_port=True)
     cv2.imwrite(os.path.join(output_dir,
                              str(i) + '_' + image_name + '.jpg'), image)
-
+    time.sleep(0.3)
 
 cv2.destroyAllWindows()

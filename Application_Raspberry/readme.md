@@ -1,3 +1,79 @@
+# OpenVino Installationen
+
+## Ubuntu
+
+### 1. [OpenVino](https://registrationcenter.intel.com/en/products/postregistration/?sn=CNP6-46RR8MT7&EmailID=mbarkey55%40gmail.com&Sequence=2579436&dnld=t) herunterladen und entpacken
+
+
+```bash
+cd ~/Downloads
+tar -xvzf l_openvino_toolkit_p_<version>.tgz
+```
+
+### 2. OpenVino und dependencies installieren
+```bash
+cd l_openvino_toolkit_p_<version>
+sudo ./isntall_GUI.sh
+cd /opt/intel/openvino/install_dependencies
+sudo -E ./install_openvino_dependencies.sh
+```
+
+### 3. Environment Variablen setze
+```bash
+source /opt/intel/openvino/bin/setupvars.sh
+```
+(in .bashrc hinzufügen für permanent)
+
+
+### 4. ModelOptimizer installieren
+```bash
+cd /opt/intel/openvino/deployment_tools/model_optimizer/install_prerequisites
+sudo ./install_prerequisites.sh
+```
+
+### 5. NCS2 einrichten
+```bash
+sudo usermod -a -G users "$(whoami)"
+sudo cp /opt/intel/openvino/inference_engine/external/97-myriad-usbboot.rules /etc/udev/rules.d/
+sudo udevadm control --reload-rules
+sudo udevadm trigger
+sudo ldconfig
+sudo reboot
+```
+
+
+## Raspberry Pi
+
+### 1. Raspberry Pi Setup
+
+[Rasbian](https://www.raspberrypi.org/downloads/raspbian/) herunterladen und img sd karte mit 
+zb [BalenaEtcher](https://www.balena.io/etcher/)
+erstellen.
+
+Dann ssh datei auf sd karte anlegen:
+```bash
+cd media/<user>/boot
+touch ssh
+```
+
+SD Karte in Raspberry und Verbindung über Ethernet 
+Kabel herstellen.  
+Dann:
+
+```bash
+ssh pi@raspberrypi.local
+```
+passwort: *raspberry* eingeben.
+
+### 2. OpenVino auf Raspberry Pi
+
+[OpenVino](https://docs.openvinotoolkit.org/latest/_docs_install_guides_installing_openvino_raspbian.html) und [OpenCV](https://software.intel.com/en-us/articles/raspberry-pi-4-and-intel-neural-compute-stick-2-setup)
+installieren.
+
+
+
+
+
 # Apllikation Raspberry
 
 ## Autostart

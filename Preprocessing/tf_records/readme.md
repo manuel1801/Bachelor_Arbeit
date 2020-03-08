@@ -1,4 +1,4 @@
-# TF Record Files aus OpenImages Datensatu erstellen
+# TF Record Files aus OpenImages Datensatz erstellen
 
 OpenImages Datenset mit Ordnerstruktur:
 

@@ -123,7 +123,7 @@ Kann jetzt mit *OpenVino Model Optimizer* für *InferenceEngine* konvertiert wer
 
 # Mit Google Colab trainiieren
 
-* Das *train_object_detection_in_colab.ipynb* Notebook in 
+* Das [*train_object_detection_in_colab.ipynb*](train_object_detection_in_colab.ipynb) Notebook in 
 Google Drive hochladen und ausführen.
 
 * *data* ordner mit *train.record*, *test.record* und *labebel_map.pbtxt* entweder:

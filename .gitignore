@@ -19,19 +19,18 @@ Ausarbeitung/*
 
 !Connection/
 Connection/*
-!Connection/socket/
-Connection/socket/*
-!Connection/socket/connection.py
-!Connection/socket/server.py
-!Connection/socket/client.py
-!Connection/socket/readme.*
 
-!Connection/remote_it/
-Connection/remote_it/*
-!Connection/remote_it/connection.py
-!Connection/remote_it/connection_test.py
-!Connection/remote_it/test.jpg
-!Connection/remote_it/readme.*
+!Connection/socket_connection.py
+!Connection/socket_server.py
+!Connection/socket_client.py
+
+!Connection/ssh_connection.py
+
+!Connection/email_connection.py
+
+!Connection/test.jpg
+!Connection/readme.*
+
 
 !Dataset/
 Dataset/*

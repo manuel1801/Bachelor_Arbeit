@@ -1,4 +1,7 @@
-# Client-Server-Connection
+# SSH Connection
+
+
+# Socket Connection
 
 ## Class RaspyConnection
 ## Methods
@@ -37,3 +40,5 @@
 ### end_connection
 * socket.shutdown
 * socket.close
+
+# Email Connection

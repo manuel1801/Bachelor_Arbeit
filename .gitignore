@@ -38,7 +38,7 @@ Dataset/*
 !Dataset/handy_bilder/
 !Dataset/classes.txt
 !Dataset/readme.*
-
+!Dataset/remove_spaces.py
 
 !Inference_Engine_Tools/
 Inference_Engine_Tools/*

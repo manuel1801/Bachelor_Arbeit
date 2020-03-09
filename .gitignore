@@ -57,6 +57,7 @@ Inference_Engine_Tools/infer_test_images/*
 Inference_Engine_Tools/benchmark_tool/*
 !Inference_Engine_Tools/benchmark_tool/benchmark.py
 !Inference_Engine_Tools/benchmark_tool/benchmark_auto.py
+!Inference_Engine_Tools/benchmark_tool/infer_async.py
 !Inference_Engine_Tools/benchmark_tool/readme.*
 
 !Inference_Engine_Tools/samples/

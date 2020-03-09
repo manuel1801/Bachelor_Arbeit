@@ -68,10 +68,10 @@ Inference_Engine_Tools/samples/*
 Preprocessing/*
 
 !Preprocessing/augmentation/
-!Preprocessing/augmentation/readme.*
+Preprocessing/augmentation/.ipynb_checkpoints/
 
 !Preprocessing/tf_records/
-!Preprocessing/tf_records/readme.*
+!Preprocessing/tf_records/.ipynb_checkpoints/
 
 
 !TensorFlow/

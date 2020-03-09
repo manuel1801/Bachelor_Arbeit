@@ -28,7 +28,7 @@ send_all_every = 100  # wie oft alle detections senden (in sekunden, 0 für nie)
 
 # nach wie vielen detections einer klasse save and send
 # n_save = 300       # für SSDs mit ca 30 FPS
-n_save = 10        # 10 für Faster R-CNNs mit ca 0,7 FPS
+n_save = 5        # 10 für Faster R-CNNs mit ca 0,7 FPS
 
 
 if raspi:
@@ -73,8 +73,8 @@ if send_results:
 # print('selected model: ', model_dir)
 # assert os.path.isdir(model_dir)
 
-models = ['samples_faster_rcnn_inception', 'samples_ssd_inception']
-# models = ['animals_faster_rcnn_inception', 'animals_ssd_inception']
+# models = ['samples_faster_rcnn_inception', 'samples_ssd_inception']
+models = ['animals_faster_rcnn_inception', 'animals_ssd_inception']
 
 
 # Load Model to Device

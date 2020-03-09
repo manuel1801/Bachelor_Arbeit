@@ -1,7 +1,7 @@
 
 
 
-# Apllikation Raspberry
+# Applikation Raspberry
 
 Zur Ausführung auf dem Raspberry Pi entweder 
 gesammetes Repository in home Verzeichnis clonen:

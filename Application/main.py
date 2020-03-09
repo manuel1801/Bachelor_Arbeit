@@ -44,10 +44,12 @@ else:
 
 
 workspace_dir = os.path.join('/home', user, 'Bachelor_Arbeit')
-local_output_dir = os.path.join(workspace_dir,
-                                'Application/detected')
-if not os.path.isdir(local_output_dir):
-    os.mkdir(local_output_dir)
+# local_output_dir = os.path.join(workspace_dir,
+#                                 'Application/detected')
+# if not os.path.isdir(local_output_dir):
+#     os.mkdir(local_output_dir)
+
+local_output_dir = '/boot/detected'
 assert os.path.isdir(local_output_dir)
 
 
@@ -73,8 +75,8 @@ if send_results:
 # print('selected model: ', model_dir)
 # assert os.path.isdir(model_dir)
 
-# models = ['samples_faster_rcnn_inception', 'samples_ssd_inception']
-models = ['animals_faster_rcnn_inception', 'animals_ssd_inception']
+models = ['samples_faster_rcnn_inception', 'samples_ssd_inception']
+# models = ['animals_faster_rcnn_inception', 'animals_ssd_inception']
 
 
 # Load Model to Device

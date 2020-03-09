@@ -9,6 +9,8 @@ Application/*
 !Application/connection.py
 !Application/launcher.sh
 !Application/models/
+Application/models/samples_ssd_inception/exported_model
+Application/models/animals_ssd_inception/exported_model
 !Application/readme.*
 #!Application/capture_image.py
 
@@ -62,6 +64,8 @@ Inference_Engine_Tools/samples/*
 !Inference_Engine_Tools/samples/readme.*
 
 !openvino_models/
+openvino_models/Animals/*/exported_model
+openvino_models/samples/*/exported_model
 
 
 !Preprocessing/

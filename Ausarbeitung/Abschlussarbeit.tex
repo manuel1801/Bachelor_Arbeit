@@ -30,7 +30,15 @@
 \usepackage{listings}
 \usepackage{tikz-uml}
 
-%\usepackage{neuralnetwork}
+\usepackage[pdftex,
+			colorlinks,
+			linkcolor = black,
+			citecolor = black]{hyperref}	%Verlinkungen im pdf-Dokument
+
+\usepackage[automake]{glossaries}
+
+
+
 
 \usetikzlibrary{positioning}
 \usetikzlibrary{calc}
@@ -55,10 +63,10 @@
 			inner = 2.5cm]{geometry}
 		
 		
-\usepackage[pdftex,
-			colorlinks,
-			linkcolor = black,
-			citecolor = black]{hyperref}	%Verlinkungen im pdf-Dokument
+% \usepackage[pdftex,
+% 			colorlinks,
+% 			linkcolor = black,
+% 			citecolor = black]{hyperref}	%Verlinkungen im pdf-Dokument
 
 
 %
@@ -133,7 +141,7 @@ Matrikelnummer : 762537
 %
 Betreuer:				&&Eberhard Binder		\\
 Zweitbetreuer:			&&Christian Höfert		\\
-Abgabedatum:			&&TT.MM.JJJJ
+Abgabedatum:			&&12.03.2020
 %
 \end{tabular}
 
@@ -163,11 +171,16 @@ Abgabedatum:			&&TT.MM.JJJJ
 
 %\setcounter{tocdepth}{1}
 
+
 \newcounter{uebung}
 \setcounter{uebung}{1}
 
 		
 \title{Abschlussarbeit--Titel}
+
+
+\makeglossaries
+\input{abkuerzungen}
 
 %--------------------------------------------------------------------
 
@@ -176,12 +189,17 @@ Abgabedatum:			&&TT.MM.JJJJ
 
 \maketitle
 
-\setcounter{page}{1}
-\setcounter{tocdepth}{2}
-
-\tableofcontents
+\thispagestyle{empty}
+\input{declaration}
 
 \thispagestyle{empty}
+\setcounter{tocdepth}{2}
+\tableofcontents
+\setcounter{page}{1}
+
+\thispagestyle{empty}
+\printglossary[title={Abkürzungsverzeichnis}]
+
 
 \input{einleitung}
 \input{grundlagen}
@@ -191,10 +209,13 @@ Abgabedatum:			&&TT.MM.JJJJ
 %\input{validierungtest}
 \input{zusammenfassung}
 
-\newpage
 
+\newpage
 \bibliography{Bachelor_Arbeit,Bilder,weitere}
 \bibliographystyle{ieeetr}
+
+\listoffigures
+\listoftables
 
 %\input{anhang}
 

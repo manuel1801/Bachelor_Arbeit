@@ -258,8 +258,9 @@ Einstellungen zu sein, wurde mithilfe des
 Dienstes \textit{remot3.it} \cite{remoteit}
 eine Cloudbasierte Remote Verbindung hergestellt.
 
-Mit dieser war es möglich eine Remote Proxy SSH Verbindung, 
-über das Internet zu einem anderen Gerät herzustellen.
+Mit dieser war es möglich eine Remote Proxy \Gls{ssh}
+Verbindung, über das Internet zu einem anderen Gerät 
+herzustellen.
 
 \begin{figure}[H]
     \centering
@@ -273,9 +274,9 @@ Da die Daten vom Raspberry Pi aus automatisiert gesendet
 werden sollen, wurde der Pc, an den 
 sie Daten gesendet werden, als Remote Gerät implementiert.
 
-Gesendet wurden die Daten über das \textit{Secure Copy Protocol},
-welches das hergestellte \textit{Secure Shell Protocol (SSH)}
-verwendet.
+Gesendet wurden die Daten über das \Gls{scp}
+welches \Gls{ssh} verwendet.
+
 Dieses lässt sich über folgendes Kommando,
 welches im \textit{connection.py}
 Script ausgeführt wird, bedienen:
@@ -296,5 +297,4 @@ die Befehle dafür programmatisch aufgerufen werden können.
 Um den Nutzer bei einer Erkennung automatisch 
 per Email zu benachrichtigen, wurde 
 eine Funktion implementiert, welche das 
-\textit{Smart Mail Transfer Protpkol (SMTP)} 
-verwendet.
+\Gls{smtp} verwendet.

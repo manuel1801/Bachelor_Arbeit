@@ -502,8 +502,7 @@ vertikaler Linien, dargestellt. Da pro Zeile
 vier Faltungen angewendet werden, entsteht 
 eine $4\times4$ Matrix. Soll die Ausgangsgröße 
 (hier $6\times6$) beibehalten werden, kann
-\textit{zero padding} verwendet werden.
-
+\textit{\Gls{zeropadding}} verwendet werden.
 Durch die Faltung entsteht eine räumliche 
 Invarianz für das zu erkennende Objekt im 
 Input Bild.
@@ -770,9 +769,9 @@ stattfinden.
 
 Da das Training und die Inferenz von Deep Learning Algorithmen
 sehr rechenintensiv ist, werden entsprechen leistungsfähige 
-Prozessoren benötigt. Dabei ist die Ausführung auf einer GPU 
-(Graphical Processor Unit) meist effizienter als auf einer 
-CPU (Central Processor Unit).
+Prozessoren benötigt. Dabei ist die Ausführung auf einer
+\Gls{gpu} meist effizienter als auf einer \Gls{cpu}.
+
 
 Anwendungen die auf eingebetteten Systemen oder einplatinen 
 Computern wie dem Raspberry Pi laufen, kommen dabei schnell
@@ -795,14 +794,14 @@ wie z.B. der Matrixmultiplikation, besonders effizient
 ausführen.
 
 Die Inferenzbeschleunigende Hardware kann dabei entweder
-als eigenständiges \textit{System on Chip (SoC)}
+als eigenständiges \textit{\Gls{soc}}
 System wie z.B. der \textit{Nvidia Jetson TX2} agieren, oder
 in Verbindung mit einem Host Pc, wie der, in der Arbeit 
 verwendete, Neural Compute Stick 2 von Intel.
 
 Der in Abbildung \ref{fig:ncs2} gezeigte Neural Compute 
 Stick 2 (NCS2) verwendet für die Inferenz eine
-Movidius Myriad X Vision Processing Unit (VPU),
+Movidius Myriad X \Gls{vpu},
 welche in Abbildung \ref{fig:myriad} schematisch 
 dargestellt ist.
 

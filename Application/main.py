@@ -44,12 +44,11 @@ else:
 
 
 workspace_dir = os.path.join('/home', user, 'Bachelor_Arbeit')
-# local_output_dir = os.path.join(workspace_dir,
-#                                 'Application/detected')
-# if not os.path.isdir(local_output_dir):
-#     os.mkdir(local_output_dir)
+local_output_dir = os.path.join(workspace_dir,
+                                'Application/detected')
+if not os.path.isdir(local_output_dir):
+    os.mkdir(local_output_dir)
 
-local_output_dir = '/boot/detected'
 assert os.path.isdir(local_output_dir)
 
 

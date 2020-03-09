@@ -1,3 +1,90 @@
+
+
+
+# Apllikation Raspberry
+
+Zur Ausführung auf dem Raspberry Pi entweder 
+gesammetes Repository in home Verzeichnis clonen:
+```bash
+git clone https://github.com/manuel1801/Bachelor_Arbeit.git
+```
+oder nur den *Application* Ordner mit folgendem Inhalt:
+
+```bash
+└── home/pi
+    └── Bachelor_Arbeit/Application
+        ├── models
+        │   └── ...
+        ├── main.py
+        ├── launcher.sh
+        ├── detection.py
+        └── connection.py
+```
+
+## [Main-Script](main.py)
+
+## [Detection](detection.py)
+
+## [Verbindung](connection.py)
+
+## [Autostart](launcher.sh)
+
+Shell Script [launcher.sh](launcher.sh)
+startet [main.py](main.py) bei Boot automatisch.  
+Dafür folgenden Service auf dem Raspberry Pi anlegen:
+
+```bash
+sudo nano /lib/systemd/system/my_init.service
+```
+
+und folgendes schreiben:
+```
+[Unit]
+Description=init
+After=multi-user.target
+
+[Service]
+User=pi
+Group=pi
+Type=idle
+ExecStart=bash /path/to/launcher.sh &
+
+[Install]
+WantedBy=multi-user.target
+```
+Zugriffsrechte geben:
+```bash
+sudo chmod 644 /lib/systemd/system/my_init.service
+```
+Daemon neu laden (nach jeder änderung)
+```bash
+sudo systemctl daemon-reload
+```
+
+manuelles starten/stoppen des Service
+```bash
+sudo systemctl start my_init.service
+sudo systemctl stop my_init.service
+```
+
+automatisches starten beim Boot aktivieren/deaktivieren    
+```bash
+sudo systemctl enable  myscript
+sudo systemctl disable  myscript
+```
+
+Status abfragen (gibt Konsolenausgabe von main script aus)
+```
+sudo systemctl status my_init.service
+```
+
+
+## [Modelle](models/)
+enthällt openvino modelle für *Animals* 
+und *Samples*, jeweils mit SSD Inception und 
+Faster R-CNN Inception trainiert.
+
+
 # OpenVino Installationen
 
 ## Ubuntu
@@ -72,71 +159,7 @@ installieren.
 
 
 
-
-
-# Apllikation Raspberry
-
-## Autostart
-
-1. Script **launcher.sh** erstellen und
-
-```bash
-cd <workspce_dir>
-source /opt/intl/openvino/bin/setupvars.sh
-/usr/bin/python3 -u main.py
-cd /
-```
-(mit -u werden ausgaben von main.py in status von service angezeigt)
-
-
-
-2. **Service** anlegen
-
-```bash
-sudo nano /lib/systemd/system/my_init.service
-```
-* *launcher.sh* als background prozess in *my_init.service* fesetlegen
-```
-[Unit]
-Description=init
-After=multi-user.target
-
-[Service]
-User=pi
-Group=pi
-Type=idle
-ExecStart=bash /path/to/launcher.sh &
-
-[Install]
-WantedBy=multi-user.target
-```
-
-* Service freigeben und daemon laden
-
-```bash
-sudo chmod 644 /lib/systemd/system/my_init.service
-sudo systemctl daemon-reload
-```
-* start/stop
-```bash
-sudo systemctl start my_init.service
-sudo systemctl stop my_init.service
-```
-
-* Autostart Aktivieren/Deaktivieren
-    
-```bash
-sudo systemctl enable  myscript
-sudo systemctl disable  myscript
-```
-* Status abfrage
-```
-sudo systemctl status my_init.service
-```
-
-
-
-## Mobiles Internet
+# Mobiles Internet
 
 [Huawei E3531 SurfStick](https://www.amazon.de/gp/product/B00HSZEY34/ref=ppx_yo_dt_b_asin_title_o00_s00?ie=UTF8&psc=1)
 

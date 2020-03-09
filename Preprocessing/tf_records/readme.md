@@ -1,6 +1,6 @@
 # TF Record Files aus OpenImages Datensatz erstellen
 
-OpenImages Datenset mit Ordnerstruktur:
+*OpenImages* Datenset mit Ordnerstruktur:
 
 ```bash
 └── DATASET_DIR
@@ -41,8 +41,11 @@ ergibt:
 
 ## 2 OpenImages zu Pascal VOC konvertieren
 
-Labelfiles von open image (txt) format ins pascal voc (xml) annotation 
-format konvertieren.
+Labelfiles vom *OpenImages* (txt) ins Pascal VOC (xml) Annotation
+Format konvertieren.
+
+Dafür [oi_to_pascal_voc_xml.py](oi_to_pascal_voc_xml.py), welches 
+mit änderungen von [hier](https://github.com/AtriSaxena/OIDv4_to_VOC/blob/master/OIDv4_to_VOC.py) stammt.
 
 ```bash
 python3 oi_to_pascal_voc_xml.py --dataset_path path/to/DATASET_DIR/
@@ -55,10 +58,11 @@ wird automatisch für beide ausgeführt und wandelt .txt in .xml um.
 ## 3 Pascal VOC zu CSV 
 
 Inhalte der .xml files in ein *train.csv* und ein *test.csv*
-achreiven:  
+schreiben:  
+
 | filename | width | height | class | xmin | ymin | xmax | ymax |
 
-dafür folgendes sycript ausführen:
+Dafür das script [pascal_voc_xml_to_csv.py](pascal_voc_xml_to_csv.py) , welches mit Änderungen von [hier](https://github.com/datitran/raccoon_dataset/blob/master/xml_to_csv.py) stammt, ausführen:
 ```bash
 python3 pascal_voc_xml_to_csv.py -i path/to/DATASET_DIR/
 ```
@@ -68,13 +72,13 @@ Wird automatisch für train und test Ordner in DATASET_DIR Ordner ausgeführt.
 
 ## 4 CSV zu TF Records
 
-Beide CSV Files *train.csv* und *test.csv* können jetzt in TF Record Files convertiert werden.  
+Beide CSV Files *train.csv* und *test.csv* in TF Record Files knvertieren.  
 
-dafür jeweils für train und test seperat folgendes script ausführen
+Dafür jeweils für *train* und *test* separat das Script [csv_to_tf_record.py](csv_to_tf_record.py) ausführen, 
+welches mit Änderungen von [hier](https://github.com/datitran/raccoon_dataset/blob/master/generate_tfrecord.py) stammt.
 
-falls noch nicht vorhanden *classes.txt* erstellen, mit auflistung 
-aller klassen namen.
-
+falls noch nicht vorhanden *classes.txt* erstellen, mit Auflistung 
+aller Klassen Namen.
 
 ```bash
 python3 csv_to_tf_record.py \

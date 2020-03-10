@@ -7,16 +7,12 @@ import numpy as np
 import sys
 from datetime import datetime
 from time import time, sleep
-
-
-# Settings:
 import picamera.array
 import picamera
 
 
 password = 'animalsdetection20'
 
-raspi = True
 
 buffer_size = 200    # zum zwischen speichern wenn infer langsamer stream
 threshhold = 0.5     # Für Detections
@@ -30,20 +26,12 @@ send_all_every = 100  # wie oft alle detections senden (in sekunden, 0 für nie)
 # n_save = 300       # für SSDs mit ca 30 FPS
 n_save = 5        # 10 für Faster R-CNNs mit ca 0,7 FPS
 
-
-if raspi:
-    user = 'pi'
-    remote_user = 'manuel'
-    remote_divice_name = 'ssh-Pc'
-    view_result = False
-else:
-    user = 'manuel'
-    remote_user = 'pi'
-    remote_divice_name = 'ssh-Pi'
-    view_result = False
-
-
+user = 'pi'
+remote_user = 'manuel'
+remote_divice_name = 'ssh-Pc'
+view_result = False
 workspace_dir = os.path.join('/home', user, 'Bachelor_Arbeit')
+
 local_output_dir = os.path.join(workspace_dir,
                                 'Application/detected')
 if not os.path.isdir(local_output_dir):

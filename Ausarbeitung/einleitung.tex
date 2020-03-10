@@ -1,9 +1,5 @@
 \chapter{Einleitung}\label{kap:einleitung}
 
-Ein \Gls{cnn} verwendet eine \Gls{featuremap} sowie 
-eine \Gls{api}. damit kann das \Gls{cnn} \dots \Gls{featuremap}
-
-
 
 Wildkameras kommen in der Jagt oder zu biologischen 
 Forschungszwecken zum Einsatz.
@@ -12,10 +8,10 @@ Bewegungsmelder erfolgt, kann es unter Umständen zu
 einer großen Menge an unwichtigen Daten kommen.
 Diese benötigen Speicherplatz auf dem Gerät, 
 oder, bei automatischem Senden, Datenvolumen 
-für die Mobile Netzwerkverbindung und bringen ausserdem einen 
-großen Auswertungsaufwand mit sich.
+für eine Mobile Netzwerkverbindung und bringen außerdem
+einen großen Auswertungsaufwand mit sich.
 
-Ein System, welches genau erkennt, um welche Tiere es
+Ein System welches genau erkennt, um welche Tiere es
 sich bei den gemachten Aufnahmen handelt, kann wesentlich 
 effizienter und gezielter für eine bestimmte Anwendung 
 eingesetzt werden.
@@ -26,15 +22,13 @@ Auch der Artbestand seltener oder aussterbender
 Tierarten könnte so leichter erfasst werden.
 
 Für die Umsetzung einer solchen Bilderkennungsaufgabe 
-werden Deep Learning Algorithmen verwendet, welche ein
-Teilgebiet der künstlichen Intelligenz sind.
-Bei den verwendeten Modellen handelt es sich in der Bilderkennung
-meist um sogenannte Convolutional Neural Networks (CNNs).
-
+werden \textit{Deep Learning} Algorithmen verwendet,
+welche ein Teilgebiet der künstlichen Intelligenz sind.
+Für die Bilderkennung werden zumeist \Glspl{cnn} verwendet.
 Durch die Fortschritte, die in diesem Bereich in
-den letzten jahren gemacht wurden, sowie durch 
+den letzten Jahren gemacht wurden, sowie durch 
 die Verfügbarkeit leistungsfähiger und zugleich
-kostengünstiger Hardware, ist die realisierung
+kostengünstiger Hardware, ist die Realisierung
 einer solchen Anwendung auch für den Privatgebrauch
 und ohne Verwendung eines Großrechners möglich geworden.
 
@@ -47,15 +41,15 @@ Bilder von erkannten Tieren automatisch an den Nutzer
 senden.
 Die Inferenz der Neuronalen Netze wird dabei
 auf dem KI Beschleuniger Neural Compute Stick 2
-von Intel ausgeführt werden. Durch verwendung einer 
+von Intel ausgeführt. Durch verwendung einer 
 infrarotfähigen Kamera soll die Erkennung des 
 Systems auch bei Nacht stattfinden können.
 
 Damit gliedert sich die Arbeit zunächst in ein
-Grundlagen Kapitel, welches die funktionsweise 
+Grundlagen-Kapitel, welches die Funktionsweise 
 von künstlichen Neuronalen Netzen für die
 Bilderkennung behandelt.
-Anschließend wrd es um die Umsetzung und Auswertung des 
+Anschließend wird es um die Umsetzung und Auswertung des 
 Trainings geeigneter Deep Learning Modelle gehen.
 
 Der letzte Teil beschreibt de Entwicklung der Anwendung, 

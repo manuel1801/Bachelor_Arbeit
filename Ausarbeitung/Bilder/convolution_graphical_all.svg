@@ -25,17 +25,17 @@
      borderopacity="1.0"
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
-     inkscape:zoom="0.89550781"
-     inkscape:cx="310.62869"
-     inkscape:cy="668.02489"
+     inkscape:zoom="1.0265084"
+     inkscape:cx="292.41913"
+     inkscape:cy="497.63771"
      inkscape:document-units="mm"
      inkscape:current-layer="layer1"
      showgrid="true"
      showguides="false"
      inkscape:window-width="1168"
-     inkscape:window-height="1025"
-     inkscape:window-x="752"
-     inkscape:window-y="67"
+     inkscape:window-height="1023"
+     inkscape:window-x="16"
+     inkscape:window-y="266"
      inkscape:window-maximized="0">
     <inkscape:grid
        type="xygrid"
@@ -49,7 +49,7 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title></dc:title>
+        <dc:title />
       </cc:Work>
     </rdf:RDF>
   </metadata>
@@ -59,7 +59,7 @@
      id="layer1">
     <g
        id="g1108"
-       transform="translate(12.037294,29.752115)">
+       transform="translate(16.799797,29.752115)">
       <rect
          y="101.20834"
          x="25.135418"
@@ -81,7 +81,7 @@
     </g>
     <g
        id="g1122"
-       transform="translate(11.112497,1.9630215)">
+       transform="translate(7.9374962,1.9630215)">
       <rect
          y="128.99744"
          x="113.60843"
@@ -144,23 +144,23 @@
     <text
        xml:space="preserve"
        style="font-style:normal;font-weight:normal;font-size:5.40962648px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.13524066"
-       x="67.633629"
+       x="69.22113"
        y="140.20493"
        id="text1126"><tspan
          sodipodi:role="line"
          id="tspan1124"
-         x="67.633629"
+         x="69.22113"
          y="140.20493"
          style="stroke-width:0.13524066">$\times$</tspan></text>
     <text
        xml:space="preserve"
        style="font-style:normal;font-weight:normal;font-size:5.40962648px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.13524067"
-       x="108.16428"
+       x="107.63512"
        y="140.20493"
        id="text1126-5"><tspan
          sodipodi:role="line"
          id="tspan1124-3"
-         x="108.16428"
+         x="107.63512"
          y="140.20493"
          style="stroke-width:0.13524067">$=$</tspan></text>
   </g>

@@ -1,11 +1,22 @@
-\newglossaryentry{api} 
+
+\newglossaryentry{ml} 
 {
-    name={API (Application Programming Interface)},
-    description={An Application Programming Interface (API) is a particular set of rules and specifications that a software program can follow to access and make use of the services and resources provided by another particular software program that implements that API},
-    first={Application Programming Interface (API)},
-    text={API}
+    name={Machine Learning},
+    description={Ein Bereich der künstlichen
+    Intelligenz, der sich mit selbstlernenden 
+    Algorithmen befasst},
+    plural={Machine Learnings}
 }
 
+\newglossaryentry{nn} 
+{
+    name={Künstliche Neuronale Netze},
+    description={Eine Form des Machine Learning, bei der 
+    eine Vielzahl an künstlicher Neuronen miteinander 
+    verbunden sind, um aus gegebenen Eingaben 
+    die richtige Ausgabe zu erhalten},
+    plural={künstlichen Neuronalen Netzen}
+}
 
 \newglossaryentry{cnn} 
 {
@@ -13,17 +24,66 @@
     description={Neuronales Netz, welches math. Faltung 
     Verwendet, meist in der Bilderkennung verwendet.},
     first={Convolutional Neural Network (CNN)},
-    text={CNN}
+    text={CNN},
+    plural={CNNs},
+    firstplural={Convolutional Neural Networks (CNNs)}
 }
-
 \newglossaryentry{featuremap} 
 {
     name={Feature Map},
     description={eine zweidimensionale matrix, 
     die duch die faltung eines bild mit einer 
-    filtermatrix entsteht.}
+    filtermatrix entsteht},
+    plural={Feature Maps}
+}
+\newglossaryentry{downsampling} 
+{
+    name={Downsampling},
+    description={In der Bildverarbeitung: kleiner skallieren 
+    eines Bildes}
 }
 
+\newglossaryentry{zeropadding} 
+{
+    name={Zero Padding},
+    description={Auffüllen mit nullen}
+}
+
+\newglossaryentry{overfitting}{
+    name={Overfitting},
+    description={Überanpassung eines Machine Learning Modells 
+    an die Trainingsdaten, wodurch keine Generalisierung 
+    mehr erreicht wird},
+    plural={Overfittings}
+}
+
+\newglossaryentry{framework}{
+    name={Framework},
+    description={Programmgerüst, bestehend aus 
+    mehreren Programmen, Schnittstellen, Tools, 
+    und weiterem, zur Erleichterten Software 
+    Entwicklung},
+    plural={Frameworks}
+}
+
+\newglossaryentry{vm} 
+{
+    name={VM (Virtual Machine)},
+    description={Virtuelle Nachbildung einer Rechnerarchitekture, 
+    welche innerhalb eines lauffähigen Rechnersystems ausgeführt wird},
+    first={Virtual Machine (VM)},
+    text={VM}
+}
+
+\newglossaryentry{api} 
+{
+    name={API (Application Programming Interface)},
+    description={Eine Application Programming Interface
+    ist ein bestimmter satz an Regeln
+    über die ein program funktionalitäten anderer software verweden kann.},
+    first={Application Programming Interface (API)},
+    text={API}
+}
 \newglossaryentry{ssh} 
 {
     name={SSH (Secure Shell Protocoll)},
@@ -31,7 +91,6 @@
     first={Secure Shell Protocoll (SSH)},
     text={SSH}
 }
-
 \newglossaryentry{scp} 
 {
     name={SCP (Secure Copy Protocoll)},
@@ -39,7 +98,6 @@
     first={Secure Copy Protocoll (SCP)},
     text={SCP}
 }
-
 \newglossaryentry{smtp} 
 {
     name={SMTP (Smart Mail Transfer Protokoll)},
@@ -48,15 +106,27 @@
     text={SMTP}
 }
 
-\newglossaryentry{zeropadding} 
-{
-    name={Zero Padding},
-    description={Auffüllen mit nullen},
-}
 \newglossaryentry{thread} 
 {
     name={Thred},
     description={wie prozess},
+    plural={Threads}
+}
+
+\newglossaryentry{fps} 
+{
+    name={Fps (Frames per Second)},
+    description={Bilder, die pro Sekunde verarbeitet werden können},
+    first={Frames per Second (Fps)},
+    text={Fps}
+}
+\newglossaryentry{csi} 
+{
+    name={CSI (Camera Serial Interface)},
+    description={Kameraschnittstelle des Raspberry Pi's welche 
+    ein Flachbandkabel verwendet},
+    first={Camera Serial Interface (CSI)},
+    text={CSI}
 }
 
 \newglossaryentry{soc} 
@@ -71,21 +141,23 @@
 \newglossaryentry{cpu} 
 {
     name={CPU (Central Processing Unit)},
-    description={...},
+    description={zentrale Recheneinheit eines Computers},
     first={Central Processing Unit (CPU)},
     text={CPU}
 }
 \newglossaryentry{gpu} 
 {
     name={GPU (Graphics Processing Unit)},
-    description={...},
+    description={Prozessor, der auf die Berechnungen von 
+    Grafiken spezialisiert ist},
     first={Graphics Processing Unit (GPU)},
     text={GPU}
 }
 \newglossaryentry{vpu} 
 {
     name={VPU (Vision Processing Unit)},
-    description={...},
+    description={Mikroprozessor für Bildverarbeitungsaufgaben 
+    häufig in KI-Beschleunigern eingesetzt},
     first={Vision Processing Unit (VPU)},
     text={VPU}
 }

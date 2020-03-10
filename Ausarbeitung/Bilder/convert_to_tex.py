@@ -3,7 +3,7 @@ import subprocess
 import sys
 
 #svg_dir = '/home/manuel/Bachelor_Arbeit/Vortrag/vortrag/Bilder'
-svg_dir = '/home/manuel/Bachelor_Arbeit/Ausarbeitung/Meine_Ausarbeitung/Bilder'
+svg_dir = '/home/manuel/Bachelor_Arbeit/Ausarbeitung/Bilder'
 if len(sys.argv) > 1:
     svg_dir = sys.argv[1]
 

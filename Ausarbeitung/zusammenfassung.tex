@@ -4,7 +4,7 @@
 Ziel der Arbeit war, es ein autonomes
 Kamerasystem zur Wildtierkennung,
 mithilfe Neuronaler Netze, zu entwickeln.
-Dafür wurden vortrainierte, CNN basierte, 
+Dafür wurden vortrainierte, \Gls{cnn} basierte, 
 Deep Learning Modelle zur Objekterkennung
 auf einen geeigneten Datensatz trainiert.
 Dadurch sollte es Möglich sein, nicht 
@@ -14,8 +14,8 @@ Klassifizierung der Tierart
 vorzunehmen, wodurch das System
 gezielter für eine bestimmte
 Anwendung eingesetzt werden kann.
-Zur Realisierung, wurde neben einem Raspberry
-Pi, sowie einer nachtsichtgeeigneten 
+Zur Realisierung, wurde neben einem \textit{Raspberry
+Pi}, sowie einer nachtsichtgeeigneten 
 Kamera, für die Inferenz der 
 \textit{Neural Compute Stick 2}
 von \textit{Intel} verwendet, um die 
@@ -32,18 +32,18 @@ für das Training aufbereitet und
 zur Evaluierung, in verschiedene 
 Sets aufgeteilt.
 Das Training wurde dann mithilfe des 
-Frameworks \textit{Tensorflow} durchgeführt,
+\Glspl{framework} \textit{Tensorflow} durchgeführt,
 wobei die Modelle \textit{SSD} und
 \textit{Faster R-CNN} mit verschiedenen
-Basis CNN und Parameter-Einstellungen
+Basis \Glspl{cnn} und Parameter-Einstellungen
 verwendet wurden.
 Durch anschließende Evaluierung, konnte 
-festgestellt werden, welches modell sich,
+festgestellt werden, welches Modell sich,
 bezogen auf Genauigkeit und Geschwindigkeit,
 am besten für die Anwendung eignet.
 Der letzte Schritt war es die Inferenz, zusammen 
-mit dem Anwendungscode für den Raspberry Pi 
-zu implementieren, wofür mit OpenVino gearbeitet 
+mit dem Anwendungscode für den \textit{Raspberry Pi} 
+zu implementieren, wofür mit \textit{OpenVino} gearbeitet 
 wurde.
 \vspace{0.5cm}
 
@@ -60,12 +60,13 @@ weg erkannt werden konnten.
 Die Performance der Inferenz konnte durch 
 asynchrone Inferenzausführung und 
 verwenden eines bewegungsmelders sowie 
-zwischenspeichern der frames verbessert werden.
+zwischenspeichern der Frames verbessert werden.
 \vspace{0.5cm}
 
 
 Auffällig war der hohe Energieverbrauch, 
-der durch den Neural Compute Stick, die Kamera mit 
+der durch den \textit{Neural Compute Stick}, die Kamera mit 
 Infrarot LEDs sowie dem Internetstick für den 
-Raspberry Pi zustande kam.
+\textit{Raspberry Pi} zustande kam.
+
 

@@ -2,8 +2,8 @@
 
 In diesem Kapitel werden zunächst die Beschaffung und Aufbereitung 
 der Trainingsdaten beschrieben. Anschließend wird es um das 
-Training geeigneter Deep Learning Modelle in Tensorflow sowie 
-um die Inferenz dieser in OpenVino gehen.
+Training geeigneter Deep Learning Modelle in \textit{Tensorflow}
+ sowie um die Inferenz dieser in \textit{OpenVino} gehen.
 
 \section{Datensatz}\label{sec:dataset}
 
@@ -11,7 +11,7 @@ Für das Training eines Deep Learning Modells werden
 eine Große Menge an Trainingsdaten benötigt.
 Handelt es sich um ein Modell zur Objekterkennung,
 müssen die Labels neben der Klasse, auch die Koordinaten, 
-der Bounding Boxen enthalten.
+der \textit{Bounding Boxen} enthalten.
 
 Die Trainingsdaten können entweder selber erstellt, oder 
 aus frei zugänglichen Datensätzen wie z.B. \textit{ImageNet}, 
@@ -33,20 +33,20 @@ Testset aufgeteilt.
 
 Je Klasse variierte die Anzahl an Bildern zwischen 200 und 
 2000 Stück, wodurch eine Verteilung der Klassen, 
-wie in  Abbildung \ref{fig:histo_ohne_aug} dargestelltem Histogramm,
-zustande Kam.
+wie in  Abbildung \ref{fig:histo_ohne_aug} dargestelltem
+Histogramm, zustande Kam.
 
 \vspace{1cm}
 \begin{minipage}{0.5\textwidth}
     \centering
     \includegraphics[width=0.9\textwidth]{class_distro.png}
-    \captionof{figure}{ohne aug}
+    \captionof{figure}{Ohne Augmentierung}
     \label{fig:histo_ohne_aug}
 \end{minipage}
 \begin{minipage}{0.5\textwidth}
     \centering
     \includegraphics[width=0.9\textwidth]{class_distro_aug.png}
-    \captionof{figure}{mit aug}
+    \captionof{figure}{Ohne Augmentierung}
     \label{fig:histo_mit_aug}
 \end{minipage}
 \vspace{1cm}
@@ -67,13 +67,13 @@ der Anzahl der Klassen ab.
 \subsection{Augmentierung}\label{subsec:augmentation}
 
 Das Augmentieren von Bilddaten für Deep Learning Modelle
-ist, neben dem ausgleichen der Klasseninbalance, eine sehr
+ist, neben dem Ausgleichen der Klasseninbalance, eine sehr
 effektive Technik, Overfitting zu verhindern.
 Indem geometrische Transformationen oder Manipulationen 
 an den Pixelwerten auf die Bilder angewendet werden, 
 können diese künstlich vermehrt werden.
 
-Die Augmentierung des OpenImages Datensatzes wurde mithilfe 
+Die Augmentierung des \textit{OpenImages} Datensatzes wurde mithilfe 
 eines Pyhton Scripts, in welchem die Library 
 \textit{imgaug} \cite{imgaug} verwendet wurde, durchgeführt.
 Dabei wurde, je zu augmentierendem Bild, eine geometrische- und 
@@ -130,20 +130,20 @@ in Einstufige- und Zweistufige Detektoren einteilen.
 
 Zweistufige Detektoren generieren in der 
 ersten Stufe eine Auswahl an räumlichen Vorschlägen
-für das Input Bild, in welchen Objekte enthalten sein 
+für das Inputbild, in welchen Objekte enthalten sein 
 können. 
-In der zweiten Stufe, werden die Vorschläge zur Feature 
-Extraction einem CNN übergeben, welches neben 
-einer Klassifikation auch einen Regressor für 
-die Bounding Box Koordinaten besitzt.
+In der zweiten Stufe, werden die Vorschläge zur \textit{Feature 
+Extraction} einem \Gls{cnn} übergeben, welches neben 
+einem Klassifikator auch einen \textit{Regressor} für 
+die \textit{Bounding Box} Koordinaten besitzt.
 
 Einstufige Verfahren verwenden kein separates 
 Netz zur Vorschlagsgenerierung. Stattdessen 
 wird das gesamte Bild als potentielle
-Regionen für Objekte betrachtet, indem 
+Region für Objekte betrachtet, indem 
 dieses Gitterartig unterteilt wird.
 Jeder Teil, der eine mögliche Region darstellt, 
-wird dann hisichtlich vorhandensein 
+wird dann hinsichtlich Vorhandensein 
 eines Objekt, klassifiziert.
 
 Für die Bachelor Arbeit wurden 
@@ -153,7 +153,6 @@ Inferenzzeit miteinander verglichen.
 
 Im Folgenden werden die beiden 
 verwendete Modelle näher erläutert.
-
 
 
 \subsection*{Faster R-CNN}
@@ -166,16 +165,16 @@ ein zweistufiges Verfahren verwendet.
 Die Vorschlagsgenerierung erfolgt in einem 
 \textit{Region Proposial Networks} (RPN), welches auf 
 einem \textit{fully convolutional network} 
-basiert, welches Featuer Maps generiert.
+basiert, welches \textit{\Glspl{featuremap}} generiert.
 
-Über die Feature Maps werden im 
+Über die \textit{\Glspl{featuremap}} werden im 
 \textit{Sliding-Window} Verfahren vordefinierte
 \textit{Anker Boxen} konvoliert.
 Der daraus resultierende Feature Vektor wird 
-einem binären klassifikator (\textit{cls layer}), 
+einem binären Klassifikator (\textit{cls layer}), 
 welcher angibt ob sich ein Objekt
 in dem Vorschlag befindet, 
-sowie einem Bounding Regresor
+sowie einem Bounding Box Regresor
 (\textit{reg layer}) zur Lokalisierung,
 übergeben.
 
@@ -184,7 +183,7 @@ sowie einem Bounding Regresor
     \centering
     \includegraphics[width=0.95\textwidth]
     {faster-RCNN_architecture.png}
-    \caption{Faster R-CNN Architektur, Quelle:
+    \caption{Faster R-CNN Architektur,
      \cite{ObjectDetectionDummies2017b}}
      \label{fig:faster_rcnn}
 \end{figure}
@@ -200,9 +199,9 @@ Boxen} unterschiedlicher skalierungen definiert.
 
 Indem an das Basis CNN weitere \textit{Extra Feature Layer}
 verschiedener Größen angehängt werden, kann dieses, 
-für jede default Box, eine Klassifikation, in Form 
+für jede default-Box, eine Klassifikation, in Form 
 eines \textit{confidence scores}, sowie eine Lokalisierung, 
-in Form eines Offsets zur default Box, vornehmen.
+in Form eines \textit{Offsets} zur default-Box, vornehmen.
 
 Diese werden zur finalen Detektion 
 einem \textit{non-maximum suppression}
@@ -215,7 +214,7 @@ in einer Box zusammenführt.
     \centering
     \includegraphics[width=0.95\textwidth]
     {ssd_architecture.png}
-    \caption{SSD, quelle: \cite{SSDSingleShot}}
+    \caption{SSD Architektur, \cite{SSDSingleShot}}
     \label{fig:faster_rcnn}
 \end{figure}
 
@@ -224,27 +223,28 @@ in einer Box zusammenführt.
 \section{Training}
 
 Das Training der Deep Learning Modelle erfolgte in dem 
-Framework Tensorflow, welches auch von 
-OpenVino, für den Neural Compute Stick, uterstütz wird.
+\Gls{framework} \textit{Tensorflow}, welches auch von 
+\textit{OpenVino}, für den \textit{Neural Compute Stick},
+unterstützt wird.
 Dabei wurde eine speziell für die Object detection 
-entwickelte Api von Tensorflow verwendet.
+entwickelte \Gls{api} von \textit{Tensorflow} verwendet.
 
-Um unabhängig von der Leistungsfähigkeit der GPU des 
+Um unabhängig von der Leistungsfähigkeit der \Gls{gpu} des 
 Rechners zu sein, wurde das Training in der Cloudbasierten
-Virtual Machine \textit{Google Colab} \cite{colab} durchgeführt,
-welche kostenlos eine, für Deep Learning geeignete, GPU
-zur verfügung stellt.
+\Gls{vm} \textit{Google Colab} \cite{colab} durchgeführt,
+welche kostenlos eine, für Deep Learning geeignete, \Gls{gpu}
+zur Verfügung stellt.
 
 
 
 \subsection{Tensorflow Object Detection Api}
 
 Die \textit{Tensorflow Object Detection Api} ist unter den
-Research Modellen des offiziellen Tensorflow
-Repositorys auf GitHub zu finden \cite{tfobjdet},
-und enthällt Implementierungen
+\textit{Research Modellen} des offiziellen Tensorflow
+Repositorys auf \textit{GitHub} zu finden \cite{tfobjdet},
+und enthält Implementierungen
 einiger gängiger Object detection Modelle, mit verschiedenen 
-vortrainerten Basis CNNs.
+vortrainerten Basis-\Glspl{cnn}.
 
 Der, für die Bachelor Arbeit Verwendete, \textit{Single 
 Shot Detector} (SSD), wurde zum einen mit dem 
@@ -258,18 +258,18 @@ Um die Modelle trainieren zu können, mussten zunächst die
 Trainingsdaten in das binäre Dateiformat \textit{TFRecords} 
 umgewandelt werden, welches die Tensorflow Api verwendet.
 Dieses ist eine serialisierte 
-Darstellung der Bilder und Labelfiles als Protocol Buffer,
+Darstellung der Bilder und Labelfiles als \textit{Protocol Buffer},
 welche einen schnelleren Zugriff auf die Daten ermöglichen.
 
 Parameter für das Modell konnten vor dem Training 
 in einer Konfigurationsdatei festgelegt werden.
 
-Diese wurde dann, zusammen mit den TFRecord Files, 
+Diese wurde dann, zusammen mit den \textit{TFRecord} Dateien, 
 dem Konsolen-Kommando, mit dem das Training 
 gestartet wurde, übergeben.
 
-Während des Trainings wurden, in regelmäßigen 
-Abständen, die trainierten Gewichte abgespeichert.
+Während des Trainings wurden in regelmäßigen 
+Abständen die trainierten Gewichte abgespeichert.
 
 Mithilfe das Evaluierungstools \textit{Tensorboard}
 konnte der Trainingsfortschritt, anhand bestimmter
@@ -280,17 +280,17 @@ Einstellungen der Datensatz- und
 Modelkonfiguration festgestellt 
 und korrigiert werde, indem z.B. andere
 Augmentierungstechniken verwendet,
-oder Hyperparameter des Models umgestellt wurden.
+oder \textit{Hyperparameter} des
+Models umgestellt wurden.
 
 In Abbildung \ref{fig:train_workflow}
 ist der Trainingsworkflow dargestellt 
 welcher dabei zustande kam.
 
-Die Ergebnisse der Trainierten Modelle 
+Die Ergebnisse der trainierten Modelle 
 werden im nächsten Kapitel diskutiert.
-
-
 \vspace{1cm}
+
 \begin{figure}[H]
     \centering
     \input{Bilder/train_workflow_gesammt.tex}
@@ -304,16 +304,16 @@ werden im nächsten Kapitel diskutiert.
 
 Die Anwendung, eines fertig trainierten Modells, für 
 neue Inputdaten, wird als \textit{Inferenz} bezeichnet.
-Zur Ausführung dieser, auf dem Neural Compute Stick 2, 
-wird das Toolkit \textit{OpenVino} von Intel verwendet.
-Dafür musste zunächst der trainierte Tensorflow Graph 
+Zur Ausführung dieser, auf dem \textit{Neural Compute Stick 2}, 
+wird das Toolkit \textit{OpenVino} von \textit{Intel} verwendet.
+Dafür musste zunächst der trainierte \textit{Tensorflow Graph} 
 exportiert, d.h. die aktuellen Werte der Gewichte 
 eingefroren werden.
 
 Anschließend konnte mit dem \textit{Model Optimizer}
-das Modell in die Intermediate Representation (IR)
+das Modell in die \textit{Intermediate Representation} (IR)
 konvertiert werden.
-Diese besteht aus einer xml und einer bin Datei und 
+Diese besteht aus einer .xml- und einer .bin-Datei und 
 und kann von der \textit{Inferecne Egine} 
 zur Inferenz gelesen werden.
 
@@ -322,7 +322,7 @@ zur Inferenz gelesen werden.
 
 Um die Inferenz eines Modells im IR-Format 
 auf dem NCS2 ausführen zu können, werden 
-in der Inference Engine, die in Abbildung 
+in der \textit{Inference Engine}, die in Abbildung 
 \ref{fig:inger_engine_workflow} schematisch
 dargestellten Schritte, durchgeführt.
 Daneben ist jeweils die entsprechende 
@@ -334,8 +334,8 @@ spezifiziert (\textit{HW Plugin laden}).
 
 Anschließend wird das Modell anhand der 
 IR Dateien definiert (\textit{Model IR einlesen})
-woraus sich die In- und Outputblobs generieren 
-lassen, (\textit{In-und Outputblob}), 
+woraus sich die \textit{In}- und \textit{Outputblobs}
+ generieren lassen, (\textit{In-und Outputblob}), 
 welche die Diemensionen der Ein- und Ausgabe 
 Schicht des Modells darstellen.
 
@@ -412,8 +412,8 @@ Für Object detection Modelle enthällt das Ergebnis
  zugehörige Wahrscheinlichkeit, sowie Bounding 
  Box Koordinaten der geschätzen Objekte im Bild enthalten.
 
-Indem man für alle Schätzungen, die in einem Bild gemacht wurden, 
-einen Threshhold für die Wahrscheinlichkeit festlegt (zb. 70\%),
+Indem für alle Schätzungen, die in einem Bild gemacht wurden, 
+ein Threshhold für die Wahrscheinlichkeit festlegt wird (zb. 70\%),
 könenn die sinnvollen Ergebnisse herausgefiltert werden.
 
 Zur veranschaulichung können die Koordinaten dann 

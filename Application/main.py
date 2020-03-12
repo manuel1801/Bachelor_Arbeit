@@ -9,6 +9,7 @@ from time import time, sleep
 import picamera.array
 import picamera
 
+
 send_results = True
 remote_user = 'manuel'
 remote_divice_name = 'ssh-Pc'
@@ -17,6 +18,8 @@ password_remote_divece = 'animalsdetection20'
 password_remoteit = 'animalsdetection20'
 remote_output_dir = os.path.join(
     '/home', remote_user, 'Bachelor_Arbeit', 'Application/detected')
+send_email = None
+
 
 # Wenn erkannte Bilder an ein Remote
 # Gerät gesendet werden sollen

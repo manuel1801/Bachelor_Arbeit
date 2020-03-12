@@ -81,7 +81,7 @@ Overfitting zu verhindern.
 Die Augmentierung des \textit{Open Images} Datensatzes 
 wurde mithilfe eines Python-Scripts, in welchem die Library 
 \textit{imgaug} \cite{imgaug} verwendet wurde, durchgeführt.
-Dabei wurde, für jedes zu augmentierendem Bild eine geometrische und 
+Dabei wurde für jedes zu augmentierende Bild eine geometrische und 
 eine pixelbezogene Transformation angewendet, die 
 zufällig aus einer Auswahl an Augmentern ausgewählt wurde.
 
@@ -116,7 +116,7 @@ verwendeten Augmentierungstechniken dargestellt:
 \end{lstlisting}
 
 Das Ergebnis von einigen zufällig angewendeten Augmentierungen 
-auf ein Bild der Klasse Fuchs ist
+auf ein Bild der Klasse \textit{Fuchs} ist
 in Abbildung \ref{fig:augmentierung} dargestellt:
 
 \begin{figure}[H]
@@ -133,7 +133,7 @@ in Abbildung \ref{fig:augmentierung} dargestellt:
 Object detection Modelle lassen sich
 in einstufige- und zweistufige Detektoren einteilen,
 siehe \cite{wuRecentAdvancesDeep2019} für eine 
-Ausführliche Beschreibung
+ausführliche Beschreibung.
 
 Zweistufige Detektoren generieren in der 
 ersten Stufe eine Auswahl an räumlichen Vorschlägen
@@ -150,7 +150,7 @@ wird das gesamte Bild als potentielle
 Region für Objekte betrachtet, indem 
 dieses gitterartig unterteilt wird.
 Jeder Teil, der eine mögliche Region darstellt, 
-wird dann hinsichtlich des Vorhandensein 
+wird dann hinsichtlich des Vorhandenseins 
 eines Objekts klassifiziert.
 
 Für diese Bachelorarbeit wurden 
@@ -176,10 +176,10 @@ basiert.
 \textit{Sliding-Window}-Verfahren vordefinierte
 \textit{Anker Boxen} konvoliert.
 Der daraus resultierende Feature-Vektor wird 
-einem binären Klassifikator (\textit{cls layer}), 
-der angibt ob, sich ein Objekt
+einem binären Klassifikator (\textit{cls layer}),
+der angibt, ob sich ein Objekt
 in dem Vorschlag befindet, 
-sowie einem Bounding-Box-Regresor
+sowie einem Bounding-Box-Regressor
 (\textit{reg layer}) zur Lokalisierung,
 übergeben.
 

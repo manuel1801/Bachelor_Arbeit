@@ -20,17 +20,17 @@ Ausarbeitung/*
 !Ausarbeitung/Bilder/
 !Ausarbeitung/*.pdf
 
-!Connection/
-Connection/*
+# !Connection/
+# Connection/*
 
-!Connection/socket_connection.py
+#!Connection/socket_connection.py
 #!Connection/socket_server.py
 #!Connection/socket_client.py
 
-!Connection/ssh_connection.py
+#!Connection/ssh_connection.py
 
-!Connection/test.jpg
-!Connection/readme.*
+#!Connection/test.jpg
+#!Connection/readme.*
 
 
 #!Dataset/
@@ -71,8 +71,6 @@ openvino_models/Animals/*/exported_model
 openvino_models/samples/
 openvino_models/Animals/faster_rcnn_inception_v2_less_aug_l2
 openvino_models/Animals/faster_rcnn_inception_v2_early_stopping
-
-
 
 
 !Preprocessing/

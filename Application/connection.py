@@ -157,3 +157,41 @@ class SSHConnect:
             smtp.starttls()
             smtp.login(self.email, self.password)
             smtp.sendmail(self.email, email, msg.as_string())
+
+    def main():
+
+        email = ''
+        password_remote_divece = ''
+        password_remoteit = ''
+        remote_user = ''
+        remote_divice_name = ''
+        remote_output_dir = os.path.join('/home', remote_user)
+
+        conn = SSHConnect(email, password_remoteit)
+
+        # Für SSH
+        file_path = os.path.join(os.path.dirname(sys.argv[0]), 'test.jpg')
+        assert os.path.isfile(file_path)
+
+        logged_in = conn.login(remote_divice_name)
+        if logged_in:
+            print('Success: logging in!')
+            ret = conn.connect()
+        else:
+            print('Error: logging in!')
+            exit()
+
+        server, port = ret
+        if conn.send(server, port, remote_user, password_remote_divece,
+                     file_path, remote_output_dir):
+            print('Success: sending!')
+        else:
+            print('Error: sending!')
+
+        conn.disconnect()
+
+        # Für Email:
+        # conn.send_email('ziel@addresse.com', 'hello world!')
+
+    if __name__ == "__main__":
+        main()

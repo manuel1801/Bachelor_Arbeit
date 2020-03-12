@@ -4,12 +4,10 @@ import os
 import cv2
 import infer_async
 
-models_dir = os.path.join(
-    os.environ['HOME'], 'Bachelor_Arbeit', 'openvino_models/Animals')
 
-test_image = cv2.imread(os.path.join(
-    os.environ['HOME'], 'Bachelor_Arbeit',
-    'Inference_Engine_Tools/benchmark_tool/car.png'))
+# Pfad zu in 'models'-Liste enthaltenen Modellen
+models_dir = '...openvino_models/Animals'
+test_image = cv2.imread(os.path.join(os.path.dirname(sys.argv[0]), 'car.png'))
 
 
 iterations = 100

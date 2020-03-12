@@ -10,10 +10,8 @@ models = ['ssd_mobilenet_v2',
           'ssd_inception_v2',
           'faster_rcnn_inception_v2_3000']
 
-# Pfad zu in 'models' Liste enthaltenen Modellen
-models_dir = os.path.join(
-    os.environ['HOME'], 'Bachelor_Arbeit', 'openvino_models/Animals')
-
+# Pfad zu in 'models'-Liste enthaltenen Modellen
+models_dir = '...openvino_models/Animals'
 
 test_image = cv2.imread(os.path.join(os.path.dirname(sys.argv[0]), 'car.png'))
 

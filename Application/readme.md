@@ -18,10 +18,10 @@ Inhalt auf den Raspberry Pi kopieren:
     └── connection.py
 ```
 
-main.py ist die Hauptanwendung, welche detection.py und 
-connectoin.py verwendet.
+Das Script *main.py* ist die Hauptanwendung, welche *detection.py* und 
+*connectoin.py* verwendet.
 
-aufgerufen wird das main Script über das launcher.sh Script
+Aufgerufen wird das *main.py* Script über das *launcher.sh* Script
 
 Im *models* Ordner sind OpenVino Modelle die auf folgende Datensätze trainiert wurden:
 
@@ -39,7 +39,7 @@ Diese enthalten jeweils folgende Modelle:
 Die Anwendung kann mit oder ohne Senden der Daten 
 ausgeführt werden.  
 Um die Daten senden zu können wird ein remote.it Account
-benötigt, wie in Connection/remote_it/readme erklärt.
+benötigt, wie im Abschnitt **Connection** beschrieben wird.
 
 Dafür müssen folgende Einstellunge vorgenommen werden:
 ```python
@@ -124,6 +124,86 @@ Status abfragen (gibt Konsolenausgabe von main script aus)
 ```
 sudo systemctl status my_init.service
 ```
+
+## Connection
+
+Verwendet [remote.it](https://remote.it/) zum senden von 
+Daten mit scp über proxy ssh Verbindung.
+
+
+### 1. Remote.it installieren
+
+Auf dem Remote Gerät (an dass Daten gesendet werden sollen)
+
+installieren
+
+```bash
+curl -LkO https://raw.githubusercontent.com/remoteit/installer/master/scripts/auto-install.sh
+chmod +x ./auto-install.sh
+sudo ./auto-install.sh
+```
+und auführen
+
+```bash
+sudo connectd_installer
+```
+
+Mit remote.it Konto anmelden, 
+oder neuen [account](https://remote.it/) erstellen.  
+Dann neues Gerät (z.B. *remote-Pc*) mit SSH Service (z.B. *ssh-Pc*) anlegen
+
+
+### 2. Verwendung
+
+In [*ssh_connection.py*](ssh_connection.py)
+
+* in init(): [Developer API Key](https://app.remote.it/#account) anpassen
+* in main():
+    * *email* von remote.it
+    * *password_remoteit* von remote.it
+    * *password_remote_divece* passwor von remote gerät
+    * *remote_user* username des remote geräts 
+    * *remote_divice_name* mit dem gerät über *connectd* angemeldet wurde
+    * *file_path* datei die gesendet werden soll
+    * *remote_output_dir* directory auf zielgerät
+
+
+einloggen und verbinden:
+```python
+conn = SSHConnect(email, password_remoteit)
+logged_in = conn.login(remote_divice_name)
+if logged_in:
+    ret = conn.connect()
+```
+wenn erfolgreich, enthällt ret *server* und *port*, sonst false
+
+senden
+```python
+server, port = ret
+conn.send(server, port, remote_user, password_remote_divece,
+        file_path, remote_output_dir)
+```
+
+verbindung trennen
+```python
+conn.disconnect()
+```
+
+
+script zum testen ausführen
+```bash
+python3 ssh_connection.py
+```
+
+
+### Email Connection
+
+mit
+```python
+conn.send_mail('ziel@addresse.com', 'textmessage')
+```
+von der in *SSHConnect(email, password)* verwendeten
+email aus an *zieladresse* die *textmessage* senden.
 
 
 

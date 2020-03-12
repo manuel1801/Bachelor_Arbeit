@@ -30,7 +30,7 @@ Im *models* Ordner sind OpenVino Modelle die auf folgende Datensätze trainiert 
     * Klassen sind in *classes.txt* der jeweiligen Modell-Ordner definiert
 
 Diese enthalten jeweils folgende Modelle:
-* Faster R-CNN: wird von der Applikation default mäßig verwendet
+* Faster R-CNN: wird von der Applikation verwendet
 * SSD: wird verwendet, wenn beim Laden des Faster R-CNN ein Fehler auftritt
 
 
@@ -43,22 +43,22 @@ benötigt, wie im Abschnitt **Connection** beschrieben wird.
 
 Dafür müssen folgende Einstellunge vorgenommen werden:
 ```python
-# Gibt mit True/False ob erkannte Bilder gesendet werden sollen
+# Gibt mit True/False an ob erkannte Bilder gesendet werden sollen
 send_results = True
 
-# User Name des Gerätes, an das die Bilder gesendet werden sollen
+# User-Name des Gerätes, an das die Bilder gesendet werden sollen
 remote_user = ''
 
-# Device Name des Gerätes in remote.it
+# Device-Name des Gerätes in remote.it
 remote_divice_name = ''
 
 # E-Mail Adresse des remot.it Accounts
 remote_it_email = ''
 
-# Rassort des Gerätes, an das die Bilder gesendet werden sollen
+# Passort des Gerätes, an das die Bilder gesendet werden sollen
 password_remote_divece = ''
 
-# Rassort des des remot.it Accounts
+# Passort des remot.it Accounts
 password_remoteit = ''
 
 # Pfad im Zielgerät, in dem die Bilder gespeichert werden sollen
@@ -155,6 +155,8 @@ Dann neues Gerät (z.B. *remote-Pc*) mit SSH Service (z.B. *ssh-Pc*) anlegen
 
 ### 2. Verwendung
 
+(wird von der Applikation implementiert)
+
 In [*ssh_connection.py*](ssh_connection.py)
 
 * in init(): [Developer API Key](https://app.remote.it/#account) anpassen
@@ -192,7 +194,7 @@ conn.disconnect()
 
 script zum testen ausführen
 ```bash
-python3 ssh_connection.py
+python3 connection.py
 ```
 
 

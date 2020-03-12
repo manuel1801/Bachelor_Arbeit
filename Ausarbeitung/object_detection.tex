@@ -8,7 +8,7 @@ Training geeigneter Deep-Learning-Modelle in \textit{TensorFlow}
 \section{Datensatz}\label{sec:dataset}
 
 Für das Training eines Deep-Learning-Modells werden 
-eine Große Menge an Trainingsdaten benötigt.
+eine große Menge an Trainingsdaten benötigt.
 Handelt es sich um ein Modell zur Objekterkennung
 müssen die Labels neben der Klasse auch die Koordinaten 
 der Bounding-Boxen enthalten.
@@ -27,8 +27,7 @@ Hedgehog, Owl, Rabbit, Raccoon} und \textit{Squirrel}
 heruntergeladen und für das Training verwendet.
 
 Für die Evaluierung des Trainings wurde der 
-Datensatz, in ein
-Trainings-, ein Validierungs- und ein 
+Datensatz in ein Trainings-, ein Validierungs- und ein 
 Testset aufgeteilt, mit einem Verhältnis von 80\%, 10\%, 10\%.
 
 Bei den verschiedenen Klassen variierte die Anzahl der 
@@ -210,7 +209,7 @@ in Form eines \textit{Offsets} zur default-Box, vornehmen.
 
 Diese werden zur finalen Detektion 
 einem \textit{non-maximum suppression}
-Layer übergeben, der Boxen, die der selben Klasse angehören 
+Layer übergeben, der Boxen, die derselben Klasse angehören 
 zusammenführt.\cite{hosangLearningNonmaximumSuppression2017}
 
 
@@ -236,7 +235,7 @@ entwickelte \Gls{api} von \textit{TensorFlow} verwendet.
 Um unabhängig von der Leistungsfähigkeit der \Gls{gpu} des 
 Rechners zu sein wurde das Training in der Cloudbasierten
 \Gls{vm} \textit{Google Colab} \cite{colab} durchgeführt,
-die eine für Deep Learning geeignete,
+die eine für Deep Learning geeignete
 \Gls{gpu} kostenlos zur Verfügung stellt.
 
 
@@ -280,7 +279,7 @@ konnte der Trainingsfortschritt anhand bestimmter
 Metriken angezeigt und ausgewertet werden. So konnten schon während des Trainings fehlerhafte
 Einstellungen der Datensatz- und 
 Modellkonfiguration festgestellt 
-und korrigiert werde, indem z.B. andere
+und korrigiert werden, indem z.B. andere
 Augmentierungstechniken verwendet
 oder \textit{Hyperparameter} des
 Modells umgestellt wurden.
@@ -320,7 +319,7 @@ zur \Gls{inferenz} gelesen werden.
 \subsection*{Inference Engine}
 
 Um die \Gls{inferenz} eines Modells im IR-Format 
-auf dem NCS2 ausführen zu können werden 
+auf dem NCS2 ausführen zu können, werden 
 in der \textit{Inference Engine} die in Abbildung 
 \ref{fig:inger_engine_workflow} schematisch
 dargestellten Schritte durchgeführt.
@@ -331,11 +330,11 @@ Zunächst wird das Zielgerät, auf dem
 die \Gls{inferenz} ausgeführt werden soll,
 spezifiziert (\textit{HW Plugin laden}).
 Anschließend wird das Modell anhand der 
-IR-Dateien definiert (\textit{Model IR einlesen})
+IR-Dateien definiert (\textit{Model IR einlesen}),
 woraus sich die \textit{In}- und \textit{Outputblobs}
- generieren lassen (\textit{In-und Outputblob}), 
+ generieren lassen (\textit{In-und Outputblob}). 
 Diese stellen die Dimensionen der Ein- und Ausgabeschicht
-des Modells darstellen.
+des Modells dar.
 Das zu inferierende Bild,
 dass als Matrix aus Pixelwerten 
 vorliegt, muss dann in das \textit{Input Blob}
@@ -409,7 +408,7 @@ Für Object-detection-Modelle enthält das Ergebnis
  Bounding-Box-Koordinaten der geschätzen Objekte im Bild enthalten.
 
 Indem für alle Schätzungen, die in einem Bild gemacht wurden, 
-ein Threshold für die Wahrscheinlichkeit festlegt wird (zb. bei 70\%),
+ein Threshold für die Wahrscheinlichkeit festlegt wird (z.B. bei 70\%),
 können die sinnvollen Ergebnisse herausgefiltert werden.
 
 Zur Veranschaulichung können die Koordinaten dann 

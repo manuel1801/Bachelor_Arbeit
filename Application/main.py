@@ -1,6 +1,5 @@
-
 import detection
-#import connection
+import connection
 import os
 import cv2
 import numpy as np
@@ -11,71 +10,64 @@ import picamera.array
 import picamera
 
 
-password = 'animalsdetection20'
-
-
-buffer_size = 200    # zum zwischen speichern wenn infer langsamer stream
-threshhold = 0.5     # Für Detections
-num_requests = 2     # anzahl paralleler inferenz requests, recommended:3
-send_results = False  # falls nein wird local gespeichert)
-# None: keine email sende, oder in send_mail zieladresse angeben.
-send_email = None
-send_all_every = 100  # wie oft alle detections senden (in sekunden, 0 für nie)
-
-# nach wie vielen detections einer klasse save and send
-# n_save = 300       # für SSDs mit ca 30 FPS
-n_save = 5        # 10 für Faster R-CNNs mit ca 0,7 FPS
-
-user = 'pi'
 remote_user = 'manuel'
 remote_divice_name = 'ssh-Pc'
-view_result = False
-workspace_dir = os.path.join('/home', user, 'Bachelor_Arbeit')
-
-local_output_dir = os.path.join(workspace_dir,
-                                'Application/detected')
-if not os.path.isdir(local_output_dir):
-    os.mkdir(local_output_dir)
-
-assert os.path.isdir(local_output_dir)
-
-
+remote_it_email = 'animals.detection@gmail.com'
+password_remote_divece = 'animalsdetection20'
+password_remoteit = 'animalsdetection20'
 remote_output_dir = os.path.join(
     '/home', remote_user, 'Bachelor_Arbeit', 'Application/detected')
 
 
-models_dir = os.path.join(workspace_dir, 'Application/models')
-assert os.path.isdir(models_dir)
+# remote_user = ''
+# remote_divice_name = ''
+# remote_id_email = ''
+# password_remote_divece = ''
+# password_remoteit = ''
+# remote_output_dir = os.path.join('/home', remote_user)
 
+
+buffer_size = 200    # zum zwischen speichern wenn infer langsamer stream
+threshhold = 0.7     # Für Detections
+num_requests = 3     # anzahl paralleler inferenz requests, recommended:3
+n_save = 10
+send_results = True  # falls False wird local gespeichert
+send_email = None  # None: keine email sende, oder in send_mail zieladresse angeben
+view_result = False
+
+
+# pfad des main.py Scripts
+appl_dir = os.path.dirname(sys.argv[0])
+
+# Ordner in den lokal erkannte Bilder abgespeichert werden
+local_output_dir = os.path.join(appl_dir, 'detected')
+if not os.path.isdir(local_output_dir):
+    os.mkdir(local_output_dir)
+assert os.path.isdir(local_output_dir)
+
+# Ordner in dem die OpenVino Modell liegen
+models_dir = os.path.join(appl_dir, 'models')
+assert os.path.isdir(models_dir)
 
 # SSH Connection Objekt anlegen
 if send_results:
-    conn = connection.SSHConnect()
+    conn = connection.SSHConnect(remote_it_email, password_remoteit)
 
 
-# Ausgabe zur Model auswahl
-# models = []
-# for i, m in enumerate(os.listdir(models_dir)):
-#     models.append(m)
-#     print(i, m)
-# model_dir = os.path.join(models_dir, models[int(input())])
-# print('selected model: ', model_dir)
-# assert os.path.isdir(model_dir)
-
+# Liste mit 2 OpenVino Modellen (sampleset zum testen oder animals mit 9 wildtierklassen)
 models = ['samples_faster_rcnn_inception', 'samples_ssd_inception']
 # models = ['animals_faster_rcnn_inception', 'animals_ssd_inception']
 
 
-# Load Model to Device
-# try first faster rcnn
-# if error try with ssd
+# Model auf Hardware laden
+# zuerst Faster R-CNN, wenn fehler auftritt SSD verwenden.
 infer_model = detection.InferenceModel(device='MYRIAD')
 for model in models:
     exec_model = infer_model.create_exec_infer_model(
         os.path.join(models_dir, model), local_output_dir, num_requests)
     if exec_model:
         break
-    n_save = 200
+    n_save = 200  # für ssd, da schneller inferiert
     threshhold = 0.5
 if not exec_model:
     print('error loading model')
@@ -83,24 +75,19 @@ if not exec_model:
 print('load: ', model)
 del infer_model
 
-# init motion detector
+# Motion Detector anlegen
 motion_detector = detection.MotionDetect()
 motion_frames = []
 
-
-# Init Cam
-if raspi:
-    camera = picamera.PiCamera()
-    camera.resolution = (640, 480)
-    camera.saturation = -75
-    camera.rotation = 180
-    capture_empty = np.empty((480, 640, 3), dtype=np.uint8)
-
-else:
-    cap = cv2.VideoCapture(0)
+# Raspberry Pi kamera einstellen
+camera = picamera.PiCamera()
+camera.resolution = (640, 480)
+camera.saturation = -75
+camera.rotation = 180
+capture_empty = np.empty((480, 640, 3), dtype=np.uint8)
 
 
-# interne variablen (nicht ändern)
+# interne Variablen
 no_detections = 0
 send_time = time()
 logged_in, connected, send_request = False, False, False
@@ -110,24 +97,18 @@ del_idx = 1
 n_infered = 0
 try_camera = 0
 
+
 while True:
-
     # Capture Frame
-    if raspi:
-        try:
-            camera.capture(capture_empty, 'bgr', use_video_port=True)
-        except:
-            sleep(2)
-            if try_camera < 5:
-                try_camera += 1
-                continue
-            break
-
+    try:
+        camera.capture(capture_empty, 'bgr', use_video_port=True)
+    except:
+        sleep(2)
+        if try_camera < 5:
+            try_camera += 1
+            continue
+        break
         capture = np.copy(capture_empty)
-    else:
-        ret, capture = cap.read()
-        if not ret:
-            break
 
     # Detect Motion in Captured Frame and save to buffer
     if motion_detector.detect_motion(capture):
@@ -148,24 +129,10 @@ while True:
         print('dissconnecting')
         connected = False
 
-    # Send all current Detections
-    if send_all_every > 0 and time() - send_time > send_all_every:
+    # Send all current Detections after 100 sec
+    if time() - send_time > 100:
         send_time = time()
         save_all = True
-
-    # damit nur zeit in der inferiert wird berüksicktigt
-    # if n_infered == 0 and not motion_frames:
-    #     start_time = time()
-    #     infered_frames, fps = 0, 0
-    # else:
-    #     # fps berechnung
-    #     infered_frames += n_infered
-    #     fps = infered_frames / (time() - start_time)
-
-    # print('Fps: ' + str(fps)
-    #       + '\tMotion: ' + str(has_motion)
-    #       + '\tBuffer: ' + str(len(motion_frames)) + '/' + str(buffer_size),
-    #       end='\r', flush=True)
 
     # Infer Frames
     n_infered, n_detected, n_saved = exec_model.infer_frames(
@@ -198,6 +165,7 @@ while True:
     if not send_results or not send_request:
         continue
 
+    # send E-Mail message
     if send_email:
         print('sending email')
         msg_str = ''
@@ -233,7 +201,7 @@ while True:
         image_path = os.path.join(local_output_dir, image)
 
         # try to send and delete local file
-        if conn.send(server, port, remote_user, password, image_path,
+        if conn.send(server, port, remote_user, password_remote_divece, image_path,
                      os.path.join(remote_output_dir, image[:-4] + '_' + model + image[-4:])):
 
             os.remove(image_path)

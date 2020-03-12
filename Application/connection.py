@@ -8,7 +8,7 @@ from email.mime.text import MIMEText
 
 
 class SSHConnect:
-    def __init__(self, email='animals.detection@gmail.com', password='animalsdetection20', dev_key='NEU3RTVFNEMtNjRGRi00MzBFLUIyNTgtOUVFQjRGMjcxOTRB'):
+    def __init__(self, email, password, dev_key='NEU3RTVFNEMtNjRGRi00MzBFLUIyNTgtOUVFQjRGMjcxOTRB'):
         self.developer_key = dev_key
         self.token = None
         self.device_adress = None
@@ -17,7 +17,7 @@ class SSHConnect:
         self.password = password
         # self.public_ip = requests.get('https://api.ipify.org').text
 
-    def login(self, device_name='ssh-Pc', retry=5):
+    def login(self, device_name, retry=5):
         headers = {
             "developerkey": self.developer_key
         }
@@ -147,18 +147,6 @@ class SSHConnect:
             print(e)
             return False
 
-    # def send_with_module(server, port, user, password, file, path):
-    #     try:
-    #         client = paramiko.SSHClient()
-    #         client.load_system_host_keys()
-    #         client.set_missing_host_key_policy(paramiko.AutoAddPolicy())
-    #         client.connect(server, port, user, password)
-    #         with SCPClient(client.get_transport()) as scp:
-    #             scp.put(file, path)
-    #         print('succesfully send with python')
-    #     except Exception as e:
-    #         print(e)
-
     def send_email(self, email, text):
 
         msg = MIMEText(text)
@@ -169,10 +157,3 @@ class SSHConnect:
             smtp.starttls()
             smtp.login(self.email, self.password)
             smtp.sendmail(self.email, email, msg.as_string())
-
-
-def main():
-
-
-if __name__ == "__main__":
-    main()

@@ -1,27 +1,90 @@
 
 
+# Applikation
 
-# Applikation Raspberry
+Zur Ausführung den *Application* Ordner mit Folgendem
+Inhalt auf den Raspberry Pi kopieren:
 
-Zur Ausführung auf dem Raspberry Pi entweder 
-gesammetes Repository in home Verzeichnis clonen:
-```bash
-git clone https://github.com/manuel1801/Bachelor_Arbeit.git
-```
 oder nur den *Application* Ordner mit folgendem Inhalt:
 
 ```bash
-└── home/pi
-    └── Bachelor_Arbeit/Application
-        ├── models
-        │   └── ...
-        ├── main.py
-        ├── launcher.sh
-        ├── detection.py
-        └── connection.py
+
+└── Application/
+    ├── models/
+    │   └── animals_faster_rcnn_inception/
+    │       ├── frozen_inference_graph.xml
+    │       └── ...
+    ├── launcher.sh
+    ├── detection.py
+    └── connection.py
 ```
 
-## [Main-Script](main.py)
+
+
+## Einstellungen
+
+Folgende Variablen müssen definiert werden:
+
+* Senden der Daten
+
+```python
+send_results = True # ob die Bilder an ein remote Gerät gesendet werden sollen. (bei False werden die Bilder lokal abgespeichert) 
+send_email = '' # E-Mail adresse (nur wenn send_results=True) an die zusätzlich eine Benachrichtigung per E-Mail gesendet werden soll (oder None wenn nicht)
+```
+
+* Geräte Namen
+
+```python
+user = 'pi'             # user name des Raspeberry Pi
+
+# nur wenn gesendet werden soll
+remote_user = ''        # name des Gerätes (PC) an das gesendet werden soll
+remote_divice_name = '' # name des Gerätes in remote.it
+```
+
+* Passwörter (nur wenn Daten gesendet werden sollen)
+
+```python
+password_remote_divece = '' # passwort des Gerätes (PC) an das gesendet werden soll
+password_remoteit = ''      # passwort des remote.it accounts (auc)
+```
+
+* weitere Einstellungen (optional, default wert kann beibehalten werden)
+```python
+buffer_size = 200       # Anzahl der Frames die zwischengespeichert werden können
+threshhold = 0.7        # Threshold, nach denen anhand der Wahrschienlichkeit die erkannten objekte gefiltert werden
+num_requests = 3        # anzahl paralleler inferenz requests
+n_save = 10             # nach wie vielen Erkannten Tieren (der gleichen Klasse) gespeicher und gesendet werden soll
+```
+
+## Ausführung
+
+
+## Autostart
+
+
+
+
+
+
+
+```python
+password = '*****'      # von remote.it account und remote gerät
+raspi = True            # ob auf
+
+buffer_size = 200    # zum zwischen speichern wenn infer langsamer stream
+threshhold = 0.5     # Für Detections
+num_requests = 2     # anzahl paralleler inferenz requests, recommended:3
+send_results = False  # falls nein wird local gespeichert)
+# None: keine email sende, oder in send_mail zieladresse angeben.
+send_email = None
+send_all_every = 100  # wie oft alle detections senden (in sekunden, 0 für nie)
+
+# nach wie vielen detections einer klasse save and send
+# n_save = 300       # für SSDs mit ca 30 FPS
+n_save = 5        # 10 für Faster R-CNNs mit ca 0,7 FPS
+```
+
 
 ## [Detection](detection.py)
 

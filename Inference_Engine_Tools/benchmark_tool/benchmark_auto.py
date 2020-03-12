@@ -3,18 +3,22 @@ import time
 import os
 import cv2
 import infer_async
+import sys
 
+# Namen der Ordner die zu inferierende Modelle enthalten
+models = ['ssd_mobilenet_v2',
+          'ssd_inception_v2',
+          'faster_rcnn_inception_v2_3000']
+
+# Pfad zu in 'models' Liste enthaltenen Modellen
 models_dir = os.path.join(
     os.environ['HOME'], 'Bachelor_Arbeit', 'openvino_models/Animals')
 
-test_image = cv2.imread(os.path.join(
-    os.environ['HOME'], 'Bachelor_Arbeit', 'Inference_Engine_Tools/benchmark_tool/car.png'))
+
+test_image = cv2.imread(os.path.join(os.path.dirname(sys.argv[0]), 'car.png'))
 
 iterations = 50
 
-models = ['ssd_mobilenet_v2',
-          'ssd_inception_v2',
-          'faster_rcnn_inception_v2']
 
 for model in models:
 

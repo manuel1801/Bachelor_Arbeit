@@ -6,23 +6,21 @@ Argumente:
 * *train_dir*: ordner der zu augmentierende bilder enthällt
 (auch rekursiv)
 
-* *n_max* anzahl an bilder die je klasse erzeugt werden sollen
-* *color* wieviel augmenter aus liste *color_augmenters* 
-je bild angewendet werden sollen 
-* *geometric* wieviel augmenter aus liste *geometric_augmenters* 
-je bild angewendet werden sollen
-
-* *all* (optional) wie viele augmentierungen je bilde 
+* *n_max* Anzahl an Bilder die je Klasse erzeugt werden sollen
+* *color* Anzahl der *Augmenter* aus der Liste *color_augmenters* 
+für jedes bild angewendet werden sollen 
+* *geometric* Anzahl der *Augmenter* aus der Liste *geometric_augmenters* für jedes bild angewendet werden sollen
+* *all* (optional) wie viele Augmentierungen je bilde 
 angewendet werden sollen (ohne spezifizierung)
 
 
-Bsp Anwendung:
+Beispielhafte Ausführung:
 ```bash
 python3 data_augmentation.py -t train/ -n 3000 -c 1 -g 1
 ```
 
-Der *train* Ordner muss die Klassen seperat in
-Unterordnern enthallten.
+Der *train* Ordner muss die Klassen separat in
+Unterordnern enthalten.
 Die Label Files können im gleichem Ordner wie die Bilder 
 oder in einem weiterem Unterordner sein.  
 Bsp:

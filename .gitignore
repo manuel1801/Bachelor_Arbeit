@@ -24,8 +24,8 @@ Ausarbeitung/*
 Connection/*
 
 !Connection/socket_connection.py
-!Connection/socket_server.py
-!Connection/socket_client.py
+#!Connection/socket_server.py
+#!Connection/socket_client.py
 
 !Connection/ssh_connection.py
 
@@ -33,11 +33,11 @@ Connection/*
 !Connection/readme.*
 
 
-!Dataset/
-Dataset/*
+#!Dataset/
+#Dataset/*
 #!Dataset/handy_bilder/
 #!Dataset/classes.txt
-!Dataset/readme.*
+#!Dataset/readme.*
 #!Dataset/remove_spaces.py
 
 
@@ -60,15 +60,19 @@ Inference_Engine_Tools/benchmark_tool/*
 !Inference_Engine_Tools/benchmark_tool/infer_async.py
 !Inference_Engine_Tools/benchmark_tool/readme.*
 
-!Inference_Engine_Tools/samples/
-Inference_Engine_Tools/samples/*
-!Inference_Engine_Tools/samples/detection_images.py
-!Inference_Engine_Tools/samples/motion_detection.py
-!Inference_Engine_Tools/samples/readme.*
+#!Inference_Engine_Tools/samples/
+#Inference_Engine_Tools/samples/*
+#!Inference_Engine_Tools/samples/detection_images.py
+#!Inference_Engine_Tools/samples/motion_detection.py
+#!Inference_Engine_Tools/samples/readme.*
 
 !openvino_models/
 openvino_models/Animals/*/exported_model
-openvino_models/samples/*/exported_model
+openvino_models/samples/
+openvino_models/Animals/faster_rcnn_inception_v2_less_aug_l2
+openvino_models/Animals/faster_rcnn_inception_v2_early_stopping
+
+
 
 
 !Preprocessing/

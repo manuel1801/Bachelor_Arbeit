@@ -1,6 +1,9 @@
 # TF Record Files aus OpenImages Datensatz erstellen
 
-*OpenImages* Datenset mit Ordnerstruktur:
+(die hier beschriebenen Scripte stammen größtenteils aus anderen Quellen 
+die jeweils angegeben sind)
+
+Mit [OIDv4_ToolKit](https://github.com/EscVM/OIDv4_ToolKit) heruntergeladene Klassen des [OpenImages](https://storage.googleapis.com/openimages/2018_04/bbox_labels_600_hierarchy_visualizer/circle.html) enthalten folgende Ordnerstruktur: 
 
 ```bash
 └── DATASET_DIR

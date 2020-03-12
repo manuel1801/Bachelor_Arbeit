@@ -8,6 +8,7 @@ import cv2
 
 
 class MotionDetect:
+    # Klasse zur Erkennung von Bewegung
     def __init__(self):
         self.static_back = None
 
@@ -32,27 +33,31 @@ class MotionDetect:
 
 
 class InferenceModel:
+    # Klasse zur Erstellung eines 'ExecInferModel' Objekts
     def __init__(self, device='MYRIAD'):
         self.ie = IECore()
         self.device = device
 
     def create_exec_infer_model(self, model_dir, output_dir, num_requests=2):
 
+        # Anlegen der Pfade zu den Modell Dateien
         model_xml = os.path.join(
             model_dir, 'frozen_inference_graph.xml')
         model_bin = os.path.join(
             model_dir, 'frozen_inference_graph.bin')
-
         exported_model = os.path.join(model_dir, 'exported_model')
 
+        # Laden der Labels aus 'classes.txt'
         labels = [line.strip() for line in open(
             os.path.join(model_dir, 'classes.txt')).readlines()]
 
         assert os.path.isfile(model_bin)
         assert os.path.isfile(model_xml)
 
+        # Erstellung des Modells aus IR Dateien
         net = IENetwork(model=model_xml, weights=model_bin)
 
+        # In-Output Shapes des Modells aus 'net' laden
         img_info_input_blob = None
         feed_dict = {}
         for blob_name in net.inputs:
@@ -68,6 +73,7 @@ class InferenceModel:
             net.outputs) == 1, "Demo supports only single output topologies"
         out_blob = next(iter(net.outputs))
 
+        # Modell importieren (Falls vorhanden)
         if os.path.isfile(exported_model):
             print('found model to import')
             try:
@@ -76,6 +82,7 @@ class InferenceModel:
             except:
                 return False
         else:
+            # sonst erstellen und exoportieren
             print('creating exec model')
             try:
                 exec_net = self.ie.load_network(
@@ -87,9 +94,10 @@ class InferenceModel:
         nchw = net.inputs[input_blob].shape
 
         del net
-
         if img_info_input_blob:
             feed_dict[img_info_input_blob] = [nchw[2], nchw[3], 1]
+
+        # ersellen und zurückgeben eines ExecInferModel Objekts, mit welchem die Inferenz ausgeführt wird
         return ExecInferModel(exec_net, input_blob, out_blob, feed_dict, nchw, labels, output_dir)
 
 
@@ -107,25 +115,28 @@ class ExecInferModel:
 
     def infer_frames(self, buffer, threshhold=0.6, view_result=True, n_save=20, save_all=False):
 
+        # Status Variablen
         n_infered, n_detected, n_saved = 0, 0, 0
 
+        # alle Inferenz Requests durchiterieren
         for inf_img_ind, infer_request in enumerate(self.exec_net.requests):
 
             res, frame = None, None
 
-            # get infer status for current req number
+            # Status der Inferenz für aktuellen Request abfragen
             status = infer_request.wait(0)
 
+            # 0: ergebnis da, -11: noch nicht gestartet
             if status != 0 and status != -11:
                 continue
 
-            # get result of current req number
+            # Ergebnis für aktuellen Request holen
             if inf_img_ind in self.current_frames:
                 res = infer_request.outputs[self.out_blob]
                 frame = self.current_frames[inf_img_ind]
                 n_infered += 1
 
-            # start new infer request
+            # neuen Inferent Request starten
             if len(buffer):
                 self.current_frames[inf_img_ind] = buffer.pop()
                 in_frame = cv2.resize(
@@ -136,53 +147,57 @@ class ExecInferModel:
                 self.feed_dict[self.input_blob] = in_frame
                 infer_request.async_infer(self.feed_dict)
 
-            # process result of curent infer req number
+            # Ergebnis verarbeiten
             if res is None or frame is None:
                 continue
 
             height, width = frame.shape[:2]
+            # inferenz ergebnisse für ein frame durchiterieren
             for obj in res[0][0]:
 
+                # Threshold prüfen
                 if obj[2] < threshhold:
                     continue
 
                 n_detected += 1
 
-                # get coordinates
+                # Boundig Box koordinalte aus Erg laden
                 xmin = int(obj[3] * width)
                 ymin = int(obj[4] * height)
                 xmax = int(obj[5] * width)
                 ymax = int(obj[6] * height)
 
-                # get class id
+                # ID der erkannten Klasse
                 class_id = int(obj[1])
 
-                # draw box and text into image
+                # Bounding Box in das Bild zeichnen
                 cv2.rectangle(frame, (xmin, ymin),
                               (xmax, ymax), color=(0, 255, 255), thickness=2)
 
                 cv2.putText(frame, self.labels[class_id - 1] + ' ' + str(round(obj[2] * 100, 1)) + '%', (xmin, ymin - 7),
                             cv2.FONT_HERSHEY_COMPLEX, 0.6, (0, 255, 255), 1)
 
-                # detected_objects -> class_id:(nr, roi, proba)
+                # detected_objects dict anlegen mit key:class_id, value:[N, Roi, proba]
                 if not class_id in self.detected_objects:
                     self.detected_objects[class_id] = [
                         0, frame, obj[2]]
                 else:
                     self.detected_objects[class_id][0] += 1
+                    # wenn wahrscheinlichkeit höher als bei gespeicherten, ersetzen
                     if self.detected_objects[class_id][2] < obj[2]:
                         self.detected_objects[class_id][1] = frame
                         self.detected_objects[class_id][2] = obj[2]
 
+                # nach 'n_save' abspeicher
                 if self.detected_objects[class_id][0] > n_save:
                     n_saved += 1
                     self._save(class_id)
                     del self.detected_objects[class_id]
-
                 if view_result:
                     cv2.imshow('infer result', frame)
                     cv2.waitKey(1)
 
+        # alle aus 'detected_objects' lokal speichern
         if save_all:
             print('saving all')
             for class_id in self.detected_objects.keys():
@@ -191,6 +206,7 @@ class ExecInferModel:
             self.detected_objects = {}
         return n_infered, n_detected, n_saved
 
+    # Funkiont zum speichern der Bilder
     def _save(self, class_id):
         class_name = self.labels[class_id - 1]
         print('saving ', class_name)

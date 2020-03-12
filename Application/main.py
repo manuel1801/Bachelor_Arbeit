@@ -10,28 +10,28 @@ import picamera.array
 import picamera
 
 
-remote_user = 'manuel'
-remote_divice_name = 'ssh-Pc'
-remote_it_email = 'animals.detection@gmail.com'
-password_remote_divece = 'animalsdetection20'
-password_remoteit = 'animalsdetection20'
-remote_output_dir = os.path.join(
-    '/home', remote_user, 'Bachelor_Arbeit', 'Application/detected')
+# remote_user = 'manuel'
+# remote_divice_name = 'ssh-Pc'
+# remote_it_email = 'animals.detection@gmail.com'
+# password_remote_divece = 'animalsdetection20'
+# password_remoteit = 'animalsdetection20'
+# remote_output_dir = os.path.join(
+#     '/home', remote_user, 'Bachelor_Arbeit', 'Application/detected')
 
 
-# remote_user = ''
-# remote_divice_name = ''
-# remote_id_email = ''
-# password_remote_divece = ''
-# password_remoteit = ''
-# remote_output_dir = os.path.join('/home', remote_user)
+remote_user = ''
+remote_divice_name = ''
+remote_it_email = ''
+password_remote_divece = ''
+password_remoteit = ''
+remote_output_dir = os.path.join('/home', remote_user)
 
 
 buffer_size = 200    # zum zwischen speichern wenn infer langsamer stream
 threshhold = 0.7     # Für Detections
 num_requests = 3     # anzahl paralleler inferenz requests, recommended:3
 n_save = 10
-send_results = True  # falls False wird local gespeichert
+send_results = False  # falls False wird local gespeichert
 send_email = None  # None: keine email sende, oder in send_mail zieladresse angeben
 view_result = False
 

@@ -13,7 +13,7 @@
         draw,
         text width=6em,
         %minimum widhth=6em,
-        minimum height=3.5em,
+        minimum height=5em,
         text centered,
         node distance=20em
     },
@@ -34,22 +34,22 @@
 
     
     \node (system) [block] {Klassisches\\Programm};
-    \node (system2) [block, right of=system] {ML\\Programm};
+    \node (system2) [block, right of=system] {Machine Learning\\Programm};
 
-    \node [textfeld, left=of system.167] (inputs) {Daten};
-    \node [textfeld, left=of system.193] (regeln) {Regeln};
+    \node [textfeld, left=of system.162] (inputs) {Daten};
+    \node [textfeld, left=of system.198] (regeln) {Regeln};
     \node [textfeld, right=of system] (output) {Ausgaben};
 
-    \node [textfeld, left=of system2.167] (inputs2) {Daten};
-    \node [textfeld, left=of system2.193] (output2) {Ausgaben};
+    \node [textfeld, left=of system2.162] (inputs2) {Daten};
+    \node [textfeld, left=of system2.198] (output2) {Ausgaben};
     \node [textfeld, right=of system2] (regeln2) {Regeln};
     
-    \draw[arrow] (inputs) -- (system.167);
-    \draw[arrow] (regeln) -- (system.193);
+    \draw[arrow] (inputs) -- (system.162);
+    \draw[arrow] (regeln) -- (system.198);
     \draw[arrow] (system) -- (output);
     
-    \draw[arrow] (inputs2) -- (system2.167);
-    \draw[arrow] (output2) -- (system2.193);
+    \draw[arrow] (inputs2) -- (system2.162);
+    \draw[arrow] (output2) -- (system2.198);
     \draw[arrow] (system2) -- (regeln2);
     
 

@@ -1,57 +1,63 @@
 \chapter{Einleitung}\label{kap:einleitung}
 
 
-Wildkameras kommen in der Jagt oder zu biologischen 
-Forschungszwecken zum Einsatz.
-Da das Aufnehmen der Bilder automatisch über einen 
-Bewegungsmelder erfolgt, kann es unter Umständen zu 
-einer großen Menge an unwichtigen Daten kommen.
-Diese benötigen Speicherplatz auf dem Gerät, 
-oder, bei automatischem Senden, Datenvolumen 
-für eine Mobile Netzwerkverbindung und bringen außerdem
-einen großen Auswertungsaufwand mit sich.
+Wildkameras werden vielfach von Jägern genutzt, kommen
+ zu Forschungszwecken zum Einsatz und werden auch
+  zunehmend von Privatpersonen verwendet, die ihr eigenes
+   Grundstück überwachen möchten.
 
-Ein System welches genau erkennt, um welche Tiere es
-sich bei den gemachten Aufnahmen handelt, kann wesentlich 
-effizienter und gezielter für eine bestimmte Anwendung 
-eingesetzt werden.
-Beispielsweise zur Überwachung des eigenen Gartens vor 
-Füchsen, oder zum Aufspüren von Wölfen und Bären 
-in bestimmten Waldgebieten.
-Auch der Artbestand seltener oder aussterbender 
-Tierarten könnte so leichter erfasst werden.
+Da das Aufnehmen der Bilder automatisch über einen
+ Bewegungsmelder erfolgt, unabhängig davon, wodurch
+  der Bewegungsmelder ausgelöst wird, kann es unter
+   Umständen zu einer großen Menge an unwichtigen Daten
+    kommen. Diese benötigen Speicherplatz auf dem Gerät
+     oder verbrauchen bei automatischem Senden hohes
+      Datenvolumen für eine mobile Netzwerkverbindung.
+       Außerdem bringen sie einen großen Auswertungsaufwand
+        mit sich, da nichtrelevante Daten ausgefiltert
+         werden müssen.
 
-Für die Umsetzung einer solchen Bilderkennungsaufgabe 
-werden \textit{Deep Learning} Algorithmen verwendet,
-welche ein Teilgebiet der künstlichen Intelligenz sind.
-Für die Bilderkennung werden zumeist \Glspl{cnn} verwendet.
-Durch die Fortschritte, die in diesem Bereich in
-den letzten Jahren gemacht wurden, sowie durch 
-die Verfügbarkeit leistungsfähiger und zugleich
-kostengünstiger Hardware, ist die Realisierung
-einer solchen Anwendung auch für den Privatgebrauch
-und ohne Verwendung eines Großrechners möglich geworden.
+Ein System, welches genau erkennt
+ um welche Tiere es sich bei den gemachten
+  Aufnahmen handelt, kann wesentlich effizienter 
+  und gezielter für eine bestimmte Anwendung eingesetzt
+   werden, beispielsweise zur Überwachung von
+    Füchsen im eigenen Garten oder zum Aufspüren von
+     Wölfen und Bären in bestimmten Waldgebieten.
+      Auch der Artbestand seltener oder aussterbender
+       Tierarten könnte so leichter erfasst werden.
+
+Ziel der vorliegenden Arbeit ist es, ein autonomes
+ Kamerasystem zu entwickeln, das mithilfe von Deep-Learning-Algorithmen
+  verschiedene Wildtierarten erkennen und klassifizieren kann.
+   Für die Umsetzung einer solchen Bilderkennungsaufgabe sind
+    insbesondere Deep-Learning-Algorithmen geeignet,
+     die ein Teilgebiet der künstlichen Intelligenz sind.
+      Die Anwendung soll auf dem Einplatinencomputer
+       \textit{Raspberry Pi 4} ausgeführt werden und die Bilder
+        von erkannten Tieren automatisch an den Nutzer senden.
+         Die Inferenz der Neuronalen Netze wird dabei auf dem
+          KI Beschleuniger \textit{Neural Compute Stick 2} von \textit{Intel}
+           ausgeführt. Durch Verwendung einer infrarotfähigen Kamera
+            soll die Erkennung der Tiere auch bei Dunkelheit möglich sein.
+
+Für die Bilderkennung werden zumeist \Glspl{cnn}
+ verwendet. Durch die Fortschritte, die
+  in diesem Bereich in den letzten Jahren gemacht wurden sowie
+   durch die Verfügbarkeit leistungsfähiger und zugleich
+    kostengünstiger Hardware ist die Realisierung einer
+     solchen Anwendung auch für den Privatgebrauch und
+      ohne Verwendung eines Großrechners möglich geworden.
 
 
-Ziel der vorliegenden Arbeit war es, ein autonomes Kamerasystem 
-zu entwickeln, welches mithilfe von Deep Learning Algorithmen, 
-verschiedene Wildtierarten erkennen und klassifizieren kann.
-Dieses soll auf einem Raspberry Pi 4 laufen und 
-Bilder von erkannten Tieren automatisch an den Nutzer 
-senden.
-Die Inferenz der Neuronalen Netze wird dabei
-auf dem KI Beschleuniger Neural Compute Stick 2
-von Intel ausgeführt. Durch verwendung einer 
-infrarotfähigen Kamera soll die Erkennung des 
-Systems auch bei Nacht stattfinden können.
+Die Arbeit gliedert sich zunächst in ein Grundlagenkapitel,
+ in dem die Funktionsweise von Künstlichen Neuronalen Netzen
+  für die Bilderkennung behandelt wird. Anschließend
+   geht es um die Umsetzung und Auswertung des Trainings
+    geeigneter Deep-Learning-Modelle.
+Der letzte Teil beschreibt die Entwicklung der
+ Anwendung, in welcher die Inferenz eines
+  fertig trainiertes Modells für den \textit{Neural
+   Compute Stick 2} implementiert wird.
 
-Damit gliedert sich die Arbeit zunächst in ein
-Grundlagen-Kapitel, welches die Funktionsweise 
-von künstlichen Neuronalen Netzen für die
-Bilderkennung behandelt.
-Anschließend wird es um die Umsetzung und Auswertung des 
-Trainings geeigneter Deep Learning Modelle gehen.
 
-Der letzte Teil beschreibt de Entwicklung der Anwendung, 
-in welcher die Inferenz eines fertig trainiertes Modell, 
-für den Neural Compute Stick, implementiert wird.

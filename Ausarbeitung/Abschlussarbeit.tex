@@ -30,6 +30,7 @@
 \usepackage{listings}
 \usepackage{tikz-uml}
 
+
 \usepackage[pdftex,
 			colorlinks,
 			linkcolor = black,
@@ -139,8 +140,8 @@ Matrikelnummer : 762537
 
 \begin{tabular}{lp{0.5cm}l}
 %
-Betreuer:				&&Eberhard Binder		\\
-Zweitbetreuer:			&&Christian Höfert		\\
+Betreuer:				&&Prof. Dr. rer. nat. Eberhard Binder		\\
+Zweitbetreuer:			&&Prof. Dr. rer. nat. Christian Höfert		\\
 Abgabedatum:			&&12.03.2020
 %
 \end{tabular}
@@ -184,21 +185,24 @@ Abgabedatum:			&&12.03.2020
 
 %--------------------------------------------------------------------
 
+
+
 \begin{document}
 
-
 \maketitle
+\pagestyle{empty}
 
-\thispagestyle{empty}
 \input{declaration}
 
-\thispagestyle{empty}
 \setcounter{tocdepth}{2}
+
 \tableofcontents
+\pagestyle{fancyplain}
+
 \setcounter{page}{1}
 
-\thispagestyle{empty}
 \printglossary[title={Abkürzungsverzeichnis}]
+
 
 
 \input{einleitung}
@@ -206,18 +210,16 @@ Abgabedatum:			&&12.03.2020
 \input{object_detection}
 \input{evaluierung}
 \input{application}
-%\input{validierungtest}
 \input{zusammenfassung}
 
 
 \newpage
-\bibliography{Bachelor_Arbeit,Bilder,weitere}
+\raggedright
+\bibliography{Bachelor_Arbeit,websites}
 \bibliographystyle{ieeetr}
 
 \listoffigures
 \listoftables
 
-%\input{anhang}
 
 \end{document}
-

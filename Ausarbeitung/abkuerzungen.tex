@@ -2,75 +2,121 @@
 \newglossaryentry{ml} 
 {
     name={Machine Learning},
-    description={Ein Bereich der künstlichen
-    Intelligenz, der sich mit selbstlernenden 
-    Algorithmen befasst},
+    description={Ein Teilgebiet der Künstlichen
+    Intelligenz, dass sich mit selbstlernenden 
+    Algorithmen befasst. Damit können ohne explizite  
+    Programmierung Zusammenhänge in größeren Datenmengen
+    erkannt werden},
     plural={Machine Learnings}
 }
 
 \newglossaryentry{nn} 
 {
     name={Künstliche Neuronale Netze},
-    description={Eine Form des Machine Learning, bei der 
-    eine Vielzahl an künstlicher Neuronen miteinander 
-    verbunden sind, um aus gegebenen Eingaben 
-    die richtige Ausgabe zu erhalten},
+    description={Eine Form des Machine Learnings, bei der 
+    eine Vielzahl künstlicher Neuronen miteinander 
+    verbunden sind. Indem die Verbindungen 
+    unterschiedlich stark gewichtet sind, lassen 
+    sich für gegebene Eingaben die richtigen 
+    Ausgaben finden},
     plural={künstlichen Neuronalen Netzen}
 }
 
 \newglossaryentry{cnn} 
 {
     name={CNN (Convolutional Neural Network)},
-    description={Neuronales Netz, welches math. Faltung 
-    Verwendet, meist in der Bilderkennung verwendet.},
+    description={Neuronales Netz, welches in 
+    sog. \textit{Convolutional Layern} eine mathematische 
+    Faltung des Inputbilds mit einer \textit{Filter-Matrix}
+    durchführt},
     first={Convolutional Neural Network (CNN)},
     text={CNN},
     plural={CNNs},
     firstplural={Convolutional Neural Networks (CNNs)}
 }
+
+
+\newglossaryentry{rpn} 
+{
+    name={RPN (Region Proposial Network)},
+    description={Ein CNN-basiertes Modell, dass 
+    im \textit{Sliding-Window}-Verfahren aus den 
+    Feature Maps räumliche Vorschläge für Objekte in
+    einem Inputbild generiert},
+    first={Region Proposial Network (RPN)},
+    text={RPN},
+    plural={RPNs},
+    firstplural={Region Proposial Networks  (RPNs)}
+}
+
+
+\newglossaryentry{faltung}
+{
+    name={Faltung},
+    description={Mathematische Rechenoperation, bei der 
+    zwei Signale (z.b. in Form von Matrizen) übereinander
+    verschoben und an jeder Stelle miteinander
+    multipliziert werden. Anschließend 
+    werden die Produktterme aufsummiert},
+    plural={Faltungen}
+}
+
+\newglossaryentry{inferenz} 
+{
+    name={Inferenz},
+    description={Die Anwendung 
+    eines trainierten Machine-Learning-Modells
+    für neue Inputdaten},
+    plural={Inferenzen}
+}
+
 \newglossaryentry{featuremap} 
 {
     name={Feature Map},
-    description={eine zweidimensionale matrix, 
-    die duch die faltung eines bild mit einer 
-    filtermatrix entsteht},
+    description={Eine zweidimensionale Matrix, 
+    die durch die Faltung eines Inputbilds mit einer 
+    Filtermatrix entsteht},
     plural={Feature Maps}
 }
 \newglossaryentry{downsampling} 
 {
     name={Downsampling},
-    description={In der Bildverarbeitung: kleiner skallieren 
-    eines Bildes}
+    description={Reduktion einer Anordnung von zeitdiskreten
+     Werten. In der Bildverarbeitung wird durch eine Verringerung 
+     der Bildpunkte die Auflösung reduziert}
 }
 
 \newglossaryentry{zeropadding} 
 {
     name={Zero Padding},
-    description={Auffüllen mit nullen}
+    description={Bei der Verrechnung zweier ungleich 
+    großer Matrizen werden fehlende Werte mit Nullen 
+    aufgefüllt, um die Ausgangsgröße für das 
+    Ergebnis beizubehalten}
 }
 
 \newglossaryentry{overfitting}{
     name={Overfitting},
     description={Überanpassung eines Machine Learning Modells 
     an die Trainingsdaten, wodurch keine Generalisierung 
-    mehr erreicht wird},
+    für neue Daten mehr stattfinden kann},
     plural={Overfittings}
 }
 
 \newglossaryentry{framework}{
     name={Framework},
-    description={Programmgerüst, bestehend aus 
-    mehreren Programmen, Schnittstellen, Tools, 
-    und weiterem, zur Erleichterten Software 
-    Entwicklung},
+    description={Programmgerüst, dass die Entwicklung einer 
+    Anwendung durch vorgefertigte Strukturen unterstützt,
+    selbst aber kein vollständiges Programm darstellt},
     plural={Frameworks}
 }
 
 \newglossaryentry{vm} 
 {
     name={VM (Virtual Machine)},
-    description={Virtuelle Nachbildung einer Rechnerarchitekture, 
-    welche innerhalb eines lauffähigen Rechnersystems ausgeführt wird},
+    description={Virtuelle Nachbildung einer Rechnerarchitektur, 
+    welche innerhalb eines lauffähigen Rechnersystems
+    ausgeführt wird},
     first={Virtual Machine (VM)},
     text={VM}
 }
@@ -78,53 +124,62 @@
 \newglossaryentry{api} 
 {
     name={API (Application Programming Interface)},
-    description={Eine Application Programming Interface
-    ist ein bestimmter satz an Regeln
-    über die ein program funktionalitäten anderer software verweden kann.},
+    description={Eine Programmierschnittstelle, 
+    mit der über einen definierten Satz an Regeln 
+    auf die Funkionalitäten eines anderen Programms 
+    oder eine Datenbank zugegriffen werden kann},
     first={Application Programming Interface (API)},
     text={API}
 }
 \newglossaryentry{ssh} 
 {
     name={SSH (Secure Shell Protocoll)},
-    description={Kommunikationsprotokoll},
+    description={Netzwerkprotokoll zur Herstellung
+    einer verschlüsselten Netzwerkverbindung
+    zu einem entfernten Gerät},
     first={Secure Shell Protocoll (SSH)},
     text={SSH}
 }
 \newglossaryentry{scp} 
 {
     name={SCP (Secure Copy Protocoll)},
-    description={zum senden von daten über SSH},
+    description={Protokoll, welches über 
+    eine SSH Verbindung die verschlüsselte
+    Datenübertragung zwischen zwei Geräten 
+    ermöglicht},
     first={Secure Copy Protocoll (SCP)},
     text={SCP}
 }
 \newglossaryentry{smtp} 
 {
-    name={SMTP (Smart Mail Transfer Protokoll)},
-    description={zum senden von emails},
+    name={SMTP (Simple Mail Transfer Protokoll)},
+    description={Protokoll zum Senden von E-Mails},
     first={Smart Mail Transfer Protokoll (SMTP)},
     text={SMTP}
 }
 
 \newglossaryentry{thread} 
 {
-    name={Thred},
-    description={wie prozess},
+    name={Thread},
+    description={Bezeichnet einen Ausführungsstrang 
+    eines Computerprogramms und ist damit Bestandteil 
+    eines Prozesses},
     plural={Threads}
 }
 
 \newglossaryentry{fps} 
 {
     name={Fps (Frames per Second)},
-    description={Bilder, die pro Sekunde verarbeitet werden können},
+    description={Frequenz, die angibt 
+    wie viele Bilder pro Sekunde verarbeitet werden können},
     first={Frames per Second (Fps)},
     text={Fps}
 }
 \newglossaryentry{csi} 
 {
     name={CSI (Camera Serial Interface)},
-    description={Kameraschnittstelle des Raspberry Pi's welche 
-    ein Flachbandkabel verwendet},
+    description={Kameraschnittstelle des Raspberry Pi's,
+    die ein Flachbandkabel verwendet},
     first={Camera Serial Interface (CSI)},
     text={CSI}
 }
@@ -132,8 +187,9 @@
 \newglossaryentry{soc} 
 {
     name={SoC (System on Chip)},
-    description={komplexes System, bestehend aud 
-    CPI, GPU und weiterem auf einem Chip verbaut.},
+    description={Komplexes System, bestehend aus 
+    einer CPU, einer GPU und ggf. weiteren 
+    Komponenten die gemeinsam auf einem Chip verbaut sind},
     first={System on Chip},
     text={SoC}
 }
@@ -141,14 +197,14 @@
 \newglossaryentry{cpu} 
 {
     name={CPU (Central Processing Unit)},
-    description={zentrale Recheneinheit eines Computers},
+    description={Zentrale Recheneinheit eines Computers},
     first={Central Processing Unit (CPU)},
     text={CPU}
 }
 \newglossaryentry{gpu} 
 {
     name={GPU (Graphics Processing Unit)},
-    description={Prozessor, der auf die Berechnungen von 
+    description={Prozessor, der auf die Berechnung von 
     Grafiken spezialisiert ist},
     first={Graphics Processing Unit (GPU)},
     text={GPU}
@@ -156,7 +212,7 @@
 \newglossaryentry{vpu} 
 {
     name={VPU (Vision Processing Unit)},
-    description={Mikroprozessor für Bildverarbeitungsaufgaben 
+    description={Mikroprozessor für Bildverarbeitungsaufgaben, 
     häufig in KI-Beschleunigern eingesetzt},
     first={Vision Processing Unit (VPU)},
     text={VPU}

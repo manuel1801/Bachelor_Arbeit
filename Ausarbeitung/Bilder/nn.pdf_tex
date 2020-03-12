@@ -38,7 +38,7 @@
   \newcommand*\fsize{\dimexpr\f@size pt\relax}%
   \newcommand*\lineheight[1]{\fontsize{\fsize}{#1\fsize}\selectfont}%
   \ifx\svgwidth\undefined%
-    \setlength{\unitlength}{1075.02770233bp}%
+    \setlength{\unitlength}{1110.07177734bp}%
     \ifx\svgscale\undefined%
       \relax%
     \else%
@@ -50,13 +50,14 @@
   \global\let\svgwidth\undefined%
   \global\let\svgscale\undefined%
   \makeatother%
-  \begin{picture}(1,0.35044115)%
+  \begin{picture}(1,0.33937801)%
     \lineheight{1}%
     \setlength\tabcolsep{0pt}%
-    \put(0.94854971,0.23030255){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\begin{minipage}{0.09938811\unitlength}\raggedright \end{minipage}}}%
+    \put(0.94124031,0.22303208){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\begin{minipage}{0.09625051\unitlength}\raggedright \end{minipage}}}%
     \put(0,0){\includegraphics[width=\unitlength,page=1]{nn.pdf}}%
-    \put(0.92376196,0.20930021){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}Katze\end{tabular}}}}%
-    \put(0.92376196,0.11235256){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}Hund\end{tabular}}}}%
-    \put(0.89468488,0.29615369){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\begin{minipage}{0.18568681\unitlength}\raggedright \end{minipage}}}%
+    \put(0.91723508,0.20269278){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}Hirsch\end{tabular}}}}%
+    \put(0.91723508,0.10880568){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\lineheight{1.25}\smash{\begin{tabular}[t]{l}Fuchs\end{tabular}}}}%
+    \put(0.88907594,0.28680436){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\begin{minipage}{0.17982483\unitlength}\raggedright \end{minipage}}}%
+    \put(0,0){\includegraphics[width=\unitlength,page=2]{nn.pdf}}%
   \end{picture}%
 \endgroup%

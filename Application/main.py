@@ -108,7 +108,7 @@ while True:
             try_camera += 1
             continue
         break
-        capture = np.copy(capture_empty)
+    capture = np.copy(capture_empty)
 
     # Detect Motion in Captured Frame and save to buffer
     if motion_detector.detect_motion(capture):

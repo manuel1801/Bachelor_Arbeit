@@ -148,18 +148,6 @@ class SSHConnect:
             print(e)
             return False
 
-    # def send_with_module(server, port, user, password, file, path):
-    #     try:
-    #         client = paramiko.SSHClient()
-    #         client.load_system_host_keys()
-    #         client.set_missing_host_key_policy(paramiko.AutoAddPolicy())
-    #         client.connect(server, port, user, password)
-    #         with SCPClient(client.get_transport()) as scp:
-    #             scp.put(file, path)
-    #         print('succesfully send with python')
-    #     except Exception as e:
-    #         print(e)
-
     def send_email(self, email, text):
 
         msg = MIMEText(text)
@@ -174,26 +162,19 @@ class SSHConnect:
 
 def main():
 
-    email = 'animals.detection@gmail.com'
-    password = 'animalsdetection20'
-    conn = SSHConnect(email, password)
+    email = ''
+    password_remote_divece = ''
+    password_remoteit = ''
+    user = ''
+    remote_user = ''
+    remote_divice_name = ''
+    remote_output_dir = os.path.join('/home', remote_user)
+
+    conn = SSHConnect(email, password_remoteit)
 
     # Für SSH
-    raspi = False
     file_path = os.path.join(os.path.dirname(sys.argv[0]), 'test.jpg')
     assert os.path.isfile(file_path)
-
-    if raspi:
-        user = 'pi'
-        remote_user = 'manuel'
-        remote_divice_name = 'ssh-Pc'
-    else:
-        user = 'manuel'
-        remote_user = 'pi'
-        remote_divice_name = 'ssh-Pi'
-
-    remote_output_dir = os.path.join(
-        '/home', remote_user, 'Bachelor_Arbeit', 'Connection/received.jpg')
 
     logged_in = conn.login(remote_divice_name)
     if logged_in:
@@ -204,7 +185,7 @@ def main():
         exit()
 
     server, port = ret
-    if conn.send(server, port, remote_user, password,
+    if conn.send(server, port, remote_user, password_remote_divece,
                  file_path, remote_output_dir):
         print('Success: sending!')
     else:
@@ -213,7 +194,7 @@ def main():
     conn.disconnect()
 
     # Für Email:
-    conn.send_email('ziel@addresse.com', 'hello world!')
+    # conn.send_email('ziel@addresse.com', 'hello world!')
 
 
 if __name__ == "__main__":

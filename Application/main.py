@@ -10,30 +10,19 @@ import picamera.array
 import picamera
 
 
-send_results = True
-remote_user = 'manuel'
-remote_divice_name = 'ssh-Pc'
-remote_it_email = 'animals.detection@gmail.com'
-password_remote_divece = 'animalsdetection20'
-password_remoteit = 'animalsdetection20'
-remote_output_dir = os.path.join(
-    '/home', remote_user, 'Bachelor_Arbeit', 'Application/detected')
-send_email = None
-
-
 # Wenn erkannte Bilder an ein Remote
 # Gerät gesendet werden sollen
 # send_result = True und folgende Nutzerdaten definieren
 # sonst werden erkannte Bilder lokal in detected/ gespeichert
-# send_results = False
-# remote_user = ''
-# remote_divice_name = ''
-# remote_it_email = ''
-# password_remote_divece = ''
-# password_remoteit = ''
-# remote_output_dir = os.path.join('/home', remote_user)
-# # optional zum senden von E-Main Benachrichtigung:
-# send_email = None    # Ziel E-Mail Adresse
+send_results = False
+remote_user = ''
+remote_divice_name = ''
+remote_it_email = ''
+password_remote_divece = ''
+password_remoteit = ''
+remote_output_dir = os.path.join('/home', remote_user)
+# optional zum senden von E-Main Benachrichtigung:
+send_email = None    # Ziel E-Mail Adresse
 
 
 buffer_size = 200    # anzahl an frames die zwischengespeichert werden

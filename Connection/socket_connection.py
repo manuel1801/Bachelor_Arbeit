@@ -6,14 +6,14 @@ import numpy as np
 import cv2
 
 
-class RaspyConnection:
+class SocketConnection:
     def __init__(self):
         self.address = 0
         self.port = 0
         self.HEADER_LENGTH = 10
         self.type = None
 
-    def start_server(self, address='10.10.73.89', port=5001):
+    def start_server(self, address, port):
         self.my_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         self.my_socket.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
         self.type = 'server'
@@ -23,7 +23,7 @@ class RaspyConnection:
         self.my_socket.listen(True)
         self.socket_list = [self.my_socket]
 
-    def start_client(self, address='10.10.73.89', port=5001):
+    def start_client(self, address, port):
         self.my_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         self.my_socket.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
         self.type = 'client'
@@ -44,9 +44,6 @@ class RaspyConnection:
                 # add new client
                 # client zusammen mit clien adr in dict clients speichern
                 self.client_socket, self.client_adress = notified_socket.accept()
-                # bei senden auf anfrage den client nach adr aus dict auswählen.
-                # beim senden muss adr in header mit versendet werden. receive_data returnt dann dict mit data und zugehörigem client
-                # send funktion bekomomt zweites arg mit liste aus clients an die gesendet werden soll (wenn nicht angegeben bradcast)
                 self.socket_list.append(self.client_socket)
                 print('client connected')
 

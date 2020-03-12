@@ -5,96 +5,80 @@
 Zur Ausführung den *Application* Ordner mit Folgendem
 Inhalt auf den Raspberry Pi kopieren:
 
-oder nur den *Application* Ordner mit folgendem Inhalt:
 
 ```bash
-
 └── Application/
     ├── models/
     │   └── animals_faster_rcnn_inception/
     │       ├── frozen_inference_graph.xml
     │       └── ...
     ├── launcher.sh
+    ├── main.sh
     ├── detection.py
     └── connection.py
 ```
 
+main.py ist die Hauptanwendung, welche detection.py und 
+connectoin.py verwendet.
+
+aufgerufen wird das main Script über das launcher.sh Script
+
+Im *models* Ordner sind OpenVino Modelle die auf folgende Datensätze trainiert wurden:
+
+* Animals: 9 Wildtierklassen:
+* Samples: Alltagsgegenstände zum testen der Anwendung
+    * Klassen sind in *classes.txt* der jeweiligen Modell-Ordner definiert
+
+Diese enthalten jeweils folgende Modelle:
+* Faster R-CNN: wird von der Applikation default mäßig verwendet
+* SSD: wird verwendet, wenn beim Laden des Faster R-CNN ein Fehler auftritt
 
 
 ## Einstellungen
 
-Folgende Variablen müssen definiert werden:
+Die Anwendung kann mit oder ohne Senden der Daten 
+ausgeführt werden.  
+Um die Daten senden zu können wird ein remote.it Account
+benötigt, wie in Connection/remote_it/readme erklärt.
 
-* Senden der Daten
-
+Dafür müssen folgende Einstellunge vorgenommen werden:
 ```python
-send_results = True # ob die Bilder an ein remote Gerät gesendet werden sollen. (bei False werden die Bilder lokal abgespeichert) 
-send_email = '' # E-Mail adresse (nur wenn send_results=True) an die zusätzlich eine Benachrichtigung per E-Mail gesendet werden soll (oder None wenn nicht)
+# Gibt mit True/False ob erkannte Bilder gesendet werden sollen
+send_results = True
+
+# User Name des Gerätes, an das die Bilder gesendet werden sollen
+remote_user = ''
+
+# Device Name des Gerätes in remote.it
+remote_divice_name = ''
+
+# E-Mail Adresse des remot.it Accounts
+remote_it_email = ''
+
+# Rassort des Gerätes, an das die Bilder gesendet werden sollen
+password_remote_divece = ''
+
+# Rassort des des remot.it Accounts
+password_remoteit = ''
+
+# Pfad im Zielgerät, in dem die Bilder gespeichert werden sollen
+remote_output_dir = os.path.join('/home', remote_user)
+
+# (optinal) E-Mail Adresse an die eine benachrichtigung gesendet werden soll
+send_email = None
 ```
 
-* Geräte Namen
+wenn send_results = False müssen die Einstellungen nicht gemacht werden und die Bilder werden lokal gespeichert.
 
-```python
-user = 'pi'             # user name des Raspeberry Pi
-
-# nur wenn gesendet werden soll
-remote_user = ''        # name des Gerätes (PC) an das gesendet werden soll
-remote_divice_name = '' # name des Gerätes in remote.it
-```
-
-* Passwörter (nur wenn Daten gesendet werden sollen)
-
-```python
-password_remote_divece = '' # passwort des Gerätes (PC) an das gesendet werden soll
-password_remoteit = ''      # passwort des remote.it accounts (auc)
-```
-
-* weitere Einstellungen (optional, default wert kann beibehalten werden)
-```python
-buffer_size = 200       # Anzahl der Frames die zwischengespeichert werden können
-threshhold = 0.7        # Threshold, nach denen anhand der Wahrschienlichkeit die erkannten objekte gefiltert werden
-num_requests = 3        # anzahl paralleler inferenz requests
-n_save = 10             # nach wie vielen Erkannten Tieren (der gleichen Klasse) gespeicher und gesendet werden soll
-```
-
-## Ausführung
 
 
 ## Autostart
 
+Um die Anwendung beim booten des Raspberry's automatisch zu starten:
 
 
-
-
-
-
-```python
-password = '*****'      # von remote.it account und remote gerät
-raspi = True            # ob auf
-
-buffer_size = 200    # zum zwischen speichern wenn infer langsamer stream
-threshhold = 0.5     # Für Detections
-num_requests = 2     # anzahl paralleler inferenz requests, recommended:3
-send_results = False  # falls nein wird local gespeichert)
-# None: keine email sende, oder in send_mail zieladresse angeben.
-send_email = None
-send_all_every = 100  # wie oft alle detections senden (in sekunden, 0 für nie)
-
-# nach wie vielen detections einer klasse save and send
-# n_save = 300       # für SSDs mit ca 30 FPS
-n_save = 5        # 10 für Faster R-CNNs mit ca 0,7 FPS
-```
-
-
-## [Detection](detection.py)
-
-## [Verbindung](connection.py)
-
-## [Autostart](launcher.sh)
-
-Shell Script [launcher.sh](launcher.sh)
-startet [main.py](main.py) bei Boot automatisch.  
-Dafür folgenden Service auf dem Raspberry Pi anlegen:
+Im *launcher.sh* den pfad zum *main.py* Script definieren.  
+Anschließend service anlegen, der launcher.sh beim booten ausführt
 
 ```bash
 sudo nano /lib/systemd/system/my_init.service
@@ -110,7 +94,7 @@ After=multi-user.target
 User=pi
 Group=pi
 Type=idle
-ExecStart=bash /path/to/launcher.sh &
+ExecStart=bash /pfad/zu/launcher.sh &
 
 [Install]
 WantedBy=multi-user.target
@@ -142,10 +126,6 @@ sudo systemctl status my_init.service
 ```
 
 
-## [Modelle](models/)
-enthällt openvino modelle für *Animals* 
-und *Samples*, jeweils mit SSD Inception und 
-Faster R-CNN Inception trainiert.
 
 
 # OpenVino Installationen

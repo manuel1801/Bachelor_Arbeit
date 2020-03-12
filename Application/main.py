@@ -18,22 +18,32 @@ import picamera
 # remote_output_dir = os.path.join(
 #     '/home', remote_user, 'Bachelor_Arbeit', 'Application/detected')
 
-
+# Wenn erkannte Bilder an ein Remote
+# Gerät gesendet werden sollen
+# send_result = True und folgende Nutzerdaten definieren
+# sonst werden erkannte Bilder lokal in detected/ gespeichert
+send_results = False
 remote_user = ''
 remote_divice_name = ''
 remote_it_email = ''
 password_remote_divece = ''
 password_remoteit = ''
 remote_output_dir = os.path.join('/home', remote_user)
+# optional zum senden von E-Main Benachrichtigung:
+send_email = None    # Ziel E-Mail Adresse
 
 
-buffer_size = 200    # zum zwischen speichern wenn infer langsamer stream
-threshhold = 0.7     # Für Detections
-num_requests = 3     # anzahl paralleler inferenz requests, recommended:3
-n_save = 10
-send_results = False  # falls False wird local gespeichert
-send_email = None  # None: keine email sende, oder in send_mail zieladresse angeben
-view_result = False
+buffer_size = 200    # anzahl an frames die zwischengespeichert werden
+threshhold = 0.7     # für die wahrscheinlichkeit mit der eine Erkennung erfolgte
+num_requests = 3     # anzahl paralleler inferenz requests,
+n_save = 10  # nach wie vielen Erkennungen der gleichen Klasse gespeichert/gesendet werden soll
+view_result = False  # anzeigen des Kamera Streams (geht nur mit Monitor)
+
+
+# Eine der folgenden Listen auswählen
+# SSD Modell wird verwendet, wenn das Faster R-CNN Modell nicht laden konnte
+# models = ['samples_faster_rcnn_inception', 'samples_ssd_inception']
+models = ['animals_faster_rcnn_inception', 'animals_ssd_inception']
 
 
 # pfad des main.py Scripts
@@ -45,19 +55,13 @@ if not os.path.isdir(local_output_dir):
     os.mkdir(local_output_dir)
 assert os.path.isdir(local_output_dir)
 
-# Ordner in dem die OpenVino Modell liegen
+# Ordner in dem die OpenVino Modelle liegen
 models_dir = os.path.join(appl_dir, 'models')
 assert os.path.isdir(models_dir)
 
 # SSH Connection Objekt anlegen
 if send_results:
     conn = connection.SSHConnect(remote_it_email, password_remoteit)
-
-
-# Liste mit 2 OpenVino Modellen (sampleset zum testen oder animals mit 9 wildtierklassen)
-models = ['samples_faster_rcnn_inception', 'samples_ssd_inception']
-# models = ['animals_faster_rcnn_inception', 'animals_ssd_inception']
-
 
 # Model auf Hardware laden
 # zuerst Faster R-CNN, wenn fehler auftritt SSD verwenden.
@@ -110,7 +114,7 @@ while True:
         break
     capture = np.copy(capture_empty)
 
-    # Detect Motion in Captured Frame and save to buffer
+    # Captured Frame auf Bewegung prüfen und im Buffer Speichern
     if motion_detector.detect_motion(capture):
         has_motion = True
         motion_frames.insert(0, capture)
@@ -123,37 +127,40 @@ while True:
     else:
         has_motion = False
 
-    # disconnect from remote device
+    # Wenn Buffer Liste leer Verbindung trennen
     if send_results and not motion_frames and connected:
         conn.disconnect()
         print('dissconnecting')
         connected = False
 
-    # Send all current Detections after 100 sec
+    # nach 100 Sekunden alle Erkannte, aber nicht
+    # gespeicherten Frames abspeichern
     if time() - send_time > 100:
         send_time = time()
         save_all = True
 
-    # Infer Frames
+    # Buffer Liste 'motion_frames' zur Inferenz übergeben.
+    # Inferierte Frames werden aus der List entfernt (Call by Ref.)
     n_infered, n_detected, n_saved = exec_model.infer_frames(
         motion_frames, threshhold, view_result, n_save, save_all)
-    # aus 'motion_frames' werden inferierte frames entfernt (call by ref)
 
-    # set send request
+    # Send Request aufgeben
     if n_saved > 0:
         save_all = False
         send_request = True
 
-    # Handle infered frames without detections
+    # Handling von inferierten Frames ohne Erkennung
     if n_infered > 0 and n_detected == 0:
         no_detections += 1
-        # if no_detections > 20 * max(1, fps):
+
+        # Motion Detector Referenz Frame neu setzen
         if no_detections > 50:
             print('resetting motion detector')
             motion_detector.reset_background()
             motion_frames = []
             no_detections = 0
 
+            # Verbindung Trennen
             if send_results and connected:
                 print('disconnection')
                 conn.disconnect()
@@ -161,11 +168,11 @@ while True:
     else:
         no_detections = 0
 
-    # check send request status
+    # Send Request Status abfragen
     if not send_results or not send_request:
         continue
 
-    # send E-Mail message
+    # E-Mail senden
     if send_email:
         print('sending email')
         msg_str = ''
@@ -173,7 +180,7 @@ while True:
             msg_str += msg[:-4] + '\n'
         conn.send_email(send_email, msg_str)
 
-    # check login status
+    # login status prüfen
     if not logged_in:
         print('try to log in')
         logged_in = conn.login(device_name=remote_divice_name)
@@ -182,7 +189,7 @@ while True:
             continue
         print('logged in')
 
-    # check connection status
+    # connection status prüfen
     if not connected:
         print('try to connect')
         connected = conn.connect()
@@ -192,22 +199,23 @@ while True:
             continue
         print('connected')
 
-    # get remote server and port name
+    # remote server und port auslesen
     server, port = connected
 
-    # reset send request and start to send all files in output dir
+    # Send Request zurücksetzen und mit Senden aller
+    # gespeicherten Bilder starten
     send_request = False
     for image in os.listdir(local_output_dir):
         image_path = os.path.join(local_output_dir, image)
 
-        # try to send and delete local file
+        # senden and Datei Lokal löschen
         if conn.send(server, port, remote_user, password_remote_divece, image_path,
                      os.path.join(remote_output_dir, image[:-4] + '_' + model + image[-4:])):
 
             os.remove(image_path)
             print('Successfully send image ', image)
 
-        # when erro: set send request again for next iteration
+        # Wenn Fehler auftritt Send-Request wieder setzen
         else:
             send_request = True
             print('Error while sending ', image)

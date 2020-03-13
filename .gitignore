@@ -20,17 +20,17 @@ Ausarbeitung/*
 !Ausarbeitung/Bilder/
 !Ausarbeitung/*.pdf
 
-# !Connection/
-# Connection/*
+!Connection/
+Connection/*
 
-#!Connection/socket_connection.py
+!Connection/socket_connection.py
 #!Connection/socket_server.py
 #!Connection/socket_client.py
 
-#!Connection/ssh_connection.py
+!Connection/ssh_connection.py
 
-#!Connection/test.jpg
-#!Connection/readme.*
+!Connection/test.jpg
+!Connection/readme.*
 
 
 #!Dataset/

@@ -1,15 +1,13 @@
 # Benchmark
 
 Berechnung der Inferenz-Fps für 
-unterschiedliche Anzahl an Infer-Requests
-
+unterschiedliche Anzahl an Inferenz-Requests
 
 
 ## Verwendung
 
 
-* In *models_dir* pfad zu konvertierten openvino models angeben,
-modelle haben folgende struktur:
+* In *models_dir* pfad zu konvertierten OpenVino Modellen angeben. Die Modellordner haben folgende struktur:
 
 
 ```bash
@@ -18,13 +16,14 @@ modelle haben folgende struktur:
     ├── frozen_inference_graph.xml
     └── exported_model (optional)
 ```
-falls vorhanden, wird *exported_model*
+
+Falls vorhanden, wird *exported_model*
 verwendet, ansonsten wird exec_model aus 
 den .xml und .bin files erzeugt und 
 exportiert.
 
-* In *test_image* pfad zu inferierender bilddatei angeben  
-* *iterationen* gibt an wie oft das bild inferiert werden soll
+* In *test_image* Pfad zu inferierender Bilddatei angeben  
+* *iterationen* gibt an wie oft das Bild inferiert werden soll
 
 
 
@@ -34,14 +33,14 @@ starten über
 ```bash
 python3 benchmark.py
 ```
-* model über nummer auswählen
-* anzahl der inferenz requests eingeben
+* Modell über Nummer auswählen
+* Anzahl der Inferenz-Requests eingeben
 
 
 
 ### benchmark_auto.py
 
-In *models* liste mit zu inferierenden modellen 
+In *models*-Liste mit zu inferierenden Modellen 
 (in *models_dir* enthalten sind) festlegen.
 
 zB:

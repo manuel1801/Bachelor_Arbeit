@@ -64,11 +64,11 @@ password_remoteit = ''
 # Pfad im Zielgerät, in dem die Bilder gespeichert werden sollen
 remote_output_dir = os.path.join('/home', remote_user)
 
-# (optinal) E-Mail Adresse an die eine benachrichtigung gesendet werden soll
+# (optinal) E-Mail Adresse an die eine Benachrichtigung gesendet werden soll
 send_email = None
 ```
 
-wenn send_results = False müssen die Einstellungen nicht gemacht werden und die Bilder werden lokal gespeichert.
+Wenn send_results = False müssen die Einstellungen nicht gemacht werden und die Bilder werden lokal gespeichert.
 
 
 
@@ -77,8 +77,8 @@ wenn send_results = False müssen die Einstellungen nicht gemacht werden und die
 Um die Anwendung beim booten des Raspberry's automatisch zu starten:
 
 
-Im *launcher.sh* den pfad zum *main.py* Script definieren.  
-Anschließend service anlegen, der launcher.sh beim booten ausführt
+Im *launcher.sh* den absoluten Pfad in dem das *main.py* Script liegt definieren.  
+Anschließend einen Service anlegen, der launcher.sh beim booten ausführt
 
 ```bash
 sudo nano /lib/systemd/system/my_init.service

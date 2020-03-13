@@ -3,38 +3,34 @@ import os
 import cv2
 import subprocess
 from random import shuffle
+import sys
 
 # pfad zu den Datensätzen
-dataset_dir = os.path.join(os.environ['HOME'], 'Bachelor_Arbeit/Dataset')
+dataset_dir = ''  # Pfad zu Datensätzen
+script_dir = os.path.dirname(sys.argv[0])
+
 
 # Pfad zu den konvertierten OpenVino Modellen
 # .../Animals/<model_name>/frozen_inference_graph.xml (and .bin)
-models_dir = os.path.join(
-    os.environ['HOME'], 'Bachelor_Arbeit/openvino_models/Animals/')
+models_dir = '.../openvino_models/Animals/'
+
 
 # Ausgabe Ordner für Inferierte Bilder
-# eval_dir = os.path.join(
-#     os.environ['HOME'], 'Bachelor_Arbeit/Inference_Engine_Tools/infer_test_images/results')
-
-eval_dir = os.path.join(
-    os.environ['HOME'], 'Bachelor_Arbeit/test_out_res2')
-
+eval_dir = os.path.join(script_dir, 'infer_results')
 
 # Validation Datensatz (OpenImages)
-validation_images = os.path.join(dataset_dir, 'OI_Animals/validation')
-assert os.path.isdir(validation_images)
+# validation_images = os.path.join(dataset_dir, 'OI_Animals/validation')
+# assert os.path.isdir(validation_images)
 
 
 # iWildCam Datensatz, (Kaggle)
-kaggle_iWildCam = os.path.join(
-    dataset_dir, 'kaggle_iWildCam')
-assert os.path.isdir(kaggle_iWildCam)
-
+# kaggle_iWildCam = os.path.join(
+#     dataset_dir, 'kaggle_iWildCam')
+# assert os.path.isdir(kaggle_iWildCam)
 
 # Eigne Bilder
-handy_images = os.path.join(dataset_dir, 'handy_bilder')
+handy_images = os.path.join(script_dir, 'test_bilder')
 assert os.path.isdir(handy_images)
-
 
 labels = ['Brown_bear',
           'Deer',
@@ -48,8 +44,8 @@ labels = ['Brown_bear',
 
 # select dataset by commenting out
 infer_images_list = [
-    validation_images,
-    kaggle_iWildCam,
+    # validation_images,
+    # kaggle_iWildCam,
     handy_images
 ]
 

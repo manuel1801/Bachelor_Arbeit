@@ -1,6 +1,6 @@
 # Installation
 
-(nur für lokales training)
+(nur für lokales Training)
 
 ## 1. Tensorflow-gpu
 

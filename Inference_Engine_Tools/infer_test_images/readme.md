@@ -1,8 +1,8 @@
-# Infer Test Images
+# Inferenz für Test Images
 
 Zum inferieren von Testbildern und Vergleichen der Ergebnisse  
 
-Einstellungen in den Scripten:  
+## Einstellungen in den Scripten:  
 
 **dataset_dir** Pfad zu Ordnern, die zu inferierende Bilder enthalten  
 
@@ -25,7 +25,7 @@ oder direkt:
     └── img2.jpg
 ```
 
-**models_dir** Pfad zu Ordnern die OpenVino Models enthalten wie:
+**models_dir** Pfad zu Ordnern die OpenVino Modelle enthalten wie:
 
 Bsp:
 ```
@@ -61,26 +61,26 @@ Folgende Einsellungen müssen festgelegt werden:
 
 ## infer_images.py
 
-mit auswahl des Datensatz aus allen in *infer_images_list* definierten
+Mit auswahl des Datensatz aus allen in *infer_images_list* definierten
 und des Models mit allen im Ordner *models_dir* befindlichen 
-über einen user input.
+über einen user-input.
 
-erzeugt in *eval_dir* ordner *infer_results_<dataset_name>*
-mit unterordnern *<model_name>* in dem die inferierten bilder 
-des ausgewählten models gespeichert werden und einem ordner *all* 
-in dem links zu den inferierten bildern aller modelle erzeugt 
+Erzeugt in *eval_dir* ordner *infer_results_<dataset_name>*
+mit unterordnern *<model_name>* in dem die inferierten Bilder 
+des ausgewählten Modells gespeichert werden und einem Ordner *all* 
+in dem Links zu den inferierten Bildern aller Modelle erzeugt 
 werden, zum besseren vergleich.
 
 
 
 ## detect_images.py
 
-wird von infer_images_auto.py und infer_images.py für die 
-inferenz zur object detection verwendet.
+Wird von infer_images_auto.py und infer_images.py für die 
+Inferenz zur Object detection verwendet.
 
 Prüft zunächst ob ein exportierten Modell mit 
 name *exported_model* vorhanden ist.
-Wenn nicht erzeugt aus IR Model Files die *'frozen_inference_graph.xml'*
+Wenn nicht erzeugt aus IR-Model-Files die *'frozen_inference_graph.xml'*
 und *'frozen_inference_graph.bin'* heißen ein exec_model und 
 exportiert dieses für die nächste ausführung als *exported_model*.
 

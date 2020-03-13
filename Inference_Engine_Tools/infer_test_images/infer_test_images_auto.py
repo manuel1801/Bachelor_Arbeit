@@ -3,35 +3,33 @@ import os
 import cv2
 import subprocess
 from random import shuffle
+import sys
 
 # pfad zu den Datensätzen
-dataset_dir = os.path.join(os.environ['HOME'], 'Bachelor_Arbeit/Dataset')
+dataset_dir = ''  # Pfad zu Datensätzen
+script_dir = os.path.dirname(sys.argv[0])
+
 
 # Pfad zu den konvertierten OpenVino Modellen
 # .../Animals/<model_name>/frozen_inference_graph.xml (und .bin)
-models_dir = os.path.join(
-    os.environ['HOME'], 'Bachelor_Arbeit/openvino_models/Animals/')
+models_dir = '/home/manuel/Bachelor_Arbeit/Abgabe/openvino_models/Animals/'
 
 # Ausgabe Ordner für Inferierte Bilder
-# eval_dir = os.path.join(
-#     os.environ['HOME'], 'Bachelor_Arbeit/Inference_Engine_Tools/infer_test_images/results')
+eval_dir = os.path.join(script_dir, 'infer_results')
 
-eval_dir = os.path.join(
-    os.environ['HOME'], 'Bachelor_Arbeit/test_out_res')
-
-# Validation Datensatz (OpenImages)
-validation_images = os.path.join(dataset_dir, 'OI_Animals/validation')
-assert os.path.isdir(validation_images)
+# # Validation Datensatz (OpenImages)
+# validation_images = os.path.join(dataset_dir, 'OI_Animals/validation')
+# assert os.path.isdir(validation_images)
 
 
-# iWildCam Datensatz, (Kaggle)
-kaggle_iWildCam = os.path.join(
-    dataset_dir, 'kaggle_iWildCam')
-assert os.path.isdir(kaggle_iWildCam)
+# # iWildCam Datensatz, (Kaggle)
+# kaggle_iWildCam = os.path.join(
+#     dataset_dir, 'kaggle_iWildCam')
+# assert os.path.isdir(kaggle_iWildCam)
 
 
 # Eigne Bilder
-handy_images = os.path.join(dataset_dir, 'handy_bilder')
+handy_images = os.path.join(script_dir, 'test_bilder')
 assert os.path.isdir(handy_images)
 
 # Labes für 'Animal' Datensatz
@@ -45,10 +43,10 @@ labels = ['Brown_bear',
           'Raccoon',
           'Squirrel']
 
-# Zu inferierende Datensätze
+# select dataset by commenting out
 infer_images_list = [
-    validation_images,
-    kaggle_iWildCam,
+    # validation_images,
+    # kaggle_iWildCam,
     handy_images
 ]
 
@@ -60,21 +58,18 @@ test_config = {
     'ssd_vs_faster': [
         'ssd_inception_v2',
         'ssd_mobilenet_v2',
-        'faster_rcnn_inception_v2_early_stopping',
-        'faster_rcnn_inception_v2_early_stopping_ohne_aug'
+        'faster_rcnn_inception_v2_early_stopping'
     ],
     'faster_optimierungen_aug': [
-        'faster_rcnn_inception_v2_early_stopping',
         'faster_rcnn_inception_v2_less_aug',
         'faster_rcnn_inception_v2_3000',
         'faster_rcnn_inception_v2_4000'
+    ],
+    'faster_optimierungen_l2': [
+        'faster_rcnn_inception_v2_less_aug',
+        'faster_rcnn_inception_v2_3000',
+        'faster_rcnn_inception_v2_l2'
     ]
-    # 'faster_optimierungen_l2': [
-    #     'faster_rcnn_inception_v2_less_aug',
-    #     'faster_rcnn_inception_v2_less_aug_l2',
-    #     'faster_rcnn_inception_v2_3000',
-    #     'faster_rcnn_inception_v2_l2'
-    # ]
 }
 
 

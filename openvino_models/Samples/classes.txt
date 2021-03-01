@@ -1,7 +1,0 @@
-Mobile_phone
-Human_hand
-Apple
-Banana
-Human_head
-Pen
-Calculator
